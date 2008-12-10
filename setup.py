@@ -2,7 +2,11 @@ from __future__ import with_statement
 
 from distutils.cmd import Command
 from distutils.errors import DistutilsError, DistutilsExecError
-from numpy.distutils.core import setup, Extension
+try:
+    from setuptools import setup, Extension
+except ImportError:
+    from numpy.distutils.core import setup, Extension
+
 import os
 import string
 import sys
@@ -27,8 +31,6 @@ class test(Command):
                 raise DistutilsError("Unit tests failed.")
         finally:
             sys.path = oldpath
-
-CMD_CLASS = {'test': test}
 
 udunits = Extension('quantities.udunits',
                     ['udunits/src/udunits_py.c',
@@ -68,5 +70,5 @@ setup (name = "quantities",
                    'quantities.tests'],
        package_data = {'': ['quantities-data/udunits.dat']},
        ext_modules = [ udunits ],
-       cmdclass = CMD_CLASS
+       test_suite = 'nose.collector',
       )

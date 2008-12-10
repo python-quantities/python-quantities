@@ -176,16 +176,17 @@ class Dimensionality(object):
                 self._compound == other._compound:
             raise IncompatibleUnits("add", self, other)
 
-        su = self._udunits()
-        ou = other._udunits()
-        if not su == ou:
-            scaling, offset = _udunits.convert(ou, su)
         units = copy.deepcopy(self._units)
         dimensions = copy.deepcopy(self._dimensions)
         compound = copy.deepcopy(self._compound)
         new = self.__class__(units, dimensions, **compound)
-        new._scaling = scaling
-        new._offset = offset
+
+        su = self._udunits()
+        ou = other._udunits()
+        if not su == ou:
+            scaling, offset = _udunits.convert(ou, su)
+            new._scaling = scaling
+            new._offset = offset
         return new
 
     __sub__ = __add__

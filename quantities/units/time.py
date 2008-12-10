@@ -10,7 +10,7 @@ us = microsecond = microseconds = time('us')
 ns = nanosecond = nanoseconds = time('ns')
 ps = picosecond = picoseconds = time('ps')
 fs = femtosecond = femtoseconds = time('fs')
-as = attosecond = attoseconds = time('as')
+attosecond = attoseconds = time('attosecond') # as is a keyword in python2.6
 jiffy = jiffies = time('jiffy') # no kidding?
 
 shake = shakes = time('shake')
