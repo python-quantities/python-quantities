@@ -7,6 +7,8 @@ try:
 except ImportError:
     from numpy.distutils.core import setup, Extension
 
+import numpy
+
 import os
 import string
 import sys
@@ -37,7 +39,7 @@ udunits = Extension('quantities.udunits',
                      'udunits/src/utparse.c',
                      'udunits/src/utlib.c',
                      'udunits/src/utscan.c'],
-                    include_dirs = ['udunits/include'])
+                    include_dirs = ['udunits/include', numpy.get_include()])
 
 with file('quantities/quantities-data/NIST_codata.txt') as f:
     data = f.read()
