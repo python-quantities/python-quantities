@@ -243,9 +243,9 @@ class Dimensionality(object):
             compound = copy.deepcopy(self._compound)
             for k, v in other._compound.items():
                 if k in self._compound:
-                    compound[k] += v
+                    compound[k] -= v
                 else:
-                    compound[k] = v
+                    compound[k] = -v
         new = self.__class__(units, dimensions, **compound)
         new._scaling = scaling
         new._offset = offset
