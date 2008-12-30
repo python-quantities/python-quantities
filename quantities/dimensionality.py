@@ -1,6 +1,7 @@
 """
 """
 
+import operator
 
 import numpy
 
@@ -27,8 +28,15 @@ class BaseDimensionality(object):
     def _format_units(self, udict):
         num = []
         den = []
-        for u, d in udict.iteritems():
-            u = u.units
+        keys = [k for k, o in
+            sorted(
+                [(k, k.format_order) for k in udict],
+                key=operator.itemgetter(1)
+            )
+        ]
+        for key in keys:
+            d = udict[key]
+            u = key.units
             if d>0:
                 if d != 1: u = u + ('**%s'%d).rstrip('.0')
                 num.append(u)
