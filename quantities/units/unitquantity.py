@@ -15,7 +15,7 @@ class UnitQuantity(Quantity):
             cls,
             1.0,
             dtype='d',
-            dimensionality={},
+            units={},
             mutable=False
         )
 

@@ -10,9 +10,12 @@ from quantities.dimensionality import BaseDimensionality, \
 from quantities.parser import unit_registry
 
 
-class HasDimensionality(numpy.ndarray):
+class Quantity(numpy.ndarray):
 
-    def __new__(cls, magnitude, dtype='d', dimensionality={}, mutable=True):
+    # TODO: what is an appropriate value?
+    __array_priority__ = 21
+
+    def __new__(cls, magnitude, dtype='d', units={}, mutable=True):
         if not isinstance(magnitude, numpy.ndarray):
             magnitude = numpy.array(magnitude, dtype=dtype)
             if not magnitude.flags.contiguous:
@@ -27,11 +30,17 @@ class HasDimensionality(numpy.ndarray):
         ret.flags.writeable = mutable
         return ret
 
-    def __init__(self, data, dtype='d', dimensionality={}, mutable=True):
+    def __init__(self, data, dtype='d', units={}, mutable=True):
+        if isinstance(units, str):
+            units = unit_registry[units].dimensionality
+        if isinstance(units, Quantity):
+            units = units.dimensionality
+        assert isinstance(units, (BaseDimensionality, dict))
+
         if mutable:
-            self._dimensionality = MutableDimensionality(dimensionality)
+            self._dimensionality = MutableDimensionality(units)
         else:
-            self._dimensionality = ImmutableDimensionality(dimensionality)
+            self._dimensionality = ImmutableDimensionality(units)
 
     @property
     def dimensionality(self):
@@ -40,6 +49,10 @@ class HasDimensionality(numpy.ndarray):
     @property
     def magnitude(self):
         return self.view(type=numpy.ndarray)
+
+    @property
+    def units(self):
+        return str(self.dimensionality)
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
@@ -59,14 +72,14 @@ class HasDimensionality(numpy.ndarray):
 
     def __add__(self, other):
         if self.dimensionality:
-            assert isinstance(other, HasDimensionality)
+            assert isinstance(other, Quantity)
         dims = self.dimensionality + other.dimensionality
         magnitude = self.magnitude + other.magnitude
         return Quantity(magnitude, magnitude.dtype, dims)
 
     def __sub__(self, other):
         if self.dimensionality:
-            assert isinstance(other, HasDimensionality)
+            assert isinstance(other, Quantity)
         dims = self.dimensionality - other.dimensionality
         magnitude = self.magnitude - other.magnitude
         return Quantity(magnitude, magnitude.dtype, dims)
@@ -108,24 +121,7 @@ class HasDimensionality(numpy.ndarray):
         magnitude = self.magnitude**other
         return Quantity(magnitude, magnitude.dtype, dims)
 
-
-class Quantity(HasDimensionality):
-
-    __array_priority__ = 21
-
-    def __init__(self, magnitude, dtype='d', units={}, mutable=True):
-        if isinstance(units, str):
-            units = unit_registry[units].dimensionality
-        if isinstance(units, HasDimensionality):
-            units = units.dimensionality
-        assert isinstance(units, (BaseDimensionality, dict))
-        HasDimensionality.__init__(self, magnitude, dtype, units, mutable)
-
     def __repr__(self):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
 
     __str__ = __repr__
-
-    @property
-    def units(self):
-        return str(self.dimensionality)
