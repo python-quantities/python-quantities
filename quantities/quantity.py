@@ -35,7 +35,7 @@ class HasDimensionality(numpy.ndarray):
 
     @property
     def dimensionality(self):
-        return self._dimensionality
+        return copy.copy(self._dimensionality)
 
     @property
     def magnitude(self):
