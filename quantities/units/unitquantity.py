@@ -62,7 +62,7 @@ class UnitTime(UnitQuantity):
     _primary_order = 2
 
 
-class UnitCharge(UnitQuantity):
+class UnitCurrent(UnitQuantity):
 
     _primary_order = 3
 
@@ -95,20 +95,3 @@ class UnitAngle(UnitQuantity):
 class UnitCurrency(UnitQuantity):
 
     _primary_order = 9
-
-
-class CompoundUnit(UnitQuantity):
-
-    _primary_order = 10
-
-
-m = UnitLength('m')
-kg = UnitMass('kg')
-s = UnitTime('s')
-J = CompoundUnit('J', kg*m**2/s**2)
-
-energy = J*J
-
-print energy, J, m
-
-print kg*m**2/s**2

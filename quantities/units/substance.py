@@ -1,6 +1,6 @@
 """
 """
 
-from quantities.units.unitquantities import substance
+from quantities.units.unitquantity import UnitSubstance
 
-mol = mole = substance('mol')
+mol = mole = UnitSubstance('mol')

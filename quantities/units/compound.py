@@ -1,8 +1,8 @@
 """
 """
 
-from quantities.units.unitquantities import compound
+from quantities.units.unitquantity import UnitQuantity
 
 
-pc_per_cc = compound('pc/cm^3')
-sqm_per_cm = compound('m^2/m^3')
+pc_per_cc = UnitQuantity('pc/cm^3')
+sqm_per_cm = UnitQuantity('m^2/m^3')

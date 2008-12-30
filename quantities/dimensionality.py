@@ -44,12 +44,12 @@ class BaseDimensionality(object):
                 d = -d
                 if d != 1: u = u + ('**%s'%d).rstrip('.0')
                 den.append(u)
-        res = ' * '.join(num)
+        res = '*'.join(num)
         if len(den):
             if not res: res = '1'
-            res = res + ' / ' + ' '.join(den)
-        if not res: res = '(dimensionless)'
-        return res
+            res = res + '/' + '*'.join(den)
+        if not res: res = 'dimensionless'
+        return '(%s)'%res
 
 
     def __add__(self, other):
@@ -63,6 +63,8 @@ class BaseDimensionality(object):
         for unit, power in other.iteritems():
             try:
                 new[unit] += power
+                if new[unit] == 0:
+                    new.pop(unit)
             except KeyError:
                 new[unit] = power
         return new
@@ -72,6 +74,8 @@ class BaseDimensionality(object):
         for unit, power in other.iteritems():
             try:
                 new[unit] -= power
+                if new[unit] == 0:
+                    new.pop(unit)
             except KeyError:
                 new[unit] = -power
         return new
@@ -99,10 +103,6 @@ class ImmutableDimensionality(BaseDimensionality):
             self.__data.update(dict)
         if len(kwds):
             self.__data.update(kwds)
-
-#        del self.__dict__['__init__']
-
-#    del __init__
 
     def __repr__(self):
         return self._format_units(self.__data)

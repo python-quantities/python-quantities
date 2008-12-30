@@ -1,4 +1,6 @@
 """
 """
 
-from unitquantities import dimensionless
+from unitquantities import UnitQuantity
+
+dimensionless = UnitQuantity('')

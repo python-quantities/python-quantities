@@ -1,18 +1,18 @@
 """
 """
 
-from quantities.units.unitquantities import compound, information
+from quantities.units.unitquantities import UnitQuantity, UnitInformation
 from quantities.units.time import s
 
-bit = bits = information('bit')
-count = counts = information('counts')
+bit = bits = UnitInformation('bit')
+count = counts = UnitInformation('counts')
 
 Bd = baud = 1 / s
 bps = bit / s
 cps = 1 / s
 
-Bd = baud = compound('Bd')
-bps = compound('bps')
-cps = compound('cps')
+Bd = baud = UnitQuantity('Bd', 1/s)
+bps = UnitQuantity('bps', bit/s)
+cps = UnitQuantity('cps', 1/s)
 
-del compound, s
+del UnitQuantity, s

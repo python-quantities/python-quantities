@@ -62,7 +62,7 @@ with file('quantities/constants/codata.py', 'w') as f:
 
 
 setup (name = "quantities",
-       version='1.0',
+       version='0.1',
        author='doutriaux1@llnl.gov',
        description = "Python wrapping for UDUNITS package developed by UNIDATA",
        url = "http://www-pcmdi.llnl.gov/software",
