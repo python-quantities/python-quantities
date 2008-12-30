@@ -2,6 +2,7 @@
 """
 
 from quantities.quantity import Quantity
+from quantities.parser import unit_registry
 
 
 class UnitQuantity(Quantity):
@@ -29,6 +30,8 @@ class UnitQuantity(Quantity):
         self._format_order = (self._primary_order, self._secondary_order)
         self.__class__._secondary_order += 1
 
+        unit_registry[name] = self
+
     @property
     def format_order(self):
         return self._format_order
@@ -45,6 +48,8 @@ class UnitQuantity(Quantity):
         return self.units
 
     __str__ = __repr__
+
+unit_registry['UnitQuantity'] = UnitQuantity
 
 
 class UnitMass(UnitQuantity):
@@ -95,3 +100,19 @@ class UnitAngle(UnitQuantity):
 class UnitCurrency(UnitQuantity):
 
     _primary_order = 9
+
+
+class Dimensionless(UnitQuantity):
+
+    def __init__(self, name, reference_quantity=None):
+        self._name = name
+        Quantity.__init__(self, 1.0, 'd', {}, mutable=False)
+
+        if reference_quantity is None:
+            reference_quantity = self
+        self._reference_quantity = reference_quantity
+
+        self._format_order = (self._primary_order, self._secondary_order)
+        self.__class__._secondary_order += 1
+
+        unit_registry[name] = self

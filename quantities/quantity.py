@@ -7,6 +7,7 @@ import numpy
 
 from quantities.dimensionality import BaseDimensionality, \
     MutableDimensionality, ImmutableDimensionality
+from quantities.parser import unit_registry
 
 
 class HasDimensionality(numpy.ndarray):
@@ -109,6 +110,8 @@ class Quantity(HasDimensionality):
     __array_priority__ = 21
 
     def __init__(self, magnitude, dtype='d', units={}, mutable=True):
+        if isinstance(units, str):
+            units = unit_registry[units].dimensionality
         if isinstance(units, HasDimensionality):
             units = units.dimensionality
         assert isinstance(units, (BaseDimensionality, dict))

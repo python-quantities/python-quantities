@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantities import UnitQuantity
+from quantities.units.unitquantity import UnitQuantity
 from quantities.units.length import cm, m
 
 

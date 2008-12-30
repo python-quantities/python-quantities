@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantities import UnitCurrent, \
+from quantities.units.unitquantity import UnitCurrent, \
     UnitLuminousIntensity, UnitQuantity
 from quantities.units.time import s
 from quantities.units.length import m

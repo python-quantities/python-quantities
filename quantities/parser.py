@@ -74,11 +74,11 @@ class UnitRegistry:
             try:
                 _unit = self.__registry[label.lower()]
             except:
-                _unit = self.__registry['compound'](label)
+                _unit = self.__registry['UnitQuantity'](label)
 
         # this check should be more robust:
-        if hasattr(_unit, 'modify_units'):
-            return copy.deepcopy(_unit)
+        if hasattr(_unit, '_dimensionality'):
+            return _unit
         else:
             raise "unrecognized unit: %s"%_unit
 

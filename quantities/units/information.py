@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantities import UnitQuantity, UnitInformation
+from quantities.units.unitquantity import UnitQuantity, UnitInformation
 from quantities.units.time import s
 
 bit = bits = UnitInformation('bit')

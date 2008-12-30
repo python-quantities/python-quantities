@@ -18,6 +18,6 @@ degree_east = degrees_east = degree_E= degrees_E = UnitAngle('degrees_E')
 degree_west = degrees_west = degree_W= degrees_W = UnitAngle('degrees_W')
 degree_true = degrees_true = degree_T = degrees_T = UnitAngle('degrees_T')
 
-sr = steradian = steradians = UnitQuantity('steradian')
+sr = steradian = steradians = UnitQuantity('sr')
 
 del UnitQuantity

@@ -10,7 +10,7 @@ from quantities.units.electromagnetism import A, V
 W = watt = watts = UnitQuantity('W', J/s)
 mW = milliwatt = milliwatts = UnitQuantity('mW', W/1000)
 kW = kilowatt = kilowatts = UnitQuantity('kW', 1000*W)
-MW = megawatt = megawatts = UnitQuantity('MW', 1000*kw)
+MW = megawatt = megawatts = UnitQuantity('MW', 1000*kW)
 VA = voltampere = voltamperes = UnitQuantity('VA', 1000*kW)
 boiler_horsepower = boiler_horsepowers = UnitQuantity('boiler_horsepower', 9.80950e3*W)
 hp = horsepower = horsepowers = UnitQuantity('hp', 7.456999e2*W)

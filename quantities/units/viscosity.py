@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantities import UnitQuantity
+from quantities.units.unitquantity import UnitQuantity
 from quantities.units.time import s
 from quantities.units.length import m
 from quantities.units.pressure import Pa
