@@ -256,7 +256,7 @@ class Quantity(HasDimensionality):
 
 class UnitQuantity(Quantity):
 
-    def __new__(cls, name, *args, **kwargs):
+    def __new__(cls, name, reference_quantity=None):
         return Quantity.__new__(
             cls,
             1.0,
@@ -265,9 +265,17 @@ class UnitQuantity(Quantity):
             mutable=False
         )
 
-    def __init__(self, name, *args, **kwargs):
+    def __init__(self, name, reference_quantity=None):
         self._name = name
         Quantity.__init__(self, 1.0, 'd', {self:1}, mutable=False)
+
+        if reference_quantity is None:
+            reference_quantity = self
+        self._reference_quantity = reference_quantity
+
+    @property
+    def reference_quantity(self):
+        return self._reference_quantity
 
     @property
     def reference_quantity(self):
@@ -275,10 +283,7 @@ class UnitQuantity(Quantity):
 
     @property
     def units(self):
-        try:
-            return self._name
-        except:
-            return ''
+        return self._name
 
     def __repr__(self):
         return self.units
