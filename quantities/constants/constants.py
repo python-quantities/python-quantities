@@ -8,7 +8,7 @@ from quantities.quantity import Quantity
 
 def _cd(name):
     entry = _pc[name]
-    q = Quantity(entry['value'], 'd', entry['units'])
+    q = Quantity(entry['value'], entry['units'], 'd')
     q.precision = entry['precision']
     return q
 

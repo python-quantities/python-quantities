@@ -14,14 +14,14 @@ class UnitQuantity(Quantity):
         return Quantity.__new__(
             cls,
             1.0,
-            dtype='d',
             units={},
+            dtype='d',
             mutable=False
         )
 
     def __init__(self, name, reference_quantity=None):
         self._name = name
-        Quantity.__init__(self, 1.0, 'd', {self:1}, mutable=False)
+        Quantity.__init__(self, 1.0, {self:1}, 'd', mutable=False)
 
         if reference_quantity is None:
             reference_quantity = self
@@ -106,7 +106,7 @@ class Dimensionless(UnitQuantity):
 
     def __init__(self, name, reference_quantity=None):
         self._name = name
-        Quantity.__init__(self, 1.0, 'd', {}, mutable=False)
+        Quantity.__init__(self, 1.0, {}, 'd', mutable=False)
 
         if reference_quantity is None:
             reference_quantity = self

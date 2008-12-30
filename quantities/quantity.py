@@ -15,7 +15,7 @@ class Quantity(numpy.ndarray):
     # TODO: what is an appropriate value?
     __array_priority__ = 21
 
-    def __new__(cls, magnitude, dtype='d', units={}, mutable=True):
+    def __new__(cls, magnitude, units={}, dtype='d', mutable=True):
         if not isinstance(magnitude, numpy.ndarray):
             magnitude = numpy.array(magnitude, dtype=dtype)
             if not magnitude.flags.contiguous:
@@ -30,7 +30,7 @@ class Quantity(numpy.ndarray):
         ret.flags.writeable = mutable
         return ret
 
-    def __init__(self, data, dtype='d', units={}, mutable=True):
+    def __init__(self, data, units={}, dtype='d', mutable=True):
         if isinstance(units, str):
             units = unit_registry[units].dimensionality
         if isinstance(units, Quantity):
@@ -75,14 +75,14 @@ class Quantity(numpy.ndarray):
             assert isinstance(other, Quantity)
         dims = self.dimensionality + other.dimensionality
         magnitude = self.magnitude + other.magnitude
-        return Quantity(magnitude, magnitude.dtype, dims)
+        return Quantity(magnitude, dims, magnitude.dtype)
 
     def __sub__(self, other):
         if self.dimensionality:
             assert isinstance(other, Quantity)
         dims = self.dimensionality - other.dimensionality
         magnitude = self.magnitude - other.magnitude
-        return Quantity(magnitude, magnitude.dtype, dims)
+        return Quantity(magnitude, dims, magnitude.dtype)
 
     def __mul__(self, other):
         assert isinstance(other, (numpy.ndarray, int, float))
@@ -92,7 +92,7 @@ class Quantity(numpy.ndarray):
         except:
             dims = copy.copy(self.dimensionality)
             magnitude = self.magnitude * other
-        return Quantity(magnitude, magnitude.dtype, dims)
+        return Quantity(magnitude, dims, magnitude.dtype)
 
     def __truediv__(self, other):
         assert isinstance(other, (numpy.ndarray, int, float))
@@ -102,7 +102,7 @@ class Quantity(numpy.ndarray):
         except:
             dims = copy.copy(self.dimensionality)
             magnitude = self.magnitude / other
-        return Quantity(magnitude, magnitude.dtype, dims)
+        return Quantity(magnitude, dims, magnitude.dtype)
 
     __div__ = __truediv__
 
@@ -119,7 +119,7 @@ class Quantity(numpy.ndarray):
         assert isinstance(other, (numpy.ndarray, int, float))
         dims = self.dimensionality**other
         magnitude = self.magnitude**other
-        return Quantity(magnitude, magnitude.dtype, dims)
+        return Quantity(magnitude, dims, magnitude.dtype)
 
     def __repr__(self):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
