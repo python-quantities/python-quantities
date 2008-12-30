@@ -41,10 +41,10 @@ class HasDimensionality(numpy.ndarray):
     def magnitude(self):
         return self.view(type=numpy.ndarray)
 
-#    def __array_finalize__(self, obj):
-#        self._dimensionality = copy.deepcopy(
-#            getattr(obj, '_dimensionality', None)
-#        )
+    def __array_finalize__(self, obj):
+        self._dimensionality = getattr(
+            obj, 'dimensionality', MutableDimensionality()
+        )
 #
 #    def __deepcopy__(self, memo={}):
 #        dimensionality = copy.deepcopy(self.dimensionality)
@@ -77,26 +77,30 @@ class HasDimensionality(numpy.ndarray):
             dims = self.dimensionality * other.dimensionality
             magnitude = self.magnitude * other.magnitude
         except:
-            dims = self.dimensionality
+            dims = copy.copy(self.dimensionality)
             magnitude = self.magnitude * other
         return Quantity(magnitude, magnitude.dtype, dims)
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         assert isinstance(other, (numpy.ndarray, int, float))
         try:
             dims = self.dimensionality / other.dimensionality
             magnitude = self.magnitude / other.magnitude
         except:
-            dims = self.dimensionality
+            dims = copy.copy(self.dimensionality)
             magnitude = self.magnitude / other
         return Quantity(magnitude, magnitude.dtype, dims)
+
+    __div__ = __truediv__
 
     def __rmul__(self, other):
         # TODO: This needs to be properly implemented
         return self.__mul__(other)
 
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         return other * self**-1
+
+    __rdiv__ = __rtruediv__
 
     def __pow__(self, other):
         assert isinstance(other, (numpy.ndarray, int, float))
