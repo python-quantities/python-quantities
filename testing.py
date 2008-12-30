@@ -68,15 +68,18 @@ class BaseDimensionality(object):
 class ImmutableDimensionality(BaseDimensionality):
 
     def __init__(self, dict=None, **kwds):
-        self.__data = {}
-        if dict is not None:
-            self.__data.update(dict)
-        if len(kwds):
-            self.__data.update(kwds)
-
-#        del self.__dict__['__init__']
-
-#    del __init__
+        try:
+            self.__data
+            raise NotImplementedError(
+                '__init__ cannot be called after %s object has been created'\
+                % self.__class__.__name__
+            )
+        except AttributeError:
+            self.__data = {}
+            if dict is not None:
+                self.__data.update(dict)
+            if len(kwds):
+                self.__data.update(kwds)
 
     def __repr__(self):
         return self._format_units(self.__data)
@@ -233,6 +236,8 @@ class HasDimensionality(numpy.ndarray):
 
 class Quantity(HasDimensionality):
 
+    __array_priority__ = 21
+
     def __init__(self, magnitude, dtype='d', units={}, mutable=True):
         if isinstance(units, HasDimensionality):
             units = units.dimensionality
@@ -279,39 +284,6 @@ class UnitQuantity(Quantity):
         return self.units
 
     __str__ = __repr__
-
-#    def __add__(self, other):
-#        assert isinstance(other, HasDimensionality)
-#        dims = HasDimensionality.__add__(self, other)
-#        magnitude = self.magnitude + other.magnitude
-#        return Quantity(dims)
-#
-#    __sub__ = __add__
-#
-#    def __mul__(self, other):
-#        assert isinstance(other, (numpy.ndarray, int, float))
-#        try:
-#            dims = HasDimensionality.__mul__(self, other)
-#            magnitude = self.magnitude * other.magnitude
-#        except:
-#            dims = self.dimensionality
-#            magnitude = self.magnitude * other
-#        return Quantity(magnitude, dims)
-#
-#    def __div__(self, other):
-#        assert isinstance(other, (HasDimensionality, int, float))
-#        try:
-#            dims = HasDimensionality.__div__(self, other)
-#            magnitude = self.magnitude / other.magnitude
-#        except:
-#            dims = self.dimensionality
-#            magnitude = self.magnitude / other
-#        return Quantity(magnitude, dims)
-#
-#    def __pow__(self, other):
-#        assert isinstance(other, (int, float))
-#        dims = HasDimensionality.__pow__(self, other)
-#        return Quantity(self.magnitude**other, dims)
 
 
 class ReferenceUnit(UnitQuantity):
