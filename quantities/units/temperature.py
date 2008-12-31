@@ -1,9 +1,9 @@
 """
 """
 
-from quantities.units.unitquantities import temperature
+from quantities.units.unitquantity import UnitTemperature
 
-K = degK = kelvin = Kelvin = temperature('K')
-degR = rankine = Rankine = temperature('Rankine')
-degC = celsius = Celsius = temperature('degC')
-degF = fahrenheit = Fahrenheit = temperature('degF')
+K = degK = kelvin = Kelvin = UnitTemperature('K')
+degR = rankine = Rankine = UnitTemperature('Rankine')
+degC = celsius = Celsius = UnitTemperature('degC')
+degF = fahrenheit = Fahrenheit = UnitTemperature('degF')

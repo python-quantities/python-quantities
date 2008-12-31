@@ -50,7 +50,7 @@ Quantity(19.000000000000004), (m^3/m^2) * (parsec/cm^3)
 __version__ = '0.1(bzr)'
 
 
-from quantity import Quantity, ProtectedUnitsError
+from quantity import Quantity
 
 from parser import unit_registry
 

@@ -51,18 +51,13 @@ with file('quantities/constants/codata.py', 'w') as f:
         name = line[:55].rstrip().replace('mag.','magnetic').replace('mom.', 'moment')
         val = line[55:77].replace(' ','').replace('...','')
         prec = line[77:99].replace(' ','').replace('(exact)', '0')
-        unit = line[99:].rstrip().replace(' ', '*')
-        unit = unit.replace('T', 'T_').replace('Pa','Pa_')
-        unit = unit.replace('J','J_').replace('ohm','ohm_')
-        unit = unit.replace('E_h','E_h_').replace('V','V_')
-        unit = unit.replace('Hz','Hz_').replace('F','F_')
-        unit = unit.replace('W','W_').replace('W_b','Wb_')
+        unit = line[99:].rstrip().replace(' ', '*').replace('^', '**')
         d = "{'value': %s, 'precision': %s, 'units': '%s'}"%(val, prec, unit)
         f.write("physical_constants['%s'] = %s\n"%(name, d))
 
 
 setup (name = "quantities",
-       version='1.0',
+       version='0.1',
        author='doutriaux1@llnl.gov',
        description = "Python wrapping for UDUNITS package developed by UNIDATA",
        url = "http://www-pcmdi.llnl.gov/software",
