@@ -2,6 +2,7 @@
 """
 
 import copy
+import os
 
 import numpy
 
@@ -9,56 +10,127 @@ from quantities.dimensionality import BaseDimensionality, \
     MutableDimensionality, ImmutableDimensionality
 from quantities.parser import unit_registry
 
+import udunits as _udunits
+
+_udunits.init(os.path.join(os.path.dirname(__file__),
+                           'quantities-data',
+                           'udunits.dat'))
+
+
+class QuantityIterator:
+
+    """an iterator for quantity objects"""
+
+    def __init__(self, object):
+        self.object = object
+        self.iterator = super(Quantity, object).__iter__()
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        return Quantity(self.iterator.next(), self.object.units)
+
 
 class Quantity(numpy.ndarray):
 
     # TODO: what is an appropriate value?
     __array_priority__ = 21
 
-    def __new__(cls, magnitude, units={}, dtype='d', mutable=True):
-        if not isinstance(magnitude, numpy.ndarray):
-            magnitude = numpy.array(magnitude, dtype=dtype)
-            if not magnitude.flags.contiguous:
-                magnitude = magnitude.copy()
+    def __new__(cls, data, units='', dtype='d', mutable=True):
+        if not isinstance(data, numpy.ndarray):
+            data = numpy.array(data, dtype=dtype)
+
+        data = data.copy()
+
+        if isinstance(data, Quantity) and units:
+            if isinstance(units, BaseDimensionality):
+                units = str(units)
+            data = data.rescale(units)
 
         ret = numpy.ndarray.__new__(
             cls,
-            magnitude.shape,
-            magnitude.dtype,
-            buffer=magnitude
+            data.shape,
+            data.dtype,
+            buffer=data
         )
         ret.flags.writeable = mutable
         return ret
 
-    def __init__(self, data, units={}, dtype='d', mutable=True):
-        if isinstance(units, str):
-            units = unit_registry[units].dimensionality
-        if isinstance(units, Quantity):
-            units = units.dimensionality
-        assert isinstance(units, (BaseDimensionality, dict))
-
-        if mutable:
-            self._dimensionality = MutableDimensionality(units)
+    def __init__(self, data, units='', dtype='d', mutable=True):
+        if isinstance(data, Quantity) and not units:
+            dims = data.dimensionality
+        elif isinstance(units, str):
+            if units == '': units = 'dimensionless'
+            dims = unit_registry[units].dimensionality
+        elif isinstance(units, Quantity):
+            dims = units.dimensionality
+        elif isinstance(units, (BaseDimensionality, dict)):
+            dims = units
         else:
-            self._dimensionality = ImmutableDimensionality(units)
+            assert units is None
+            dims = None
+
+        self._mutable = mutable
+        if self.is_mutable:
+            if dims is None: dims = {}
+            self._dimensionality = MutableDimensionality(dims)
+        else:
+            if dims is None:
+                self._dimensionality = None
+            else:
+                self._dimensionality = ImmutableDimensionality(dims)
 
     @property
     def dimensionality(self):
-        return copy.copy(self._dimensionality)
+        if self._dimensionality is None:
+            return ImmutableDimensionality({self:1})
+        else:
+            return ImmutableDimensionality(self._dimensionality)
 
     @property
     def magnitude(self):
         return self.view(type=numpy.ndarray)
 
     @property
-    def units(self):
+    def is_mutable(self):
+        return self._mutable
+
+    @property
+    def udunits(self):
+        return self.dimensionality.udunits
+
+    def get_units(self):
         return str(self.dimensionality)
+    def set_units(self, units):
+        if not self.is_mutable:
+            raise AttributeError("can not modify protected units")
+        try:
+            if isinstance(units, str):
+                units = unit_registry[units]
+            scaling, offset = _udunits.convert(self.udunits, units.udunits)
+            self.magnitude.flat[:] = scaling*self.magnitude.flat[:] + offset
+            self._dimensionality = MutableDimensionality(units.dimensionality)
+        except TypeError:
+            raise TypeError(
+                'Can not convert between quantities with units of %s and %s'\
+                %(self.udunits, units.udunits)
+            )
+    units = property(get_units, set_units)
+
+    def rescale(self, units):
+        """
+        Return a copy rescaled with the specified units
+        """
+        copy = Quantity(self)
+        copy.units = units
+        return copy
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
             obj, 'dimensionality', MutableDimensionality()
         )
-#
+
 #    def __deepcopy__(self, memo={}):
 #        dimensionality = copy.deepcopy(self.dimensionality)
 #        return self.__class__(
@@ -67,8 +139,8 @@ class Quantity(numpy.ndarray):
 #            dimensionality
 #        )
 
-    def __cmp__(self, other):
-        raise
+#    def __cmp__(self, other):
+#        raise
 
     def __add__(self, other):
         if self.dimensionality:
@@ -125,103 +197,36 @@ class Quantity(numpy.ndarray):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
 
     __str__ = __repr__
-    
-#    def to(self, units):
-#        """this function returns a copy of the object with the specified units
-#        """
-#        copy = self.__deepcopy__()
-#        copy.units = units
-#        return copy
 
     def __getitem__(self, key):
-        """
-        returns a quantity
-        """
-        # indexing needs overloading so that units are also returned
-        data = self.view(type=ndarray)[key]
-        return Quantity(data, self.units)
+        return Quantity(self.magnitude[key], self.units)
 
     def __setitem__(self, key, value):
-        ## convert value units to item's units
-        if (self.units != value.units):
-            #this can be replaced with .to()
-            value = value.__deepcopy__()
-            value.units = self.units
-
-        self.view(dtype = ndarray).__setitem__(key, value)
+        self.magnitude[key] = value.rescale(self.units).magnitude
 
     def __iter__(self):
-        # return the iterator wrapper
         return QuantityIterator(self)
 
-
-    def _comparison_operater_prep(self, other):
-        """
-        this function checks whether other is of an appropriate type and returns an ndarray
-        object which is other modified so that it is in the correct units and scaling factor
-        other - the other object to be operated with and
-        returns: (prepped_other)
-        """
-        if (not isinstance(other, Quantity)):
-            other = Quantity(other, '')
-
-        # this can be replaced with .to()
-        other = other.__deepcopy__()
-        other.units = self.units
-        return self.view(type=ndarray), other.view(type=ndarray)
-
-    # comparison overloads
-    # these must be implemented so that the return type is just a plain array
-    # (no units) and so that the proper scaling is used
-    # these comparisons work even though self will be Quantity and other will be
-    # a ndarray (after going though _comparison_operater_prep) because we use
-    # the ndarray comparison operators and those naturally disregard the effect
-    # of the units
     def __lt__(self, other):
-
-       self, other = self._comparison_operater_prep(other)
-
-       return self.__lt__(other)
-
+       other = other.rescale(self.units)
+       return self.magnitude < other.magnitude
 
     def __le__(self, other):
-       self, other = self._comparison_operater_prep(other)
-
-       return self.__le__(other)
+       other = other.rescale(self.units)
+       return self.magnitude <= other.magnitude
 
     def __eq__(self, other):
-       self, other = self._comparison_operater_prep(other)
-
-       return self.__eq__(other)
+       other = other.rescale(self.units)
+       return self.magnitude == other.magnitude
 
     def __ne__(self, other):
-       self, other = self._comparison_operater_prep(other)
-
-       return self.__ne__(other)
+       other = other.rescale(self.units)
+       return self.magnitude != other.magnitude
 
     def __gt__(self, other):
-       self, other = self._comparison_operater_prep(other)
-
-       return self.__gt__(other)
+       other = other.rescale(self.units)
+       return self.magnitude > other.magnitude
 
     def __ge__(self, other):
-       self, other = self._comparison_operater_prep(other)
-
-       return self.__ge__(other)
-
-#define an iterator class
-class QuantityIterator:
-    """ an iterator for quantity objects"""
-    # this simply wraps the base class iterator
-
-    def __init__(self, object):
-        """mu"""
-        self.object = object
-        self.iterator = super(Quantity, object).__iter__()
-
-    def __iter__(self):
-        return self
-
-    def next(self):
-        # we just want to return the ndarray item times the units
-        return Quantity(self.iterator.next(), self.object.units)
+       other = other.rescale(self.units)
+       return self.magnitude >= other.magnitude

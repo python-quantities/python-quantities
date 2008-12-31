@@ -3,6 +3,7 @@
 
 from quantities.quantity import Quantity
 from quantities.parser import unit_registry
+from quantities.dimensionality import ImmutableDimensionality
 
 
 class UnitQuantity(Quantity):
@@ -14,14 +15,14 @@ class UnitQuantity(Quantity):
         return Quantity.__new__(
             cls,
             1.0,
-            units={},
+            units=None,
             dtype='d',
             mutable=False
         )
 
     def __init__(self, name, reference_quantity=None):
         self._name = name
-        Quantity.__init__(self, 1.0, {self:1}, 'd', mutable=False)
+        Quantity.__init__(self, 1.0, None, 'd', mutable=False)
 
         if reference_quantity is None:
             reference_quantity = self
@@ -37,17 +38,16 @@ class UnitQuantity(Quantity):
         return self._format_order
 
     @property
+    def name(self):
+        return self._name
+
+    @property
     def reference_quantity(self):
         return self._reference_quantity
 
     @property
     def units(self):
-        return self._name
-
-    def __repr__(self):
-        return self.units
-
-    __str__ = __repr__
+        return '(%s)'%self._name
 
 unit_registry['UnitQuantity'] = UnitQuantity
 

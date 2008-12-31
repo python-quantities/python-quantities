@@ -6,20 +6,6 @@ import operator
 import numpy
 
 
-class IncompatibleUnits(Exception):
-
-    def __init__(self, op, operand1, operand2):
-        self._op = op
-        self._op1 = operand1
-        self._op2 = operand2
-        return
-
-    def __str__(self):
-        str = "Cannot %s quanitites with units of '%s' and '%s'" % \
-              (self._op, self._op1, self._op2)
-        return str
-
-
 class BaseDimensionality(object):
 
     """
@@ -36,7 +22,7 @@ class BaseDimensionality(object):
         ]
         for key in keys:
             d = udict[key]
-            u = key.units
+            u = key.name
             if d>0:
                 if d != 1: u = u + ('**%s'%d).rstrip('.0')
                 num.append(u)
@@ -47,13 +33,23 @@ class BaseDimensionality(object):
         res = '*'.join(num)
         if len(den):
             if not res: res = '1'
-            res = res + '/' + '*'.join(den)
+            fmt = '(%s)' if len(den) > 1 else '%s'
+            res = res + '/' + fmt%('*'.join(den))
         if not res: res = 'dimensionless'
         return '(%s)'%res
 
+    @property
+    def udunits(self):
+        return str(self).replace('**', '^')
 
     def __add__(self, other):
-        assert self == other
+        try:
+            assert self == other
+        except AssertionError:
+            raise TypeError(
+                'can not add quantities of with units of %s and %s'\
+                %(str(self), str(other))
+            )
         return MutableDimensionality(self)
 
     __sub__ = __add__
@@ -108,7 +104,7 @@ class ImmutableDimensionality(BaseDimensionality):
         return self._format_units(self.__data)
 
     def __cmp__(self, dict):
-        if isinstance(dict, tuct):
+        if isinstance(dict, ImmutableDimensionality):
             return cmp(self.__data, dict.__data)
         else:
             return cmp(self.__data, dict)
@@ -127,8 +123,8 @@ class ImmutableDimensionality(BaseDimensionality):
         return res
 
     def copy(self):
-        if self.__class__ is tuct:
-            return tuct(self.__data.copy())
+        if self.__class__ is ImmutableDimensionality:
+            return ImmutableDimensionality(self.__data.copy())
         import copy
         __data = self.__data
         try:
