@@ -1,4 +1,4 @@
-"""
+﻿"""
 """
 
 import copy
@@ -125,3 +125,103 @@ class Quantity(numpy.ndarray):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
 
     __str__ = __repr__
+    
+#    def to(self, units):
+#        """this function returns a copy of the object with the specified units
+#        """
+#        copy = self.__deepcopy__()
+#        copy.units = units
+#        return copy
+
+    def __getitem__(self, key):
+        """
+        returns a quantity
+        """
+        # indexing needs overloading so that units are also returned
+        data = self.view(type=ndarray)[key]
+        return Quantity(data, self.units)
+
+    def __setitem__(self, key, value):
+        ## convert value units to item's units
+        if (self.units != value.units):
+            #this can be replaced with .to()
+            value = value.__deepcopy__()
+            value.units = self.units
+
+        self.view(dtype = ndarray).__setitem__(key, value)
+
+    def __iter__(self):
+        # return the iterator wrapper
+        return QuantityIterator(self)
+
+
+    def _comparison_operater_prep(self, other):
+        """
+        this function checks whether other is of an appropriate type and returns an ndarray
+        object which is other modified so that it is in the correct units and scaling factor
+        other - the other object to be operated with and
+        returns: (prepped_other)
+        """
+        if (not isinstance(other, Quantity)):
+            other = Quantity(other, '')
+
+        # this can be replaced with .to()
+        other = other.__deepcopy__()
+        other.units = self.units
+        return self.view(type=ndarray), other.view(type=ndarray)
+
+    # comparison overloads
+    # these must be implemented so that the return type is just a plain array
+    # (no units) and so that the proper scaling is used
+    # these comparisons work even though self will be Quantity and other will be
+    # a ndarray (after going though _comparison_operater_prep) because we use
+    # the ndarray comparison operators and those naturally disregard the effect
+    # of the units
+    def __lt__(self, other):
+
+       self, other = self._comparison_operater_prep(other)
+
+       return self.__lt__(other)
+
+
+    def __le__(self, other):
+       self, other = self._comparison_operater_prep(other)
+
+       return self.__le__(other)
+
+    def __eq__(self, other):
+       self, other = self._comparison_operater_prep(other)
+
+       return self.__eq__(other)
+
+    def __ne__(self, other):
+       self, other = self._comparison_operater_prep(other)
+
+       return self.__ne__(other)
+
+    def __gt__(self, other):
+       self, other = self._comparison_operater_prep(other)
+
+       return self.__gt__(other)
+
+    def __ge__(self, other):
+       self, other = self._comparison_operater_prep(other)
+
+       return self.__ge__(other)
+
+#define an iterator class
+class QuantityIterator:
+    """ an iterator for quantity objects"""
+    # this simply wraps the base class iterator
+
+    def __init__(self, object):
+        """mu"""
+        self.object = object
+        self.iterator = super(Quantity, object).__iter__()
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        # we just want to return the ndarray item times the units
+        return Quantity(self.iterator.next(), self.object.units)
