@@ -22,7 +22,7 @@ class BaseDimensionality(object):
         ]
         for key in keys:
             d = udict[key]
-            u = key.name
+            u = key.units
             if d>0:
                 if d != 1: u = u + ('**%s'%d).rstrip('.0')
                 num.append(u)
@@ -36,7 +36,7 @@ class BaseDimensionality(object):
             fmt = '(%s)' if len(den) > 1 else '%s'
             res = res + '/' + fmt%('*'.join(den))
         if not res: res = 'dimensionless'
-        return '(%s)'%res
+        return '%s'%res
 
     @property
     def udunits(self):

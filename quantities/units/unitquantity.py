@@ -38,16 +38,12 @@ class UnitQuantity(Quantity):
         return self._format_order
 
     @property
-    def name(self):
-        return self._name
-
-    @property
     def reference_quantity(self):
         return self._reference_quantity
 
     @property
     def units(self):
-        return '(%s)'%self._name
+        return self._name
 
 unit_registry['UnitQuantity'] = UnitQuantity
 
