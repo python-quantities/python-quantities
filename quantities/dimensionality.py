@@ -62,7 +62,11 @@ class Dimensionality(object):
         return self.__class__(units, dimensions, **compound)
 
     def simplify_units(self):
+        # first setup a unitless quantity
         scaling = unit_registry['dimensionless']
+        
+        #now produce a quantity from all the subunits of this quantity
+        #this call to _compound should be too something that refers to all units
         for k, v in self._compound.items():
             q = unit_registry[k]**v
             scaling = scaling * q
