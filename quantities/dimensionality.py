@@ -62,7 +62,11 @@ class Dimensionality(object):
         return self.__class__(units, dimensions, **compound)
 
     def simplify_units(self):
+        # first setup a unitless quantity
         scaling = unit_registry['dimensionless']
+        
+        #now produce a quantity from all the subunits of this quantity
+        #this call to _compound should be too something that refers to all units
         for k, v in self._compound.items():
             q = unit_registry[k]**v
             scaling = scaling * q
@@ -243,9 +247,9 @@ class Dimensionality(object):
             compound = copy.deepcopy(self._compound)
             for k, v in other._compound.items():
                 if k in self._compound:
-                    compound[k] += v
+                    compound[k] -= v
                 else:
-                    compound[k] = v
+                    compound[k] = -v
         new = self.__class__(units, dimensions, **compound)
         new._scaling = scaling
         new._offset = offset
