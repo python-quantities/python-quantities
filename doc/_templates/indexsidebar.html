@@ -1,0 +1,20 @@
+<h3>Download</h3>
+{% if release.endswith('(bzr)') %}
+<p>This documentation is for version <b>{{ version }}</b>, which is
+  not released yet.</p>
+<p>You can use it from the
+  <a href="http://launchpad.net/python-quantites/">Bazaar repo</a> or look for
+  released versions in the <a href="http://pypi.python.org/pypi/quantites">Python
+    Package Index</a>.</p>
+{% else %}
+<p>Current version: <b>{{ version }}</b></p>
+<p>Get Quantities from the <a href="http://pypi.python.org/pypi/quantities">
+Python Package Index</a>
+{% endif %}
+
+<h3>Questions? Suggestions?</h3>
+
+<p>You can report issues at the
+  <a href="https://bugs.launchpad.net/python-quantities">tracker</a> or send an 
+email to dsdale24 at gmail dot com</p>
+
