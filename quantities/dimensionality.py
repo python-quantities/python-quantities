@@ -43,10 +43,15 @@ class BaseDimensionality(object):
 
     @property
     def udunits(self):
+        """
+        string representation of the unit group in the udunits format
+        """
         return str(self).replace('**', '^')
 
     def __add__(self, other):
         try:
+            # in order to allow adding different units (i.e. ft + m) need to
+            # compare the two fully reduced units
             assert self == other
         except AssertionError:
             raise TypeError(
@@ -58,13 +63,18 @@ class BaseDimensionality(object):
     __sub__ = __add__
 
     def __mul__(self, other):
+        #make a new dimensionality object for the result from the first object
         new = MutableDimensionality(self)
         for unit, power in other.iteritems():
             try:
+                #add existing units together
                 new[unit] += power
+                #if the unit has a zero power, remove it
                 if new[unit] == 0:
                     new.pop(unit)
             except KeyError:
+                #if we get a keyerror, the unit does not exist in the first
+                #dimensionality, so add it in
                 new[unit] = power
         return new
 
@@ -72,10 +82,14 @@ class BaseDimensionality(object):
         new = MutableDimensionality(self)
         for unit, power in other.iteritems():
             try:
+                #add the power to the entry for the unit
                 new[unit] -= power
+                #if the unit is raised to the zeroth power, remove it
                 if new[unit] == 0:
                     new.pop(unit)
             except KeyError:
+                #if we get an exception, then the unit did not exist before
+                #so we have to add it in
                 new[unit] = -power
         return new
 
@@ -83,6 +97,8 @@ class BaseDimensionality(object):
         assert isinstance(other, (numpy.ndarray, int, float))
         if isinstance(other, numpy.ndarray):
             try:
+                #make sure that if an array is used to power a unit,
+                #the array just repeats the same number
                 assert other.min()==other.max()
                 other = other.min()
             except AssertionError:
@@ -90,7 +106,33 @@ class BaseDimensionality(object):
 
         new = MutableDimensionality(self)
         for i in new:
+            #multiply all the entries by the power
             new[i] *= other
+        return new
+
+    def reduced(self):
+        """
+        returns a dimensionality object reduced one step
+        """
+        new = MutableDimensionality()
+        # iterate through all the units in the current unit and multiply them
+        # together
+        for unit in self:
+            # multiply by the reference quantity taken to the appropriate
+            #power
+            new *= unit._reference_quantity.dimensionality ** self[unit]
+        return new
+
+    def simplified(self):
+        """
+        returns a fully reduced dimensionality
+        """
+        old = MutableDimensionality(self)
+        new = old.reduced()
+        # continue decomposing the units until further decomposition
+        # does not change anything
+        while old != new:
+            old, new = new, new.reduced()
         return new
 
 

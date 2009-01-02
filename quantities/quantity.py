@@ -106,17 +106,28 @@ class Quantity(numpy.ndarray):
     def udunits(self):
         return self.dimensionality.udunits
 
+    # get and set methods for the units property
     def get_units(self):
         return str(self.dimensionality)
     def set_units(self, units):
         if not self.is_mutable:
             raise AttributeError("can not modify protected units")
         try:
+            #if the units are given as a string, find the actual units in
+            # the unit registry
             if isinstance(units, str):
                 units = unit_registry[units]
+            # if the units are being assigned a quantity, simply use the
+            # quantity's units
+            if isinstance(units, Quantity):
+                units = units.dimensionality
+            # get the scaling factor and offset for converting between the
+            # current units and the assigned units
             scaling, offset = _udunits.convert(self.udunits, units.udunits)
+            #multiply the data array by the scaling factor and add the offset
             self.magnitude.flat[:] = scaling*self.magnitude.flat[:] + offset
-            self._dimensionality = MutableDimensionality(units.dimensionality)
+            # make the units the new units
+            self._dimensionality = MutableDimensionality(units)
         except TypeError:
             raise TypeError(
                 'Can not convert between quantities with units of %s and %s'\
@@ -126,11 +137,17 @@ class Quantity(numpy.ndarray):
 
     def rescale(self, units):
         """
-        Return a copy rescaled with the specified units
+        Return a copy of the quantity converted to the specified units
         """
         copy = Quantity(self)
         copy.units = units
         return copy
+
+    def simplified(self):
+        # call the dimensionality simplification routine
+        simplified_units = self.dimensionality.simplified()
+        # rescale the quantity to the simplified units
+        return self.rescale(simplified_units)
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
