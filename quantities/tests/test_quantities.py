@@ -47,18 +47,21 @@ class TestQuantities(unittest.TestCase):
 
     def test_unit_aggregation(self):
         joule = q.kg*q.m**2/q.s**2
+        pc_per_cc = q.UnitQuantity("(parsec/cm**3)", q.parsec/q.cm**3)
+        area_per_volume = q.UnitQuantity("(m**2/m**3)", 1/q.m)
         self.assertEqual(str(joule/q.m), "1.0*kg*m/s**2", str(joule/q.m))
         self.assertEqual(str(joule*q.m), "1.0*kg*m**3/s**2", str(joule*q.m))
         self.assertEqual(
-            str(q.J*q.UnitQuantity("(parsec/cm**3)")),
+            str(q.J*pc_per_cc),
             "1.0*J*(parsec/cm**3)",
-            str(q.J*q.UnitQuantity("(parsec/cm**3)"))
+            str(q.J*pc_per_cc)
         )
-#        temp = 1.0*q.m
-#        temp.units = q.ft
-#        temp = q.UnitQuantity("(parsec/cm**3)")*q.UnitQuantity("(m**3/m**2)")
-#        temp.simplify_units()
-#        self.assertEqual(str(temp), "3.085678e+22*1/m", str(temp))
+        temp = pc_per_cc / area_per_volume
+        self.assertEqual(
+            str(temp.simplified),
+            "3.08568025e+22*1/m",
+            str(temp.simplified)
+        )
 
     def test_ratios(self):
         self.assertAlmostEqual(
@@ -74,30 +77,27 @@ class TestQuantities(unittest.TestCase):
             q.J/q.BTU.rescale(q.J))
 
     def test_compound_reduction(self):
-        temp = q.UnitQuantity('(parsec/cm**3)')*q.UnitQuantity('(m/m**3)')
+        pc_per_cc = q.UnitQuantity("(parsec/cm**3)", q.parsec/q.cm**3)
+        temp = pc_per_cc * q.UnitQuantity('(m/m**3)', 1/q.m**2)
         self.assertEqual(str(temp), "1.0*(parsec/cm**3)*(m/m**3)", str(temp))
-#        temp.simplify_units()
+        temp = temp.simplified
         temp.units=q.parsec**-4
-        self.assertEqual(str(temp), "2.7973900166e+88*1/parsec**4", str(temp))
+        self.assertEqual(str(temp), "2.79740021556e+88*1/parsec**4", str(temp))
         temp.units=q.m**-4
-        self.assertEqual(str(temp), "3.085678e+22*1/m**4", str(temp))
-        self.assertEqual(str(1/temp), "3.2407788499e-23*m**4", str(1/temp))
+        self.assertEqual(str(temp), "3.08568025e+22*1/m**4", str(temp))
+        self.assertEqual(str(1/temp), "3.24077648681e-23*m**4", str(1/temp))
         self.assertEqual(
             str(temp**-1),
-            "3.2407788499e-23*m**4",
+            "3.24077648681e-23*m**4",
             str(temp**-1)
         )
 
         # does this handle regular units correctly?
         temp1 = 3.14159 * q.m
 
-        temp2 = 3.14159 * q.m
-#        temp2.simplify_units()
-        # simplifying the units of a quantity with base units should not affect
-        # it, this currently fails
-        self.assertAlmostEqual(temp1, temp2)
+        self.assertAlmostEqual(temp1, temp1.simplified)
 
-        self.assertEqual(str(temp1), str(temp2))
+        self.assertEqual(str(temp1), str(temp1.simplified))
 
     def test_equality(self):
         test1 = 1.5 * q.kilometer

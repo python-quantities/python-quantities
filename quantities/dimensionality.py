@@ -141,9 +141,8 @@ class ImmutableDimensionality(BaseDimensionality):
         return self.__data[key]
 
     def __hash__(self):
-        items = self.items()
-        res = hash(items[0])
-        for item in items[1:]:
+        res = hash(unit_registry['dimensionless'])
+        for item in self.items():
             res ^= hash(item)
         return res
 

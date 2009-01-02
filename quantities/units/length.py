@@ -33,11 +33,11 @@ yd = yard = yards = international_yard = international_yards = \
 mil = mils = \
     UnitLength('mil', 2.54e-5*m)
 pc = parsec = parsecs = \
-    UnitLength('parsec', 3.085678e16*meter) # TODO: check
+    UnitLength('parsec', 3.08568025e16*meter)
 ly = light_year = light_years = \
-    UnitLength('light_year', 9.46073e15*m) # TODO: check
+    UnitLength('light_year', 9.4605284e15*m)
 au = astronomical_unit = astronomical_units = \
-    UnitLength('au', 1.495979e11*m) # TODO: check
+    UnitLength('au', 149597870691*m)
 fermi = fermis = \
     UnitLength('fermi', 1e-15*m)
 nmi = nmile = nmiles = nautical_mile = nautical_miles = \

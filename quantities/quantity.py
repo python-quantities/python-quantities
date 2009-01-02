@@ -2,25 +2,12 @@
 """
 
 import copy
-import os
 
 import numpy
 
 from quantities.dimensionality import BaseDimensionality, \
     MutableDimensionality, ImmutableDimensionality
 from quantities.parser import unit_registry
-
-import udunits as _udunits
-
-_udunits.init(
-    os.path.join(
-        os.path.dirname(__file__),
-        'quantities-data',
-        'udunits.dat'
-    )
-)
-
-del os
 
 
 class QuantityIterator:
@@ -127,31 +114,10 @@ class Quantity(numpy.ndarray):
             self._dimensionality = \
                 MutableDimensionality(units.dimensionality)
         except AssertionError:
-            print 'no conversion path between "%s" and "%s"'\
+            raise TypeError(
+                'Unable to convert between units of "%s" and "%s"'
                 %(sq.units, osq.units)
-            print 'please register a bug report!'
-            print 'attempting to use udunits for conversion'
-            try:
-                #if the units are given as a string, find the actual units in
-                # the unit registry
-                if isinstance(units, str):
-                    units = unit_registry[units]
-                # if the units are being assigned a quantity, simply use the
-                # quantity's units
-                if isinstance(units, Quantity):
-                    units = units.dimensionality
-                # get the scaling factor and offset for converting between the
-                # current units and the assigned units
-                scaling, offset = _udunits.convert(self.udunits, units.udunits)
-                #multiply the data array by the scaling factor and add the offset
-                self.magnitude.flat[:] = scaling*self.magnitude.flat[:] + offset
-                # make the units the new units
-                self._dimensionality = MutableDimensionality(units)
-            except TypeError:
-                raise TypeError(
-                    'Can not convert between quantities with units of %s and %s'\
-                    %(self.udunits, units.udunits)
-                )
+            )
     units = property(get_units, set_units)
 
     def rescale(self, units):
