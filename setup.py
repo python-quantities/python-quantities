@@ -55,12 +55,41 @@ with file('quantities/constants/codata.py', 'w') as f:
         d = "{'value': %s, 'precision': %s, 'units': '%s'}"%(val, prec, unit)
         f.write("physical_constants['%s'] = %s\n"%(name, d))
 
+desc = 'Support for physical quantities based on the popular numpy library'
+long_desc = "Quantities is designed to handle arithmetic and conversions of \
+physical quantities, which have a magnitude, dimensionality specified by \
+various units, and possibly an uncertainty. Quantities is based on the popular \
+numpy library. It is undergoing active development, and while the current \
+features and API are fairly stable, test coverage is far from complete and the \
+package is not ready for production use."
+classifiers = [
+    'Development Status :: 3 - Alpha',
+    'Environment :: Console',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Education',
+    'Intended Audience :: End Users/Desktop',
+    'Intended Audience :: Science/Research',
+    'License :: OSI Approved :: BSD License',
+    'Natural Language :: English',
+    'Operating System :: OS Independent',
+    'Programming Language :: Python',
+    'Topic :: Education',
+    'Topic :: Scientific/Engineering',
+]
+
 
 setup (name = "quantities",
-       version='0.1',
-       author='doutriaux1@llnl.gov',
-       description = "Python wrapping for UDUNITS package developed by UNIDATA",
-       url = "http://www-pcmdi.llnl.gov/software",
+       version = '0.1',
+       author = 'Darren Dale',
+       author_email = 'dsdale24@gmail.com',
+       description = desc,
+       keywords = ['quantities', 'physical quantities', 'units'],
+       license = 'BSD',
+       long_description = long_desc,
+       classifiers = classifiers,
+       platforms = 'Any',
+       requires = ['numpy'],
+       url = "https://launchpad.net/python-quantities",
        packages = ['quantities',
                    'quantities.units',
                    'quantities.constants',
