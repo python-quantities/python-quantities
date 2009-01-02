@@ -147,9 +147,7 @@ class Quantity(numpy.ndarray):
         # call the dimensionality simplification routine
         simplified_units = self.dimensionality.simplified()
         # rescale the quantity to the simplified units
-        return self.rescale(simplified_units )
-
-
+        return self.rescale(simplified_units)
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(

@@ -110,12 +110,12 @@ class BaseDimensionality(object):
             new[i] *= other
         return new
 
-    def reduce(self):
+    def reduced(self):
         """
         returns a dimensionality object reduced one step
         """
         new = MutableDimensionality()
-        #iterate through all the units in the current unit and multiply them
+        # iterate through all the units in the current unit and multiply them
         # together
         for unit in self:
             # multiply by the reference quantity taken to the appropriate
@@ -127,14 +127,12 @@ class BaseDimensionality(object):
         """
         returns a fully reduced dimensionality
         """
-        new = MutableDimensionality(self)
-        reduced = new.reduce()
-
+        old = MutableDimensionality(self)
+        new = old.reduced()
         # continue decomposing the units until further decomposition
         # does not change anything
-        while new != reduced:
-            new = reduced
-            reduced = reduced.reduce()
+        while old != new:
+            old, new = new, new.reduced()
         return new
 
 
