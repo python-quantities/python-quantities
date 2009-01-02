@@ -112,27 +112,46 @@ class Quantity(numpy.ndarray):
     def set_units(self, units):
         if not self.is_mutable:
             raise AttributeError("can not modify protected units")
+        if isinstance(units, str):
+            units = unit_registry[units]
+        if isinstance(units, Quantity):
+            try:
+                assert units.magnitude == 1
+            except AssertionError:
+                raise TypeError('units must have unit magnitude')
         try:
-            #if the units are given as a string, find the actual units in
-            # the unit registry
-            if isinstance(units, str):
-                units = unit_registry[units]
-            # if the units are being assigned a quantity, simply use the
-            # quantity's units
-            if isinstance(units, Quantity):
-                units = units.dimensionality
-            # get the scaling factor and offset for converting between the
-            # current units and the assigned units
-            scaling, offset = _udunits.convert(self.udunits, units.udunits)
-            #multiply the data array by the scaling factor and add the offset
-            self.magnitude.flat[:] = scaling*self.magnitude.flat[:] + offset
-            # make the units the new units
-            self._dimensionality = MutableDimensionality(units)
-        except TypeError:
-            raise TypeError(
-                'Can not convert between quantities with units of %s and %s'\
-                %(self.udunits, units.udunits)
-            )
+            sq = Quantity(1.0, self.dimensionality).simplified
+            osq = units.simplified
+            assert osq.dimensionality == sq.dimensionality
+            self.magnitude.flat[:] *= sq.magnitude.flat[:] / osq.magnitude.flat[:]
+            self._dimensionality = \
+                MutableDimensionality(units.dimensionality)
+        except AssertionError:
+            print 'no conversion path between "%s" and "%s"'\
+                %(sq.units, osq.units)
+            print 'please register a bug report!'
+            print 'attempting to use udunits for conversion'
+            try:
+                #if the units are given as a string, find the actual units in
+                # the unit registry
+                if isinstance(units, str):
+                    units = unit_registry[units]
+                # if the units are being assigned a quantity, simply use the
+                # quantity's units
+                if isinstance(units, Quantity):
+                    units = units.dimensionality
+                # get the scaling factor and offset for converting between the
+                # current units and the assigned units
+                scaling, offset = _udunits.convert(self.udunits, units.udunits)
+                #multiply the data array by the scaling factor and add the offset
+                self.magnitude.flat[:] = scaling*self.magnitude.flat[:] + offset
+                # make the units the new units
+                self._dimensionality = MutableDimensionality(units)
+            except TypeError:
+                raise TypeError(
+                    'Can not convert between quantities with units of %s and %s'\
+                    %(self.udunits, units.udunits)
+                )
     units = property(get_units, set_units)
 
     def rescale(self, units):
@@ -143,11 +162,12 @@ class Quantity(numpy.ndarray):
         copy.units = units
         return copy
 
+    @property
     def simplified(self):
-        # call the dimensionality simplification routine
-        simplified_units = self.dimensionality.simplified()
-        # rescale the quantity to the simplified units
-        return self.rescale(simplified_units)
+        rq = self.magnitude * unit_registry['dimensionless']
+        for u, d in self.dimensionality.iteritems():
+            rq = rq * u.reference_quantity**d
+        return rq
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
@@ -231,25 +251,19 @@ class Quantity(numpy.ndarray):
         return QuantityIterator(self)
 
     def __lt__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude < other.magnitude
+       return self.simplified.magnitude < other.simplified.magnitude
 
     def __le__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude <= other.magnitude
+       return self.simplified.magnitude <= other.simplified.magnitude
 
     def __eq__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude == other.magnitude
+        return self.simplified.magnitude == other.simplified.magnitude
 
     def __ne__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude != other.magnitude
+       return self.simplified.magnitude != other.simplified.magnitude
 
     def __gt__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude > other.magnitude
+       return self.simplified.magnitude > other.simplified.magnitude
 
     def __ge__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude >= other.magnitude
+       return self.simplified.magnitude >= other.simplified.magnitude
