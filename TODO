@@ -1,5 +1,0 @@
-give Quantity object a precision property. Could be a scalar, array of 
-same shape, or lower/upper data. precision should handle error 
-propagation.
-
-MaskedQuantity
