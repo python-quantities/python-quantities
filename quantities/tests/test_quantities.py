@@ -42,23 +42,23 @@ class TestQuantities(unittest.TestCase):
                 self.assertAlmostEqual(x1, x2, prec)
 
     def test_simple(self):
-        self.assertEqual(str(q.m), "1.0*(m)", str(q.m))
-        self.assertEqual(str(q.J), "1.0*(J)", str(q.J))
+        self.assertEqual(str(q.m), "1.0*m", str(q.m))
+        self.assertEqual(str(q.J), "1.0*J", str(q.J))
 
     def test_unit_aggregation(self):
         joule = q.kg*q.m**2/q.s**2
-        self.assertEqual(str(joule/q.m), "1.0*(kg*m/s**2)", str(joule/q.m))
-        self.assertEqual(str(joule*q.m), "1.0*(kg*m**3/s**2)", str(joule*q.m))
+        self.assertEqual(str(joule/q.m), "1.0*kg*m/s**2", str(joule/q.m))
+        self.assertEqual(str(joule*q.m), "1.0*kg*m**3/s**2", str(joule*q.m))
         self.assertEqual(
             str(q.J*q.UnitQuantity("(parsec/cm**3)")),
-            "1.0*(J*(parsec/cm**3))",
-            str(q.J*q.UnitQuantity("parsec/cm**3"))
+            "1.0*J*(parsec/cm**3)",
+            str(q.J*q.UnitQuantity("(parsec/cm**3)"))
         )
 #        temp = 1.0*q.m
 #        temp.units = q.ft
-#        temp = q.compound("parsec/cm^3")*q.compound("m^3/m^2")
+#        temp = q.UnitQuantity("(parsec/cm**3)")*q.UnitQuantity("(m**3/m**2)")
 #        temp.simplify_units()
-#        self.assertEqual(str(temp), "3.085678e+22 1 / m", str(temp))
+#        self.assertEqual(str(temp), "3.085678e+22*1/m", str(temp))
 
     def test_ratios(self):
         self.assertAlmostEqual(
@@ -75,16 +75,16 @@ class TestQuantities(unittest.TestCase):
 
     def test_compound_reduction(self):
         temp = q.UnitQuantity('(parsec/cm**3)')*q.UnitQuantity('(m/m**3)')
-        self.assertEqual(str(temp), "1.0*((parsec/cm**3)*(m/m**3))", str(temp))
+        self.assertEqual(str(temp), "1.0*(parsec/cm**3)*(m/m**3)", str(temp))
 #        temp.simplify_units()
         temp.units=q.parsec**-4
-        self.assertEqual(str(temp), "2.7973900166e+88*(1/parsec**4)", str(temp))
+        self.assertEqual(str(temp), "2.7973900166e+88*1/parsec**4", str(temp))
         temp.units=q.m**-4
-        self.assertEqual(str(temp), "3.085678e+22*(1/m**4)", str(temp))
-        self.assertEqual(str(1/temp), "3.2407788499e-23*(m**4)", str(1/temp))
+        self.assertEqual(str(temp), "3.085678e+22*1/m**4", str(temp))
+        self.assertEqual(str(1/temp), "3.2407788499e-23*m**4", str(1/temp))
         self.assertEqual(
             str(temp**-1),
-            "3.2407788499e-23*(m**4)",
+            "3.2407788499e-23*m**4",
             str(temp**-1)
         )
 
@@ -145,7 +145,7 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 + temp2),
-            "[  6.5   7.5   8.5   9.5  10.5]*(rem)"
+            "[  6.5   7.5   8.5   9.5  10.5]*rem"
         )
         self.assertTrue(((arr+5.5) * q.rem == temp1 + temp2).all())
 
@@ -161,14 +161,14 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 + temp3),
-            "[  6.5   8.5   8.5   9.5  10.5]*(rem)"
+            "[  6.5   8.5   8.5   9.5  10.5]*rem"
         )
         # two arrays with different units
         temp5 = numpy.array([5.5, 6.5, 5.5, 5.5, 5.5]) * 1e-2 * q.sievert
 
         self.assertEqual(
             str(temp1 + temp5.rescale(q.rem)),
-            "[  6.5   8.5   8.5   9.5  10.5]*(rem)"
+            "[  6.5   8.5   8.5   9.5  10.5]*rem"
         )
 
     def test_substraction(self):
@@ -200,7 +200,7 @@ class TestQuantities(unittest.TestCase):
 
         temp2 = 5.5 * q.rems
 
-        self.assertEqual(str(temp1 - temp2), "[-4.5 -3.5 -2.5 -1.5 -0.5]*(rem)")
+        self.assertEqual(str(temp1 - temp2), "[-4.5 -3.5 -2.5 -1.5 -0.5]*rem")
         self.numAssertEqual((arr-5.5) * q.rem, temp1 - temp2)
 
         # with different units
@@ -210,13 +210,13 @@ class TestQuantities(unittest.TestCase):
         #subtract two arrays
         temp3 = numpy.array([5.5, 6.5, 5.5, 5.5, 5.5]) * q.rem
 
-        self.assertEqual(str(temp1 - temp3), "[-4.5 -4.5 -2.5 -1.5 -0.5]*(rem)")
+        self.assertEqual(str(temp1 - temp3), "[-4.5 -4.5 -2.5 -1.5 -0.5]*rem")
         #two arrays with different units
         temp5 = numpy.array([5.5, 6.5, 5.5, 5.5, 5.5]) * 1e-2 * q.sievert
 
         self.assertEqual(
             str(temp1 - temp5.rescale(q.rem)),
-            "[-4.5 -4.5 -2.5 -1.5 -0.5]*(rem)"
+            "[-4.5 -4.5 -2.5 -1.5 -0.5]*rem"
         )
 
     def test_multiplication(self):
@@ -245,14 +245,14 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 * temp2),
-            "[ 1.5  2.   2.5  3.   3.5]*(J/s)"
+            "[ 1.5  2.   2.5  3.   3.5]*J/s"
         )
 
         # multiply an array with an array
         temp3 = numpy.array ([4,4,5,6,7]) * q.s**-1
         self.assertEqual(
             str(temp1 * temp3),
-            "[ 12.  16.  25.  36.  49.]*(J/s)"
+            "[ 12.  16.  25.  36.  49.]*J/s"
         )
 
     def test_division(self):
@@ -280,14 +280,14 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 / temp2),
-            "[  6.   8.  10.  12.  14.]*(s*J)"
+            "[  6.   8.  10.  12.  14.]*s*J"
         )
 
         # divide an array with an array
         temp3 = numpy.array([4,4,5,6,7]) * q.s**-1
         self.assertEqual(
             str(temp1 / temp3),
-            "[ 0.75  1.    1.    1.    1.  ]*(s*J)"
+            "[ 0.75  1.    1.    1.    1.  ]*s*J"
         )
 
     def test_powering(self):
@@ -305,7 +305,7 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp**3),
-            "[   1.    8.   27.   64.  125.]*(kg**3)"
+            "[   1.    8.   27.   64.  125.]*kg**3"
         )
         self.assertEqual(str(temp**6), str(temp2))
 
@@ -364,5 +364,5 @@ class TestQuantities(unittest.TestCase):
         # check for this bug
         self.assertEqual(
             str(q.J.rescale('kg*m**2/s**2')),
-            "1.0*(kg*m**2/s**2)"
+            "1.0*kg*m**2/s**2"
         )

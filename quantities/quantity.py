@@ -12,9 +12,15 @@ from quantities.parser import unit_registry
 
 import udunits as _udunits
 
-_udunits.init(os.path.join(os.path.dirname(__file__),
-                           'quantities-data',
-                           'udunits.dat'))
+_udunits.init(
+    os.path.join(
+        os.path.dirname(__file__),
+        'quantities-data',
+        'udunits.dat'
+    )
+)
+
+del os
 
 
 class QuantityIterator:

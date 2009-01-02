@@ -5,41 +5,41 @@ import operator
 
 import numpy
 
+def format_units(udict):
+    '''
+    create a string representation of the units contained in a dimensionality
+    '''
+    num = []
+    den = []
+    keys = [k for k, o in
+        sorted(
+            [(k, k.format_order) for k in udict],
+            key=operator.itemgetter(1)
+        )
+    ]
+    for key in keys:
+        d = udict[key]
+        u = key.units
+        if d>0:
+            if d != 1: u = u + ('**%s'%d).rstrip('.0')
+            num.append(u)
+        elif d<0:
+            d = -d
+            if d != 1: u = u + ('**%s'%d).rstrip('.0')
+            den.append(u)
+    res = '*'.join(num)
+    if len(den):
+        if not res: res = '1'
+        fmt = '(%s)' if len(den) > 1 else '%s'
+        res = res + '/' + fmt%('*'.join(den))
+    if not res: res = 'dimensionless'
+    return '%s'%res
+
 
 class BaseDimensionality(object):
 
     """
     """
-
-    def _format_units(self, udict):
-        """
-        generate a string representation of the dimensionality object
-        """
-        num = []
-        den = []
-        keys = [k for k, o in
-            sorted(
-                [(k, k.format_order) for k in udict],
-                key=operator.itemgetter(1)
-            )
-        ]
-        for key in keys:
-            d = udict[key]
-            u = key.name
-            if d>0:
-                if d != 1: u = u + ('**%s'%d).rstrip('.0')
-                num.append(u)
-            elif d<0:
-                d = -d
-                if d != 1: u = u + ('**%s'%d).rstrip('.0')
-                den.append(u)
-        res = '*'.join(num)
-        if len(den):
-            if not res: res = '1'
-            fmt = '(%s)' if len(den) > 1 else '%s'
-            res = res + '/' + fmt%('*'.join(den))
-        if not res: res = 'dimensionless'
-        return '(%s)'%res
 
     @property
     def udunits(self):
@@ -148,7 +148,7 @@ class ImmutableDimensionality(BaseDimensionality):
             self.__data.update(kwds)
 
     def __repr__(self):
-        return self._format_units(self.__data)
+        return format_units(self.__data)
 
     def __cmp__(self, dict):
         if isinstance(dict, ImmutableDimensionality):
@@ -222,4 +222,4 @@ class ImmutableDimensionality(BaseDimensionality):
 class MutableDimensionality(BaseDimensionality, dict):
 
     def __repr__(self):
-        return self._format_units(self)
+        return format_units(self)
