@@ -251,19 +251,67 @@ class Quantity(numpy.ndarray):
         return QuantityIterator(self)
 
     def __lt__(self, other):
-       return self.simplified.magnitude < other.simplified.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude < os.magnitude
+        except AssertionError:
+            raise TypeError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __le__(self, other):
-       return self.simplified.magnitude <= other.simplified.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude <= os.magnitude
+        except AssertionError:
+            raise TypeError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __eq__(self, other):
-        return self.simplified.magnitude == other.simplified.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude == os.magnitude
+        except AssertionError:
+            raise TypeError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __ne__(self, other):
-       return self.simplified.magnitude != other.simplified.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude != os.magnitude
+        except AssertionError:
+            raise TypeError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __gt__(self, other):
-       return self.simplified.magnitude > other.simplified.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude > os.magnitude
+        except AssertionError:
+            raise TypeError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __ge__(self, other):
-       return self.simplified.magnitude >= other.simplified.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude >= os.magnitude
+        except AssertionError:
+            raise TypeError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
