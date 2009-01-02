@@ -67,9 +67,16 @@ which will produce the html output and save it in build/sphinx/html. Then run::
   python setup.py build_sphinx -b latex
   cd build/sphinx/latex
   make all-pdf
+  cp Quantities.pdf ../html
 
-which will generate a pdf file in the latex directory. Finally, copy the `html/` 
-directory and the `latex/Quantites.pdf` file to the webserver.
+which will generate a pdf file in the latex directory. Finally, upload the html 
+content to the http://packages.python.org/quantities/ webserver. To do so::
+
+  cd doc/_build/html
+  zip -r quantities *
+
+and then visit http://pypi.python.org/pypi?%3Aaction=pkg_edit&name=quantities to 
+upload the zip archive.
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _LaTeX: http://www.latex-project.org/

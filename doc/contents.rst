@@ -4,7 +4,7 @@
     :Release: |version|
     :Date: |today|
 
-    .. Download `PDF <http://dale.chess.cornell.edu/~darren/XPaXS.pdf>`_
+    Download `PDF <http://packages.python.org/quantities/Quantities.pdf>`_
 
 .. _contents:
 
