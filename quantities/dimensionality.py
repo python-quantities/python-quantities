@@ -5,7 +5,7 @@ import operator
 
 import numpy
 
-from quantities.parser import unit_registry
+from quantities.registry import unit_registry
 
 def format_units(udict):
     '''

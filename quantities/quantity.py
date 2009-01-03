@@ -6,8 +6,8 @@ import copy
 import numpy
 
 from quantities.dimensionality import BaseDimensionality, \
-    MutableDimensionality, ImmutableDimensionality, incompatible_units
-from quantities.parser import unit_registry
+    MutableDimensionality, ImmutableDimensionality
+from quantities.registry import unit_registry
 
 
 class QuantityIterator:

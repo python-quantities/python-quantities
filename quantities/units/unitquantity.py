@@ -4,7 +4,7 @@
 import numpy
 
 from quantities.quantity import Quantity
-from quantities.parser import unit_registry
+from quantities.registry import unit_registry
 from quantities.dimensionality import ImmutableDimensionality
 
 
