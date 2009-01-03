@@ -133,7 +133,7 @@ class TestQuantities(unittest.TestCase):
             """just a function that raises an incompatible units error"""
             return (1 * q.kPa) + (5 * q.lb)
 
-        self.assertRaises(TypeError, add_bad_units)
+        self.assertRaises(ValueError, add_bad_units)
 
         # does add work correctly with arrays?
 
@@ -191,7 +191,7 @@ class TestQuantities(unittest.TestCase):
             """just a function that raises an incompatible units error"""
             return (1 * q.kPa) + (5 * q.lb)
 
-        self.assertRaises(TypeError, subtract_bad_units)
+        self.assertRaises(ValueError, subtract_bad_units)
 
         # does subtraction work correctly with arrays?
         # subtract a scalar and an array
@@ -330,9 +330,9 @@ class TestQuantities(unittest.TestCase):
         def test(value):
             temp[2] = value
 
-        #self.assertRaises(TypeError, test, 60 * q.inch * q.J)
+        #self.assertRaises(ValueError, test, 60 * q.inch * q.J)
         # even in the case when the quantity has no units (maybe this could go away)
-        #self.assertRaises(TypeError, test, 60)
+        #self.assertRaises(ValueError, test, 60)
 
         #needs to check for out of bounds
         def tempfunc(value):
@@ -359,7 +359,7 @@ class TestQuantities(unittest.TestCase):
             temp.units = units
 
         # this currently screws up q.J
-        self.assertRaises(TypeError, test, q.inch * q.J)
+        self.assertRaises(ValueError, test, q.inch * q.J)
 
         # check for this bug
         self.assertEqual(

@@ -6,7 +6,7 @@ import copy
 import numpy
 
 from quantities.dimensionality import BaseDimensionality, \
-    MutableDimensionality, ImmutableDimensionality
+    MutableDimensionality, ImmutableDimensionality, incompatible_units
 from quantities.parser import unit_registry
 
 
@@ -105,7 +105,7 @@ class Quantity(numpy.ndarray):
             try:
                 assert units.magnitude == 1
             except AssertionError:
-                raise TypeError('units must have unit magnitude')
+                raise ValueError('units must have unit magnitude')
         try:
             sq = Quantity(1.0, self.dimensionality).simplified
             osq = units.simplified
@@ -114,7 +114,7 @@ class Quantity(numpy.ndarray):
             self._dimensionality = \
                 MutableDimensionality(units.dimensionality)
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'Unable to convert between units of "%s" and "%s"'
                 %(sq.units, osq.units)
             )
@@ -222,7 +222,7 @@ class Quantity(numpy.ndarray):
             assert ss.units == os.units
             return ss.magnitude < os.magnitude
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not compare quantities with units of %s and %s'\
                 %(ss.units, os.units)
             )
@@ -233,7 +233,7 @@ class Quantity(numpy.ndarray):
             assert ss.units == os.units
             return ss.magnitude <= os.magnitude
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not compare quantities with units of %s and %s'\
                 %(ss.units, os.units)
             )
@@ -244,7 +244,7 @@ class Quantity(numpy.ndarray):
             assert ss.units == os.units
             return ss.magnitude == os.magnitude
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not compare quantities with units of %s and %s'\
                 %(ss.units, os.units)
             )
@@ -255,7 +255,7 @@ class Quantity(numpy.ndarray):
             assert ss.units == os.units
             return ss.magnitude != os.magnitude
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not compare quantities with units of %s and %s'\
                 %(ss.units, os.units)
             )
@@ -266,7 +266,7 @@ class Quantity(numpy.ndarray):
             assert ss.units == os.units
             return ss.magnitude > os.magnitude
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not compare quantities with units of %s and %s'\
                 %(ss.units, os.units)
             )
@@ -277,7 +277,7 @@ class Quantity(numpy.ndarray):
             assert ss.units == os.units
             return ss.magnitude >= os.magnitude
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not compare quantities with units of %s and %s'\
                 %(ss.units, os.units)
             )

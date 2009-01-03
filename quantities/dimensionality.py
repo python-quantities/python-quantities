@@ -56,7 +56,7 @@ class BaseDimensionality(object):
             # compare the two fully reduced units
             assert self == other
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not add quantities of with units of %s and %s'\
                 %(str(self), str(other))
             )
