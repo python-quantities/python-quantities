@@ -170,19 +170,19 @@ class Quantity(numpy.ndarray):
     def __add__(self, other):
         if self.dimensionality:
             assert isinstance(other, Quantity)
-        dims = self.dimensionality + other.dimensionality
-        magnitude = self.magnitude + other.magnitude
+        dims = self.dimensionality  + other.dimensionality
+        magnitude = self.magnitude + other.rescale(self.units).magnitude
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __sub__(self, other):
         if self.dimensionality:
             assert isinstance(other, Quantity)
         dims = self.dimensionality - other.dimensionality
-        magnitude = self.magnitude - other.magnitude
+        magnitude = self.magnitude - other.rescale(self.units).magnitude
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __mul__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
+        assert isinstance(other, (numpy.ndarray, list , int, float))
         try:
             dims = self.dimensionality * other.dimensionality
             magnitude = self.magnitude * other.magnitude
@@ -192,7 +192,7 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __truediv__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
+        assert isinstance(other, (numpy.ndarray, list, int, float))
         try:
             dims = self.dimensionality / other.dimensionality
             magnitude = self.magnitude / other.magnitude
@@ -255,3 +255,27 @@ class Quantity(numpy.ndarray):
     def __ge__(self, other):
        other = other.rescale(self.units)
        return self.magnitude >= other.magnitude
+
+def quantitizer(base_function, handler_function = lambda *args, **kwargs: 1.0):
+    """
+    returns a wrapped base_function which handles Quantities correctly
+    handler_function - a function which takes the same arguments as the
+    base_function  and returns a Quantity (or tuple of Quantities) which
+    has (have) the units that the output of base_function should have
+    """
+    def wrapped_function(*args , **kwargs):
+        print args, kwargs
+        result = base_function( *args, **kwargs)
+        handler_quantities= handler_function( *args, **kwargs)
+
+        if (isinstance(base_result, tuple)):
+            assert len(base_result) == len(handler_quantities)
+
+        for i in len(result):
+            result[i] = Quantity(result[i], handler_quantities.dimensionality)
+
+        return result
+
+    return wrapped_function
+
+

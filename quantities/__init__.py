@@ -35,7 +35,7 @@ or:
 __version__ = '0.1(bzr)'
 
 
-from quantity import Quantity
+from quantity import Quantity, quantitizer
 
 from parser import unit_registry
 

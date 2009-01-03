@@ -51,8 +51,8 @@ class BaseDimensionality(object):
     def __add__(self, other):
         try:
             # in order to allow adding different units (i.e. ft + m) need to
-            # compare the two fully reduced units
-            assert self == other
+            # compare the two fully simplified units
+            assert self.simplified() == other.simplified()
         except AssertionError:
             raise TypeError(
                 'can not add quantities of with units of %s and %s'\
