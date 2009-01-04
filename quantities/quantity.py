@@ -9,6 +9,17 @@ from quantities.dimensionality import BaseDimensionality, \
     MutableDimensionality, ImmutableDimensionality
 from quantities.registry import unit_registry
 
+def prepare_compatible_units(s, o):
+    try:
+        ss, os = s.simplified, o.simplified
+        assert ss.units == os.units
+        return ss, os
+    except AssertionError:
+        raise ValueError(
+            'can not compare quantities with units of %s and %s'\
+            %(ss.units, os.units)
+        )
+
 
 class QuantityIterator:
 
@@ -213,67 +224,25 @@ class Quantity(numpy.ndarray):
         return QuantityIterator(self)
 
     def __lt__(self, other):
-        try:
-            ss, os = self.simplified, other.simplified
-            assert ss.units == os.units
-            return ss.magnitude < os.magnitude
-        except AssertionError:
-            raise ValueError(
-                'can not compare quantities with units of %s and %s'\
-                %(ss.units, os.units)
-            )
+        ss, os = prepare_compatible_units(self, other)
+        return ss.magnitude < os.magnitude
 
     def __le__(self, other):
-        try:
-            ss, os = self.simplified, other.simplified
-            assert ss.units == os.units
-            return ss.magnitude <= os.magnitude
-        except AssertionError:
-            raise ValueError(
-                'can not compare quantities with units of %s and %s'\
-                %(ss.units, os.units)
-            )
+        ss, os = prepare_compatible_units(self, other)
+        return ss.magnitude <= os.magnitude
 
     def __eq__(self, other):
-        try:
-            ss, os = self.simplified, other.simplified
-            assert ss.units == os.units
-            return ss.magnitude == os.magnitude
-        except AssertionError:
-            raise ValueError(
-                'can not compare quantities with units of %s and %s'\
-                %(ss.units, os.units)
-            )
+        ss, os = prepare_compatible_units(self, other)
+        return ss.magnitude == os.magnitude
 
     def __ne__(self, other):
-        try:
-            ss, os = self.simplified, other.simplified
-            assert ss.units == os.units
-            return ss.magnitude != os.magnitude
-        except AssertionError:
-            raise ValueError(
-                'can not compare quantities with units of %s and %s'\
-                %(ss.units, os.units)
-            )
+        ss, os = prepare_compatible_units(self, other)
+        return ss.magnitude != os.magnitude
 
     def __gt__(self, other):
-        try:
-            ss, os = self.simplified, other.simplified
-            assert ss.units == os.units
-            return ss.magnitude > os.magnitude
-        except AssertionError:
-            raise ValueError(
-                'can not compare quantities with units of %s and %s'\
-                %(ss.units, os.units)
-            )
+        ss, os = prepare_compatible_units(self, other)
+        return ss.magnitude > os.magnitude
 
     def __ge__(self, other):
-        try:
-            ss, os = self.simplified, other.simplified
-            assert ss.units == os.units
-            return ss.magnitude >= os.magnitude
-        except AssertionError:
-            raise ValueError(
-                'can not compare quantities with units of %s and %s'\
-                %(ss.units, os.units)
-            )
+        ss, os = prepare_compatible_units(self, other)
+        return ss.magnitude >= os.magnitude

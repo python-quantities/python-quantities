@@ -42,7 +42,7 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 
-setup (
+setup(
     name = "quantities",
     version = '0.1',
     author = 'Darren Dale',
