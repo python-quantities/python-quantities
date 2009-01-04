@@ -13,7 +13,7 @@ Quantities has a few dependencies:
 
 The following are also recommended:
 
-* setuptools_ (version 0.6c8 or later, mainly for developers)
+* setuptools_ (version 0.6c8 or later, for developers and unit tests)
 * nose_ (for unit tests)
 
 Source Code Installation
