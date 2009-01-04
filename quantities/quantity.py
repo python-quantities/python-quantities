@@ -166,7 +166,7 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __mul__(self, other):
-        assert isinstance(other, (numpy.ndarray, list , int, float))
+        assert isinstance(other, (numpy.ndarray, list , long, int, float))
         try:
             dims = self.dimensionality * other.dimensionality
             magnitude = self.magnitude * other.magnitude
@@ -176,7 +176,7 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __truediv__(self, other):
-        assert isinstance(other, (numpy.ndarray, list, int, float))
+        assert isinstance(other, (numpy.ndarray, list, long, int, float))
         try:
             dims = self.dimensionality / other.dimensionality
             magnitude = self.magnitude / other.magnitude
@@ -273,8 +273,8 @@ class Quantity(numpy.ndarray):
 
     def __ge__(self, other):
 
-       other = other.rescale(self.units)
-       return self.magnitude >= other.magnitude
+        other = other.rescale(self.units)
+        return self.magnitude >= other.magnitude
         try:
             ss, os = self.simplified, other.simplified
             assert ss.units == os.units
