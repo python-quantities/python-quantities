@@ -21,14 +21,23 @@ TypeError: Cannot convert between quanitites with units of 'J' and 'ft'
 3.280839895013123*ft
 
 
-here's some tricks for preserving compound units:
+Here's some tricks for working compound units, which can be preserved::
 
->>> q=19*UnitQuantity("(parsec/cm**3)")*J
+  >>> q=19*CompoundUnit("parsec/cm**3")*cm**3
+  >>> q
+  19.0*cm**3*(parsec/cm**3)
 
-or:
+and can be simplified::
 
->>> q=19*UnitQuantity("(parsec/cm**3)"*UnitQuantity("(m**3/m**2)")
+  >>> qs = q.simplified
+  >>> qs
+  5.862792475e+17*m
 
+and then rescaled back into compound units::
+
+  >>> qs.rescale(CompoundUnit("parsec/cm**3")*cm**3)
+  >>> qs
+  19.0*cm**3*(parsec/cm**3)
 """
 
 

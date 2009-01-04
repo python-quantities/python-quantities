@@ -25,13 +25,13 @@ or::
   3.280839895013123*ft
 
 
-here's some tricks for preserving compound units::
+Here's some tricks for working compound units, which can be preserved::
 
-  >>> q=19*UnitQuantity("(parsec/cm**3)", parsec/cm**3)*cm**3
+  >>> q=19*CompoundUnit("parsec/cm**3")*cm**3
   >>> q
   19.0*cm**3*(parsec/cm**3)
 
-which can be simplified::
+and can be simplified::
 
   >>> qs = q.simplified
   >>> qs
@@ -39,6 +39,6 @@ which can be simplified::
 
 and then rescaled back into compound units::
 
-  >>> qs.rescale(UnitQuantity("(parsec/cm**3)", parsec/cm**3)*cm**3)
+  >>> qs.rescale(CompoundUnit("parsec/cm**3")*cm**3)
   >>> qs
   19.0*cm**3*(parsec/cm**3)
