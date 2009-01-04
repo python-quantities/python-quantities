@@ -117,7 +117,8 @@ class Quantity(numpy.ndarray):
             sq = Quantity(1.0, self.dimensionality).simplified
             osq = units.simplified
             assert osq.dimensionality == sq.dimensionality
-            self.magnitude.flat[:] *= sq.magnitude.flat[:] / osq.magnitude.flat[:]
+            m = self.magnitude
+            m *= sq.magnitude / osq.magnitude
             self._dimensionality = \
                 MutableDimensionality(units.dimensionality)
         except AssertionError:
