@@ -89,10 +89,6 @@ class Quantity(numpy.ndarray):
     def is_mutable(self):
         return self._mutable
 
-    @property
-    def udunits(self):
-        return self.dimensionality.udunits
-
     # get and set methods for the units property
     def get_units(self):
         return str(self.dimensionality)

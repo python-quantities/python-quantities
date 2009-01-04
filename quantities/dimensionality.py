@@ -43,13 +43,6 @@ class BaseDimensionality(object):
     """
     """
 
-    @property
-    def udunits(self):
-        """
-        string representation of the unit group in the udunits format
-        """
-        return str(self).replace('**', '^')
-
     def __add__(self, other):
         try:
             # in order to allow adding different units (i.e. ft + m) need to
