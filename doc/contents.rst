@@ -4,7 +4,7 @@
     :Release: |version|
     :Date: |today|
 
-    Download `PDF <http://packages.python.org/quantities/Quantities.pdf>`_
+    Download `PDF <./Quantities.pdf>`_
 
 .. _contents:
 

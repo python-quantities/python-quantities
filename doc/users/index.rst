@@ -8,4 +8,6 @@ User's Guide
    :maxdepth: 2
 
    installation.rst
+   tutorial.rst
    license.rst
+   credits.rst
