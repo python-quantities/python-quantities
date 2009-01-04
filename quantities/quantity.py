@@ -2,25 +2,12 @@
 """
 
 import copy
-import os
 
 import numpy
 
 from quantities.dimensionality import BaseDimensionality, \
     MutableDimensionality, ImmutableDimensionality
-from quantities.parser import unit_registry
-
-import udunits as _udunits
-
-_udunits.init(
-    os.path.join(
-        os.path.dirname(__file__),
-        'quantities-data',
-        'udunits.dat'
-    )
-)
-
-del os
+from quantities.registry import unit_registry
 
 
 class QuantityIterator:
@@ -112,26 +99,24 @@ class Quantity(numpy.ndarray):
     def set_units(self, units):
         if not self.is_mutable:
             raise AttributeError("can not modify protected units")
+        if isinstance(units, str):
+            units = unit_registry[units]
+        if isinstance(units, Quantity):
+            try:
+                assert units.magnitude == 1
+            except AssertionError:
+                raise ValueError('units must have unit magnitude')
         try:
-            #if the units are given as a string, find the actual units in
-            # the unit registry
-            if isinstance(units, str):
-                units = unit_registry[units]
-            # if the units are being assigned a quantity, simply use the
-            # quantity's units
-            if isinstance(units, Quantity):
-                units = units.dimensionality
-            # get the scaling factor and offset for converting between the
-            # current units and the assigned units
-            scaling, offset = _udunits.convert(self.udunits, units.udunits)
-            #multiply the data array by the scaling factor and add the offset
-            self.magnitude.flat[:] = scaling*self.magnitude.flat[:] + offset
-            # make the units the new units
-            self._dimensionality = MutableDimensionality(units)
-        except TypeError:
-            raise TypeError(
-                'Can not convert between quantities with units of %s and %s'\
-                %(self.udunits, units.udunits)
+            sq = Quantity(1.0, self.dimensionality).simplified
+            osq = units.simplified
+            assert osq.dimensionality == sq.dimensionality
+            self.magnitude.flat[:] *= sq.magnitude.flat[:] / osq.magnitude.flat[:]
+            self._dimensionality = \
+                MutableDimensionality(units.dimensionality)
+        except AssertionError:
+            raise ValueError(
+                'Unable to convert between units of "%s" and "%s"'
+                %(sq.units, osq.units)
             )
     units = property(get_units, set_units)
 
@@ -143,13 +128,12 @@ class Quantity(numpy.ndarray):
         copy.units = units
         return copy
 
+    @property
     def simplified(self):
-        # call the dimensionality simplification routine
-        simplified_units = self.dimensionality.simplified()
-        # rescale the quantity to the simplified units
-        return self.rescale(simplified_units )
-
-
+        rq = self.magnitude * unit_registry['dimensionless']
+        for u, d in self.dimensionality.iteritems():
+            rq = rq * u.reference_quantity**d
+        return rq
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
@@ -233,28 +217,75 @@ class Quantity(numpy.ndarray):
         return QuantityIterator(self)
 
     def __lt__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude < other.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude < os.magnitude
+        except AssertionError:
+            raise ValueError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __le__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude <= other.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude <= os.magnitude
+        except AssertionError:
+            raise ValueError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __eq__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude == other.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude == os.magnitude
+        except AssertionError:
+            raise ValueError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __ne__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude != other.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude != os.magnitude
+        except AssertionError:
+            raise ValueError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __gt__(self, other):
-       other = other.rescale(self.units)
-       return self.magnitude > other.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude > os.magnitude
+        except AssertionError:
+            raise ValueError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
 
     def __ge__(self, other):
+
        other = other.rescale(self.units)
        return self.magnitude >= other.magnitude
+        try:
+            ss, os = self.simplified, other.simplified
+            assert ss.units == os.units
+            return ss.magnitude >= os.magnitude
+        except AssertionError:
+            raise ValueError(
+                'can not compare quantities with units of %s and %s'\
+                %(ss.units, os.units)
+            )
+
+
 
 def quantitizer(base_function,
                 handler_function = lambda *args, **kwargs: 1.0):
@@ -358,5 +389,3 @@ def quantitizer(base_function,
             + base_function.__doc__)
 
     return wrapped_function
-
-

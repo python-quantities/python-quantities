@@ -68,13 +68,7 @@ class UnitRegistry:
                 or label.lower() == 'unknown':
             label = "dimensionless"
 
-        try:
-            _unit = self.__registry[label]
-        except UnableToParseUnits:
-            try:
-                _unit = self.__registry[label.lower()]
-            except:
-                _unit = self.__registry['UnitQuantity'](label)
+        _unit = self.__registry[label]
 
         # this check should be more robust:
         if hasattr(_unit, '_dimensionality'):

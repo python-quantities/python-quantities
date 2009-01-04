@@ -5,6 +5,8 @@ import operator
 
 import numpy
 
+from quantities.registry import unit_registry
+
 def format_units(udict):
     '''
     create a string representation of the units contained in a dimensionality
@@ -54,7 +56,7 @@ class BaseDimensionality(object):
             # compare the two fully simplified units
             assert self.simplified() == other.simplified()
         except AssertionError:
-            raise TypeError(
+            raise ValueError(
                 'can not add quantities of with units of %s and %s'\
                 %(str(self), str(other))
             )
@@ -110,34 +112,6 @@ class BaseDimensionality(object):
             new[i] *= other
         return new
 
-    def reduce(self):
-        """
-        returns a dimensionality object reduced one step
-        """ 
-        new = MutableDimensionality()
-        #iterate through all the units in the current unit and multiply them
-        # together
-        for unit in self:
-            # multiply by the reference quantity taken to the appropriate
-            #power
-            new *= unit._reference_quantity.dimensionality ** self[unit]
-        return new
-
-    def simplified(self):
-        """
-        returns a fully reduced dimensionality
-        """
-        new = MutableDimensionality(self)
-        reduced = new.reduce()
-
-        # continue decomposing the units until further decomposition
-        # does not change anything
-        while new != reduced:
-            new = reduced
-            reduced = reduced.reduce()
-        return new
-
-
 class ImmutableDimensionality(BaseDimensionality):
 
     def __init__(self, dict=None, **kwds):
@@ -159,15 +133,20 @@ class ImmutableDimensionality(BaseDimensionality):
     def __len__(self):
         return len(self.__data)
 
+    def __eq__(self, other):
+        return hash(self) == hash(other)
+
     def __getitem__(self, key):
         return self.__data[key]
 
     def __hash__(self):
-        items = self.items()
-        res = hash(items[0])
-        for item in items[1:]:
+        res = hash(unit_registry['dimensionless'])
+        for item in self.items():
             res ^= hash(item)
         return res
+
+    def __iter__(self):
+        return self.__data.__iter__()
 
     def copy(self):
         if self.__class__ is ImmutableDimensionality:

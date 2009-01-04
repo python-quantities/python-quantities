@@ -3,9 +3,9 @@ from __future__ import with_statement
 from distutils.cmd import Command
 from distutils.errors import DistutilsError, DistutilsExecError
 try:
-    from setuptools import setup, Extension
+    from setuptools import setup
 except ImportError:
-    from numpy.distutils.core import setup, Extension
+    from numpy.distutils.core import setup
 
 import numpy
 
@@ -34,12 +34,6 @@ class test(Command):
         finally:
             sys.path = oldpath
 
-udunits = Extension('quantities.udunits',
-                    ['udunits/src/udunits_py.c',
-                     'udunits/src/utparse.c',
-                     'udunits/src/utlib.c',
-                     'udunits/src/utscan.c'],
-                    include_dirs = ['udunits/include', numpy.get_include()])
 
 with file('quantities/quantities-data/NIST_codata.txt') as f:
     data = f.read()
@@ -89,12 +83,10 @@ setup (name = "quantities",
        classifiers = classifiers,
        platforms = 'Any',
        requires = ['numpy'],
-       url = "https://launchpad.net/python-quantities",
+       url = "http://packages.python.org/quantities",
        packages = ['quantities',
                    'quantities.units',
                    'quantities.constants',
                    'quantities.tests'],
-       package_data = {'': ['quantities-data/udunits.dat']},
-       ext_modules = [ udunits ],
        test_suite = 'nose.collector',
       )

@@ -1,8 +1,10 @@
 """
 """
 
+import numpy
+
 from quantities.quantity import Quantity
-from quantities.parser import unit_registry
+from quantities.registry import unit_registry
 from quantities.dimensionality import ImmutableDimensionality
 
 
@@ -25,8 +27,9 @@ class UnitQuantity(Quantity):
         Quantity.__init__(self, 1.0, None, 'd', mutable=False)
 
         if reference_quantity is None:
-            reference_quantity = self
-        self._reference_quantity = reference_quantity
+            self._reference_quantity = self
+        else:
+            self._reference_quantity = reference_quantity.simplified
 
         self._format_order = (self._primary_order, self._secondary_order)
         self.__class__._secondary_order += 1
@@ -112,3 +115,5 @@ class Dimensionless(UnitQuantity):
         self.__class__._secondary_order += 1
 
         unit_registry[name] = self
+
+dimensionless = Dimensionless('dimensionless')
