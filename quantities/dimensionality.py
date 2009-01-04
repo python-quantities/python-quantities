@@ -113,7 +113,7 @@ class BaseDimensionality(object):
     def reduce(self):
         """
         returns a dimensionality object reduced one step
-        """
+        """ 
         new = MutableDimensionality()
         #iterate through all the units in the current unit and multiply them
         # together
