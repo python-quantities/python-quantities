@@ -174,23 +174,21 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __mul__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
         try:
             dims = self.dimensionality * other.dimensionality
             magnitude = self.magnitude * other.magnitude
-        except:
-            dims = copy.copy(self.dimensionality)
+        except AttributeError:
             magnitude = self.magnitude * other
+            dims = copy.copy(self.dimensionality)
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __truediv__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
         try:
             dims = self.dimensionality / other.dimensionality
             magnitude = self.magnitude / other.magnitude
-        except:
-            dims = copy.copy(self.dimensionality)
+        except AttributeError:
             magnitude = self.magnitude / other
+            dims = copy.copy(self.dimensionality)
         return Quantity(magnitude, dims, magnitude.dtype)
 
     __div__ = __truediv__
