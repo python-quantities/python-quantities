@@ -17,7 +17,7 @@ def prepare_compatible_units(s, o):
     except AssertionError:
         raise ValueError(
             'can not compare quantities with units of %s and %s'\
-            %(ss.units, os.units)
+            %(s.units, o.units)
         )
 
 
@@ -160,18 +160,73 @@ class Quantity(numpy.ndarray):
 #        raise
 
     def __add__(self, other):
-        if self.dimensionality:
-            assert isinstance(other, Quantity)
-        dims = self.dimensionality  + other.dimensionality
-        magnitude = self.magnitude + other.rescale(self.units).magnitude
-        return Quantity(magnitude, dims, magnitude.dtype)
+        # if the other is not a quantity, try to cast it to a dimensionless
+        #quantity
+        try:
+            if not isinstance(other, Quantity):
+                other = Quantity(other)
+            dims = self.dimensionality  + other.dimensionality
+            magnitude = self.magnitude + other.rescale(self.units).magnitude
+
+            return Quantity(magnitude, dims, magnitude.dtype)
+        except ValueError:
+            raise ValueError(
+                'can not add quantities of with units of %s and %s'\
+                %(str(self), str(other))
+            )
+
+
+    def __radd__(self, other):
+        # if the other is not a quantity, try to cast it to a dimensionless
+        #quantity
+        try:
+            if not isinstance(other, Quantity):
+                other = Quantity(other)
+            dims =  other.dimensionality + self.dimensionality
+            magnitude = other.magnitude + self.rescale(other.units).magnitude
+
+            return Quantity(magnitude, dims, magnitude.dtype)
+        except ValueError:
+            raise ValueError(
+                'can not add quantities of with units of %s and %s'\
+                %(str(other), str(self))
+            )
 
     def __sub__(self, other):
-        if self.dimensionality:
-            assert isinstance(other, Quantity)
-        dims = self.dimensionality - other.dimensionality
-        magnitude = self.magnitude - other.rescale(self.units).magnitude
-        return Quantity(magnitude, dims, magnitude.dtype)
+        try:
+            # if the other is not a quantity, try to cast it to a dimensionless
+            #quantity
+            if not isinstance(other, Quantity):
+                other = Quantity(other)
+            dims = self.dimensionality - other.dimensionality
+            magnitude = self.magnitude - other.rescale(self.units).magnitude
+
+            return Quantity(magnitude, dims, magnitude.dtype)
+        except ValueError:
+            raise ValueError(
+                'can not subtract quantities of with units of %s and %s'\
+                %(str(self), str(other))
+            )
+
+    def __rsub__(self, other):
+        try:
+            # if the other is not a quantity, try to cast it to a dimensionless
+            #quantity
+            if not isinstance(other, Quantity):
+                other = Quantity(other)
+            print other
+
+            #we need to reverse these, that's why this needs it's own function
+            dims =  other.dimensionality - self.dimensionality
+            print (other.dimensionality)
+            magnitude = other.magnitude - self.rescale(other.units).magnitude
+
+            return Quantity(magnitude, dims, magnitude.dtype)
+        except ValueError:
+            raise ValueError(
+                'can not subtract quantities of with units of %s and %s'\
+                %(str(other), str(self))
+            )
 
     def __mul__(self, other):
 
@@ -205,10 +260,32 @@ class Quantity(numpy.ndarray):
     __rdiv__ = __rtruediv__
 
     def __pow__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
+        if isinstance(other, Quantity):
+            #if we are raising a quantity to a quantity, make sure
+            #it's dimensionless
+            simplified = other.simplified
+            if simplified.dimensionality != unit_registry['dimensionless'].dimensionality:
+                raise ValueError("exponent is not dimensionless")
+
+            #make sure the quantity is simplified
+            other = simplified.magnitude
+
+        assert isinstance(other, (numpy.ndarray, int, float, long))
+
         dims = self.dimensionality**other
         magnitude = self.magnitude**other
         return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __rpow__(self, other):
+
+        simplified = self.simplified
+        #make sure that if we are going to raise something to a Quantity
+        # that the quantity is dimensionless
+        if simplified.dimensionality != unit_registry['dimensionless'].dimensionality:
+            raise ValueError("exponent is not dimensionless")
+
+        return other**simplified.magnitude
+
 
     def __repr__(self):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
@@ -293,7 +370,7 @@ def quantitizer(base_function,
                 args[i] = args[i].simplified()
 
                 #view the array as an ndarray
-                args[i] = args[i].view(type=numpy.ndarray)
+                args[i] = args[i].magnitude
 
         #convert the list back to a tuple so it can be used as an output
         args = tuple (args)
@@ -307,7 +384,7 @@ def quantitizer(base_function,
                 kwargs[i] = kwargs[i].simplifed()
 
                 #view the array as an ndarray
-                kwargs[i] = kwargs[i].view(type=numpy.ndarray)
+                kwargs[i] = kwargs[i].magnitude
 
 
         #get the result for the function

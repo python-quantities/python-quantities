@@ -45,6 +45,18 @@ class TestQuantities(unittest.TestCase):
         self.assertEqual(str(q.m), "1.0*m", str(q.m))
         self.assertEqual(str(q.J), "1.0*J", str(q.J))
 
+    def test_creation(self):
+        self.numAssertEqual(   [100, -1.02, 30] * q.cm**2,
+                            q.Quantity(numpy.array([100, -1.02, 30]) , q.cm**2))
+        self.assertEqual(   str([100, -1.02, 30] * q.cm**2),
+                            str(q.Quantity(numpy.array([100, -1.02, 30]) , q.cm**2)))
+
+        self.assertEqual(   -10.1 * q.ohm ,
+                            q.Quantity(-10.1, q.ohm))
+
+        self.assertEqual(   str(-10.1 * q.ohm) ,
+                            str(q.Quantity(-10.1, q.ohm)))
+
     def test_unit_aggregation(self):
         joule = q.kg*q.m**2/q.s**2
         pc_per_cc = q.UnitQuantity("(parsec/cm**3)", q.parsec/q.cm**3)
@@ -308,6 +320,22 @@ class TestQuantities(unittest.TestCase):
             "[   1.    8.   27.   64.  125.]*kg**3"
         )
         self.assertEqual(str(temp**6), str(temp2))
+
+
+        # test raising a quantity to a quantity
+
+        def QpowQ(q1, q2):
+            return q1 ** q2
+
+        self.assertRaises(ValueError, QpowQ, 10.0 * q.m, 10 * q.J)
+
+        self.assertEqual( (10 * q.J) ** (2 * q.J/q.J) , 100 * q.J**2 )
+
+
+        # test rpow here
+        self.assertRaises(ValueError, QpowQ, 10.0, 10 * q.J)
+
+        self.assertEqual( 10 ** (2 * q.J/ q.J) , 100)
 
     def test_getitem(self):
         tempArray1 = q.Quantity(numpy.array([1.5, 2.5 , 3, 5]), q.J)
