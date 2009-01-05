@@ -17,7 +17,7 @@ def prepare_compatible_units(s, o):
     except AssertionError:
         raise ValueError(
             'can not compare quantities with units of %s and %s'\
-            %(ss.units, os.units)
+            %(s.units, o.units)
         )
 
 
@@ -170,11 +170,20 @@ class Quantity(numpy.ndarray):
         magnitude = self.magnitude + other.magnitude
         return Quantity(magnitude, dims, magnitude.dtype)
 
+    __radd__ = __add__
+
     def __sub__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other)
         dims = self.dimensionality - other.dimensionality
         magnitude = self.magnitude - other.magnitude
+        return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __rsub__(self, other):
+        if not isinstance(other, Quantity):
+            other = Quantity(other)
+        dims = other.dimensionality - self.dimensionality
+        magnitude = other.magnitude - self.magnitude
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __mul__(self, other):
@@ -207,10 +216,23 @@ class Quantity(numpy.ndarray):
     __rdiv__ = __rtruediv__
 
     def __pow__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
+        if isinstance(other, Quantity):
+            simplified = other.simplified
+            if simplified.dimensionality:
+                raise ValueError("exponent must be dimensionless")
+            other = simplified.magnitude
+
+        assert isinstance(other, (numpy.ndarray, int, float, long))
+
         dims = self.dimensionality**other
         magnitude = self.magnitude**other
         return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __rpow__(self, other):
+        simplified = self.simplified
+        if simplified.dimensionality:
+            raise ValueError("exponent must be dimensionless")
+        return other**simplified.magnitude
 
     def __repr__(self):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)

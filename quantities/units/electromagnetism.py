@@ -56,7 +56,7 @@ abohm = abohms = \
     UnitQuantity('abohm', 1e-9*ohm)
 abvolt = abvolts = \
     UnitQuantity('abvolt', 1e-8*V)
-e = UnitQuantity('e', 1.60217733-19*C)
+e = UnitQuantity('e', 1.60217733e-19*C)
 chemical_faraday = chemical_faradays = \
     UnitQuantity('chemical_faraday', 9.64957e4*C)
 physical_faraday = physical_faradays = \

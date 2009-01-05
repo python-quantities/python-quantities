@@ -1,4 +1,4 @@
-"""
+﻿"""
 
 >>> q=Quantity([1,2,3.0], 'J')
 
@@ -43,10 +43,9 @@ and then rescaled back into compound units::
 
 __version__ = '0.1(bzr)'
 
-
 from quantity import Quantity, UncertainQuantity
 
-from parser import unit_registry
+from registry import unit_registry
 
 import units
 from units import *

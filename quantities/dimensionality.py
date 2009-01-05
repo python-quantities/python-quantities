@@ -45,8 +45,6 @@ class BaseDimensionality(object):
 
     def __add__(self, other):
         try:
-            # in order to allow adding different units (i.e. ft + m) need to
-            # compare the two fully reduced units
             assert self == other
         except AssertionError:
             raise ValueError(
@@ -104,7 +102,6 @@ class BaseDimensionality(object):
             #multiply all the entries by the power
             new[i] *= other
         return new
-
 
 class ImmutableDimensionality(BaseDimensionality):
 
