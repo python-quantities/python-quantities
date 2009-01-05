@@ -65,8 +65,10 @@ class Quantity(numpy.ndarray):
         if isinstance(data, Quantity) and not units:
             dims = data.dimensionality
         elif isinstance(units, str):
-            if units == '': units = 'dimensionless'
-            dims = unit_registry[units].dimensionality
+            if units in ('', 'dimensionless'):
+                dims = {}
+            else:
+                dims = unit_registry[units].dimensionality
         elif isinstance(units, Quantity):
             dims = units.dimensionality
         elif isinstance(units, (BaseDimensionality, dict)):
@@ -149,26 +151,26 @@ class Quantity(numpy.ndarray):
         )
 
 #    def __deepcopy__(self, memo={}):
-#        dimensionality = copy.deepcopy(self.dimensionality)
 #        return self.__class__(
-#            self.view(type=ndarray),
+#            self.view(type=numpy.ndarray),
 #            self.dtype,
-#            dimensionality
+#            self.units,
+#            self._uncertainty
 #        )
 
 #    def __cmp__(self, other):
 #        raise
 
     def __add__(self, other):
-        if self.dimensionality:
-            assert isinstance(other, Quantity)
+        if not isinstance(other, Quantity):
+            other = Quantity(other)
         dims = self.dimensionality + other.dimensionality
         magnitude = self.magnitude + other.magnitude
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __sub__(self, other):
-        if self.dimensionality:
-            assert isinstance(other, Quantity)
+        if not isinstance(other, Quantity):
+            other = Quantity(other)
         dims = self.dimensionality - other.dimensionality
         magnitude = self.magnitude - other.magnitude
         return Quantity(magnitude, dims, magnitude.dtype)
@@ -217,6 +219,7 @@ class Quantity(numpy.ndarray):
         return Quantity(self.magnitude[key], self.units)
 
     def __setitem__(self, key, value):
+        # TODO: do we want this kind of magic?
         self.magnitude[key] = value.rescale(self.units).magnitude
 
     def __iter__(self):
@@ -245,3 +248,107 @@ class Quantity(numpy.ndarray):
     def __ge__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude >= os.magnitude
+
+
+class UncertainQuantity(Quantity):
+
+    def __new__(
+        cls, data, units='', dtype='d', uncertainty=0, mutable=True
+    ):
+        return Quantity.__new__(
+            cls, data, units, dtype, mutable
+        )
+
+    def __init__(
+        self, data, units='', dtype='d', uncertainty=0, mutable=True
+    ):
+        Quantity.__init__(
+            self, data, units, dtype, mutable
+        )
+        if not numpy.any(uncertainty):
+            uncertainty = getattr(self, 'uncertainty', uncertainty)
+        self.set_uncertainty(uncertainty)
+
+    @property
+    def simplified(self):
+        sq = self.magnitude * unit_registry['dimensionless']
+        for u, d in self.dimensionality.iteritems():
+            sq = sq * u.reference_quantity**d
+        u = self.uncertainty.simplified
+        # TODO: use view:
+        return UncertainQuantity(sq, uncertainty=u)
+
+    def set_units(self, units):
+        Quantity.set_units(self, units)
+        self.uncertainty.set_units(units)
+    units = property(Quantity.get_units, set_units)
+
+    def get_uncertainty(self):
+        return self._uncertainty
+    def set_uncertainty(self, uncertainty):
+        if not isinstance(uncertainty, Quantity):
+            uncertainty = Quantity(uncertainty, self.units)
+        try:
+            uncertainty / self.magnitude
+            uncertainty.units = self.units
+            self._uncertainty = uncertainty
+        except:
+            ValueError(
+                'uncertainty must be divisible by the parent quantity'
+            )
+    uncertainty = property(get_uncertainty, set_uncertainty)
+
+    def rescale(self, units):
+        """
+        Return a copy of the quantity converted to the specified units
+        """
+        copy = UncertainQuantity(self)
+        copy.units = units
+        return copy
+
+    def __add__(self, other):
+        res = Quantity.__add__(self, other)
+        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
+
+    def __sub__(self, other):
+        res = Quantity.__sub__(self, other)
+        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
+
+    def __mul__(self, other):
+        res = Quantity.__mul__(self, other)
+        try:
+            sru = self.uncertainty.magnitude/self.magnitude
+            oru = other.uncertainty.magnitude/other.magnitude
+            u = res*(sru**2+oru**2)**0.5
+        except AttributeError:
+            u = (self.uncertainty**2*other**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
+
+    def __truediv__(self, other):
+        res = Quantity.__truediv__(self, other)
+        try:
+            sru = self.uncertainty.magnitude/self.magnitude
+            oru = other.uncertainty.magnitude/other.magnitude
+            u = res*(sru**2+oru**2)**0.5
+        except AttributeError:
+            u = (self.uncertainty**2/other**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
+
+    def __pow__(self, other):
+        res = Quantity.__pow__(self, other)
+        u = res * other * self.uncertainty.magnitude / self.magnitude
+        return UncertainQuantity(res, uncertainty=u)
+
+    def __getitem__(self, key):
+        return UncertainQuantity(
+            self.magnitude[key],
+            self.units,
+            self.dtype,
+            copy.copy(self.uncertainty)
+        )
