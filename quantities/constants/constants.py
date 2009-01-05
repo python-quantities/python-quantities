@@ -4,13 +4,16 @@ from __future__ import absolute_import
 
 import math as _math
 from .codata import physical_constants as _pc
-from quantities.quantity import Quantity
+from quantities.quantity import Quantity, UncertainQuantity
 
 def _cd(name):
     entry = _pc[name]
-    q = Quantity(entry['value'], entry['units'], 'd')
-    q.precision = entry['precision']
-    return q
+    if entry['precision']:
+        return UncertainQuantity(
+            entry['value'], entry['units'], entry['precision']
+        )
+    else:
+        return Quantity(entry['value'], entry['units'])
 
 #mathematical constants
 pi = _math.pi
