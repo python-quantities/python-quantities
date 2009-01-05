@@ -289,7 +289,9 @@ class UncertainQuantity(Quantity):
         if not isinstance(uncertainty, Quantity):
             uncertainty = Quantity(uncertainty, self.units)
         try:
-            uncertainty / self.magnitude
+            if len(uncertainty.shape) != 0:
+                # make sure we can calculate relative uncertainty:
+                uncertainty / self.magnitude
             uncertainty.units = self.units
             self._uncertainty = uncertainty
         except:
@@ -297,6 +299,12 @@ class UncertainQuantity(Quantity):
                 'uncertainty must be divisible by the parent quantity'
             )
     uncertainty = property(get_uncertainty, set_uncertainty)
+
+    @property
+    def relative_uncertainty(self):
+        if len(self.uncertainty.shape) == 0:
+            return self.uncertainty.magnitude/self.magnitude.mean()
+        return self.uncertainty.magnitude/self.magnitude
 
     def rescale(self, units):
         """
@@ -321,8 +329,8 @@ class UncertainQuantity(Quantity):
     def __mul__(self, other):
         res = Quantity.__mul__(self, other)
         try:
-            sru = self.uncertainty.magnitude/self.magnitude
-            oru = other.uncertainty.magnitude/other.magnitude
+            sru = self.relative_uncertainty
+            oru = other.relative_uncertainty
             u = res*(sru**2+oru**2)**0.5
         except AttributeError:
             u = (self.uncertainty**2*other**2)**0.5
@@ -332,8 +340,8 @@ class UncertainQuantity(Quantity):
     def __truediv__(self, other):
         res = Quantity.__truediv__(self, other)
         try:
-            sru = self.uncertainty.magnitude/self.magnitude
-            oru = other.uncertainty.magnitude/other.magnitude
+            sru = self.relative_uncertainty
+            oru = other.relative_uncertainty
             u = res*(sru**2+oru**2)**0.5
         except AttributeError:
             u = (self.uncertainty**2/other**2)**0.5
@@ -342,7 +350,7 @@ class UncertainQuantity(Quantity):
 
     def __pow__(self, other):
         res = Quantity.__pow__(self, other)
-        u = res * other * self.uncertainty.magnitude / self.magnitude
+        u = res * other * self.relative_uncertainty
         return UncertainQuantity(res, uncertainty=u)
 
     def __getitem__(self, key):
