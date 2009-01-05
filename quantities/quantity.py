@@ -157,8 +157,7 @@ class Quantity(numpy.ndarray):
 #        return self.__class__(
 #            self.view(type=numpy.ndarray),
 #            self.dtype,
-#            self.units,
-#            self._uncertainty
+#            self.units
 #        )
 
 #    def __cmp__(self, other):
@@ -256,7 +255,7 @@ class Quantity(numpy.ndarray):
 class UncertainQuantity(Quantity):
 
     # TODO: what is an appropriate value?
-    __array_priority__ = 21
+    __array_priority__ = 22
 
     def __new__(
         cls, data, units='', uncertainty=0, dtype='d', mutable=True
