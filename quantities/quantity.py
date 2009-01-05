@@ -130,6 +130,9 @@ class Quantity(numpy.ndarray):
             )
     units = property(get_units, set_units)
 
+    def mean(self):
+        return Quantity(self.magnitude.mean(), self.units)
+
     def rescale(self, units):
         """
         Return a copy of the quantity converted to the specified units
@@ -252,15 +255,18 @@ class Quantity(numpy.ndarray):
 
 class UncertainQuantity(Quantity):
 
+    # TODO: what is an appropriate value?
+    __array_priority__ = 21
+
     def __new__(
-        cls, data, units='', dtype='d', uncertainty=0, mutable=True
+        cls, data, units='', uncertainty=0, dtype='d', mutable=True
     ):
         return Quantity.__new__(
             cls, data, units, dtype, mutable
         )
 
     def __init__(
-        self, data, units='', dtype='d', uncertainty=0, mutable=True
+        self, data, units='', uncertainty=0, dtype='d', mutable=True
     ):
         Quantity.__init__(
             self, data, units, dtype, mutable
@@ -291,7 +297,7 @@ class UncertainQuantity(Quantity):
         try:
             if len(uncertainty.shape) != 0:
                 # make sure we can calculate relative uncertainty:
-                uncertainty / self.magnitude
+                uncertainty.magnitude / self.magnitude
             uncertainty.units = self.units
             self._uncertainty = uncertainty
         except:
@@ -314,6 +320,12 @@ class UncertainQuantity(Quantity):
         copy.units = units
         return copy
 
+    def __array_finalize__(self, obj):
+        Quantity.__array_finalize__(self, obj)
+        self._uncertainty = getattr(
+            obj, 'uncertainty', Quantity(0, self.units)
+        )
+
     def __add__(self, other):
         res = Quantity.__add__(self, other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
@@ -331,7 +343,11 @@ class UncertainQuantity(Quantity):
         try:
             sru = self.relative_uncertainty
             oru = other.relative_uncertainty
-            u = res*(sru**2+oru**2)**0.5
+            ru = (sru**2+oru**2)**0.5
+            if len(ru.shape) == 0:
+                u = res.mean() * ru
+            else:
+                u = res * ru
         except AttributeError:
             u = (self.uncertainty**2*other**2)**0.5
         # TODO: use .view:
@@ -342,7 +358,11 @@ class UncertainQuantity(Quantity):
         try:
             sru = self.relative_uncertainty
             oru = other.relative_uncertainty
-            u = res*(sru**2+oru**2)**0.5
+            ru = (sru**2+oru**2)**0.5
+            if len(ru.shape) == 0:
+                u = res.mean() * ru
+            else:
+                u = res * ru
         except AttributeError:
             u = (self.uncertainty**2/other**2)**0.5
         # TODO: use .view:
@@ -350,13 +370,22 @@ class UncertainQuantity(Quantity):
 
     def __pow__(self, other):
         res = Quantity.__pow__(self, other)
-        u = res * other * self.relative_uncertainty
+        ru = other * self.relative_uncertainty
+        if len(ru.shape) == 0:
+            u = res.mean() * ru
+        else:
+            u = res * ru
         return UncertainQuantity(res, uncertainty=u)
 
     def __getitem__(self, key):
         return UncertainQuantity(
             self.magnitude[key],
             self.units,
-            self.dtype,
             copy.copy(self.uncertainty)
         )
+
+    def __repr__(self):
+        return '%s*%s\n+/-%s (1 sigma)'\
+            %(numpy.ndarray.__str__(self), self.units, self.uncertainty)
+
+    __str__ = __repr__
