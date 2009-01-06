@@ -4,10 +4,122 @@ import tempfile
 import shutil
 import os
 import numpy
+from quantities import *
 import quantities as q
+from nose.tools import *
 
-def test():
-    assert 1==1, 'assert 1==1'
+def test_scalar_equality():
+    assert_true(J == J)
+    assert_true(1*J == J)
+    assert_true(str(1*J) == str(J))
+    assert_true(J == q.kg*q.m**2/q.s**2)
+
+    assert_false(J == erg)
+    assert_false(2*J == J)
+    assert_false(str(2*J) == str(J))
+    assert_false(J == 2*q.kg*q.m**2/q.s**2)
+
+def test_scalar_inequality():
+    assert_true(J != erg)
+    assert_true(2*J != J)
+    assert_true(str(2*J) != str(J))
+    assert_true(J != 2*q.kg*q.m**2/q.s**2)
+
+    assert_false(J != J)
+    assert_false(1*J != J)
+    assert_false(str(1*J) != str(J))
+    assert_false(J != 1*q.kg*q.m**2/q.s**2)
+
+def test_scalar_comparison():
+    assert_true(2*J > J)
+    assert_true(2*J > 1*J)
+    assert_true(1*J >= J)
+    assert_true(1*J >= 1*J)
+    assert_true(2*J >= J)
+    assert_true(2*J >= 1*J)
+
+    assert_true(0.5*J < J)
+    assert_true(0.5*J < 1*J)
+    assert_true(0.5*J <= J)
+    assert_true(0.5*J <= 1*J)
+    assert_true(1.0*J <= J)
+    assert_true(1.0*J <= 1*J)
+
+    assert_false(2*J < J)
+    assert_false(2*J < 1*J)
+    assert_false(2*J <= J)
+    assert_false(2*J <= 1*J)
+
+    assert_false(0.5*J > J)
+    assert_false(0.5*J > 1*J)
+    assert_false(0.5*J >= J)
+    assert_false(0.5*J >= 1*J)
+
+def test_array_equality():
+    assert_false(
+        str(Quantity([1, 2, 3, 4], 'J')) == str(Quantity([1, 22, 3, 44], 'J'))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')) == str(Quantity([1, 2, 3, 4], 'J'))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==Quantity([1, 22, 3, 44], 'J')) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==Quantity([1, 22, 3, 44], J)) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==[1, 22, 3, 44]*J) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==numpy.array([1, 22, 3, 44])*J) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==\
+            Quantity(numpy.array([1, 22, 3, 44]), 'J')) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==\
+            Quantity(Quantity([1, 22, 3, 44], 'J'))) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==[1, 22, 3, 44]*kg*m**2/s**2) == \
+            str(numpy.array([True, False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')==Quantity([1, 22, 3, 44], 'J')) == \
+            str(numpy.array([True, False, True, False]))
+    )
+
+def test_array_inequality():
+    assert_true(
+        str(Quantity([1, 2, 3, 4], 'J')!=Quantity([1, 22, 3, 44], 'J')) == \
+            str(numpy.array([False, True, False, True]))
+    )
+
+def test_array_comparison():
+    assert_true(
+        str(Quantity([1, 2, 33], 'J')>Quantity([1, 22, 3], 'J')) == \
+            str(numpy.array([False, False, True]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 33], 'J')>=Quantity([1, 22, 3], 'J')) == \
+            str(numpy.array([True, False, True]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 33], 'J')<Quantity([1, 22, 3], 'J')) == \
+            str(numpy.array([False, True, False]))
+    )
+    assert_true(
+        str(Quantity([1, 2, 33], 'J')<=Quantity([1, 22, 3], 'J')) == \
+            str(numpy.array([True, True, False]))
+    )
 
 class TestQuantities(unittest.TestCase):
 
