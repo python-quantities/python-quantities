@@ -15,6 +15,7 @@ The following are also recommended:
 
 * setuptools_ (version 0.6c8 or later, for developers and unit tests)
 * nose_ (for unit tests)
+* coverage_ (for unit tests)
 
 Source Code Installation
 ========================
@@ -41,6 +42,7 @@ website.
 .. _Python: http://www.python.org/
 .. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
 .. _NumPy: http://www.scipy.org
-.. _Nose: http://somethingaboutorange.com/mrl/projects/nose
+.. _nose: http://somethingaboutorange.com/mrl/projects/nose
+.. _coverage: http://nedbatchelder.com/code/modules/rees-coverage.html
 .. _PyPi: http://pypi.python.org/pypi/quantities
 .. _launchpad: https://launchpad.net/python-quantities
