@@ -16,6 +16,10 @@ Charles Doutriaux
   wrote the python wrapper for unit conversions with the UDUnits 
   library (no longer used)
 
+Enthought Inc.
+  the original units registry was developed at Enthought for the 
+  Enthought Tool Suite.
+
 John Salvatier
   added support for the Quantity iterator, contributed to support for 
   simplified representations of units, comparison operators, and 

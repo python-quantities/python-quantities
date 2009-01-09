@@ -44,6 +44,13 @@ class BaseDimensionality(object):
     """
 
     def __add__(self, other):
+        try:
+            assert self == other
+        except AssertionError:
+            raise ValueError(
+                'can not add quantities of with units of %s and %s'\
+                %(str(self), str(other))
+            )
         return MutableDimensionality(self)
 
     __sub__ = __add__

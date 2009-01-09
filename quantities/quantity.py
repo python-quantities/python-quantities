@@ -67,8 +67,10 @@ class Quantity(numpy.ndarray):
         if isinstance(data, Quantity) and not units:
             dims = data.dimensionality
         elif isinstance(units, str):
-            if units == '': units = 'dimensionless'
-            dims = unit_registry[units].dimensionality
+            if units in ('', 'dimensionless'):
+                dims = {}
+            else:
+                dims = unit_registry[units].dimensionality
         elif isinstance(units, Quantity):
             dims = units.dimensionality
         elif isinstance(units, (BaseDimensionality, dict)):
@@ -130,6 +132,9 @@ class Quantity(numpy.ndarray):
             )
     units = property(get_units, set_units)
 
+    def mean(self):
+        return Quantity(self.magnitude.mean(), self.units)
+
     def rescale(self, units):
         """
         Return a copy of the quantity converted to the specified units
@@ -153,11 +158,10 @@ class Quantity(numpy.ndarray):
         )
 
 #    def __deepcopy__(self, memo={}):
-#        dimensionality = copy.deepcopy(self.dimensionality)
 #        return self.__class__(
-#            self.view(type=ndarray),
+#            self.view(type=numpy.ndarray),
 #            self.dtype,
-#            dimensionality
+#            self.units
 #        )
 
 #    def __cmp__(self, other):
@@ -166,77 +170,42 @@ class Quantity(numpy.ndarray):
     def __add__(self, other):
         # if the other is not a quantity, try to cast it to a dimensionless
         #quantity
-        try:
-            if not isinstance(other, Quantity):
-                other = Quantity(other)
-            dims = self.dimensionality  + other.dimensionality
-            magnitude = self.magnitude + other.rescale(self.units).magnitude
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy = False)
 
-            return Quantity(magnitude, dims, magnitude.dtype)
-        except ValueError:
-            raise ValueError(
-                'can not add quantities of with units of %s and %s'\
-                %(str(self), str(other))
-            )
+        dims = self.dimensionality + other.dimensionality
+        magnitude = self.magnitude + other.magnitude
 
+        return Quantity(magnitude, dims, magnitude.dtype)
 
-    def __radd__(self, other):
+    __radd__ = __add__
+
+    def __sub__(self, other):
+        # if the other is not a quantity,
+        # try to cast it to a dimensionless
+        #quantity
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy = False)
+
+        dims = self.dimensionality - other.dimensionality
+        magnitude = self.magnitude - other.magnitude
+
+        return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __rsub__(self, other):
+
         # if the other is not a quantity,
         #try to cast it to a dimensionless
         #quantity
-        try:
-            if not isinstance(other, Quantity):
-                other = Quantity(other)
-            dims =  other.dimensionality + self.dimensionality
-            magnitude = other.magnitude + self.rescale(other.units).magnitude
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy = False)
 
-            return Quantity(magnitude, dims, magnitude.dtype)
-        except ValueError:
-            raise ValueError(
-                'can not add quantities of with units of %s and %s'\
-                %(str(other), str(self))
-            )
+        dims = other.dimensionality - self.dimensionality
+        magnitude = other.magnitude - self.magnitude
 
-    def __sub__(self, other):
-        try:
-            # if the other is not a quantity,
-            # try to cast it to a dimensionless
-            #quantity
-            if not isinstance(other, Quantity):
-                other = Quantity(other)
-            dims = self.dimensionality - other.dimensionality
-            magnitude = self.magnitude - other.rescale(self.units).magnitude
-
-            return Quantity(magnitude, dims, magnitude.dtype)
-        except ValueError:
-            raise ValueError(
-                'can not subtract quantities of with units of %s and %s'\
-                %(str(self), str(other))
-            )
-
-    def __rsub__(self, other):
-        try:
-            # if the other is not a quantity,
-            #try to cast it to a dimensionless
-            #quantity
-            if not isinstance(other, Quantity):
-                other = Quantity(other)
-            print other
-
-            #we need to reverse these, that's why this needs it's own function
-            dims =  other.dimensionality - self.dimensionality
-            print (other.dimensionality)
-            magnitude = other.magnitude - self.rescale(other.units).magnitude
-
-            return Quantity(magnitude, dims, magnitude.dtype)
-        except ValueError:
-            raise ValueError(
-                'can not subtract quantities of with units of %s and %s'\
-                %(str(other), str(self))
-            )
+        return Quantity(magnitude, dims, magnitude.dtype)
 
     def __mul__(self, other):
-
         try:
             dims = self.dimensionality * other.dimensionality
             magnitude = self.magnitude * other.magnitude
@@ -246,7 +215,6 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __truediv__(self, other):
-
         try:
             dims = self.dimensionality / other.dimensionality
             magnitude = self.magnitude / other.magnitude
@@ -268,14 +236,16 @@ class Quantity(numpy.ndarray):
 
     def __pow__(self, other):
         if isinstance(other, Quantity):
-            #if we are raising a quantity to a quantity, make sure
-            #it's dimensionless
             simplified = other.simplified
+
             if (simplified.dimensionality !=
                 unit_registry['dimensionless'].dimensionality):
-                raise ValueError("exponent is not dimensionless")
+                raise ValueError("exponent must be dimensionless")
 
             #make sure the quantity is simplified
+
+            if simplified.dimensionality:
+                raise ValueError("exponent must be dimensionless")
             other = simplified.magnitude
 
         assert isinstance(other, (numpy.ndarray, int, float, long))
@@ -285,16 +255,14 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __rpow__(self, other):
-
         simplified = self.simplified
         #make sure that if we are going to raise something to a Quantity
         # that the quantity is dimensionless
         if (simplified.dimensionality !=
             unit_registry['dimensionless'].dimensionality):
-            raise ValueError("exponent is not dimensionless")
+            raise ValueError("exponent must be dimensionless")
 
         return other**simplified.magnitude
-
 
     def __repr__(self):
         return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
@@ -305,9 +273,11 @@ class Quantity(numpy.ndarray):
         return Quantity(self.magnitude[key], self.units)
 
     def __setitem__(self, key, value):
+
         if not isinstance(value, Quantity):
             value = Quantity(value)
 
+        # TODO: do we want this kind of magic?
         self.magnitude[key] = value.rescale(self.units).magnitude
 
     def __iter__(self):
@@ -334,7 +304,6 @@ class Quantity(numpy.ndarray):
         return ss.magnitude > os.magnitude
 
     def __ge__(self, other):
-
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude >= os.magnitude
 
@@ -541,106 +510,139 @@ class Quantity(numpy.ndarray):
 
 
 
-def quantitizer(base_function,
-                handler_function = lambda *args, **kwargs: 1.0):
-    """
-    wraps a function so that it works properly with physical quantities
-    (Quantities).
-    arguments:
-        base_function - the function to be wrapped
-        handler_function - a function which takes the same arguments as the
-            base_function  and returns a Quantity (or tuple of Quantities)
-            which has (have) the units that the output of base_function should
-            have.
-        returns:
-            a wrapped version of base_function that takes the same arguments
-            and works with physical quantities. It will have almost the same
-            __name__ and almost the same __doc__.
-    """
-    # define a function which will wrap the base function so that it works
-    # with Quantities
-    def wrapped_function(*args , **kwargs):
+class UncertainQuantity(Quantity):
 
-        # run the arguments through the handler function, this should
-        # return a tuple of Quantities which have the correct units
-        # for the output of the function we are wrapping
-        handler_quantities= handler_function( *args, **kwargs)
+    # TODO: what is an appropriate value?
+    __array_priority__ = 22
 
-        # now we need to turn Quantities into ndarrays so they behave
-        # correctly
-        #
-        # first we simplify all units so that  addition and subtraction work
-        # there may be another way to ensure this, but I do not have any good
-        # ideas
+    def __new__(
+        cls, data, units='', uncertainty=0, dtype='d', mutable=True
+    ):
+        return Quantity.__new__(
+            cls, data, units, dtype, mutable
+        )
 
-        # in order to modify the args tuple, we have to turn it into a list
-        args = list(args)
+    def __init__(
+        self, data, units='', uncertainty=0, dtype='d', mutable=True
+    ):
+        Quantity.__init__(
+            self, data, units, dtype, mutable
+        )
+        if not numpy.any(uncertainty):
+            uncertainty = getattr(self, 'uncertainty', uncertainty)
+        self.set_uncertainty(uncertainty)
 
-        #replace all the quantities in the argument list with ndarrays
-        for i in range(len(args)):
-            #test if the argument is a quantity
-            if isinstance(args[i], Quantity):
-                #convert the units to the base units
-                args[i] = args[i].simplified()
+    @property
+    def simplified(self):
+        sq = self.magnitude * unit_registry['dimensionless']
+        for u, d in self.dimensionality.iteritems():
+            sq = sq * u.reference_quantity**d
+        u = self.uncertainty.simplified
+        # TODO: use view:
+        return UncertainQuantity(sq, uncertainty=u)
 
-                #view the array as an ndarray
-                args[i] = args[i].magnitude
+    def set_units(self, units):
+        Quantity.set_units(self, units)
+        self.uncertainty.set_units(units)
+    units = property(Quantity.get_units, set_units)
 
-        #convert the list back to a tuple so it can be used as an output
-        args = tuple (args)
+    def get_uncertainty(self):
+        return self._uncertainty
+    def set_uncertainty(self, uncertainty):
+        if not isinstance(uncertainty, Quantity):
+            uncertainty = Quantity(uncertainty, self.units)
+        try:
+            if len(uncertainty.shape) != 0:
+                # make sure we can calculate relative uncertainty:
+                uncertainty.magnitude / self.magnitude
+            uncertainty.units = self.units
+            self._uncertainty = uncertainty
+        except:
+            ValueError(
+                'uncertainty must be divisible by the parent quantity'
+            )
+    uncertainty = property(get_uncertainty, set_uncertainty)
 
-        #repalce all the quantities in the keyword argument
-        #dictionary with ndarrays
-        for i in kwargs:
-            #test if the argument is a quantity
-            if isinstance(kwargs[i], Quantity):
-                #convert the units to the base units
-                kwargs[i] = kwargs[i].simplifed()
+    @property
+    def relative_uncertainty(self):
+        if len(self.uncertainty.shape) == 0:
+            return self.uncertainty.magnitude/self.magnitude.mean()
+        return self.uncertainty.magnitude/self.magnitude
 
-                #view the array as an ndarray
-                kwargs[i] = kwargs[i].magnitude
+    def rescale(self, units):
+        """
+        Return a copy of the quantity converted to the specified units
+        """
+        copy = UncertainQuantity(self)
+        copy.units = units
+        return copy
 
+    def __array_finalize__(self, obj):
+        Quantity.__array_finalize__(self, obj)
+        self._uncertainty = getattr(
+            obj, 'uncertainty', Quantity(0, self.units)
+        )
 
-        #get the result for the function
-        result = base_function( *args, **kwargs)
+    def __add__(self, other):
+        res = Quantity.__add__(self, other)
+        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
 
-        # since we have to modify the result, convert it to a list
-        result = list(result)
+    def __sub__(self, other):
+        res = Quantity.__sub__(self, other)
+        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
 
-        #iterate through the handler_quantities and get the correct
-        # units
+    def __mul__(self, other):
+        res = Quantity.__mul__(self, other)
+        try:
+            sru = self.relative_uncertainty
+            oru = other.relative_uncertainty
+            ru = (sru**2+oru**2)**0.5
+            if len(ru.shape) == 0:
+                u = res.mean() * ru
+            else:
+                u = res * ru
+        except AttributeError:
+            u = (self.uncertainty**2*other**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
 
+    def __truediv__(self, other):
+        res = Quantity.__truediv__(self, other)
+        try:
+            sru = self.relative_uncertainty
+            oru = other.relative_uncertainty
+            ru = (sru**2+oru**2)**0.5
+            if len(ru.shape) == 0:
+                u = res.mean() * ru
+            else:
+                u = res * ru
+        except AttributeError:
+            u = (self.uncertainty**2/other**2)**0.5
+        # TODO: use .view:
+        return UncertainQuantity(res, uncertainty=u)
 
-        length = min(   len(handler_quantities)   ,    len(result)   )
+    def __pow__(self, other):
+        res = Quantity.__pow__(self, other)
+        ru = other * self.relative_uncertainty
+        if len(ru.shape) == 0:
+            u = res.mean() * ru
+        else:
+            u = res * ru
+        return UncertainQuantity(res, uncertainty=u)
 
-        for i in range(length):
-            # if the output of the handler is a quantity make the
-            # output of the wrapper function be a quantity with correct
-            # units
-            if isinstance(handler_quantities[i], Quantity):
-                # the results should have simplified units since that's what
-                # the inputs were (they were simplified earlier)
-                # (reasons why this would not be true?)
-                result[i] = Quantity(
-                                result[i],
-                                handler_quantities[i]
-                                    .dimensionality.simplified()
-                                    )
-                #now convert the quantity to the appropriate units
-                result[i] = result[i].rescale(
-                                        handler_quantities[i].dimensionality)
+    def __getitem__(self, key):
+        return UncertainQuantity(
+            self.magnitude[key],
+            self.units,
+            copy.copy(self.uncertainty)
+        )
 
-        #need to convert the result back to a tuple
-        result = tuple(result)
-        return result
+    def __repr__(self):
+        return '%s*%s\n+/-%s (1 sigma)'\
+            %(numpy.ndarray.__str__(self), self.units, self.uncertainty)
 
-    # give the wrapped function a similar name to the base function
-    wrapped_function.__name__ = base_function.__name__ + "_QWrap"
-    # give the wrapped function a similar doc string to the base function's
-    # doc string but add an annotation to the beginning
-    wrapped_function.__doc__ = (
-            "this function has been wrapped to work with Quantities\n"
-            + base_function.__doc__)
-
-    return wrapped_function
-
+    __str__ = __repr__
