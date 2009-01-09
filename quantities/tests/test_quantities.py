@@ -16,7 +16,9 @@ class TestQuantities(unittest.TestCase):
         """
         self.assertEqual(a1.shape, a2.shape)
         self.assertEqual(a1.dtype, a2.dtype)
-        self.assertTrue(numpy.alltrue(numpy.equal(a1.flat, a2.flat)))
+
+        self.assertTrue((a1 == a2).all())
+
 
     def numAssertAlmostEqual(self, a1, a2):
         """Test for approximately equality of numarray fields a1 and a2.
@@ -351,6 +353,19 @@ class TestQuantities(unittest.TestCase):
         #make sure indexing is correct
         self.assertRaises(IndexError, tempfunc, 10)
 
+
+        #test get item using slicing
+        tempArray2 = [100, .2, -1, -5, -6] * q.mA
+        tempArray3 = [100, .2, -1, -5] * q.mA
+        tempArray4 = [.2, -1 ] * q.mA
+
+        self.numAssertEqual(tempArray2[:], tempArray2)
+
+        self.numAssertEqual(tempArray2[:-1], tempArray3)
+        self.numAssertEqual(tempArray2[1:3], tempArray4)
+
+
+
     def test_setitem (self):
         temp = q.Quantity([0,2,5,7.6], q.lb)
 
@@ -358,9 +373,39 @@ class TestQuantities(unittest.TestCase):
         def test(value):
             temp[2] = value
 
-        #self.assertRaises(ValueError, test, 60 * q.inch * q.J)
+        #make sure normal assignment works correctly
+        test(2 *q.lb)
+
+        self.assertRaises(ValueError, test, 60 * q.inch * q.J)
         # even in the case when the quantity has no units (maybe this could go away)
-        #self.assertRaises(ValueError, test, 60)
+        self.assertRaises(ValueError, test, 60)
+
+
+        #test set item using slicing
+        tempArray2 = [100, .2, -1, -5, -6] * q.mA
+        tempArray3 = [100, .2, 0, 0, -6] * q.mA
+        tempArray4 = [100,  1,  1,  1,  1] * q.mA
+
+        tempArray4[1:] = [.2, -1, -5, -6] * q.mA
+        self.numAssertEqual(tempArray4, tempArray2)
+
+
+        tempArray3[2:4] = [-1, -5] * q.mA
+        self.numAssertEqual(tempArray3, tempArray2)
+
+        tempArray4[:] = [100, .2, -1, -5, -6] * q.mA
+        self.numAssertEqual(tempArray4, tempArray2)
+
+
+        # check and see that dimensionless numbers work correctly
+        tempArray5 = q.Quantity([.2, -3, -5, -9,10])
+        tempArray6 = q.Quantity([.2, -3, 0, 0,11])
+
+        tempArray5[4] = 1 + tempArray5[4]
+        tempArray5[2:4] = numpy.zeros(2)
+
+        self.numAssertEqual(tempArray5, tempArray6)
+
 
         #needs to check for out of bounds
         def tempfunc(value):
@@ -376,6 +421,176 @@ class TestQuantities(unittest.TestCase):
         for i in x:
             # currently fails
             self.assertEqual(i.units, q.kPa.units)
+
+    def test_numpy_functions(self):
+        #test tolist()
+        k = [[1,2,3,10], [1,2,3,4]] * q.BTU
+
+        self.assertTrue(k.tolist() ==
+                        [[1.0*q.Btu, 2.0*q.Btu, 3.0*q.Btu, 10.0*q.Btu],
+                         [1.0*q.Btu, 2.0*q.Btu, 3.0*q.Btu,  4.0*q.Btu]] )
+
+
+
+        # test sum functionality
+        temp1  = [ 100, -100, 20.00003, 1.5e-4] * q.BTU
+        self.assertEqual( temp1.sum(),  20.00018 * q.BTU)
+
+
+        # test fill
+        u = [[-100, 5, 6],[1,2,3]] * q.m
+
+        u.fill(6 * q.m)
+
+        self.numAssertEqual(u,[[6, 6, 6],[6,6,6]] * q.m )
+
+
+
+        y = [[1 , 3,4 ,5],[1,2,3,6]] * q.inch
+        #reshape
+        self.numAssertEqual(y.reshape([1,8]),
+                              [[ 1.0,  3,  4,  5,  1,  2,  3,  6]]*q.inch)
+
+        #transpose
+        self.numAssertEqual(y.transpose(),
+                             [[1 , 1],[3 ,2],[4,3],[5,6]] * q.inch)
+
+        # flatten
+
+        self.numAssertEqual(y.flatten(),
+                             [ 1,  3,  4,  5,  1,  2,  3,  6] * q.inch)
+        #ravel
+        self.numAssertEqual(y.ravel(),
+                             [ 1,  3,  4,  5,  1,  2,  3,  6] * q.inch)
+        #squeeze
+        self.numAssertEqual((y.reshape([1,8])).squeeze(),
+                             [ 1,  3,  4,  5,  1,  2,  3,  6]*q.inch)
+
+
+        #test take
+        self.numAssertEqual( temp1.take([2,0,3]) ,
+                            [20.00003, 100, 1.5e-4] * q.BTU )
+
+        # test put
+        #make up something similar to y
+        z = [[1 , 3,10 ,5],[1,2,3,12]] * q.inch
+        # put replace the numbers so it is identical to y
+        z.put([2, 7], [4, 6] * q.inch)
+        # test to make sure they are equal
+        self.numAssertEqual(z, y)
+
+        # now test that the appropriate error is raised
+        #when incorrect units are passed
+
+        self.assertRaises(ValueError, z.put,
+                          [2, 7], [4, 6] * q.feet )
+
+        #test repeat
+        z =  [1 ,1, 1, 3, 3,3 ,4 ,4,4 ,5, 5, 5, 1, 1, 1, 2, 2, 2,3, 3, 3 ,6, 6, 6] * q.inch
+        self.numAssertEqual(y.repeat(3), z)
+
+
+        #test sort()
+
+        m = [4,5,2,3,1,6] * q.radian
+        m.sort()
+        self.numAssertEqual(m, [1,2,3,4,5,6] * q.radian)
+
+        #test argsort
+        m = [1,4,5,6,2,9] * q.MeV
+        self.numAssertEqual(m.argsort(), numpy.array([0, 4, 1, 2, 3, 5]))
+
+        # test diagonal
+        t = [[1,2,3],[1,2,3],[1,2,3]] * q.kPa
+        self.numAssertEqual(t.diagonal(offset = 1), [2, 3] * q.kPa)
+
+        #test compress
+        self.numAssertEqual(z.compress(z > 5 * q.inch), [6,6,6] * q.inch)
+
+        #test searchsorted()
+        m.sort()
+        self.numAssertEqual(m.searchsorted([5.5, 9.5] * q.MeV),
+                            numpy.array([4,6]))
+
+        def searchsortedError():
+            m.searchsorted([1])
+
+        #make sure the proper error is raised when called with improper units
+        self.assertRaises (ValueError, searchsortedError)
+
+
+
+        #test nonzero()
+
+        j = [1,0,5,6,0,9] * q.MeV
+        self.numAssertEqual(j.nonzero()[0], numpy.array([0,2,3,5]))
+
+        #test max()
+
+        self.assertEqual(j.max(), 9 * q.MeV)
+        # test argmax
+        self.assertEqual(j.argmax(), 5)
+
+        #test min()
+
+        self.assertEqual(j.min(), 0 * q.MeV)
+
+        #test argmin
+        self.assertEqual(m.argmin(), 0)
+
+        #test ptp()
+
+        self.assertEqual(m.ptp() , 8 * q.MeV)
+        #test clip()
+        #self.numAssertEqual(j.clip(max = 5 * q.MeV), [1,0,5,5,0,5] * q.MeV)
+        #self.numAssertEqual(j.clip(min = 1 *q.eV, max = 5 * q.MeV), [1,0,5,5,0,5] * q.MeV)
+
+        #test round
+
+        p = [1,3.00001, 3, .6 , 1000] * q.J
+        self.numAssertEqual(p.round(0), [1,3., 3, 1 , 1000] * q.J)
+
+        self.numAssertEqual(p.round(-1), [0,0, 0, 0 , 1000] * q.J)
+        self.numAssertEqual(p.round(3), [1,3., 3, .6 , 1000] * q.J)
+
+        # rest trace()
+        d = [[ 1.,  2.,  3.,  4.], [ 1.,  2.,  3.,  4.],[ 1. , 2. , 3.,  4.]]*q.A
+
+        self.numAssertEqual(d.trace(), (1+2+3) * q.A)
+
+        #test cusum()
+
+        #print p.cumsum()
+        #print [1, 4.00001, 7.00001,7.60001, 1007.60001] * q.J
+        #print p.cumsum() == [1, 4.00001, 7.00001,7.60001, 1007.60001] * q.J
+
+        self.numAssertEqual(p.cumsum(), [1, 4.00001, 7.00001,1 + 3.00001 + 3 + .6, 1007.60001] * q.J)
+
+
+        #test mean()
+
+        self.assertEqual(p.mean(), 201.520002 * q.J)
+
+        #test var()
+
+        self.assertAlmostEqual(p.var(), ((1 - 201.520002)**2 + (3.00001 -201.520002)**2 + (3- 201.520002) **2 + (.6 - 201.520002) **2 + (1000-201.520002)**2)/5 * q.J**2 )
+
+        #test std()
+        self.assertAlmostEqual(p.std(), numpy.sqrt(((1 - 201.520002)**2 + (3.00001 -201.520002)**2 + (3- 201.520002) **2 + (.6 - 201.520002) **2 + (1000-201.520002)**2)/5 )* q.J )
+
+        # test prod()
+
+        o = [1, 3,2] * q.kPa
+        self.assertEqual(o.prod(), 6 * q.kPa **3 )
+
+        #test cumprod
+        self.assertRaises(ValueError, o.cumprod)
+
+        f = [1,2,3] * q.dimensionless
+        self.numAssertEqual(f.cumprod(), [1,2,6] * q.dimensionless)
+
+
+
 
     def test_specific_bugs(self):
 

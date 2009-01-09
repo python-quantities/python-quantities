@@ -5,7 +5,7 @@ from numpy import pi
 
 from quantities.units.unitquantity import UnitAngle, UnitQuantity
 
-radian = radians = \
+rad = radian = radians = \
     UnitAngle('radian')
 turn = turns = circle = circles = \
     UnitAngle('turn', 2*pi*radian)
