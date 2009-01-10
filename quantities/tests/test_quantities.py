@@ -8,6 +8,10 @@ from quantities import *
 import quantities as q
 from nose.tools import *
 
+def test_quantity_creation():
+    assert_raises(LookupError, Quantity, 1, 'nonsense')
+    assert_equal(str(Quantity(1, '')), '1.0*dimensionless')
+
 def test_scalar_equality():
     assert_true(J == J)
     assert_true(1*J == J)
@@ -180,8 +184,8 @@ class TestQuantities(unittest.TestCase):
 
     def test_unit_aggregation(self):
         joule = q.kg*q.m**2/q.s**2
-        pc_per_cc = q.UnitQuantity("(parsec/cm**3)", q.parsec/q.cm**3)
-        area_per_volume = q.UnitQuantity("(m**2/m**3)", 1/q.m)
+        pc_per_cc = q.CompoundUnit("parsec/cm**3")
+        area_per_volume = q.CompoundUnit("m**2/m**3")
         self.assertEqual(str(joule/q.m), "1.0*kg*m/s**2", str(joule/q.m))
         self.assertEqual(str(joule*q.m), "1.0*kg*m**3/s**2", str(joule*q.m))
         self.assertEqual(
@@ -211,8 +215,8 @@ class TestQuantities(unittest.TestCase):
         )
 
     def test_compound_reduction(self):
-        pc_per_cc = q.UnitQuantity("(parsec/cm**3)", q.parsec/q.cm**3)
-        temp = pc_per_cc * q.UnitQuantity('(m/m**3)', 1/q.m**2)
+        pc_per_cc = q.CompoundUnit("parsec/cm**3")
+        temp = pc_per_cc * q.CompoundUnit('m/m**3')
         self.assertEqual(str(temp), "1.0*(parsec/cm**3)*(m/m**3)", str(temp))
         temp = temp.simplified
         temp.units=q.parsec**-4

@@ -82,8 +82,6 @@ __version__ = '0.1(bzr)'
 
 from quantity import Quantity, UncertainQuantity
 
-from registry import unit_registry
-
 import units
 from units import *
 

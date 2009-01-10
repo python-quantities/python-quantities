@@ -1,8 +1,6 @@
 """
 """
 
-from quantities.registry import unit_registry
-
 import acceleration
 from acceleration import *
 
