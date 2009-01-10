@@ -139,6 +139,48 @@ def test_array_comparison():
             str(numpy.array([True, True, False]))
     )
 
+def test_uncertainquantity_simplified():
+    a = 1000*eV
+    assert_equal(
+        str(a.simplified),
+        '1.602176487e-16*kg*m**2/s**2\n+/-4e-24*kg*m**2/s**2 (1 sigma)'
+    )
+
+def test_uncertainquantity_set_uncertainty():
+    a = UncertainQuantity([1, 2], 'm', [.1, .2])
+    assert_equal(
+        str(a),
+        '[ 1.  2.]*m\n+/-[ 0.1  0.2]*m (1 sigma)'
+    )
+    a.uncertainty = [1., 2.]
+    assert_equal(
+        str(a),
+        '[ 1.  2.]*m\n+/-[ 1.  2.]*m (1 sigma)'
+    )
+
+def test_uncertainquantity_multiply():
+    a = UncertainQuantity([1, 2], 'm', [.1, .2])
+    assert_equal(
+        str(a*a),
+        '[ 1.  4.]*m**2\n+/-[ 0.14142136  0.56568542]*m**2 (1 sigma)'
+    )
+    assert_equal(
+        str(a*2),
+        '[ 2.  4.]*m\n+/-[ 0.2  0.4]*m (1 sigma)'
+    )
+
+def test_uncertainquantity_divide():
+    a = UncertainQuantity([1, 2], 'm', [.1, .2])
+    assert_equal(
+        str(a/a),
+        '[ 1.  1.]*dimensionless\n+/-[ 0.14142136  0.14142136]*'
+        'dimensionless (1 sigma)'
+    )
+    assert_equal(
+        str(a/2),
+        '[ 0.5  1. ]*m\n+/-[ 0.05  0.1 ]*m (1 sigma)'
+    )
+
 class TestQuantities(unittest.TestCase):
 
     def numAssertEqual(self, a1, a2):
@@ -416,7 +458,7 @@ class TestQuantities(unittest.TestCase):
 
         # the formatting should be the same
         self.assertEqual(
-            str((5.2 * q.eV) / (400.0 * q.eV)),
+            str((5.2 * q.energy.eV) / (400.0 * q.energy.eV)),
             str(q.Quantity(.013))
         )
 
@@ -562,7 +604,9 @@ class TestQuantities(unittest.TestCase):
         # fill
         u = [[-100, 5, 6], [1, 2, 3]] * q.m
         u.fill(6 * q.m)
-        self.numAssertEqual(u,[[6, 6, 6], [6, 6, 6]] * q.m )
+        self.numAssertEqual(u,[[6, 6, 6], [6, 6, 6]] * q.m)
+        # incompatible units:
+        self.assertRaises(ValueError, u.fill, [[-100, 5, 6], [1, 2, 3]])
 
         # reshape
         y = [[1, 3, 4, 5], [1, 2, 3, 6]] * q.inch
@@ -669,14 +713,20 @@ class TestQuantities(unittest.TestCase):
         self.assertEqual(m.ptp(), 8 * q.MeV)
 
         # clip
-#        self.numAssertEqual(
-#            j.clip(max = 5 * q.MeV),
-#            [1, 0, 5, 5, 0, 5] * q.MeV
-#        )
-#        self.numAssertEqual(
-#            j.clip(min = 1 *q.eV, max = 5 * q.MeV),
-#            [1, 0, 5, 5, 0, 5] * q.MeV
-#        )
+        self.numAssertEqual(
+            j.clip(max=5*q.MeV),
+            [1, 0, 5, 5, 0, 5] * q.MeV
+        )
+        self.numAssertEqual(
+            j.clip(min=1*q.MeV),
+            [1, 1, 5, 6, 1, 9] * q.MeV
+        )
+        self.numAssertEqual(
+            j.clip(min=1*q.MeV, max=5*q.MeV),
+            [1, 1, 5, 5, 1, 5] * q.MeV
+        )
+        self.assertRaises(ValueError, j.clip)
+        self.assertRaises(ValueError, j.clip, 1)
 
         # round
         p = [1, 3.00001, 3, .6, 1000] * q.J

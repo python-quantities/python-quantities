@@ -27,13 +27,10 @@ class QuantityIterator:
 
     def __init__(self, object):
         self.object = object
-        self.iterator = super(Quantity, object).__iter__()
-
-    def __iter__(self):
-        return self
+        self._iterator = super(Quantity, object).__iter__()
 
     def next(self):
-        return Quantity(self.iterator.next(), self.object.units)
+        return Quantity(self._iterator.next(), self.object.units)
 
 
 class Quantity(numpy.ndarray):
@@ -214,7 +211,8 @@ class Quantity(numpy.ndarray):
 
         return Quantity(magnitude, dims, magnitude.dtype)
 
-    __div__ = __truediv__
+    def __div__(self, other):
+        return self.__truediv__(other)
 
     def __rmul__(self, other):
         # TODO: This needs to be properly implemented
@@ -223,7 +221,8 @@ class Quantity(numpy.ndarray):
     def __rtruediv__(self, other):
         return other * self**-1
 
-    __rdiv__ = __rtruediv__
+    def __rdiv__(self, other):
+        return self.__rtruediv__(other)
 
     def __pow__(self, other):
         if isinstance(other, Quantity):
@@ -339,7 +338,7 @@ class Quantity(numpy.ndarray):
     #squeeze works as expected
     #take functions as intended
 
-    def put (self, indicies, values, mode='raise'):
+    def put(self, indicies, values, mode='raise'):
         """
         performs the equivalent of ndarray.put() but enforces units
         values - must be an Quantity with the same units as self
@@ -361,7 +360,7 @@ class Quantity(numpy.ndarray):
 
     #sort works as intended
 
-    def argsort (self, axis=-1, kind='quick', order=None):
+    def argsort(self, axis=-1, kind='quick', order=None):
         return self.magnitude.argsort(axis, kind, order)
 
     def searchsorted(self,values, side='left'):
@@ -396,7 +395,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    def argmin (self,axis=None, out=None):
+    def argmin(self,axis=None, out=None):
         return self.magnitude.argmin()
 
     def ptp(self, axis=None, out=None):
@@ -406,20 +405,23 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    def clip (self, min = None, max = None, out = None):
-        if min is None or  max is None:
+    def clip(self, min=None, max=None, out=None):
+        if min is None and max is None:
             raise ValueError("at least one of min or max must be set")
         else:
             #set min and max to their appropriate values
             if min is None: min = Quantity(-numpy.Inf, self.dimensionality)
             if max is None: max = Quantity(numpy.Inf, self.dimensionality)
 
-        if not isinstance(min, Quantity) or not isinstance(max, Quantity):
-            raise TypeError("both min and max must be Quantities")
+        if self.dimensionality and not \
+                (isinstance(min, Quantity) and isinstance(max, Quantity)):
+            raise ValueError(
+                "both min and max must be Quantities with compatible units"
+            )
 
         clipped = self.magnitude.clip(
-            min.rescale(self.dimensionality).magnitude,
-            max.rescale(self.dimensionality).magnitude,
+            min.rescale(self.units).magnitude,
+            max.rescale(self.units).magnitude,
             out
         )
         return Quantity(clipped, self.dimensionality, copy=False)
@@ -428,14 +430,14 @@ class Quantity(numpy.ndarray):
     # because it is not settled how we want to deal with
     # complex numbers
 
-    def round (self, decimals=0, out=None):
+    def round(self, decimals=0, out=None):
         return Quantity(
             self.magnitude.round(decimals, out),
             self.dimensionality,
             copy=False
         )
 
-    def trace (self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
+    def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
         return Quantity(
             self.magnitude.trace(offset, axis1, axis2, dtype, out),
             self.dimensionality,
@@ -459,7 +461,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    def std (self, axis=None, dtype=None, out=None):
+    def std(self, axis=None, dtype=None, out=None):
         #just return the std of the magnitude
         return Quantity(
             self.magnitude.std(axis, dtype, out),
@@ -597,6 +599,7 @@ class UncertainQuantity(Quantity):
             else:
                 u = res * ru
         except AttributeError:
+            other = numpy.array(other, copy=False)
             u = (self.uncertainty**2*other**2)**0.5
         # TODO: use .view:
         return UncertainQuantity(res, uncertainty=u)
