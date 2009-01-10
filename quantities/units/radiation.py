@@ -12,11 +12,13 @@ Bq = becquerel = becquerels = \
     UnitQuantity('Bq', 1/s)
 Ci = curie = curies = \
     UnitQuantity('Ci', 3.7e10*becquerel)
+rd = rutherford = rutherfords = \
+    UnitQuantity('rd', 1e6*Bq)
 Gy = gray = grays = Sv = sievert = sieverts = \
     UnitQuantity('Gy', J/kg)
 rem = rems = \
     UnitQuantity('rem', 1e-2*sievert)
-rd = rad = rads = \
+rad = rads = \
     UnitQuantity('rd', 1e-2*gray)
 R = roentgen = roentgens = \
     UnitQuantity('R', 2.58e-4*coulomb/kg)
