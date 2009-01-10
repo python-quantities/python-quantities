@@ -105,12 +105,10 @@ class BaseDimensionality(object):
 
 class ImmutableDimensionality(BaseDimensionality):
 
-    def __init__(self, dict=None, **kwds):
+    def __init__(self, dict=None):
         self.__data = {}
         if dict is not None:
             self.__data.update(dict)
-        if len(kwds):
-            self.__data.update(kwds)
 
     def __repr__(self):
         return format_units(self.__data)
@@ -140,17 +138,7 @@ class ImmutableDimensionality(BaseDimensionality):
         return self.__data.__iter__()
 
     def copy(self):
-        if self.__class__ is ImmutableDimensionality:
-            return ImmutableDimensionality(self.__data.copy())
-        import copy
-        __data = self.__data
-        try:
-            self.__data = {}
-            c = copy.copy(self)
-        finally:
-            self.__data = __data
-        c.update(self)
-        return c
+        return ImmutableDimensionality(self.__data.copy())
 
     def keys(self):
         return self.__data.keys()
@@ -180,13 +168,6 @@ class ImmutableDimensionality(BaseDimensionality):
 
     def __contains__(self, key):
         return key in self.__data
-
-    @classmethod
-    def fromkeys(cls, iterable, value=None):
-        d = cls()
-        for key in iterable:
-            d[key] = value
-        return d
 
 
 class MutableDimensionality(BaseDimensionality, dict):

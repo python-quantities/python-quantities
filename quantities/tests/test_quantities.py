@@ -8,6 +8,16 @@ from quantities import *
 import quantities as q
 from nose.tools import *
 
+def test_immutabledimensionality_iter():
+    assert_equal(str([i for i in m.dimensionality]), '[1.0*m]')
+
+def test_immutabledimensionality_copy():
+    assert_equal(m.dimensionality, m.dimensionality.copy())
+
+def test_immutabledimensionality_get():
+    assert_equal(m.dimensionality.get(m), 1)
+    assert_equal(m.dimensionality.get(ft, 2), 2)
+
 def test_quantity_creation():
     assert_raises(LookupError, Quantity, 1, 'nonsense')
     assert_equal(str(Quantity(1, '')), '1.0*dimensionless')
@@ -22,6 +32,10 @@ def test_scalar_equality():
     assert_false(2*J == J)
     assert_false(str(2*J) == str(J))
     assert_false(J == 2*q.kg*q.m**2/q.s**2)
+
+    def eq(q1, q2):
+        return q1 == q2
+    assert_raises(ValueError, eq, J, kg)
 
 def test_scalar_inequality():
     assert_true(J != erg)
@@ -441,15 +455,16 @@ class TestQuantities(unittest.TestCase):
         )
         self.assertEqual(str(temp**6), str(temp2))
 
-        def QpowQ(q1, q2):
+        def q_pow_r(q1, q2):
             return q1 ** q2
 
-        self.assertRaises(ValueError, QpowQ, 10.0 * q.m, 10 * q.J)
+        self.assertRaises(ValueError, q_pow_r, 10.0 * q.m, 10 * q.J)
+        self.assertRaises(ValueError, q_pow_r, 10.0 * q.m, numpy.array([1, 2, 3]))
 
         self.assertEqual( (10 * q.J) ** (2 * q.J/q.J) , 100 * q.J**2 )
 
         # test rpow here
-        self.assertRaises(ValueError, QpowQ, 10.0, 10 * q.J)
+        self.assertRaises(ValueError, q_pow_r, 10.0, 10 * q.J)
 
         self.assertEqual( 10 ** (2 * q.J/ q.J) , 100)
 

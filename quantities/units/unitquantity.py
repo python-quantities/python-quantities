@@ -5,7 +5,6 @@ import numpy
 
 from quantities.quantity import Quantity
 from quantities.registry import unit_registry
-from quantities.dimensionality import ImmutableDimensionality
 
 
 class UnitQuantity(Quantity):

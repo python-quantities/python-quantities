@@ -233,7 +233,7 @@ class Quantity(numpy.ndarray):
                 raise ValueError("exponent must be dimensionless")
             other = simplified.magnitude
 
-        assert isinstance(other, (numpy.ndarray, int, float, long))
+        other = numpy.array(other)
 
         dims = self.dimensionality**other
         magnitude = self.magnitude**other
