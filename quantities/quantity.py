@@ -142,10 +142,10 @@ class Quantity(numpy.ndarray):
 
     @property
     def simplified(self):
-        rq = self.magnitude * unit_registry['dimensionless']
+        rq = unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
             rq = rq * u.reference_quantity**d
-        return rq
+        return rq * self.magnitude
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
