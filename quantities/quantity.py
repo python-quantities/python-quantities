@@ -214,6 +214,11 @@ class Quantity(numpy.ndarray):
             other = other.simplified.magnitude
 
         other = numpy.array(other)
+        try:
+            assert other.min() == other.max()
+            other = other.min()
+        except AssertionError:
+            raise ValueError('Quantities must be raised to a single power')
 
         dims = self.dimensionality**other
         magnitude = self.magnitude**other

@@ -58,26 +58,29 @@ class BaseDimensionality(object):
             assert self == other
         except AssertionError:
             raise ValueError(
-                'can not add quantities of with units of %s and %s'\
+                'can not add units of %s and %s'\
                 %(str(self), str(other))
             )
         return Dimensionality(self)
 
-    __sub__ = __add__
+    def __sub__(self, other):
+        try:
+            assert self == other
+        except AssertionError:
+            raise ValueError(
+                'can not subtract units of %s and %s'\
+                %(str(self), str(other))
+            )
+        return Dimensionality(self)
 
     def __mul__(self, other):
-        #make a new dimensionality object for the result from the first object
         new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
-                #add existing units together
                 new[unit] += power
-                #if the unit has a zero power, remove it
                 if new[unit] == 0:
                     new.pop(unit)
             except KeyError:
-                #if we get a keyerror, the unit does not exist in the first
-                #dimensionality, so add it in
                 new[unit] = power
         return new
 
@@ -85,30 +88,18 @@ class BaseDimensionality(object):
         new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
-                #add the power to the entry for the unit
                 new[unit] -= power
-                #if the unit is raised to the zeroth power, remove it
                 if new[unit] == 0:
                     new.pop(unit)
             except KeyError:
-                #if we get an exception, then the unit did not exist before
-                #so we have to add it in
                 new[unit] = -power
         return new
 
-    __div__ = __truediv__
+    def __div__(self, other):
+        return self.__truediv__(other)
 
     def __pow__(self, other):
-        assert isinstance(other, (numpy.ndarray, int, float))
-        if isinstance(other, numpy.ndarray):
-            try:
-                #make sure that if an array is used to power a unit,
-                #the array just repeats the same number
-                assert other.min()==other.max()
-                other = other.min()
-            except AssertionError:
-                raise ValueError('Quantities must be raised to a single power')
-
+        assert isinstance(other, (int, float))
         new = Dimensionality(self)
         for i in new:
             #multiply all the entries by the power
