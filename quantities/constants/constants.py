@@ -4,7 +4,8 @@ from __future__ import absolute_import
 
 import math as _math
 from .codata import physical_constants as _pc
-from quantities.quantity import Quantity, UncertainQuantity
+from quantities.quantity import Quantity
+from quantities.uncertainquantity import UncertainQuantity
 
 def _cd(name):
     entry = _pc[name]

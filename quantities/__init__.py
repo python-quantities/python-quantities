@@ -77,10 +77,10 @@ multiplicands are uncorrelated. It would be more accurate in this case to use::
   +/-1.6*J**2 (1 sigma)
 """
 
-
 __version__ = '0.1(bzr)'
 
-from quantity import Quantity, UncertainQuantity
+from quantity import Quantity
+from uncertainquantity import UncertainQuantity
 
 import units
 from units import *
