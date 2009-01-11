@@ -112,9 +112,6 @@ class Quantity(numpy.ndarray):
             )
     units = property(get_units, set_units)
 
-    def mean(self):
-        return Quantity(self.magnitude.mean(), self.units)
-
     def rescale(self, units):
         """
         Return a copy of the quantity converted to the specified units
