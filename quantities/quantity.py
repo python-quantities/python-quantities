@@ -151,7 +151,8 @@ class Quantity(numpy.ndarray):
 
         return Quantity(magnitude, dims, magnitude.dtype)
 
-    __radd__ = __add__
+    def __radd__(self, other):
+        return self.__add__(other)
 
     def __sub__(self, other):
         if not isinstance(other, Quantity):

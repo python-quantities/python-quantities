@@ -54,7 +54,7 @@ class UncertainQuantity(Quantity):
             uncertainty.units = self.units
             self._uncertainty = uncertainty
         except AssertionError:
-            ValueError('data and uncertainty must have identical shape')
+            raise ValueError('data and uncertainty must have identical shape')
     uncertainty = property(get_uncertainty, set_uncertainty)
 
     @property
