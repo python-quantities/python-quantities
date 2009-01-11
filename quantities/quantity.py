@@ -6,14 +6,13 @@ import copy
 import numpy
 
 from quantities.dimensionality import BaseDimensionality, \
-    MutableDimensionality, ImmutableDimensionality
+    Dimensionality, ImmutableDimensionality
 from quantities.registry import unit_registry
 
 def prepare_compatible_units(s, o):
     try:
-        ss, os = s.simplified, o.simplified
-        assert ss.units == os.units
-        return ss, os
+        assert s.dimensionality.simplified == o.dimensionality.simplified
+        return s.simplified, o.simplified
     except AssertionError:
         raise ValueError(
             'can not compare quantities with units of %s and %s'\
@@ -38,7 +37,7 @@ class Quantity(numpy.ndarray):
     # TODO: what is an appropriate value?
     __array_priority__ = 21
 
-    def __new__(cls, data, units='', dtype='d', mutable=True, copy=True):
+    def __new__(cls, data, units='', dtype='d', copy=True):
         if not isinstance(data, numpy.ndarray):
             data = numpy.array(data, dtype=dtype)
 
@@ -46,8 +45,6 @@ class Quantity(numpy.ndarray):
             data = data.copy()
 
         if isinstance(data, Quantity) and units:
-            if isinstance(units, BaseDimensionality):
-                units = str(units)
             data = data.rescale(units)
 
         # should this be a "cooperative super" call instead?
@@ -57,11 +54,10 @@ class Quantity(numpy.ndarray):
             data.dtype,
             buffer=data
         )
-        ret.flags.writeable = mutable
         return ret
 
-    def __init__(self, data, units='', dtype='d', mutable=True, copy=True):
-        if isinstance(data, Quantity) and not units:
+    def __init__(self, data, units='', dtype='d', copy=True):
+        if not units and isinstance(data, Quantity):
             dims = data.dimensionality
         elif isinstance(units, str):
             if units in ('', 'dimensionless'):
@@ -73,55 +69,42 @@ class Quantity(numpy.ndarray):
         elif isinstance(units, (BaseDimensionality, dict)):
             dims = units
         else:
-            assert units is None
-            dims = None
-
-        self._mutable = mutable
-        if self.is_mutable:
-            if dims is None: dims = {}
-            self._dimensionality = MutableDimensionality(dims)
-        else:
-            if dims is None:
-                self._dimensionality = None
-            else:
-                self._dimensionality = ImmutableDimensionality(dims)
+            raise TypeError(
+                'units must be a quantity, string, or dimensionality, got %s'\
+                %type(units)
+            )
+        self._dimensionality = Dimensionality(dims)
 
     @property
     def dimensionality(self):
-        if self._dimensionality is None:
-            return ImmutableDimensionality({self:1})
-        else:
-            return ImmutableDimensionality(self._dimensionality)
+        return ImmutableDimensionality(self._dimensionality)
 
     @property
     def magnitude(self):
         return self.view(type=numpy.ndarray)
 
-    @property
-    def is_mutable(self):
-        return self._mutable
-
-    # get and set methods for the units property
     def get_units(self):
-        return str(self.dimensionality)
-    def set_units(self, units):
-        if not self.is_mutable:
-            raise AttributeError("can not modify protected units")
-        if isinstance(units, str):
-            units = unit_registry[units]
-        if isinstance(units, Quantity):
+        return Quantity(1, self.dimensionality)
+    def set_units(self, other):
+        if not self.flags.writeable:
+            raise AttributeError("can not modify protected data")
+        if isinstance(other, str):
+            other = unit_registry[other]
+        if isinstance(other, BaseDimensionality):
+            other = Quantity(1, other)
+        if isinstance(other, Quantity):
             try:
-                assert units.magnitude == 1
+                assert other.magnitude == 1
             except AssertionError:
                 raise ValueError('units must have unit magnitude')
         try:
             sq = Quantity(1.0, self.dimensionality).simplified
-            osq = units.simplified
+            osq = other.simplified
             assert osq.dimensionality == sq.dimensionality
             m = self.magnitude
             m *= sq.magnitude / osq.magnitude
             self._dimensionality = \
-                MutableDimensionality(units.dimensionality)
+                Dimensionality(other.dimensionality)
         except AssertionError:
             raise ValueError(
                 'Unable to convert between units of "%s" and "%s"'
@@ -149,7 +132,7 @@ class Quantity(numpy.ndarray):
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
-            obj, 'dimensionality', MutableDimensionality()
+            obj, 'dimensionality', Dimensionality()
         )
 
 #    def __deepcopy__(self, memo={}):
@@ -226,11 +209,9 @@ class Quantity(numpy.ndarray):
 
     def __pow__(self, other):
         if isinstance(other, Quantity):
-            simplified = other.simplified
-
-            if simplified.dimensionality:
+            if other.dimensionality.simplified:
                 raise ValueError("exponent must be dimensionless")
-            other = simplified.magnitude
+            other = other.simplified.magnitude
 
         other = numpy.array(other)
 
@@ -239,14 +220,13 @@ class Quantity(numpy.ndarray):
         return Quantity(magnitude, dims, magnitude.dtype)
 
     def __rpow__(self, other):
-        simplified = self.simplified
-        if simplified.dimensionality:
+        if self.dimensionality.simplified:
             raise ValueError("exponent must be dimensionless")
 
-        return other**simplified.magnitude
+        return other**self.simplified.magnitude
 
     def __repr__(self):
-        return '%s*%s'%(numpy.ndarray.__str__(self), self.units)
+        return '%s*%s'%(numpy.ndarray.__str__(self), self.dimensionality)
 
     __str__ = __repr__
 
@@ -508,31 +488,24 @@ class UncertainQuantity(Quantity):
     # TODO: what is an appropriate value?
     __array_priority__ = 22
 
-    def __new__(
-        cls, data, units='', uncertainty=0, dtype='d', mutable=True
-    ):
-        return Quantity.__new__(
-            cls, data, units, dtype, mutable
-        )
+    def __new__(cls, data, units='', uncertainty=0, dtype='d'):
+        return Quantity.__new__(cls, data, units, dtype)
 
     def __init__(
-        self, data, units='', uncertainty=0, dtype='d', mutable=True
-    ):
-        Quantity.__init__(
-            self, data, units, dtype, mutable
-        )
+        self, data, units='', uncertainty=0, dtype='d'):
+        Quantity.__init__(self, data, units, dtype)
         if not numpy.any(uncertainty):
             uncertainty = getattr(self, 'uncertainty', uncertainty)
         self.set_uncertainty(uncertainty)
 
     @property
     def simplified(self):
-        sq = self.magnitude * unit_registry['dimensionless']
+        sq = unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
             sq = sq * u.reference_quantity**d
         u = self.uncertainty.simplified
         # TODO: use view:
-        return UncertainQuantity(sq, uncertainty=u)
+        return UncertainQuantity(sq * self.magnitude, uncertainty=u)
 
     def set_units(self, units):
         Quantity.set_units(self, units)
@@ -636,7 +609,10 @@ class UncertainQuantity(Quantity):
         )
 
     def __repr__(self):
-        return '%s*%s\n+/-%s (1 sigma)'\
-            %(numpy.ndarray.__str__(self), self.units, self.uncertainty)
+        return '%s*%s\n+/-%s (1 sigma)'%(
+            numpy.ndarray.__str__(self),
+            str(self.dimensionality),
+            self.uncertainty
+        )
 
     __str__ = __repr__

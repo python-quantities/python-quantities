@@ -10,6 +10,7 @@ from nose.tools import *
 
 def test_immutabledimensionality_iter():
     assert_equal(str([i for i in m.dimensionality]), '[1.0*m]')
+    assert_equal(str([i for i in m.dimensionality.iterkeys()]), '[1.0*m]')
 
 def test_immutabledimensionality_copy():
     assert_equal(m.dimensionality, m.dimensionality.copy())
@@ -659,6 +660,11 @@ class TestQuantities(unittest.TestCase):
             ValueError,
             z.put,
             [2, 7], [4, 6] * q.feet
+        )
+        self.assertRaises(
+            TypeError,
+            z.put,
+            [2, 7], [4, 6]
         )
 
         # repeat

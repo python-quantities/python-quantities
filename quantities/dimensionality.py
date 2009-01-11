@@ -21,7 +21,7 @@ def format_units(udict):
     ]
     for key in keys:
         d = udict[key]
-        u = key.units
+        u = key.name
         if d>0:
             if d != 1: u = u + ('**%s'%d).rstrip('.0')
             num.append(u)
@@ -43,6 +43,16 @@ class BaseDimensionality(object):
     """
     """
 
+    @property
+    def simplified(self):
+        if len(self):
+            rq = 1
+            for u, d in self.iteritems():
+                rq = rq * u.reference_quantity**d
+            return rq.dimensionality
+        else:
+            return self
+
     def __add__(self, other):
         try:
             assert self == other
@@ -51,13 +61,13 @@ class BaseDimensionality(object):
                 'can not add quantities of with units of %s and %s'\
                 %(str(self), str(other))
             )
-        return MutableDimensionality(self)
+        return Dimensionality(self)
 
     __sub__ = __add__
 
     def __mul__(self, other):
         #make a new dimensionality object for the result from the first object
-        new = MutableDimensionality(self)
+        new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
                 #add existing units together
@@ -71,8 +81,8 @@ class BaseDimensionality(object):
                 new[unit] = power
         return new
 
-    def __div__(self, other):
-        new = MutableDimensionality(self)
+    def __truediv__(self, other):
+        new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
                 #add the power to the entry for the unit
@@ -86,6 +96,8 @@ class BaseDimensionality(object):
                 new[unit] = -power
         return new
 
+    __div__ = __truediv__
+
     def __pow__(self, other):
         assert isinstance(other, (numpy.ndarray, int, float))
         if isinstance(other, numpy.ndarray):
@@ -97,7 +109,7 @@ class BaseDimensionality(object):
             except AssertionError:
                 raise ValueError('Quantities must be raised to a single power')
 
-        new = MutableDimensionality(self)
+        new = Dimensionality(self)
         for i in new:
             #multiply all the entries by the power
             new[i] *= other
@@ -170,7 +182,7 @@ class ImmutableDimensionality(BaseDimensionality):
         return key in self.__data
 
 
-class MutableDimensionality(BaseDimensionality, dict):
+class Dimensionality(BaseDimensionality, dict):
 
     def __repr__(self):
         return format_units(self)
