@@ -46,12 +46,19 @@ class BaseDimensionality(object):
     @property
     def simplified(self):
         if len(self):
-            rq = 1
+            rq = 1*unit_registry['dimensionless']
             for u, d in self.iteritems():
-                rq = rq * u.reference_quantity**d
+                rq *= u.reference_quantity**d
             return rq.dimensionality
         else:
             return self
+
+    def __hash__(self):
+        res = hash(unit_registry['dimensionless'])
+        for key in sorted(self.keys(), key=operator.attrgetter('format_order')):
+            val = self[key]
+            res ^= hash((key, val))
+        return res
 
     def __add__(self, other):
         try:
@@ -102,9 +109,9 @@ class BaseDimensionality(object):
         assert isinstance(other, (int, float))
         new = Dimensionality(self)
         for i in new:
-            #multiply all the entries by the power
             new[i] *= other
         return new
+
 
 class ImmutableDimensionality(BaseDimensionality):
 
@@ -112,6 +119,24 @@ class ImmutableDimensionality(BaseDimensionality):
         self.__data = {}
         if dict is not None:
             self.__data.update(dict)
+
+    def __iadd__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __isub__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __imul__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __itruediv__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __idiv__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __ipow__(self, other):
+        raise TypeError('can not modify protected units')
 
     def __repr__(self):
         return format_units(self.__data)
@@ -130,12 +155,6 @@ class ImmutableDimensionality(BaseDimensionality):
 
     def __getitem__(self, key):
         return self.__data[key]
-
-    def __hash__(self):
-        res = hash(unit_registry['dimensionless'])
-        for item in self.items():
-            res ^= hash(item)
-        return res
 
     def __iter__(self):
         return self.__data.__iter__()
@@ -174,6 +193,59 @@ class ImmutableDimensionality(BaseDimensionality):
 
 
 class Dimensionality(BaseDimensionality, dict):
+
+    def __iadd__(self, other):
+        try:
+            assert self == other
+        except AssertionError:
+            raise ValueError(
+                'can not add units of %s and %s'\
+                %(str(self), str(other))
+            )
+        return self
+
+    def __isub__(self, other):
+        try:
+            assert self == other
+        except AssertionError:
+            raise ValueError(
+                'can not subtract units of %s and %s'\
+                %(str(self), str(other))
+            )
+        return self
+
+    def __imul__(self, other):
+        if other is self:
+            other = other.copy()
+        for unit, power in other.iteritems():
+            try:
+                self[unit] += power
+                if self[unit] == 0:
+                    self.pop(unit)
+            except KeyError:
+                self[unit] = power
+        return self
+
+    def __itruediv__(self, other):
+        if other is self:
+            other = other.copy()
+        for unit, power in other.iteritems():
+            try:
+                self[unit] -= power
+                if self[unit] == 0:
+                    self.pop(unit)
+            except KeyError:
+                self[unit] = -power
+        return self
+
+    def __idiv__(self, other):
+        return self.__itruediv__(other)
+
+    def __ipow__(self, other):
+        assert isinstance(other, (int, float))
+        for i in self:
+            self[i] *= other
+        return self
 
     def __repr__(self):
         return format_units(self)

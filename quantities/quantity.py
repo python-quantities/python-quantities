@@ -77,7 +77,7 @@ class Quantity(numpy.ndarray):
 
     @property
     def dimensionality(self):
-        return ImmutableDimensionality(self._dimensionality)
+        return self._dimensionality
 
     @property
     def magnitude(self):
@@ -122,25 +122,15 @@ class Quantity(numpy.ndarray):
 
     @property
     def simplified(self):
-        rq = unit_registry['dimensionless']
+        rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
-            rq = rq * u.reference_quantity**d
+            rq *= u.reference_quantity**d
         return rq * self.magnitude
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(
             obj, 'dimensionality', Dimensionality()
         )
-
-#    def __deepcopy__(self, memo={}):
-#        return self.__class__(
-#            self.view(type=numpy.ndarray),
-#            self.dtype,
-#            self.units
-#        )
-
-#    def __cmp__(self, other):
-#        raise
 
     def __add__(self, other):
         if not isinstance(other, Quantity):
@@ -150,6 +140,17 @@ class Quantity(numpy.ndarray):
         magnitude = self.magnitude + other.magnitude
 
         return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __iadd__(self, other):
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy=False)
+
+        sd = self.dimensionality
+        sd += other.dimensionality
+        m = self.magnitude
+        m += other.magnitude
+
+        return self
 
     def __radd__(self, other):
         return self.__add__(other)
@@ -162,6 +163,17 @@ class Quantity(numpy.ndarray):
         magnitude = self.magnitude - other.magnitude
 
         return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __isub__(self, other):
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy=False)
+
+        sd = self.dimensionality
+        sd -= other.dimensionality
+        m = self.magnitude
+        m -= other.magnitude
+
+        return self
 
     def __rsub__(self, other):
         if not isinstance(other, Quantity):
@@ -182,6 +194,20 @@ class Quantity(numpy.ndarray):
 
         return Quantity(magnitude, dims, magnitude.dtype)
 
+    def __imul__(self, other):
+        try:
+            sd = self.dimensionality
+            sd *= other.dimensionality
+            m = self.magnitude
+            m *= other.magnitude
+        except AttributeError:
+            m = self.magnitude
+            m *= other
+        return self
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
     def __truediv__(self, other):
         try:
             dims = self.dimensionality / other.dimensionality
@@ -195,12 +221,23 @@ class Quantity(numpy.ndarray):
     def __div__(self, other):
         return self.__truediv__(other)
 
-    def __rmul__(self, other):
-        # TODO: This needs to be properly implemented
-        return self.__mul__(other)
+    def __itruediv__(self, other):
+        try:
+            sd = self.dimensionality
+            sd /= other.dimensionality
+            m = self.magnitude
+            m /= other.magnitude
+        except AttributeError:
+            m = self.magnitude
+            m /= other
+        return self
+
+    def __idiv__(self, other):
+        return self.__itruediv__(other)
 
     def __rtruediv__(self, other):
-        return other * self**-1
+        temp = Quantity(1/self.magnitude, self.dimensionality**-1, copy=False)
+        return other * temp
 
     def __rdiv__(self, other):
         return self.__rtruediv__(other)
@@ -221,6 +258,25 @@ class Quantity(numpy.ndarray):
         dims = self.dimensionality**other
         magnitude = self.magnitude**other
         return Quantity(magnitude, dims, magnitude.dtype)
+
+    def __ipow__(self, other):
+        if isinstance(other, Quantity):
+            if other.dimensionality.simplified:
+                raise ValueError("exponent must be dimensionless")
+            other = other.simplified.magnitude
+
+        other = numpy.array(other)
+        try:
+            assert other.min() == other.max()
+            other = other.min()
+        except AssertionError:
+            raise ValueError('Quantities must be raised to a single power')
+
+        sd = self.dimensionality
+        sd **= other
+        m = self.magnitude
+        m **= other
+        return self
 
     def __rpow__(self, other):
         if self.dimensionality.simplified:
@@ -301,10 +357,6 @@ class Quantity(numpy.ndarray):
         )
 
     def fill(self, scalar):
-        # the behavior of fill needs to be discussed in the future
-        # particularly the fact that this will raise an error if fill (0)
-        #is called (when we self is not dimensionless)
-
         if not isinstance (scalar, Quantity):
             scalar = Quantity(scalar, copy=False)
 
@@ -315,7 +367,7 @@ class Quantity(numpy.ndarray):
 
     #reshape works as intended
     #transpose works as intended
-    #reshape works as intented
+    #reshape works as intended
     #flatten works as expected
     #ravel works as expected
     #squeeze works as expected
@@ -327,8 +379,6 @@ class Quantity(numpy.ndarray):
         values - must be an Quantity with the same units as self
         """
         if isinstance(values, Quantity):
-            #this currently checks to see if the quantities are identical
-            # and may be revised in the future, pending discussion
             if values.dimensionality == self.dimensionality:
                 self.magnitude.put(indicies, values, mode)
             else:
@@ -336,18 +386,17 @@ class Quantity(numpy.ndarray):
         else:
             raise TypeError("values must be a Quantity")
 
-    #repeat performs as expected
+    # repeat performs as expected
 
-    #choose does not function correctly, and it is not clear
+    # choose does not function correctly, and it is not clear
     # how it would function, so for now it will not be implemented
 
-    #sort works as intended
+    # sort works as intended
 
     def argsort(self, axis=-1, kind='quick', order=None):
         return self.magnitude.argsort(axis, kind, order)
 
     def searchsorted(self,values, side='left'):
-        # if the input is not a Quantity, convert it
         if not isinstance (values, Quantity):
             values = Quantity(values, copy=False)
 
@@ -359,8 +408,8 @@ class Quantity(numpy.ndarray):
     def nonzero(self):
         return self.magnitude.nonzero()
 
-    #compress works as intended
-    #diagonal works as intended
+    # compress works as intended
+    # diagonal works as intended
 
     def max(self, axis=None, out=None):
         return Quantity(
@@ -369,7 +418,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    #argmax works as intended
+    # argmax works as intended
 
     def min(self, axis=None, out=None):
         return Quantity(
@@ -392,7 +441,6 @@ class Quantity(numpy.ndarray):
         if min is None and max is None:
             raise ValueError("at least one of min or max must be set")
         else:
-            #set min and max to their appropriate values
             if min is None: min = Quantity(-numpy.Inf, self.dimensionality)
             if max is None: max = Quantity(numpy.Inf, self.dimensionality)
 
@@ -436,8 +484,6 @@ class Quantity(numpy.ndarray):
             copy=False)
 
     def var(self, axis=None, dtype=None, out=None):
-        #just return the variance of the magnitude
-        # with the correct units (squared)
         return Quantity(
             self.magnitude.var(axis, dtype, out),
             self.dimensionality**2,
@@ -445,7 +491,6 @@ class Quantity(numpy.ndarray):
         )
 
     def std(self, axis=None, dtype=None, out=None):
-        #just return the std of the magnitude
         return Quantity(
             self.magnitude.std(axis, dtype, out),
             self.dimensionality,
@@ -465,9 +510,8 @@ class Quantity(numpy.ndarray):
         )
 
     def cumprod(self, axis=None, dtype=None, out=None):
-        # cumprod can only be calculated when the quantity is dimensionless
-        # otherwise different array elements would have different dimensionality
         if self.dimensionality:
+            # different array elements would have different dimensionality
             raise ValueError(
                 "Quantity must be dimensionless, try using simplified"
             )
@@ -477,10 +521,4 @@ class Quantity(numpy.ndarray):
                 copy=False
                 )
 
-    # for now all() and any() will be left unimplemented because this is
-    # ambiguous
-
-    #list of unsupported functions: [all, any conj, conjugate, choose]
-
-    #TODO:
-    #check/implement resize, swapaxis
+    # list of unsupported functions: [conj, conjugate, choose]

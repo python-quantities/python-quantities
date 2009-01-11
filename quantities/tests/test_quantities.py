@@ -18,6 +18,20 @@ def test_immutabledimensionality_copy():
 def test_immutabledimensionality_get():
     assert_equal(m.dimensionality.get(m), 1)
     assert_equal(m.dimensionality.get(ft, 2), 2)
+    assert_true(m in m.dimensionality)
+
+def test_units_protected():
+    def setunits(u, v):
+        u.units = v
+    def inplace(op, u, val):
+        getattr(u, '__i%s__'%op)(val)
+    assert_raises(AttributeError, setunits, m, ft)
+    assert_raises(TypeError, inplace, 'add', m, m)
+    assert_raises(TypeError, inplace, 'sub', m, m)
+    assert_raises(TypeError, inplace, 'mul', m, m)
+    assert_raises(TypeError, inplace, 'div', m, m)
+    assert_raises(TypeError, inplace, 'truediv', m, m)
+    assert_raises(TypeError, inplace, 'pow', m, 2)
 
 def test_quantity_creation():
     assert_raises(LookupError, Quantity, 1, 'nonsense')
@@ -397,6 +411,21 @@ class TestQuantities(unittest.TestCase):
             "[  6.5   8.5   8.5   9.5  10.5]*rem"
         )
 
+        # in-place addition
+        temp1 = 1*m
+        temp2 = 1*m
+        temp1+=temp1
+        self.assertEqual(str(temp1), str(temp2+temp2))
+
+        temp1 = [1, 2, 3, 4]*m
+        temp2 = [1, 2, 3, 4]*m
+        temp1+=temp1
+        self.assertEqual(str(temp1), str(temp2+temp2))
+
+        def iadd(q1, q2):
+            q1 -= q2
+        self.assertRaises(ValueError, iadd, 1*m, 1)
+
     def test_substraction(self):
         # arbitrary test of subtraction
         self.assertAlmostEqual((5.2 * q.eV) - (300.2 * q.eV), -295.0 * q.eV)
@@ -443,6 +472,21 @@ class TestQuantities(unittest.TestCase):
             "[-4.5 -4.5 -2.5 -1.5 -0.5]*rem"
         )
 
+        # in-place
+        temp1 = 1*m
+        temp2 = 1*m
+        temp1-=temp1
+        self.assertEqual(str(temp1), str(temp2-temp2))
+
+        temp1 = [1, 2, 3, 4]*m
+        temp2 = [1, 2, 3, 4]*m
+        temp1-=temp1
+        self.assertEqual(str(temp1), str(temp2-temp2))
+
+        def isub(q1, q2):
+            q1 -= q2
+        self.assertRaises(ValueError, isub, temp1, 1)
+
     def test_multiplication(self):
         #arbitrary test of multiplication
         self.assertAlmostEqual(
@@ -479,6 +523,17 @@ class TestQuantities(unittest.TestCase):
             "[ 12.  16.  25.  36.  49.]*J/s"
         )
 
+        # in-place
+        temp1 = 1*m
+        temp2 = 1*m
+        temp1 *= temp1
+        self.assertEqual(str(temp1), str(temp2*temp2))
+
+        temp1 = [1, 2, 3, 4]*m
+        temp2 = [1, 2, 3, 4]*m
+        temp1 *= temp1
+        self.assertEqual(str(temp1), str(temp2*temp2))
+
     def test_division(self):
         #arbitrary test of division
         self.assertAlmostEqual(
@@ -513,6 +568,17 @@ class TestQuantities(unittest.TestCase):
             "[ 0.75  1.    1.    1.    1.  ]*s*J"
         )
 
+        # in-place
+        temp1 = 1*m
+        temp2 = 1*m
+        temp1 /= temp1
+        self.assertEqual(str(temp1), str(temp2/temp2))
+
+        temp1 = [1, 2, 3, 4]*m
+        temp2 = [1, 2, 3, 4]*m
+        temp1 /= temp1
+        self.assertEqual(str(temp1), str(temp2/temp2))
+
     def test_powering(self):
         # test raising a quantity to a power
         self.assertAlmostEqual((5.5 * q.cm)**5, (5.5**5) * (q.cm**5))
@@ -543,7 +609,22 @@ class TestQuantities(unittest.TestCase):
         # test rpow here
         self.assertRaises(ValueError, q_pow_r, 10.0, 10 * q.J)
 
-        self.assertEqual( 10 ** (2 * q.J/ q.J) , 100)
+        self.assertEqual(10**(2*q.J/q.J), 100)
+
+        # in-place
+        temp1 = 1*m
+        temp2 = 1*m
+        temp1 **= 2
+        self.assertEqual(str(temp1), str(temp2*temp2))
+
+        temp1 = [1, 2, 3, 4]*m
+        temp2 = [1, 2, 3, 4]*m
+        temp1 **= 2
+        self.assertEqual(str(temp1), str(temp2*temp2))
+
+        def ipow(q1, q2):
+            q1 -= q2
+        self.assertRaises(ValueError, ipow, 1*m, [1, 2])
 
     def test_getitem(self):
         tempArray1 = q.Quantity(numpy.array([1.5, 2.5 , 3, 5]), q.J)
