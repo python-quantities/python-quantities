@@ -381,7 +381,7 @@ class TestQuantities(unittest.TestCase):
 
         def subtract_bad_units():
             """just a function that raises an incompatible units error"""
-            return (1 * q.kPa) + (5 * q.lb)
+            return (1 * q.kPa) - (5 * q.lb)
 
         self.assertRaises(ValueError, subtract_bad_units)
 

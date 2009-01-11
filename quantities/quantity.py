@@ -493,15 +493,24 @@ class UncertainQuantity(Quantity):
     # TODO: what is an appropriate value?
     __array_priority__ = 22
 
-    def __new__(cls, data, units='', uncertainty=0, dtype='d'):
-        return Quantity.__new__(cls, data, units, dtype)
+    def __new__(cls, data, units='', uncertainty=None, dtype='d', copy=True):
+        return Quantity.__new__(cls, data, units, dtype, copy)
 
-    def __init__(
-        self, data, units='', uncertainty=0, dtype='d'):
-        Quantity.__init__(self, data, units, dtype)
-        if not numpy.any(uncertainty):
-            uncertainty = getattr(self, 'uncertainty', uncertainty)
-        self.set_uncertainty(uncertainty)
+    def __init__(self, data, units='', uncertainty=None, dtype='d', copy=True):
+        Quantity.__init__(self, data, units, dtype, copy)
+
+        if uncertainty is None:
+            if isinstance(data, UncertainQuantity):
+                uncertainty = data.uncertainty
+            else:
+                uncertainty = numpy.zeros(self.shape, dtype)
+        elif not isinstance(uncertainty, numpy.ndarray):
+            uncertainty = numpy.array(uncertainty, dtype)
+        try:
+            assert uncertainty.shape == self.shape
+        except AssertionError:
+            raise ValueError('data and uncertainty must have identical shape')
+        self.uncertainty = uncertainty
 
     @property
     def simplified(self):
@@ -510,7 +519,7 @@ class UncertainQuantity(Quantity):
             sq = sq * u.reference_quantity**d
         u = self.uncertainty.simplified
         # TODO: use view:
-        return UncertainQuantity(sq * self.magnitude, uncertainty=u)
+        return UncertainQuantity(sq * self.magnitude, uncertainty=u, copy=False)
 
     def set_units(self, units):
         Quantity.set_units(self, units)
@@ -523,21 +532,15 @@ class UncertainQuantity(Quantity):
         if not isinstance(uncertainty, Quantity):
             uncertainty = Quantity(uncertainty, self.units)
         try:
-            if len(uncertainty.shape) != 0:
-                # make sure we can calculate relative uncertainty:
-                uncertainty.magnitude / self.magnitude
+            assert self.shape == uncertainty.shape
             uncertainty.units = self.units
             self._uncertainty = uncertainty
-        except:
-            ValueError(
-                'uncertainty must be divisible by the parent quantity'
-            )
+        except AssertionError:
+            ValueError('data and uncertainty must have identical shape')
     uncertainty = property(get_uncertainty, set_uncertainty)
 
     @property
     def relative_uncertainty(self):
-        if len(self.uncertainty.shape) == 0:
-            return self.uncertainty.magnitude/self.magnitude.mean()
         return self.uncertainty.magnitude/self.magnitude
 
     def rescale(self, units):
@@ -551,20 +554,22 @@ class UncertainQuantity(Quantity):
     def __array_finalize__(self, obj):
         Quantity.__array_finalize__(self, obj)
         self._uncertainty = getattr(
-            obj, 'uncertainty', Quantity(0, self.units)
+            obj,
+            'uncertainty',
+            Quantity(numpy.zeros(self.shape, self.dtype), self.units)
         )
 
     def __add__(self, other):
         res = Quantity.__add__(self, other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         # TODO: use .view:
-        return UncertainQuantity(res, uncertainty=u)
+        return UncertainQuantity(res, uncertainty=u, copy=False)
 
     def __sub__(self, other):
         res = Quantity.__sub__(self, other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         # TODO: use .view:
-        return UncertainQuantity(res, uncertainty=u)
+        return UncertainQuantity(res, uncertainty=u, copy=False)
 
     def __mul__(self, other):
         res = Quantity.__mul__(self, other)
@@ -572,15 +577,12 @@ class UncertainQuantity(Quantity):
             sru = self.relative_uncertainty
             oru = other.relative_uncertainty
             ru = (sru**2+oru**2)**0.5
-            if len(ru.shape) == 0:
-                u = res.mean() * ru
-            else:
-                u = res * ru
+            u = res * ru
         except AttributeError:
             other = numpy.array(other, copy=False)
             u = (self.uncertainty**2*other**2)**0.5
         # TODO: use .view:
-        return UncertainQuantity(res, uncertainty=u)
+        return UncertainQuantity(res, uncertainty=u, copy=False)
 
     def __truediv__(self, other):
         res = Quantity.__truediv__(self, other)
@@ -588,29 +590,25 @@ class UncertainQuantity(Quantity):
             sru = self.relative_uncertainty
             oru = other.relative_uncertainty
             ru = (sru**2+oru**2)**0.5
-            if len(ru.shape) == 0:
-                u = res.mean() * ru
-            else:
-                u = res * ru
+            u = res * ru
         except AttributeError:
+            other = numpy.array(other, copy=False)
             u = (self.uncertainty**2/other**2)**0.5
         # TODO: use .view:
-        return UncertainQuantity(res, uncertainty=u)
+        return UncertainQuantity(res, uncertainty=u, copy=False)
 
     def __pow__(self, other):
         res = Quantity.__pow__(self, other)
         ru = other * self.relative_uncertainty
-        if len(ru.shape) == 0:
-            u = res.mean() * ru
-        else:
-            u = res * ru
-        return UncertainQuantity(res, uncertainty=u)
+        u = res * ru
+        return UncertainQuantity(res, uncertainty=u, copy=False)
 
     def __getitem__(self, key):
         return UncertainQuantity(
             self.magnitude[key],
             self.units,
-            copy.copy(self.uncertainty)
+            self.uncertainty[key],
+            copy=False
         )
 
     def __repr__(self):
