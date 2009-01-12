@@ -289,13 +289,13 @@ class TestQuantities(unittest.TestCase):
 
     def test_unit_aggregation(self):
         joule = q.kg*q.m**2/q.s**2
-        pc_per_cc = q.CompoundUnit("parsec/cm**3")
+        pc_per_cc = q.CompoundUnit("pc/cm**3")
         area_per_volume = q.CompoundUnit("m**2/m**3")
         self.assertEqual(str(joule/q.m), "1.0*kg*m/s**2", str(joule/q.m))
         self.assertEqual(str(joule*q.m), "1.0*kg*m**3/s**2", str(joule*q.m))
         self.assertEqual(
             str(q.J*pc_per_cc),
-            "1.0*J*(parsec/cm**3)",
+            "1.0*J*(pc/cm**3)",
             str(q.J*pc_per_cc)
         )
         temp = pc_per_cc / area_per_volume
@@ -320,12 +320,12 @@ class TestQuantities(unittest.TestCase):
         )
 
     def test_compound_reduction(self):
-        pc_per_cc = q.CompoundUnit("parsec/cm**3")
+        pc_per_cc = q.CompoundUnit("pc/cm**3")
         temp = pc_per_cc * q.CompoundUnit('m/m**3')
-        self.assertEqual(str(temp), "1.0*(parsec/cm**3)*(m/m**3)", str(temp))
+        self.assertEqual(str(temp), "1.0*(pc/cm**3)*(m/m**3)", str(temp))
         temp = temp.simplified
-        temp.units=q.parsec**-4
-        self.assertEqual(str(temp), "2.79740021556e+88*1/parsec**4", str(temp))
+        temp.units=q.pc**-4
+        self.assertEqual(str(temp), "2.79740021556e+88*1/pc**4", str(temp))
         temp.units=q.m**-4
         self.assertEqual(str(temp), "3.08568025e+22*1/m**4", str(temp))
         self.assertEqual(str(1/temp), "3.24077648681e-23*m**4", str(1/temp))
@@ -343,8 +343,8 @@ class TestQuantities(unittest.TestCase):
         self.assertEqual(str(temp1), str(temp1.simplified))
 
     def test_equality(self):
-        test1 = 1.5 * q.kilometer
-        test2 = 1.5 * q.kilometer
+        test1 = 1.5 * q.km
+        test2 = 1.5 * q.km
 
         self.assertEqual(test1, test2)
         test2.units = q.ft
@@ -352,13 +352,13 @@ class TestQuantities(unittest.TestCase):
         self.assertAlmostEqual(test1, test2.rescale(q.km))
 
         # test less than and greater than
-        self.assertTrue(1.5 * q.kilometer > 2.5 * q.cm)
-        self.assertTrue(1.5 * q.kilometer >= 2.5 * q.cm)
-        self.assertTrue(not (1.5 * q.kilometer < 2.5 * q.cm))
-        self.assertTrue(not (1.5 * q.kilometer <= 2.5 * q.cm))
+        self.assertTrue(1.5 * q.km > 2.5 * q.cm)
+        self.assertTrue(1.5 * q.km >= 2.5 * q.cm)
+        self.assertTrue(not (1.5 * q.km < 2.5 * q.cm))
+        self.assertTrue(not (1.5 * q.km <= 2.5 * q.cm))
 
         self.assertTrue(
-            1.5 * q.kilometer != 1.5 * q.cm,
+            1.5 * q.km != 1.5 * q.cm,
             "unequal quantities are not-not-equal"
         )
 
@@ -774,7 +774,7 @@ class TestQuantities(unittest.TestCase):
         self.assertRaises(
             ValueError,
             z.put,
-            [2, 7], [4, 6] * q.feet
+            [2, 7], [4, 6] * q.ft
         )
         self.assertRaises(
             TypeError,

@@ -4,7 +4,7 @@
 from quantities.units.unitquantity import UnitQuantity
 from quantities.units.acceleration import gravity
 from quantities.units.mass import kg, pound
-from quantities.units.length import m, mm, cm, inch, foot
+from quantities.units.length import m, mm, cm, inch, ft
 from quantities.units.force import N, kip
 
 
@@ -51,7 +51,7 @@ inch_Hg_60F = \
 millimeter_Hg_0C = \
     UnitQuantity('millimeter_Hg_0C', mm*mercury_0C)
 footH2O = \
-    UnitQuantity('footH2O', foot*water)
+    UnitQuantity('footH2O', ft*water)
 cmHg = \
     UnitQuantity('cmHg', cm*Hg)
 cmH2O = \
@@ -61,7 +61,7 @@ inHg = in_Hg = inch_Hg = \
 torr = torrs = mmHg = mm_Hg = millimeter_Hg = \
     UnitQuantity('torr', mm*Hg)
 foot_H2O = ftH2O = \
-    UnitQuantity('foot_H2O', foot*water)
+    UnitQuantity('foot_H2O', ft*water)
 psi = \
     UnitQuantity('psi', pound*gravity/inch**2)
 ksi = \
@@ -69,4 +69,4 @@ ksi = \
 barie = baries = barye = baryes = \
     UnitQuantity('barie', 0.1*N/m**2)
 
-del UnitQuantity, gravity, kg, pound, m, mm, cm, inch, foot, N, kip
+del UnitQuantity, gravity, kg, pound, m, mm, cm, inch, ft, N, kip
