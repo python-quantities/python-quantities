@@ -36,7 +36,7 @@ Gy = gray = Sv = sievert = UnitQuantity(
 rem = UnitQuantity(
     'rem',
     1e-2*sievert,
-    aliases='rems'
+    aliases=['rems']
 )
 rad = rads = UnitQuantity(
     'rad',

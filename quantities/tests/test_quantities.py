@@ -9,8 +9,8 @@ import quantities as q
 from nose.tools import *
 
 def test_immutabledimensionality_iter():
-    assert_equal(str([i for i in m.dimensionality]), '[1 m]')
-    assert_equal(str([i for i in m.dimensionality.iterkeys()]), '[1 m]')
+    assert_equal(str([i for i in m.dimensionality]), '[1 m (meter)]')
+    assert_equal(str([i for i in m.dimensionality.iterkeys()]), '[1 m (meter)]')
 
 def test_immutabledimensionality_copy():
     assert_equal(m.dimensionality, m.dimensionality.copy())
@@ -320,8 +320,8 @@ class TestQuantities(unittest.TestCase):
         )
 
     def test_compound_reduction(self):
-        pc_per_cc = q.CompoundUnit("pc/cm³")
-        temp = pc_per_cc * q.CompoundUnit('m/m³')
+        pc_per_cc = q.CompoundUnit("pc/cm**3")
+        temp = pc_per_cc * q.CompoundUnit('m/m**3')
         self.assertEqual(str(temp), "1.0 (pc/cm³)·(m/m³)", str(temp))
         temp = temp.simplified
         temp.units=q.pc**-4
@@ -381,7 +381,7 @@ class TestQuantities(unittest.TestCase):
         # add a scalar and an array
         arr = numpy.array([1,2,3,4,5])
         temp1 = arr * q.rem
-        temp2 = 5.5 * q.rems
+        temp2 = 5.5 * q.rem
 
         self.assertEqual(
             str(temp1 + temp2),
@@ -451,7 +451,7 @@ class TestQuantities(unittest.TestCase):
         # subtract a scalar and an array
         arr = numpy.array([1,2,3,4,5])
         temp1 = arr * q.rem
-        temp2 = 5.5 * q.rems
+        temp2 = 5.5 * q.rem
 
         self.assertEqual(str(temp1 - temp2), "[-4.5 -3.5 -2.5 -1.5 -0.5] rem")
         self.numAssertEqual((arr-5.5) * q.rem, temp1 - temp2)
