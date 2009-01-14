@@ -9,8 +9,10 @@ import numpy
 from quantities.registry import unit_registry
 
 def superscript(val):
+    # TODO: use a regexp:
     for k, v in enumerate(['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']):
-        val = val.replace(str(k), v)
+        val = val.replace('**'+str(k), v)
+        val = val.replace('^'+str(k), v)
     return val
 
 def format_units(udict):
@@ -30,18 +32,12 @@ def format_units(udict):
         u = key.symbol if key.symbol else key.name
         if d>0:
             if d > 1:
-                if int(d) == d:
-                    u = u + superscript(str(d))
-                else:
-                    u = u + ('^%s'%d).rstrip('.0')
+                u = u + ('^%s'%d)
             num.append(u)
         elif d<0:
             d = -d
             if d > 1:
-                if int(d) == d:
-                    u = u + superscript(str(d))
-                else:
-                    u = u + ('^%s'%d).rstrip('.0')
+                u = u + ('^%s'%d)
             den.append(u)
     res = '·'.join(num)
     if len(den):
@@ -49,7 +45,7 @@ def format_units(udict):
         fmt = '(%s)' if len(den) > 1 else '%s'
         res = res + '/' + fmt%('·'.join(den))
     if not res: res = 'dimensionless'
-    return '%s'%res
+    return superscript(res)
 
 
 class BaseDimensionality(object):

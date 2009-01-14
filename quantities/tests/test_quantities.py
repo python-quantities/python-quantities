@@ -1,4 +1,4 @@
-﻿
+﻿# -*- coding: utf-8 -*-
 import unittest
 import tempfile
 import shutil
@@ -9,8 +9,8 @@ import quantities as q
 from nose.tools import *
 
 def test_immutabledimensionality_iter():
-    assert_equal(str([i for i in m.dimensionality]), '[1.0*m]')
-    assert_equal(str([i for i in m.dimensionality.iterkeys()]), '[1.0*m]')
+    assert_equal(str([i for i in m.dimensionality]), '[1 m]')
+    assert_equal(str([i for i in m.dimensionality.iterkeys()]), '[1 m]')
 
 def test_immutabledimensionality_copy():
     assert_equal(m.dimensionality, m.dimensionality.copy())
@@ -35,7 +35,7 @@ def test_units_protected():
 
 def test_quantity_creation():
     assert_raises(LookupError, Quantity, 1, 'nonsense')
-    assert_equal(str(Quantity(1, '')), '1.0*dimensionless')
+    assert_equal(str(Quantity(1, '')), '1.0 dimensionless')
 
 def test_scalar_equality():
     assert_true(J == J)
@@ -156,13 +156,13 @@ def test_array_comparison():
 
 def test_uncertainquantity_creation():
     a = UncertainQuantity(1, m)
-    assert_equal(str(a), '1.0*m\n+/-0.0*m (1 sigma)')
+    assert_equal(str(a), '1.0 m\n+/-0.0 m (1 sigma)')
     a = UncertainQuantity([1, 1, 1], m)
-    assert_equal(str(a), '[ 1.  1.  1.]*m\n+/-[ 0.  0.  0.]*m (1 sigma)')
+    assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.  0.  0.] m (1 sigma)')
     a = UncertainQuantity(a)
-    assert_equal(str(a), '[ 1.  1.  1.]*m\n+/-[ 0.  0.  0.]*m (1 sigma)')
+    assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.  0.  0.] m (1 sigma)')
     a = UncertainQuantity([1, 1, 1], m, [.1, .1, .1])
-    assert_equal(str(a), '[ 1.  1.  1.]*m\n+/-[ 0.1  0.1  0.1]*m (1 sigma)')
+    assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.1  0.1  0.1] m (1 sigma)')
     assert_raises(ValueError, UncertainQuantity, [1, 1, 1], m, 1)
     assert_raises(ValueError, UncertainQuantity, [1, 1, 1], m, [1, 1])
 
@@ -171,8 +171,8 @@ def test_uncertainquantity_set_units():
     a.units = ft
     assert_equal(
         str(a),
-        '[ 3.2808399  3.2808399  3.2808399]*ft'
-        '\n+/-[ 0.32808399  0.32808399  0.32808399]*ft (1 sigma)'
+        '[ 3.2808399  3.2808399  3.2808399] ft'
+        '\n+/-[ 0.32808399  0.32808399  0.32808399] ft (1 sigma)'
     )
 
 def test_uncertainquantity_rescale():
@@ -180,27 +180,27 @@ def test_uncertainquantity_rescale():
     b = a.rescale(ft)
     assert_equal(
         str(b),
-        '[ 3.2808399  3.2808399  3.2808399]*ft'
-        '\n+/-[ 0.32808399  0.32808399  0.32808399]*ft (1 sigma)'
+        '[ 3.2808399  3.2808399  3.2808399] ft'
+        '\n+/-[ 0.32808399  0.32808399  0.32808399] ft (1 sigma)'
     )
 
 def test_uncertainquantity_simplified():
     a = 1000*eV
     assert_equal(
         str(a.simplified),
-        '1.602176487e-16*kg*m**2/s**2\n+/-4e-24*kg*m**2/s**2 (1 sigma)'
+        '1.602176487e-16 kg·m²/s²\n+/-4e-24 kg·m²/s² (1 sigma)'
     )
 
 def test_uncertainquantity_set_uncertainty():
     a = UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a),
-        '[ 1.  2.]*m\n+/-[ 0.1  0.2]*m (1 sigma)'
+        '[ 1.  2.] m\n+/-[ 0.1  0.2] m (1 sigma)'
     )
     a.uncertainty = [1., 2.]
     assert_equal(
         str(a),
-        '[ 1.  2.]*m\n+/-[ 1.  2.]*m (1 sigma)'
+        '[ 1.  2.] m\n+/-[ 1.  2.] m (1 sigma)'
     )
     def set_u(q, u):
         q.uncertainty = u
@@ -211,23 +211,23 @@ def test_uncertainquantity_multiply():
     a = UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a*a),
-        '[ 1.  4.]*m**2\n+/-[ 0.14142136  0.56568542]*m**2 (1 sigma)'
+        '[ 1.  4.] m²\n+/-[ 0.14142136  0.56568542] m² (1 sigma)'
     )
     assert_equal(
         str(a*2),
-        '[ 2.  4.]*m\n+/-[ 0.2  0.4]*m (1 sigma)'
+        '[ 2.  4.] m\n+/-[ 0.2  0.4] m (1 sigma)'
     )
 
 def test_uncertainquantity_divide():
     a = UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a/a),
-        '[ 1.  1.]*dimensionless\n+/-[ 0.14142136  0.14142136]*'
+        '[ 1.  1.] dimensionless\n+/-[ 0.14142136  0.14142136] '
         'dimensionless (1 sigma)'
     )
     assert_equal(
         str(a/2),
-        '[ 0.5  1. ]*m\n+/-[ 0.05  0.1 ]*m (1 sigma)'
+        '[ 0.5  1. ] m\n+/-[ 0.05  0.1 ] m (1 sigma)'
     )
 
 class TestQuantities(unittest.TestCase):
@@ -263,8 +263,8 @@ class TestQuantities(unittest.TestCase):
                 self.assertAlmostEqual(x1, x2, prec)
 
     def test_simple(self):
-        self.assertEqual(str(q.m), "1.0*m", str(q.m))
-        self.assertEqual(str(q.J), "1.0*J", str(q.J))
+        self.assertEqual(str(q.m), "1.0 m", str(q.m))
+        self.assertEqual(str(q.J), "1.0 J", str(q.J))
 
     def test_creation(self):
         self.numAssertEqual(
@@ -291,17 +291,17 @@ class TestQuantities(unittest.TestCase):
         joule = q.kg*q.m**2/q.s**2
         pc_per_cc = q.CompoundUnit("pc/cm**3")
         area_per_volume = q.CompoundUnit("m**2/m**3")
-        self.assertEqual(str(joule/q.m), "1.0*kg*m/s**2", str(joule/q.m))
-        self.assertEqual(str(joule*q.m), "1.0*kg*m**3/s**2", str(joule*q.m))
+        self.assertEqual(str(joule/q.m), "1.0 kg·m/s²", str(joule/q.m))
+        self.assertEqual(str(joule*q.m), "1.0 kg·m³/s²", str(joule*q.m))
         self.assertEqual(
             str(q.J*pc_per_cc),
-            "1.0*J*(pc/cm**3)",
+            "1.0 J·(pc/cm³)",
             str(q.J*pc_per_cc)
         )
         temp = pc_per_cc / area_per_volume
         self.assertEqual(
             str(temp.simplified),
-            "3.08568025e+22*1/m",
+            "3.08568025e+22 1/m",
             str(temp.simplified)
         )
 
@@ -320,18 +320,18 @@ class TestQuantities(unittest.TestCase):
         )
 
     def test_compound_reduction(self):
-        pc_per_cc = q.CompoundUnit("pc/cm**3")
-        temp = pc_per_cc * q.CompoundUnit('m/m**3')
-        self.assertEqual(str(temp), "1.0*(pc/cm**3)*(m/m**3)", str(temp))
+        pc_per_cc = q.CompoundUnit("pc/cm³")
+        temp = pc_per_cc * q.CompoundUnit('m/m³')
+        self.assertEqual(str(temp), "1.0 (pc/cm³)·(m/m³)", str(temp))
         temp = temp.simplified
         temp.units=q.pc**-4
-        self.assertEqual(str(temp), "2.79740021556e+88*1/pc**4", str(temp))
+        self.assertEqual(str(temp), "2.79740021556e+88 1/pc⁴", str(temp))
         temp.units=q.m**-4
-        self.assertEqual(str(temp), "3.08568025e+22*1/m**4", str(temp))
-        self.assertEqual(str(1/temp), "3.24077648681e-23*m**4", str(1/temp))
+        self.assertEqual(str(temp), "3.08568025e+22 1/m⁴", str(temp))
+        self.assertEqual(str(1/temp), "3.24077648681e-23 m⁴", str(1/temp))
         self.assertEqual(
             str(temp**-1),
-            "3.24077648681e-23*m**4",
+            "3.24077648681e-23 m⁴",
             str(temp**-1)
         )
 
@@ -385,7 +385,7 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 + temp2),
-            "[  6.5   7.5   8.5   9.5  10.5]*rem"
+            "[  6.5   7.5   8.5   9.5  10.5] rem"
         )
         self.assertTrue(((arr+5.5) * q.rem == temp1 + temp2).all())
 
@@ -401,14 +401,14 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 + temp3),
-            "[  6.5   8.5   8.5   9.5  10.5]*rem"
+            "[  6.5   8.5   8.5   9.5  10.5] rem"
         )
         # two arrays with different units
         temp5 = numpy.array([5.5, 6.5, 5.5, 5.5, 5.5]) * 1e-2 * q.sievert
 
         self.assertEqual(
             str(temp1 + temp5.rescale(q.rem)),
-            "[  6.5   8.5   8.5   9.5  10.5]*rem"
+            "[  6.5   8.5   8.5   9.5  10.5] rem"
         )
 
         # in-place addition
@@ -453,7 +453,7 @@ class TestQuantities(unittest.TestCase):
         temp1 = arr * q.rem
         temp2 = 5.5 * q.rems
 
-        self.assertEqual(str(temp1 - temp2), "[-4.5 -3.5 -2.5 -1.5 -0.5]*rem")
+        self.assertEqual(str(temp1 - temp2), "[-4.5 -3.5 -2.5 -1.5 -0.5] rem")
         self.numAssertEqual((arr-5.5) * q.rem, temp1 - temp2)
 
         # with different units
@@ -463,13 +463,13 @@ class TestQuantities(unittest.TestCase):
         #subtract two arrays
         temp3 = numpy.array([5.5, 6.5, 5.5, 5.5, 5.5]) * q.rem
 
-        self.assertEqual(str(temp1 - temp3), "[-4.5 -4.5 -2.5 -1.5 -0.5]*rem")
+        self.assertEqual(str(temp1 - temp3), "[-4.5 -4.5 -2.5 -1.5 -0.5] rem")
         #two arrays with different units
         temp5 = numpy.array([5.5, 6.5, 5.5, 5.5, 5.5]) * 1e-2 * q.sievert
 
         self.assertEqual(
             str(temp1 - temp5.rescale(q.rem)),
-            "[-4.5 -4.5 -2.5 -1.5 -0.5]*rem"
+            "[-4.5 -4.5 -2.5 -1.5 -0.5] rem"
         )
 
         # in-place
@@ -513,14 +513,14 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 * temp2),
-            "[ 1.5  2.   2.5  3.   3.5]*J/s"
+            "[ 1.5  2.   2.5  3.   3.5] J/s"
         )
 
         # multiply an array with an array
         temp3 = numpy.array ([4,4,5,6,7]) * q.s**-1
         self.assertEqual(
             str(temp1 * temp3),
-            "[ 12.  16.  25.  36.  49.]*J/s"
+            "[ 12.  16.  25.  36.  49.] J/s"
         )
 
         # in-place
@@ -558,14 +558,14 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp1 / temp2),
-            "[  6.   8.  10.  12.  14.]*s*J"
+            "[  6.   8.  10.  12.  14.] s·J"
         )
 
         # divide an array with an array
         temp3 = numpy.array([4,4,5,6,7]) * q.s**-1
         self.assertEqual(
             str(temp1 / temp3),
-            "[ 0.75  1.    1.    1.    1.  ]*s*J"
+            "[ 0.75  1.    1.    1.    1.  ] s·J"
         )
 
         # in-place
@@ -594,7 +594,7 @@ class TestQuantities(unittest.TestCase):
 
         self.assertEqual(
             str(temp**3),
-            "[   1.    8.   27.   64.  125.]*kg**3"
+            "[   1.    8.   27.   64.  125.] kg³"
         )
         self.assertEqual(str(temp**6), str(temp2))
 
@@ -908,5 +908,5 @@ class TestQuantities(unittest.TestCase):
         # check for this bug
         self.assertEqual(
             str(q.J.rescale('kg*m**2/s**2')),
-            "1.0*kg*m**2/s**2"
+            "1.0 kg·m²/s²"
         )
