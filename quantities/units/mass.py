@@ -95,7 +95,8 @@ u = amu = atomic_mass_unit = UnitMass(
     'atomic_mass_unit',
     1.660538782e-27*kg,
     symbol='u',
-    aliases=['amu']
+    aliases=['amu'],
+    note='relative uncertainty = 5e-8'
 ) # TODO: needs uncertainty: 0.000000083e-27*kg
 scruple = UnitMass(
     'scruple',

@@ -20,8 +20,9 @@ cmil = circular_mil = UnitQuantity(
     'circular_mil',
     5.067075e-10*m**2,
     symbol='cmil',
-    aliases=['circular_mils']
-) # approximate, area of a circle with diameter=1 mil
+    aliases=['circular_mils'],
+    note='conversions approximate, area of a circle with diameter=1 mil'
+)
 D = darcy = UnitQuantity(
     'darcy',
     9.869233e-13*m**2,

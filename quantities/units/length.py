@@ -93,11 +93,12 @@ pc = parsec = UnitLength(
     'parsec',
     3.08568025e16*m,
     symbol='pc',
-    aliases=['parsecs']
+    aliases=['parsecs'],
+    note='approximate'
 )
 ly = light_year = UnitLength(
     'light_year',
-    9.4605284e15*m,
+    9460730472580.8*km,
     symbol='ly',
     aliases=['light_years']
 )
@@ -105,8 +106,9 @@ au = astronomical_unit = UnitLength(
     'astronomical_unit',
     149597870691*m,
     symbol='au',
-    aliases=['astronomical_units']
-)
+    aliases=['astronomical_units'],
+    note='uncertainty ± 30 m'
+) # TODO: needs uncertainty: http://en.wikipedia.org/wiki/Astronomical_unit
 nmi = nautical_mile = UnitLength(
     'nautical_mile',
     1.852e3*m,
