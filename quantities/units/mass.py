@@ -22,7 +22,7 @@ mg = milligram = UnitMass(
     symbol='mg',
     aliases=['milligrams']
 )
-ounce = avoirdupois_ounce = UnitMass(
+oz = ounce = avoirdupois_ounce = UnitMass(
     'ounce',
     28.349523125*g,
     symbol='oz',

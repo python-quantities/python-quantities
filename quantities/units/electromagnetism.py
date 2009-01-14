@@ -212,4 +212,4 @@ cd = candle = candela = UnitLuminousIntensity(
     aliases=['candle', 'candles', 'candelas']
 )
 
-del UnitQuantity, s, m, J
+del UnitQuantity, s, m, J, c
