@@ -20,7 +20,7 @@ us = microsecond = UnitTime(
     'microsecond',
     ms/1000,
     symbol='µs',
-    aliased=['us', 'microseconds']
+    aliases=['us', 'microseconds']
 )
 ns = nanosecond = UnitTime(
     'nanosecond',
@@ -77,7 +77,7 @@ week = UnitTime(
 )
 fortnight = UnitTime(
     'fortnight',
-    2*weeks,
+    2*week,
     aliases=['fortnights']
 )
 yr = year = tropical_year = a = UnitTime(
@@ -172,7 +172,7 @@ eon = UnitTime(
 
 work_year = UnitQuantity(
     'work_year',
-    2056*hours,
+    2056*hour,
     aliases=['work_years']
 )
 work_month = UnitQuantity(
