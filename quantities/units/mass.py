@@ -104,7 +104,7 @@ scruple = UnitMass(
     symbol='℈',
     aliases=['scruples']
 )
-dram = drachm = apdram = UnitMass(
+drachm = apdram = UnitMass(
     'drachm',
     60*gr,
     symbol='ʒ',

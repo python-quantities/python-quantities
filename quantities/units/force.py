@@ -2,7 +2,7 @@
 """
 
 from quantities.units.unitquantity import UnitQuantity
-from quantities.units.mass import gram, kg, oz, lb
+from quantities.units.mass import gram, kg, ounce, lb
 from quantities.units.length import cm, m, ft
 from quantities.units.time import s
 from quantities.units.acceleration import g_0
@@ -34,7 +34,7 @@ kgf = force_kilogram = kilogram_force = UnitQuantity(
 )
 ozf = force_ounce = ounce_force = UnitQuantity(
     'ounce_force',
-    oz*g_0,
+    ounce*g_0,
     symbol='ozf',
     aliases=['ozf']
 )
