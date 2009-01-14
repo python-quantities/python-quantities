@@ -13,7 +13,9 @@ class UnitQuantity(Quantity):
     _primary_order = 99
     _secondary_order = 0
 
-    def __new__(cls, name, reference_quantity=None, aliases=[]):
+    def __new__(
+        cls, name, reference_quantity=None, symbol=None, aliases=[]
+    ):
         data = numpy.array(1, dtype='d')
         ret = numpy.ndarray.__new__(
             cls,
@@ -24,8 +26,11 @@ class UnitQuantity(Quantity):
         ret.flags.writeable = False
         return ret
 
-    def __init__(self, name, reference_quantity=None, aliases=[]):
+    def __init__(
+        self, name, reference_quantity=None, symbol=None, aliases=[]
+    ):
         self._name = name
+        self._symbol = symbol
         self._dimensionality = ImmutableDimensionality({self:1})
 
         if reference_quantity is None:
@@ -37,8 +42,16 @@ class UnitQuantity(Quantity):
         self.__class__._secondary_order += 1
 
         unit_registry[name] = self
+        if symbol:
+            unit_registry[symbol] = self
         for alias in aliases:
             unit_registry[alias] = self
+
+    def __repr__(self):
+        if self._symbol:
+            return '1 %s (%s)'%(self.symbol, self.name)
+        else:
+            return '1 %s'%self.name
 
     @property
     def format_order(self):
@@ -51,6 +64,13 @@ class UnitQuantity(Quantity):
     @property
     def reference_quantity(self):
         return self._reference_quantity
+
+    @property
+    def symbol(self):
+        if self._symbol:
+            return self._symbol
+        else:
+            return self.name
 
     @property
     def units(self):

@@ -130,7 +130,7 @@ class UncertainQuantity(Quantity):
         )
 
     def __repr__(self):
-        return '%s*%s\n+/-%s (1 sigma)'%(
+        return '%s %s\n+/-%s (1 sigma)'%(
             numpy.ndarray.__str__(self),
             str(self.dimensionality),
             self.uncertainty

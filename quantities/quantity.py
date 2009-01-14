@@ -285,7 +285,7 @@ class Quantity(numpy.ndarray):
         return other**self.simplified.magnitude
 
     def __repr__(self):
-        return '%s*%s'%(numpy.ndarray.__str__(self), self.dimensionality)
+        return '%s %s'%(numpy.ndarray.__str__(self), self.dimensionality)
 
     __str__ = __repr__
 

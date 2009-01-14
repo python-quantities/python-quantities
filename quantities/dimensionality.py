@@ -1,4 +1,5 @@
-﻿"""
+﻿# -*- coding: utf-8 -*-
+"""
 """
 
 import operator
@@ -21,19 +22,19 @@ def format_units(udict):
     ]
     for key in keys:
         d = udict[key]
-        u = key.name
+        u = key.symbol if key.symbol else key.name
         if d>0:
-            if d != 1: u = u + ('**%s'%d).rstrip('.0')
+            if d != 1: u = u + ('^%s'%d).rstrip('.0')
             num.append(u)
         elif d<0:
             d = -d
-            if d != 1: u = u + ('**%s'%d).rstrip('.0')
+            if d != 1: u = u + ('^%s'%d).rstrip('.0')
             den.append(u)
-    res = '*'.join(num)
+    res = '·'.join(num)
     if len(den):
         if not res: res = '1'
         fmt = '(%s)' if len(den) > 1 else '%s'
-        res = res + '/' + fmt%('*'.join(den))
+        res = res + '/' + fmt%('·'.join(den))
     if not res: res = 'dimensionless'
     return '%s'%res
 

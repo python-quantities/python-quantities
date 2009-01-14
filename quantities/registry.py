@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 """
 
@@ -36,7 +37,8 @@ class UnitRegistry:
     def __getitem__(self, label):
         """Parses a string description of a unit e.g., 'g/cc'"""
 
-        label = self.__regex.sub(r"\g<1>*\g<2>", label.replace('^', '**'))
+        label = self.__regex.sub(
+            r"\g<1>*\g<2>", label.replace('^', '**').replace('·', '*'))
 
         # make sure we can parse the label ....
         if label == "%": label = "percent"
