@@ -2,7 +2,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitLength
+from quantities.units.unitquantity import UnitLength, UnitQuantity
 
 m = meter = metre = UnitLength(
     'meter',
@@ -169,3 +169,11 @@ arpentlin = UnitLength(
     'arpentlin',
     191.835*ft
 )
+
+kayser = wavenumber = UnitQuantity(
+    'kayser',
+    1/cm,
+    aliases=['kaysers', 'wavenumber', 'wavenumbers']
+)
+
+del UnitQuantity
