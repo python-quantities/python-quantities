@@ -1,18 +1,36 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity, UnitInformation
+from quantities.units.unitquantity import UnitQuantity, UnitInformation, \
+    dimensionless
 from quantities.units.time import s
 
-bit = bits = \
-    UnitInformation('bit')
-count = counts = \
-    UnitInformation('counts')
-Bd = baud = \
-    UnitQuantity('Bd', 1/s)
-bps = \
-    UnitQuantity('bps', bit/s)
-cps = \
-    UnitQuantity('cps', 1/s)
+bit = UnitInformation(
+    'bit',
+    1*dimensionless,
+    aliases=['bits']
+)
+B = byte = o = octet = UnitInformation(
+    'byte',
+    8*bit,
+    symbol='B',
+    aliases=['bytes', 'o', 'octet', 'octets']
+)
+count = counts = UnitInformation(
+    'count',
+    1*dimensionless,
+    symbol='ct',
+    aliases=['cts', 'counts']
+)
 
-del UnitQuantity, s
+Bd = baud = bps = UnitQuantity(
+    'baud',
+    bit/s,
+    symbol='Bd',
+)
+cps = UnitQuantity(
+    'counts_per_second',
+    count/s
+)
+
+del UnitQuantity, s, dimensionless
