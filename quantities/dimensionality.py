@@ -8,6 +8,11 @@ import numpy
 
 from quantities.registry import unit_registry
 
+def superscript(val):
+    for k, v in enumerate(['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']):
+        val = val.replace(str(k), v)
+    return val
+
 def format_units(udict):
     '''
     create a string representation of the units contained in a dimensionality
@@ -24,11 +29,19 @@ def format_units(udict):
         d = udict[key]
         u = key.symbol if key.symbol else key.name
         if d>0:
-            if d != 1: u = u + ('^%s'%d).rstrip('.0')
+            if d > 1:
+                if int(d) == d:
+                    u = u + superscript(str(d))
+                else:
+                    u = u + ('^%s'%d).rstrip('.0')
             num.append(u)
         elif d<0:
             d = -d
-            if d != 1: u = u + ('^%s'%d).rstrip('.0')
+            if d > 1:
+                if int(d) == d:
+                    u = u + superscript(str(d))
+                else:
+                    u = u + ('^%s'%d).rstrip('.0')
             den.append(u)
     res = '·'.join(num)
     if len(den):
