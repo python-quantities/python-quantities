@@ -3,70 +3,149 @@
 
 from quantities.units.unitquantity import UnitQuantity
 from quantities.units.acceleration import gravity
-from quantities.units.mass import kg, pound
+from quantities.units.mass import g, kg, pound
 from quantities.units.length import m, mm, cm, inch, ft
 from quantities.units.force import N, kip
 
 
-Hg = hg = mercury = conventional_mercury = \
-    UnitQuantity('Hg', gravity*13595.10*kg/m**3)
-mercury_0C = mercury_32F = \
-    UnitQuantity('mercury_0C', gravity*13595.1*kg/m**3)
-mercury_60F = \
-    UnitQuantity('mercury_60F', gravity*13556.8*kg/m**3)
-H2O = h2o = water = conventional_water = \
-    UnitQuantity('H2O', gravity*1000*kg/m**3)
-water_4C = water_39F = \
-    UnitQuantity('water_4C', gravity*999.972*kg/m**3)
-water_60F = \
-    UnitQuantity('water_60F', gravity*999.001*kg/m**3)
+Hg = mercury = conventional_mercury = UnitQuantity(
+    'conventional_mercury',
+    gravity*13.59510*g/cm**3
+)
+mercury_60F = UnitQuantity('mercury_60F', gravity*13556.8*kg/m**3)
+H2O = h2o = water = conventional_water = UnitQuantity('H2O', gravity*1000*kg/m**3)
+water_4C = water_39F = UnitQuantity('water_4C', gravity*999.972*kg/m**3)
+water_60F = UnitQuantity('water_60F', gravity*999.001*kg/m**3)
 
-Pa = pascal = \
-    UnitQuantity('Pa', N/m**2)
-kPa = kilopascal = kilopascals = \
-    UnitQuantity('kPa', 1000*Pa)
-MPa = megapascal = megapascals = \
-    UnitQuantity('MPa', 1000*kPa)
-GPa = gigapascal = gigapascals = \
-    UnitQuantity('GPa', 1000*MPa)
-bar = bars = UnitQuantity('bar', 1e5*pascal)
-kbar = kilobar = kilobars = \
-    UnitQuantity('kbar', 1000*bar)
-Mbar = kilobar = kilobars = \
-    UnitQuantity('Mbar', 1000*kbar)
-Gbar = gigabar = gigabars = \
-    UnitQuantity('Gbar', 1000*Mbar)
-atm = atmosphere = atmospheres = standard_atmosphere =standard_atmospheres = \
-    UnitQuantity('atm', 1.01325e5*pascal)
-at = technical_atmosphere = technical_atmospheres = \
-    UnitQuantity('at', kg*gravity/cm**2)
-inch_H2O_39F = \
-    UnitQuantity('inch_H2O_39F', inch*water_39F)
-inch_H2O_60F = \
-    UnitQuantity('inch_H2O_60F', inch*water_60F)
-inch_Hg_32F = \
-    UnitQuantity('inch_Hg_32F', inch*mercury_32F)
-inch_Hg_60F = \
-    UnitQuantity('inch_Hg_60F', inch*mercury_60F)
-millimeter_Hg_0C = \
-    UnitQuantity('millimeter_Hg_0C', mm*mercury_0C)
-footH2O = \
-    UnitQuantity('footH2O', ft*water)
-cmHg = \
-    UnitQuantity('cmHg', cm*Hg)
-cmH2O = \
-    UnitQuantity('cmH2O', cm*water)
-inHg = in_Hg = inch_Hg = \
-    UnitQuantity('inHg', inch*Hg)
-torr = torrs = mmHg = mm_Hg = millimeter_Hg = \
-    UnitQuantity('torr', mm*Hg)
-foot_H2O = ftH2O = \
-    UnitQuantity('foot_H2O', ft*water)
-psi = \
-    UnitQuantity('psi', pound*gravity/inch**2)
-ksi = \
-    UnitQuantity('ksi', kip/inch**2)
-barie = baries = barye = baryes = \
-    UnitQuantity('barie', 0.1*N/m**2)
+Pa = pascal = UnitQuantity(
+    'pascal',
+    N/m**2,
+    symbol='Pa',
+    aliases=['pascals']
+)
+kPa = kilopascal = UnitQuantity(
+    'kilopascal',
+    1000*Pa,
+    symbol='kPa',
+    aliases=['kilopascals']
+)
+MPa = megapascal = UnitQuantity(
+    'megapascal',
+    1000*kPa,
+    symbol='MPa',
+    aliases=['megapascals']
+)
+GPa = gigapascal = UnitQuantity(
+    'gigapascal',
+    1000*MPa,
+    symbol='GPa',
+    aliases=['gigapascals']
+)
+bar = UnitQuantity(
+    'bar',
+    100000*pascal,
+    aliases=['bars']
+)
+kbar = kilobar = UnitQuantity(
+    'kilobar',
+    1000*bar,
+    symbol='kbar',
+    aliases=['kilobars']
+)
+Mbar = kilobar = UnitQuantity(
+    'megabar',
+    1000*kbar,
+    symbol='Mbar',
+    aliases=['megabars']
+)
+Gbar = gigabar = UnitQuantity(
+    'gigabar',
+    1000*Mbar,
+    symbol='Gbar',
+    aliases=['Gbar']
+)
+atm = atmosphere = standard_atmosphere = UnitQuantity(
+    'standard_atmosphere',
+    101325*pascal,
+    symbol='atm',
+    aliases=['atmosphere', 'atmospheres', 'standard_atmospheres']
+)
+at = technical_atmosphere = UnitQuantity(
+    'technical_atmosphere',
+    kg*gravity/cm**2,
+    symbol='at',
+    aliases=['technical_atmospheres']
+)
+torr = UnitQuantity(
+    'torr',
+    atm/760
+)
+psi = pound_force_per_square_inch = UnitQuantity(
+    'pound_force_per_square_inch',
+    pound*gravity/inch**2,
+    symbol='psi'
+)
+ksi = kip_per_square_inch = UnitQuantity(
+    'kip_per_square_inch',
+    kip/inch**2,
+    symbol='ksi'
+)
+barye = barie = barad = barad = barrie = baryd = UnitQuantity(
+    'barye',
+    0.1*N/m**2,
+    symbol='Ba',
+    aliases=[
+        'barie', 'baries', 'baryes', 'barad', 'barad', 'barrie', 'baryd',
+        'baryed'
+    ]
+)
+
+mmHg = mm_Hg = millimeter_Hg = millimeter_Hg_0C = UnitQuantity(
+    'millimeter_Hg',
+    mm*mercury,
+    symbol='mmHg',
+    aliases=['mmHg', 'millimeter_Hg'],
+    note='''
+    "the pressure exerted at the base of a column of fluid exactly 1 mm high,
+    when the density of the fluid is exactly 13.5951 g/cm^3, at a place where
+    the acceleration of gravity is exactly 9.80665 m/s^2"
+    http://en.wikipedia.org/wiki/Conventional_millimeter_of_mercury'''
+)
+cmHg = cm_Hg = centimeter_Hg = UnitQuantity(
+    'cmHg',
+    cm*Hg,
+    aliases=['cm_Hg', 'centimeter_Hg']
+)
+inHg = in_Hg = inch_Hg = inch_Hg_32F = UnitQuantity(
+    'inHg',
+    inch*Hg,
+    aliases=['in_Hg', 'inch_Hg', 'inch_Hg_32F']
+)
+inch_Hg_60F = UnitQuantity(
+    'inch_Hg_60F',
+    inch*mercury_60F
+)
+
+inch_H2O_39F = UnitQuantity(
+    'inch_H2O_39F',
+    inch*water_39F
+)
+inch_H2O_60F = UnitQuantity(
+    'inch_H2O_60F',
+    inch*water_60F
+)
+footH2O = UnitQuantity(
+    'footH2O',
+    ft*water
+)
+cmH2O = UnitQuantity(
+    'cmH2O',
+    cm*water
+)
+foot_H2O = ftH2O = UnitQuantity(
+    'foot_H2O',
+    ft*water,
+    aliases=['ftH2O']
+)
 
 del UnitQuantity, gravity, kg, pound, m, mm, cm, inch, ft, N, kip
