@@ -3,10 +3,10 @@
 
 from numpy import pi
 
-from quantities.units.unitquantity import UnitAngle, UnitQuantity
+from quantities.units.unitquantity import UnitAngle, UnitQuantity, dimensionless
 
 radian = radians = \
-    UnitAngle('radian')
+    UnitAngle('radian', 1*dimensionless)
 turn = turns = circle = circles = \
     UnitAngle('turn', 2*pi*radian)
 arcdeg = arcdegs = degree = degrees = angular_degree = angular_degrees = \
