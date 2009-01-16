@@ -2,7 +2,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitCurrent, \
+from quantities.unitquantity import UnitCurrent, \
     UnitLuminousIntensity, UnitQuantity
 from quantities.units.time import s
 from quantities.units.length import m
@@ -25,7 +25,8 @@ mA = milliamp = milliampere = UnitCurrent(
 uA = microampere = UnitCurrent(
     'microampere',
     mA/1000,
-    symbol='µA',
+    symbol='uA',
+    u_symbol='µA',
     aliases=['uA', 'microamp', 'microamps', 'microamperes'])
 nA = nanoamp = nanoampere = UnitCurrent(
     'nanoampere',
@@ -89,7 +90,7 @@ F = farad = UnitQuantity(
 ohm = UnitQuantity(
     'ohm',
     V/A,
-    symbol='Ω',
+    u_symbol='Ω',
     aliases=['ohms']
 )
 S = siemens = UnitQuantity(
@@ -192,7 +193,7 @@ statmho = statS = stS = UnitQuantity(
 statohm = UnitQuantity(
     'statohm',
     8.987554e11*ohm,
-    symbol='stΩ',
+    u_symbol='stΩ',
     aliases=['statohms']
 )
 statvolt = statV = stV = UnitQuantity(

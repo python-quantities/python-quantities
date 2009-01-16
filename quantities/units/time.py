@@ -2,7 +2,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity, UnitTime
+from quantities.unitquantity import UnitQuantity, UnitTime
 
 
 s = sec = second = UnitTime(
@@ -19,7 +19,8 @@ ms = millisecond = UnitTime(
 us = microsecond = UnitTime(
     'microsecond',
     ms/1000,
-    symbol='µs',
+    symbol='us',
+    u_symbol='µs',
     aliases=['us', 'microseconds']
 )
 ns = nanosecond = UnitTime(

@@ -1,8 +1,12 @@
 """
 """
 
-from quantities.units.unitquantity import dimensionless, UnitQuantity
+from quantities.unitquantity import dimensionless, UnitQuantity
 
-percent = UnitQuantity('percent', .01*dimensionless)
+percent = UnitQuantity(
+    'percent',
+    .01*dimensionless,
+    symbol='%'
+)
 
 del UnitQuantity

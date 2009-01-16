@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.temperature import K, degF
 from quantities.units.length import m, ft
 from quantities.units.power import W

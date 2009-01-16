@@ -2,7 +2,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitLength, UnitQuantity
+from quantities.unitquantity import UnitLength, UnitQuantity
 
 m = meter = metre = UnitLength(
     'meter',
@@ -30,7 +30,8 @@ mm = millimeter = millimetre = UnitLength(
 um = micrometer = micrometre = micron = UnitLength(
     'micrometer',
     mm/1000,
-    symbol='µm',
+    symbol='um',
+    u_symbol='µm',
     aliases=[
         'um', 'micron', 'microns', 'micrometers', 'micrometre', 'micrometres'
     ]
@@ -50,7 +51,8 @@ pm = picometer = picometre = UnitLength(
 angstrom = UnitLength(
     'angstrom',
     nm/10,
-    symbol='Å',
+    symbol='A',
+    u_symbol='Å',
     aliases=['angstroms']
 )
 fm = femtometer = femtometre = fermi = UnitLength(

@@ -7,6 +7,12 @@ from quantities.dimensionality import ImmutableDimensionality
 from quantities.quantity import Quantity
 from quantities.registry import unit_registry
 
+__all__ = [
+    'Dimensionless', 'UnitAngle', 'UnitCurrency', 'UnitCurrent',
+    'UnitInformation', 'UnitLength', 'UnitLuminousIntensity', 'UnitMass',
+    'UnitMass', 'UnitQuantity', 'UnitSubstance', 'UnitTemperature', 'UnitTime'
+]
+
 
 class UnitQuantity(Quantity):
 
@@ -14,7 +20,8 @@ class UnitQuantity(Quantity):
     _secondary_order = 0
 
     def __new__(
-        cls, name, reference_quantity=None, symbol=None, aliases=[], note=None
+        cls, name, reference_quantity=None, symbol=None, u_symbol=None,
+        aliases=[], note=None
     ):
         data = numpy.array(1, dtype='d')
         ret = numpy.ndarray.__new__(
@@ -27,10 +34,24 @@ class UnitQuantity(Quantity):
         return ret
 
     def __init__(
-        self, name, reference_quantity=None, symbol=None, aliases=[], note=None
+        self, name, reference_quantity=None, symbol=None, u_symbol=None,
+        aliases=[], note=None
     ):
+        try:
+            assert isinstance(name, str)
+        except AssertionError:
+            raise TypeError('name must be a string, got %s (not unicode)'%name)
+        try:
+            assert symbol is None or isinstance(symbol, str)
+        except AssertionError:
+            raise TypeError(
+                'symbol must be a string, '
+                'got %s (u_symbol can be unicode)'%symbol
+            )
+
         self._name = name
         self._symbol = symbol
+        self._u_symbol = u_symbol
         self._note = note
         self._dimensionality = ImmutableDimensionality({self:1})
 
@@ -80,6 +101,13 @@ class UnitQuantity(Quantity):
             return self._symbol
         else:
             return self.name
+
+    @property
+    def u_symbol(self):
+        if self._u_symbol:
+            return self._u_symbol
+        else:
+            return self.symbol
 
     @property
     def units(self):

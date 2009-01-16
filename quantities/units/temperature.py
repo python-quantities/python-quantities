@@ -2,7 +2,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitTemperature
+from quantities.unitquantity import UnitTemperature
 
 K = degK = kelvin = Kelvin = UnitTemperature(
     'Kelvin',
@@ -12,19 +12,22 @@ K = degK = kelvin = Kelvin = UnitTemperature(
 degR = rankine = Rankine = UnitTemperature(
     'Rankine',
     K/1.8,
-    symbol='°R',
+    symbol='degR',
+    u_symbol='°R',
     aliases=['degR', 'rankine']
 )
 degC = celsius = Celsius = UnitTemperature(
     'Celsius',
     K,
-    symbol='°C',
+    symbol='degC',
+    u_symbol='°C',
     aliases=['degC', 'celsius']
 )
 degF = fahrenheit = Fahrenheit = UnitTemperature(
     'Fahrenheit',
     K,
-    symbol='°F',
+    symbol='degF',
+    u_symbol='°F',
     aliases=['degF', 'fahrenheit']
 )
 # Unicode has special compatibility characters for ℃ ℉, but their use is

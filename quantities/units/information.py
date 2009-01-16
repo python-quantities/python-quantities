@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity, UnitInformation, \
+from quantities.unitquantity import UnitQuantity, UnitInformation, \
     dimensionless
 from quantities.units.time import s
 

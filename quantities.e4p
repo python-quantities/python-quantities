@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-01-09, 08:35:01 -->
+<!-- Saved: 2009-01-16, 16:35:44 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -43,43 +43,12 @@
     <Source>quantities/constants/__init__.py</Source>
     <Source>quantities/quantity.py</Source>
     <Source>quantities/__init__.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/parser.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/tests/test_quantities.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/tests/__init__.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/volume.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/substance.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/angle.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/electromagnetism.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/information.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/compound.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/acceleration.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/viscosity.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/radiation.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/force.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/mass.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/pressure.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/length.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/time.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/velocity.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/power.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/energy.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/heat.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/frequency.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/unitquantities.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/area.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/__init__.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/dimensionless.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/units/temperature.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/dimensionality.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/constants/constants.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/constants/codata.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/constants/__init__.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/quantity.py</Source>
-    <Source>build/lib.linux-x86_64-2.6/quantities/__init__.py</Source>
     <Source>setup.py</Source>
     <Source>quantities/decorators.py</Source>
     <Source>quantities/registry.py</Source>
-    <Source>quantities/units/unitquantity.py</Source>
+    <Source>quantities/uncertainquantity.py</Source>
+    <Source>quantities/unitquantity.py</Source>
+    <Source>quantities/markup.py</Source>
   </Sources>
   <Forms>
   </Forms>

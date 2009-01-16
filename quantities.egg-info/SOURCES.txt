@@ -2,9 +2,11 @@ setup.py
 quantities/__init__.py
 quantities/decorators.py
 quantities/dimensionality.py
+quantities/markup.py
 quantities/quantity.py
 quantities/registry.py
 quantities/uncertainquantity.py
+quantities/unitquantity.py
 quantities.egg-info/PKG-INFO
 quantities.egg-info/SOURCES.txt
 quantities.egg-info/dependency_links.txt
@@ -34,7 +36,6 @@ quantities/units/radiation.py
 quantities/units/substance.py
 quantities/units/temperature.py
 quantities/units/time.py
-quantities/units/unitquantity.py
 quantities/units/velocity.py
 quantities/units/viscosity.py
 quantities/units/volume.py

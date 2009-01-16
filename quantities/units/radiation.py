@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.time import s
 from quantities.units.mass import kg
 from quantities.units.energy import J
@@ -38,11 +38,11 @@ rem = UnitQuantity(
     1e-2*sievert,
     aliases=['rems']
 )
-rad = rads = UnitQuantity(
-    'rad',
+rads = UnitQuantity(
+    'rads',
     1e-2*gray,
     aliases=['rads']
-)
+) # rad is commonly used symbol for radian, rads unit of radiation is deprecated
 R = roentgen = UnitQuantity(
     'roentgen',
     2.58e-4*coulomb/kg,

@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.force import dyne, N
 from quantities.units.length import cm, m
 from quantities.units.time import s, h

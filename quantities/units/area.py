@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.length import m, rod
 
 are = ares = UnitQuantity(

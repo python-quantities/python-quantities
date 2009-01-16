@@ -4,7 +4,7 @@
 
 from numpy import pi
 
-from quantities.units.unitquantity import UnitAngle, UnitQuantity, dimensionless
+from quantities.unitquantity import UnitAngle, UnitQuantity, dimensionless
 
 radian = radians = UnitAngle(
     'radian',
@@ -20,7 +20,8 @@ turn = revolution = cycle = turns = circle = circles = UnitAngle(
 degree = arcdeg = arcdegree = angular_degree = UnitAngle(
     'arcdegree',
     pi/180*radian,
-    symbol='°',
+    symbol='deg',
+    u_symbol='°',
     aliases=[
         'degree', 'degrees', 'arc_degree', 'arc_degrees', 'angular_degree',
         'angular_degrees', 'arcdegrees'
@@ -29,16 +30,18 @@ degree = arcdeg = arcdegree = angular_degree = UnitAngle(
 arcminute = arcmin = arc_minute = angular_minute = UnitAngle(
     'arcminute',
     arcdeg/60,
-    symbol='′',
+    symbol='arcmin',
+    u_symbol='′',
     aliases=[
         'arcmin', 'arcmins', 'arcminutes', 'arc_minute', 'arc_minutes',
         'angular_minute', 'angular_minutes'
     ]
 )
 arcsecond = arcsec = arc_second = angular_second = UnitAngle(
-    'arcsec',
+    'arcsecond',
     arcmin/60,
-    symbol='″',
+    symbol='arcsec',
+    u_symbol='″',
     aliases=[
         'arcsec', 'arcsecs', 'arcseconds', 'arc_second', 'arc_second',
         'angular_second', 'angular_seconds'
@@ -53,25 +56,29 @@ grad = grade = UnitAngle(
 degrees_north = degrees_N = UnitAngle(
     'degrees_north',
     arcdeg,
-    symbol='°N',
+    symbol='degN',
+    u_symbol='°N',
     aliases=['degrees_N']
 )
 degrees_east = degrees_E = UnitAngle(
     'degrees_east',
     arcdeg,
-    symbol='°E',
+    symbol='degE',
+    u_symbol='°E',
     aliases=['degrees_E']
 )
 degrees_west = degrees_W = UnitAngle(
     'degrees_west',
     arcdeg,
-    symbol='°W',
+    symbol='degW',
+    u_symbol='°W',
     aliases=['degrees_W']
 )
 degrees_true = degrees_T = UnitAngle(
     'degrees_true',
     arcdeg,
-    symbol='°T',
+    symbol='degT',
+    u_symbol='°T',
     aliases=['degrees_T']
 )
 

@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.mass import gram, kg, ounce, lb
 from quantities.units.length import cm, m, ft
 from quantities.units.time import s

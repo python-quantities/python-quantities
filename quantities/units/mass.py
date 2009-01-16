@@ -2,7 +2,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity, UnitMass
+from quantities.unitquantity import UnitQuantity, UnitMass
 from quantities.units.length import m
 
 kg = kilogram =  UnitMass(
@@ -76,7 +76,8 @@ slug = slugs = UnitMass(
 toz = troy_ounce = apounce = apothecary_ounce = UnitMass(
     'troy_ounce',
     480*gr,
-    symbol='℥',
+    symbol='toz',
+    u_symbol='℥',
     aliases=[
         'apounce', 'apounces', 'apothecary_ounce', 'apothecary_ounces',
         'troy_ounces'
@@ -85,7 +86,8 @@ toz = troy_ounce = apounce = apothecary_ounce = UnitMass(
 troy_pound = appound = apothecary_pound = UnitMass(
     'troy_pound',
     12*toz,
-    symbol='℔',
+    symbol='tlb',
+    u_symbol='℔',
     aliases=[
         'troy_pounds', 'appound', 'appounds', 'apothecary_pound',
         'apothecary_pounds'
@@ -101,13 +103,13 @@ u = amu = atomic_mass_unit = UnitMass(
 scruple = UnitMass(
     'scruple',
     20*gr,
-    symbol='℈',
+    u_symbol='℈',
     aliases=['scruples']
 )
 drachm = apdram = UnitMass(
     'drachm',
     60*gr,
-    symbol='ʒ',
+    u_symbol='ʒ',
     aliases=['dram', 'drams', 'drachms', 'apdrams']
 )
 

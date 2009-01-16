@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.energy import Btu, J
 from quantities.units.time import s, h, min
 from quantities.units.electromagnetism import A, V

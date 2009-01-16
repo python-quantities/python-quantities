@@ -1,7 +1,7 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.acceleration import gravity
 from quantities.units.mass import g, kg, pound
 from quantities.units.length import m, mm, cm, inch, ft
