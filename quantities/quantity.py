@@ -38,28 +38,24 @@ class Quantity(numpy.ndarray):
     __array_priority__ = 21
 
     def __new__(cls, data, units='', dtype='d', copy=True):
-        if not isinstance(data, numpy.ndarray):
-            data = numpy.array(data, dtype=dtype)
+        if isinstance(data, Quantity):
+            if units:
+                # force a copy so we don't rescale a subset of the original
+                copy = True
 
-        if copy == True:
-            data = data.copy()
+            res = numpy.array(data, dtype=dtype, copy=copy).view(cls)
+            if copy:
+                res._dimensionality = data._dimensionality.copy()
+            else:
+                res._dimensionality = data._dimensionality
+            if units:
+                res.units = units
 
-        if isinstance(data, Quantity) and units:
-            data = data.rescale(units)
+            return res
 
-        # should this be a "cooperative super" call instead?
-        ret = numpy.ndarray.__new__(
-            cls,
-            data.shape,
-            data.dtype,
-            buffer=data
-        )
-        return ret
+        res = numpy.array(data, dtype=dtype, copy=copy).view(cls)
 
-    def __init__(self, data, units='', dtype='d', copy=True):
-        if not units and isinstance(data, Quantity):
-            dims = data.dimensionality
-        elif isinstance(units, str):
+        if isinstance(units, str):
             if units in ('', 'dimensionless'):
                 dims = {}
             else:
@@ -73,7 +69,9 @@ class Quantity(numpy.ndarray):
                 'units must be a quantity, string, or dimensionality, got %s'\
                 %type(units)
             )
-        self._dimensionality = Dimensionality(dims)
+        res._dimensionality = Dimensionality(dims)
+
+        return res
 
     @property
     def dimensionality(self):
@@ -116,30 +114,76 @@ class Quantity(numpy.ndarray):
         """
         Return a copy of the quantity converted to the specified units
         """
-        copy = Quantity(self)
-        copy.units = units
-        return copy
+        return Quantity(self, units)
 
     @property
     def simplified(self):
         rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
-            rq *= u.reference_quantity**d
+            rq = rq * u.reference_quantity**d
         return rq * self.magnitude
 
     def __array_finalize__(self, obj):
-        self._dimensionality = getattr(
-            obj, 'dimensionality', Dimensionality()
-        )
+        self._dimensionality = getattr(obj, '_dimensionality', Dimensionality())
+        if self.base is None:
+            self._dimensionality = self._dimensionality.copy()
+
+#    def __array_wrap__(self, obj, context=None):
+#        """
+#        Special hook for ufuncs.
+#        Wraps the numpy array and sets the mask according to context.
+#        """
+#        result = obj.view(type(self))
+#
+#        if context is not None:
+#            result._dimensionality = result._dimensionality.copy()
+#            (func, args, _) = context
+#            m = reduce(mask_or, [getmaskarray(arg) for arg in args])
+#            # Get the domain mask................
+#            domain = ufunc_domain.get(func, None)
+#            if domain is not None:
+#                if len(args) > 2:
+#                    d = reduce(domain, args)
+#                else:
+#                    d = domain(*args)
+#                # Fill the result where the domain is wrong
+#                try:
+#                    # Binary domain: take the last value
+#                    fill_value = ufunc_fills[func][-1]
+#                except TypeError:
+#                    # Unary domain: just use this one
+#                    fill_value = ufunc_fills[func]
+#                except KeyError:
+#                    # Domain not recognized, use fill_value instead
+#                    fill_value = self.fill_value
+#                result = result.copy()
+#                np.putmask(result, d, fill_value)
+#                # Update the mask
+#                if m is nomask:
+#                    if d is not nomask:
+#                        m = d
+#                else:
+#                    m |= d
+#            # Make sure the mask has the proper size
+#            if result.shape == () and m:
+#                return masked
+#            else:
+#                result._mask = m
+#                result._sharedmask = False
+#        #....
+#        return result
 
     def __add__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
 
         dims = self.dimensionality + other.dimensionality
-        magnitude = self.magnitude + other.magnitude
+        ret = super(Quantity, self).__add__(other)
+        ret._dimensionality = dims
 
-        return Quantity(magnitude, dims, magnitude.dtype)
+        return ret
+
+    # TODO: in-place arithmetic should check for .base, and raise if not None
 
     def __iadd__(self, other):
         if not isinstance(other, Quantity):
@@ -187,12 +231,13 @@ class Quantity(numpy.ndarray):
     def __mul__(self, other):
         try:
             dims = self.dimensionality * other.dimensionality
-            magnitude = self.magnitude * other.magnitude
         except AttributeError:
-            magnitude = self.magnitude * other
-            dims = copy.copy(self.dimensionality)
+            other = Quantity(other, copy=False)
+            dims = Dimensionality(self.dimensionality)
 
-        return Quantity(magnitude, dims, magnitude.dtype)
+        ret = super(Quantity, self).__mul__(other)
+        ret._dimensionality = dims
+        return ret
 
     def __imul__(self, other):
         try:
@@ -211,12 +256,13 @@ class Quantity(numpy.ndarray):
     def __truediv__(self, other):
         try:
             dims = self.dimensionality / other.dimensionality
-            magnitude = self.magnitude / other.magnitude
         except AttributeError:
-            magnitude = self.magnitude / other
-            dims = copy.copy(self.dimensionality)
+            other = Quantity(other, copy=False)
+            dims = Dimensionality(self.dimensionality)
 
-        return Quantity(magnitude, dims, magnitude.dtype)
+        ret = super(Quantity, self).__truediv__(other)
+        ret._dimensionality = dims
+        return ret
 
     def __div__(self, other):
         return self.__truediv__(other)

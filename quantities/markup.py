@@ -33,12 +33,12 @@ def format_units(udict):
             u = key.symbol
         if d>0:
             if d > 1:
-                u = u + ('**%s'%d)
+                u = u + ('**%s'%d).rstrip('0').rstrip('.')
             num.append(u)
         elif d<0:
             d = -d
             if d > 1:
-                u = u + ('**%s'%d)
+                u = u + ('**%s'%d).rstrip('0').rstrip('.')
             den.append(u)
     res = '*'.join(num)
     if len(den):

@@ -19,6 +19,7 @@ class BaseDimensionality(object):
     def simplified(self):
         if len(self):
             rq = 1*unit_registry['dimensionless']
+            print type(rq), type(rq.dimensionality)
             for u, d in self.iteritems():
                 rq *= u.reference_quantity**d
             return rq.dimensionality
@@ -181,6 +182,9 @@ class ImmutableDimensionality(BaseDimensionality):
 
 
 class Dimensionality(BaseDimensionality, dict):
+
+    def copy(self):
+        return Dimensionality(dict.copy(self))
 
     def __iadd__(self, other):
         try:

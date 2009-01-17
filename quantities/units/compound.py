@@ -7,8 +7,8 @@ from quantities.registry import unit_registry
 
 class CompoundUnit(UnitQuantity):
 
-    def __init__(self, name):
-        UnitQuantity.__init__(self, name, unit_registry[name])
+    def __new__(cls, name):
+        return UnitQuantity.__new__(cls, name, unit_registry[name])
 
     def __repr__(self):
         return '1 %s'%self.name

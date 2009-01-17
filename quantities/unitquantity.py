@@ -19,22 +19,10 @@ class UnitQuantity(Quantity):
     _primary_order = 99
     _secondary_order = 0
 
+    __array_priority__ = 20
+
     def __new__(
         cls, name, reference_quantity=None, symbol=None, u_symbol=None,
-        aliases=[], note=None
-    ):
-        data = numpy.array(1, dtype='d')
-        ret = numpy.ndarray.__new__(
-            cls,
-            data.shape,
-            data.dtype,
-            buffer=data
-        )
-        ret.flags.writeable = False
-        return ret
-
-    def __init__(
-        self, name, reference_quantity=None, symbol=None, u_symbol=None,
         aliases=[], note=None
     ):
         try:
@@ -49,25 +37,31 @@ class UnitQuantity(Quantity):
                 'got %s (u_symbol can be unicode)'%symbol
             )
 
-        self._name = name
-        self._symbol = symbol
-        self._u_symbol = u_symbol
-        self._note = note
-        self._dimensionality = ImmutableDimensionality({self:1})
+        ret = numpy.array(1, dtype='d').view(cls)
+        ret.flags.writeable = False
 
-        if reference_quantity is None:
-            self._reference_quantity = self
-        else:
-            self._reference_quantity = reference_quantity.simplified
+        ret._name = name
+        ret._symbol = symbol
+        ret._u_symbol = u_symbol
+        ret._note = note
+        ret._dimensionality = ImmutableDimensionality({ret:1})
 
-        self._format_order = (self._primary_order, self._secondary_order)
-        self.__class__._secondary_order += 1
+        try:
+            reference_quantity = reference_quantity.simplified
+        except AttributeError:
+            pass
+        ret._reference_quantity = reference_quantity
 
-        unit_registry[name] = self
+        ret._format_order = (ret._primary_order, ret._secondary_order)
+        ret.__class__._secondary_order += 1
+
+        unit_registry[name] = ret
         if symbol:
-            unit_registry[symbol] = self
+            unit_registry[symbol] = ret
         for alias in aliases:
-            unit_registry[alias] = self
+            unit_registry[alias] = ret
+
+        return ret
 
     def __repr__(self):
         if self._symbol:
@@ -93,7 +87,10 @@ class UnitQuantity(Quantity):
 
     @property
     def reference_quantity(self):
-        return self._reference_quantity
+        if self._reference_quantity is not None:
+            return self._reference_quantity
+        else:
+            return self
 
     @property
     def symbol(self):
@@ -118,52 +115,52 @@ unit_registry['UnitQuantity'] = UnitQuantity
 
 class UnitMass(UnitQuantity):
 
-    _primary_order = 0
+    _primary_order = 1
 
 
 class UnitLength(UnitQuantity):
 
-    _primary_order = 1
+    _primary_order = 2
 
 
 class UnitTime(UnitQuantity):
 
-    _primary_order = 2
+    _primary_order = 3
 
 
 class UnitCurrent(UnitQuantity):
 
-    _primary_order = 3
+    _primary_order = 4
 
 
 class UnitLuminousIntensity(UnitQuantity):
 
-    _primary_order = 4
+    _primary_order = 5
 
 
 class UnitSubstance(UnitQuantity):
 
-    _primary_order = 5
+    _primary_order = 6
 
 
 class UnitTemperature(UnitQuantity):
 
-    _primary_order = 6
+    _primary_order = 7
 
 
 class UnitInformation(UnitQuantity):
 
-    _primary_order = 7
+    _primary_order = 8
 
 
 class UnitAngle(UnitQuantity):
 
-    _primary_order = 8
+    _primary_order = 9
 
 
 class UnitCurrency(UnitQuantity):
 
-    _primary_order = 9
+    _primary_order = 10
 
 
 class Dimensionless(UnitQuantity):
