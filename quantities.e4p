@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Project SYSTEM "Project-4.6.dtd">
+<!-- eric4 project file for project quantities -->
+<!-- Saved: 2009-01-16, 16:35:44 -->
+<!-- Copyright (C) 2009 ,  -->
+<Project version="4.6">
+  <Language>en</Language>
+  <ProgLanguage mixed="0">Python</ProgLanguage>
+  <ProjectType>Qt4</ProjectType>
+  <Description></Description>
+  <Version>0.1</Version>
+  <Author></Author>
+  <Email></Email>
+  <Sources>
+    <Source>quantities/tests/test_quantities.py</Source>
+    <Source>quantities/tests/__init__.py</Source>
+    <Source>quantities/units/volume.py</Source>
+    <Source>quantities/units/substance.py</Source>
+    <Source>quantities/units/angle.py</Source>
+    <Source>quantities/units/electromagnetism.py</Source>
+    <Source>quantities/units/information.py</Source>
+    <Source>quantities/units/compound.py</Source>
+    <Source>quantities/units/acceleration.py</Source>
+    <Source>quantities/units/viscosity.py</Source>
+    <Source>quantities/units/radiation.py</Source>
+    <Source>quantities/units/force.py</Source>
+    <Source>quantities/units/mass.py</Source>
+    <Source>quantities/units/pressure.py</Source>
+    <Source>quantities/units/length.py</Source>
+    <Source>quantities/units/time.py</Source>
+    <Source>quantities/units/velocity.py</Source>
+    <Source>quantities/units/power.py</Source>
+    <Source>quantities/units/energy.py</Source>
+    <Source>quantities/units/heat.py</Source>
+    <Source>quantities/units/frequency.py</Source>
+    <Source>quantities/units/area.py</Source>
+    <Source>quantities/units/__init__.py</Source>
+    <Source>quantities/units/dimensionless.py</Source>
+    <Source>quantities/units/temperature.py</Source>
+    <Source>quantities/dimensionality.py</Source>
+    <Source>quantities/constants/constants.py</Source>
+    <Source>quantities/constants/codata.py</Source>
+    <Source>quantities/constants/__init__.py</Source>
+    <Source>quantities/quantity.py</Source>
+    <Source>quantities/__init__.py</Source>
+    <Source>setup.py</Source>
+    <Source>quantities/decorators.py</Source>
+    <Source>quantities/registry.py</Source>
+    <Source>quantities/uncertainquantity.py</Source>
+    <Source>quantities/unitquantity.py</Source>
+    <Source>quantities/markup.py</Source>
+  </Sources>
+  <Forms>
+  </Forms>
+  <Translations>
+  </Translations>
+  <Resources>
+  </Resources>
+  <Interfaces>
+  </Interfaces>
+  <Others>
+  </Others>
+  <Vcs>
+    <VcsType>None</VcsType>
+  </Vcs>
+  <FiletypeAssociations>
+    <FiletypeAssociation pattern="*.ui" type="FORMS" />
+    <FiletypeAssociation pattern="*.idl" type="INTERFACES" />
+    <FiletypeAssociation pattern="*.qm" type="TRANSLATIONS" />
+    <FiletypeAssociation pattern="*.ptl" type="SOURCES" />
+    <FiletypeAssociation pattern="*.pyw" type="SOURCES" />
+    <FiletypeAssociation pattern="*.ui.h" type="FORMS" />
+    <FiletypeAssociation pattern="*.ts" type="TRANSLATIONS" />
+    <FiletypeAssociation pattern="*.py" type="SOURCES" />
+    <FiletypeAssociation pattern="*.qrc" type="RESOURCES" />
+  </FiletypeAssociations>
+</Project>

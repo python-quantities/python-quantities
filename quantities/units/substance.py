@@ -1,7 +1,9 @@
 """
 """
 
-from quantities.units.unitquantity import UnitSubstance
+from quantities.unitquantity import UnitSubstance
 
-mol = mole = \
-    UnitSubstance('mol')
+mol = mole = UnitSubstance(
+    'mole',
+    symbol='mol'
+)

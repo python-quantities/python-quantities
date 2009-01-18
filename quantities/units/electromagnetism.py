@@ -1,89 +1,216 @@
+# -*- coding: utf-8 -*-
 """
 """
 
-from quantities.units.unitquantity import UnitCurrent, \
+from quantities.unitquantity import UnitCurrent, \
     UnitLuminousIntensity, UnitQuantity
 from quantities.units.time import s
 from quantities.units.length import m
 from quantities.units.energy import J
+from quantities.units.velocity import c
+from math import pi
 
 
-A = amp = amps = ampere = amperes = \
-    UnitCurrent('A')
-mA = milliamp = milliamps = \
-    UnitCurrent('mA', A/1000)
-uA = microamp = microamps = \
-    UnitCurrent('uA', mA/1000)
-nA = nanoamp = nanoamps = \
-    UnitCurrent('nA', uA/1000)
-pA = picoamp = picoamps = \
-    UnitCurrent('pA', nA/1000)
-abampere = \
-    UnitCurrent('abampere', 10*A)
-gilbert = \
-    UnitCurrent('gilbert', 7.957747e-1*A) # TODO: check
-statampere = \
-    UnitCurrent('statampere', 3.335640e-10*A) # TODO: check
-biot = \
-    UnitCurrent('biot', 10*A)
+A = amp = amps = ampere = amperes = UnitCurrent(
+    'ampere',
+    symbol='A',
+    aliases=['amp', 'amps', 'amperes']
+)
+mA = milliamp = milliampere = UnitCurrent(
+    'milliampere',
+    A/1000,
+    symbol='mA',
+    aliases=['milliamp', 'milliamps', 'milliamperes']
+)
+uA = microampere = UnitCurrent(
+    'microampere',
+    mA/1000,
+    symbol='uA',
+    u_symbol='µA',
+    aliases=['uA', 'microamp', 'microamps', 'microamperes'])
+nA = nanoamp = nanoampere = UnitCurrent(
+    'nanoampere',
+    uA/1000,
+    symbol='nA',
+    aliases=['nanoamp', 'nanoamps', 'nanoamperes']
+)
+pA = picoamp = picoampere = UnitCurrent(
+    'picoampere',
+    nA/1000,
+    symbol='pA',
+    aliases=['picoamp', 'picoamps', 'picoamperes']
+)
+aA = abampere = biot = UnitCurrent(
+    'abampere',
+    10*A,
+    symbol='aA',
+    aliases=['abamperes', 'biot', 'biots']
+)
 
-cd = candle = candles = candela = candelas = \
-    UnitLuminousIntensity('cd')
+esu = statcoulomb = statC = franklin = Fr = UnitQuantity(
+    'statcoulomb',
+    0.1*A*m/c,
+    symbol='esu',
+    aliases=['statcoulombs', 'statC', 'franklin', 'franklins', 'Fr']
+)
+esu_per_second = statampere = UnitCurrent(
+    'statampere',
+    esu/s,
+    symbol='(esu/s)',
+    aliases=['statamperes']
+)
 
-C = coulomb = \
-    UnitQuantity('C', A*s)
-V = volt = \
-    UnitQuantity('V', J/s/A)
-F = farad = \
-    UnitQuantity('F', C/V)
-ohm = ohms = \
-    UnitQuantity('ohm', V/A)
-S = siemens = \
-    UnitQuantity('S', A/V)
-Wb = weber = webers = \
-    UnitQuantity('Wb', V*s)
-T = tesla = teslas = \
-    UnitQuantity('T', Wb/m**2)
-H = henry = henrys = \
-    UnitQuantity('H', Wb/A)
-abfarad = abfarads = \
-    UnitQuantity('abfarad', 1e9*farad)
-abhenry = abhenry = \
-    UnitQuantity('abhenry', 1e-9*henry)
-abmho = abmhos = \
-    UnitQuantity('abmho', 1e9*S)
-abohm = abohms = \
-    UnitQuantity('abohm', 1e-9*ohm)
-abvolt = abvolts = \
-    UnitQuantity('abvolt', 1e-8*V)
-e = UnitQuantity('e', 1.60217733e-19*C)
-chemical_faraday = chemical_faradays = \
-    UnitQuantity('chemical_faraday', 9.64957e4*C)
-physical_faraday = physical_faradays = \
-    UnitQuantity('physical_faraday', 9.65219e4*C)
-faraday = faradays = C12_faraday = C12_faradays = \
-    UnitQuantity('faraday', 9.648531e4*C)
-gamma = gammas = \
-    UnitQuantity('gamma', 1e-9*T)
-gauss = \
-    UnitQuantity('gauss', 1e-4*T)
-maxwell = maxwells = \
-    UnitQuantity('maxwell', 1e-8*Wb)
-Oe = oersted = oersteds = \
-    UnitQuantity('Oe', 7.957747e1*A/m)
-statcoulomb = statcoulombs = \
-    UnitQuantity('statcoulomb', 3.335640e-10*C)
-statfarad = statfarads = \
-    UnitQuantity('statfarad', 1.112650e-12*F)
-stathenry = stathenrys = \
-    UnitQuantity('stathenry', 8.987554e11*H)
-statmho = statmhos = \
-    UnitQuantity('statmho', 1.112650e-12*S)
-statohm = statohms = \
-    UnitQuantity('statohm', 8.987554e11*ohm)
-statvolt = statvolts = \
-    UnitQuantity('statvolt', 2.997925e2*V)
-unit_pole = unit_poles = \
-    UnitQuantity('unit_pole', 1.256637e-7*Wb)
+ampere_turn = UnitQuantity(
+    'ampere_turn',
+    1*A
+)
+Gi = gilbert = UnitQuantity(
+    'gilbert',
+    10/(4*pi)*ampere_turn,
+    symbol='Gi'
+)
 
-del UnitQuantity, s, m, J
+C = coulomb = UnitQuantity(
+    'coulomb',
+    A*s,
+    symbol='C'
+)
+V = volt = UnitQuantity(
+    'volt',
+    J/C,
+    symbol='V',
+    aliases=['volts']
+)
+F = farad = UnitQuantity(
+    'farad',
+    C/V,
+    symbol='F',
+    aliases=['farads']
+)
+ohm = UnitQuantity(
+    'ohm',
+    V/A,
+    u_symbol='Ω',
+    aliases=['ohms']
+)
+S = siemens = UnitQuantity(
+    'siemens',
+    A/V,
+    symbol='S'
+)
+Wb = weber = UnitQuantity(
+    'weber',
+    V*s,
+    symbol='Wb',
+    aliases=['webers']
+)
+T = tesla = UnitQuantity(
+    'tesla',
+    Wb/m**2,
+    symbol='T',
+    aliases=['teslas']
+)
+H = henry = UnitQuantity(
+    'henry',
+    Wb/A,
+    symbol='H'
+)
+abfarad = UnitQuantity(
+    'abfarad',
+    1e9*farad,
+    aliases=['abfarads']
+)
+abhenry = UnitQuantity(
+    'abhenry',
+    1e-9*henry
+)
+abmho = UnitQuantity(
+    'abmho',
+    1e9*S
+)
+abohm = UnitQuantity(
+    'abohm',
+    1e-9*ohm
+)
+abvolt = UnitQuantity(
+    'abvolt',
+    1e-8*V,
+    aliases=['abvolts']
+)
+e = elementary_charge = UnitQuantity(
+    'elementary_charge',
+    1.602176487e-19*C,
+    symbol='e',
+    note='relative uncertainty = 6.64e-8'
+) # TODO: move to physical constants
+#chemical_faraday = UnitQuantity(
+#    'chemical_faraday', 9.64957e4*C)
+#physical_faraday = physical_faradays = \
+#    UnitQuantity('physical_faraday', 9.65219e4*C)
+faraday = C12_faraday = UnitQuantity(
+    'faraday',
+    96485.3399*C,
+    symbol='F',
+    aliases=['faradays']
+) # TODO: move to physical constants
+#gamma = UnitQuantity(
+#    'gamma',
+#    1e-9*T)
+gauss = UnitQuantity(
+    'gauss',
+    1e-4*T,
+    symbol='G'
+)
+maxwell = UnitQuantity(
+    'maxwell',
+    1e-8*Wb,
+    symbol='Mx',
+    aliases=['maxwells']
+)
+Oe = oersted = UnitQuantity(
+    'oersted',
+    1000/(4*pi)*A/m,
+    symbol='Oe',
+    aliases=['aliases']
+)
+statfarad = statF = stF = UnitQuantity(
+    'statfarad',
+    1.112650e-12*F,
+    symbol='stF',
+    aliases=['statfarads', 'statF']
+)
+stathenry = statH = stH = UnitQuantity(
+    'stathenry',
+    8.987554e11*H,
+    symbol='stH',
+    aliases=['statH', 'stH']
+)
+statmho = statS = stS = UnitQuantity(
+    'statmho',
+    1.112650e-12*S,
+    symbol='stS'
+)
+statohm = UnitQuantity(
+    'statohm',
+    8.987554e11*ohm,
+    u_symbol='stΩ',
+    aliases=['statohms']
+)
+statvolt = statV = stV = UnitQuantity(
+    'statvolt',
+    2.997925e2*V,
+    symbol='stV',
+    aliases=['statvolts', 'statV', 'stV']
+)
+unit_pole = UnitQuantity(
+    'unit_pole',
+    1.256637e-7*Wb
+)
+
+cd = candle = candela = UnitLuminousIntensity(
+    'candela',
+    symbol='cd',
+    aliases=['candle', 'candles', 'candelas']
+)
+
+del UnitQuantity, s, m, J, c

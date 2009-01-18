@@ -1,0 +1,24 @@
+Metadata-Version: 1.1
+Name: quantities
+Version: 0.1
+Summary: Support for physical quantities based on the popular numpy library
+Home-page: http://packages.python.org/quantities
+Author: Darren Dale
+Author-email: dsdale24@gmail.com
+License: BSD
+Description: Quantities is designed to handle arithmetic and conversions of physical quantities, which have a magnitude, dimensionality specified by various units, and possibly an uncertainty. Quantities is based on the popular numpy library. It is undergoing active development, and while the current features and API are fairly stable, test coverage is far from complete and the package is not ready for production use.
+Keywords: quantities,physical quantities,units
+Platform: Any
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Education
+Classifier: Topic :: Scientific/Engineering
+Requires: numpy

@@ -1,41 +1,13 @@
-﻿"""
+﻿# -*- coding: utf-8 -*-
+"""
 """
 
 import operator
 
 import numpy
 
+from quantities.markup import USE_UNICODE, format_units, format_units_unicode
 from quantities.registry import unit_registry
-
-def format_units(udict):
-    '''
-    create a string representation of the units contained in a dimensionality
-    '''
-    num = []
-    den = []
-    keys = [k for k, o in
-        sorted(
-            [(k, k.format_order) for k in udict],
-            key=operator.itemgetter(1)
-        )
-    ]
-    for key in keys:
-        d = udict[key]
-        u = key.name
-        if d>0:
-            if d != 1: u = u + ('**%s'%d).rstrip('.0')
-            num.append(u)
-        elif d<0:
-            d = -d
-            if d != 1: u = u + ('**%s'%d).rstrip('.0')
-            den.append(u)
-    res = '*'.join(num)
-    if len(den):
-        if not res: res = '1'
-        fmt = '(%s)' if len(den) > 1 else '%s'
-        res = res + '/' + fmt%('*'.join(den))
-    if not res: res = 'dimensionless'
-    return '%s'%res
 
 
 class BaseDimensionality(object):
@@ -47,6 +19,7 @@ class BaseDimensionality(object):
     def simplified(self):
         if len(self):
             rq = 1*unit_registry['dimensionless']
+            print type(rq), type(rq.dimensionality)
             for u, d in self.iteritems():
                 rq *= u.reference_quantity**d
             return rq.dimensionality
@@ -112,6 +85,18 @@ class BaseDimensionality(object):
             new[i] *= other
         return new
 
+    def __repr__(self):
+        if USE_UNICODE:
+            return self.unicode()
+        else:
+            return self.string()
+
+    def string(self):
+        return format_units(self)
+
+    def unicode(self):
+        return format_units_unicode(self)
+
 
 class ImmutableDimensionality(BaseDimensionality):
 
@@ -138,8 +123,12 @@ class ImmutableDimensionality(BaseDimensionality):
     def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
-    def __repr__(self):
-        return format_units(self.__data)
+#    def __repr__(self):
+#        if USE_UNICODE:
+#            return self.unicode()
+#        else:
+#            return self.string()
+#        return format_units(self.__data)
 
     def __cmp__(self, dict):
         if isinstance(dict, ImmutableDimensionality):
@@ -194,6 +183,9 @@ class ImmutableDimensionality(BaseDimensionality):
 
 class Dimensionality(BaseDimensionality, dict):
 
+    def copy(self):
+        return Dimensionality(dict.copy(self))
+
     def __iadd__(self, other):
         try:
             assert self == other
@@ -247,5 +239,5 @@ class Dimensionality(BaseDimensionality, dict):
             self[i] *= other
         return self
 
-    def __repr__(self):
-        return format_units(self)
+#    def __repr__(self):
+#        return format_units(self)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 """
 from __future__ import absolute_import
@@ -6,6 +7,7 @@ import math as _math
 from .codata import physical_constants as _pc
 from quantities.quantity import Quantity
 from quantities.uncertainquantity import UncertainQuantity
+from quantities.unitquantity import UnitQuantity
 
 def _cd(name):
     entry = _pc[name]
@@ -52,8 +54,13 @@ zebi = 2**70
 yobi = 2**80
 
 #physical constants
-d_220 = a_Si_220 = silicon_220_lattice_spacing = \
-    _cd('{220} lattice spacing of silicon')
+d_220 = a_Si_220 = silicon_220_lattice_spacing = UnitQuantity(
+    'silicon_220_lattice_spacing',
+    _cd('{220} lattice spacing of silicon'),
+    symbol='d_220',
+    u_symbol='d₂₂₀',
+    aliases=['a_Si_220']
+)
 alpha_particle_electron_mass_ratio = \
     _cd('alpha particle-electron mass ratio')
 m_alpha = alpha_particle_mass = \

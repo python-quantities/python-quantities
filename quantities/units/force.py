@@ -1,32 +1,67 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
-from quantities.units.mass import gram, kg
-from quantities.units.length import cm, m
+from quantities.unitquantity import UnitQuantity
+from quantities.units.mass import gram, kg, ounce, lb
+from quantities.units.length import cm, m, ft
 from quantities.units.time import s
-from quantities.units.acceleration import g
+from quantities.units.acceleration import g_0
 
 
-N = newton = newtons = \
-    UnitQuantity('N', kg*m/s**2)
-dyne = dynes = \
-    UnitQuantity('dyne', gram*cm/s**2)
-pond = ponds = \
-    UnitQuantity('pond', 9.806650e-3*N)
-kgf = force_kilogram = kilogram_force = \
-    UnitQuantity('kgf', kg*g)
-ozf = force_ounce = ounce_force = \
-    UnitQuantity('ozf', 2.780139e-1*N)
-lbf = force_pound = pound_force = \
-    UnitQuantity('lbf', 4.4482216152605*N)
-poundal = poundals = \
-    UnitQuantity('poundal', 1.382550e-1*N)
-gf = gram_force = force_gram = \
-    UnitQuantity('gf', gram*g)
-force_ton = ton_force = \
-    UnitQuantity('force_ton', 2000*force_pound)
-kip = \
-    UnitQuantity('kip', 1000*lbf)
+N = newton = UnitQuantity(
+    'newton',
+    kg*m/s**2,
+    symbol='N',
+    aliases=['newtons']
+)
+dyne = UnitQuantity(
+    'dyne',
+    gram*cm/s**2,
+    symbol='dyn',
+    aliases=['dynes']
+)
+pond = UnitQuantity(
+    'pond',
+    g_0*kg,
+    symbol='p',
+    aliases=['ponds']
+)
+kgf = force_kilogram = kilogram_force = UnitQuantity(
+    'kilogram_force',
+    kg*g_0,
+    symbol='kgf',
+    aliases=['force_kilogram']
+)
+ozf = force_ounce = ounce_force = UnitQuantity(
+    'ounce_force',
+    ounce*g_0,
+    symbol='ozf',
+    aliases=['ozf']
+)
+lbf = force_pound = pound_force = UnitQuantity(
+    'pound_force',
+    lb*g_0,
+    symbol='lbf',
+    aliases=['force_pound']
+)
+poundal = UnitQuantity(
+    'poundal',
+    lb*ft/s**2,
+    symbol='pdl',
+    aliases=['poundals']
+)
+gf = gram_force = force_gram = UnitQuantity(
+    'gram_force',
+    gram*g_0,
+    symbol='gf',
+    aliases=['force_gram']
+)
+force_ton = ton_force = UnitQuantity(
+    'ton_force',
+    2000*force_pound,
+    aliases=['force_ton'])
+kip = UnitQuantity(
+    'kip', 1000*lbf
+)
 
-del UnitQuantity, gram, kg, cm, m, s, g
+del UnitQuantity, gram, kg, cm, m, s, g_0

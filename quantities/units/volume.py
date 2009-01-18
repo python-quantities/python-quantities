@@ -1,73 +1,182 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
-from quantities.units.length import cm, m
+from quantities.unitquantity import UnitQuantity
+from quantities.units.length import cm, m, foot, inch
+from quantities.units.area import acre
 
+l = L = liter = litre = UnitQuantity(
+    'liter',
+    1e-3*m**3,
+    symbol='L',
+    aliases=['l', 'liters', 'litre', 'litres']
+)
+mL = milliliter = UnitQuantity(
+    'milliliter',
+    liter/1000,
+    symbol='mL',
+    aliases=['milliliters']
+)
+cc = cubic_centimeter = milliliter = UnitQuantity(
+    'cubic_centimeter',
+    cm**3,
+    symbol='cc',
+    aliases=['cubic_centimeters']
+)
 
-acre_foot = acre_feet = \
-    UnitQuantity('acre_feet', 1.233489e3*m**3)
-board_foot = board_feet = \
-    UnitQuantity('board_feet', 2.359737e-3*m**3)
-bu = bushel = bushels = \
-    UnitQuantity('bu', 3.523907e-2*m**3)
-UK_liquid_gallon = UK_liquid_gallons = Canadian_liquid_gallon = \
-    Canadian_liquid_gallons = UK_liquid_gallon = \
-    UnitQuantity('UK_liquid_gallon', 4.546090e-3*m**3)
-US_dry_gallon = US_dry_gallons = \
-    UnitQuantity('US_dry_gallon', 4.404884e-3*m**3)
-gallon = gallons = liquid_gallon = liquid_gallons = US_liquid_gallon = \
-    US_liquid_gallons = \
-    UnitQuantity('gallon', 3.785412e-3*m**3)
-cc = UnitQuantity('cc', cm**3)
-l = L = liter = liters = litre = litres = \
-    UnitQuantity('l', 1e-3*m**3)
-stere = steres = UnitQuantity('stere', m**3)
-register_ton = register_tons = \
-    UnitQuantity('register_ton', 2.831685*m**3)
-dry_quart = dry_quarts = US_dry_quart = US_dry_quarts = \
-    UnitQuantity('dry_quart', US_dry_gallon/4)
-dry_pint = dry_pints = US_dry_pint = US_dry_pints = \
-    UnitQuantity('dry_pint', US_dry_gallon/8)
-quart = liquid_quart = US_liquid_quart = US_liquid_quarts = \
-    UnitQuantity('quart', US_liquid_gallon/4)
-pt = pint = pints = liquid_pint = liquid_pints = US_liquid_pint = \
-    US_liquid_pints = \
-    UnitQuantity('pt', US_liquid_gallon/8)
-cup = cups = US_liquid_cup = US_liquid_cups = \
-    UnitQuantity('cup', US_liquid_gallon/16)
-gill = gills = US_liquid_gill = US_liquid_gills = \
-    UnitQuantity('gill', US_liquid_gallon/32)
-oz = floz = fluid_ounce = fluid_ounces = US_fluid_ounce = US_fluid_ounces = \
-    US_liquid_ounce = US_liquid_ounces = \
-    UnitQuantity('oz', US_liquid_gallon/128)
+stere = UnitQuantity(
+    'stere',
+    m**3,
+    aliases=['steres']
+)
+gross_register_ton = register_ton = UnitQuantity(
+    'gross_register_ton',
+    100*foot**3,
+    symbol='GRT',
+    aliases=['gross_register_ton', 'register_ton', 'register_tons']
+)
 
-UK_liquid_quart = UK_liquid_quarts = \
-    UnitQuantity('UK_liquid_quart', UK_liquid_gallon/4)
-UK_liquid_pint = UK_liquid_pints = \
-    UnitQuantity('UK_liquid_pint', UK_liquid_gallon/8)
-UK_liquid_cup = UK_liquid_cups = \
-    UnitQuantity('UK_liquid_cup', UK_liquid_gallon/16)
-UK_liquid_gill = UK_liquid_gills = \
-    UnitQuantity('UK_liquid_gill', UK_liquid_gallon/32)
-UK_fluid_ounce = UK_fluid_ounces = UK_liquid_ounce = UK_liquid_ounces = \
-    UnitQuantity('UK_fluid_ounce', UK_liquid_gallon/160)
+acre_foot = UnitQuantity(
+    'acre_foot',
+    acre*foot,
+    aliases=['acre_feet']
+)
+board_foot = UnitQuantity(
+    'board_foot',
+    foot**2*inch,
+    symbol='FBM',
+    aliases=['board_feet'])
+bu = bushel = US_bushel = UnitQuantity(
+    'US_bushel',
+    2150.42*inch**3,
+    symbol='bu'
+)
+US_dry_gallon = UnitQuantity(
+    'US_dry_gallon',
+    bushel/8,
+)
+gallon = liquid_gallon = US_liquid_gallon = UnitQuantity(
+    'US_liquid_gallon',
+    231*inch**3
+)
+dry_quart = US_dry_quart = UnitQuantity(
+    'US_dry_quart',
+    US_dry_gallon/4,
+    aliases=['dry_quart', 'dry_quarts', 'US_dry_quarts']
+)
+dry_pint = US_dry_pint = UnitQuantity(
+    'US_dry_pint',
+    US_dry_quart/2,
+    aliases=['dry_pint', 'dry_pints', 'US_dry_pints']
+)
+quart = liquid_quart = US_liquid_quart = UnitQuantity(
+    'US_liquid_quart',
+    US_liquid_gallon/4,
+    symbol='quart',
+    aliases=['quarts', 'liquid_quart', 'liquid_quarts', 'US_liquid_quarts']
+)
+pt = pint = liquid_pint = US_liquid_pint = UnitQuantity(
+    'US_liquid_pint',
+    US_liquid_quart/2,
+    symbol='pt',
+    aliases=['pint', 'pints', 'liquid_pint', 'liquid_pints', 'US_liquid_pints']
+)
+cup = US_liquid_cup = UnitQuantity(
+    'cup',
+    US_liquid_pint/2)
+gill = US_liquid_gill = UnitQuantity(
+    'US_liquid_gill',
+    US_liquid_pint/2,
+    symbol='gill',
+    aliases=['gills', 'US_liquid_gills']
+)
+floz = fluid_ounce = US_fluid_ounce = US_liquid_ounce = UnitQuantity(
+    'US_fluid_ounce',
+    US_liquid_gill/4,
+    symbol='fl_oz',
+    aliases=[
+        'fluid_ounce', 'fluid_ounces', 'US_fluid_ounces', 'US_liquid_ounce',
+        'US_liquid_ounces'
+    ]
+)
 
-bbl = barrel = barrels = \
-    UnitQuantity('bbl', 42*US_liquid_gallon)
-tbsp = Tbsp = Tblsp = tblsp = Tbl = tablespoon = tablespoons = \
-    UnitQuantity('tbsp', US_fluid_ounce/2)
-tsp = teaspoon = teaspoons = \
-    UnitQuantity('tsp', tablespoon/3)
-pk = peck = pecks = \
-    UnitQuantity('pk', bushel/4)
+Imperial_bushel = UnitQuantity(
+    'Imperial_bushel',
+    36.36872*liter
+) # exact
+UK_liquid_gallon = Canadian_liquid_gallon = UK_liquid_gallon = UnitQuantity(
+    'UK_liquid_gallon',
+    4.54609*liter,
+    aliases=[
+        'UK_liquid_gallons', 'Canadian_liquid_gallon',
+        'Canadian_liquid_gallons', 'UK_liquid_gallon'
+    ]
+) # exact
+UK_liquid_quart = UnitQuantity(
+    'UK_liquid_quart',
+    UK_liquid_gallon/4,
+    aliases=['UK_liquid_quarts']
+)
+UK_liquid_pint = UnitQuantity(
+    'UK_liquid_pint',
+    UK_liquid_quart/2,
+    aliases=['UK_liquid_pints']
+)
+UK_liquid_cup = UnitQuantity(
+    'UK_liquid_cup',
+    UK_liquid_pint/2,
+    aliases=['UK_liquid_cups']
+)
+UK_liquid_gill = UnitQuantity(
+    'UK_liquid_gill',
+    UK_liquid_cup/2,
+    aliases=['UK_liquid_gills']
+)
+UK_fluid_ounce = UK_liquid_ounce = UnitQuantity(
+    'UK_fluid_ounce',
+    UK_liquid_gill/5, # not a mistake
+    aliases=['UK_fluid_ounces', 'UK_liquid_ounce', 'UK_liquid_ounces']
+)
 
-fldr = \
-    UnitQuantity('fldr', floz/8)
-dr = dram = \
-    UnitQuantity('dr', floz/16)
+bbl = barrel = UnitQuantity(
+    'barrel',
+    42*US_liquid_gallon,
+    symbol='bbl'
+)
+tbsp = Tbsp = Tblsp = tblsp = tbs = Tbl = tablespoon = UnitQuantity(
+    'tablespoon',
+    US_fluid_ounce/2,
+    symbol='tbsp',
+    aliases=['Tbsp', 'Tblsp', 'Tbl', 'tblsp', 'tbs', 'tablespoons']
+)
+tsp = teaspoon = UnitQuantity(
+    'teaspoon',
+    tablespoon/3,
+    symbol='tsp',
+    aliases=['teaspoons']
+)
 
-firkin = \
-    UnitQuantity('firkin', barrel/4)
+pk = peck = UnitQuantity(
+    'peck',
+    bushel/4,
+    symbol='pk',
+    aliases=['pecks']
+)
+
+fldr = UnitQuantity(
+    'fldr',
+    floz/8
+)
+dr = dram = UnitQuantity(
+    'dram',
+    floz/16,
+    symbol='dr',
+    aliases=['drams']
+)
+
+firkin = UnitQuantity(
+    'firkin',
+    barrel/4
+)
 
 del UnitQuantity, cm, m

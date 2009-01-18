@@ -1,26 +1,53 @@
 """
 """
 
-from quantities.units.unitquantity import UnitQuantity
+from quantities.unitquantity import UnitQuantity
 from quantities.units.time import s
 from quantities.units.mass import kg
 from quantities.units.energy import J
 from quantities.units.electromagnetism import coulomb
 
 
-Bq = becquerel = becquerels = \
-    UnitQuantity('Bq', 1/s)
-Ci = curie = curies = \
-    UnitQuantity('Ci', 3.7e10*becquerel)
-rd = rutherford = rutherfords = \
-    UnitQuantity('rd', 1e6*Bq)
-Gy = gray = grays = Sv = sievert = sieverts = \
-    UnitQuantity('Gy', J/kg)
-rem = rems = \
-    UnitQuantity('rem', 1e-2*sievert)
-rad = rads = \
-    UnitQuantity('rd', 1e-2*gray)
-R = roentgen = roentgens = \
-    UnitQuantity('R', 2.58e-4*coulomb/kg)
+Bq = becquerel = UnitQuantity(
+    'becquerel',
+    1/s,
+    symbol='Bq',
+    aliases=['becquerels']
+)
+Ci = curie = UnitQuantity(
+    'curie',
+    3.7e10*becquerel,
+    symbol='Ci',
+    aliases=['curies']
+)
+rd = rutherford = UnitQuantity(
+    'rutherford',
+    1e6*Bq,
+    symbol='Rd',
+    aliases=['rutherfords'],
+    note='this unit is obsolete, in favor of 1e6 Bq'
+)
+Gy = gray = Sv = sievert = UnitQuantity(
+    'gray',
+    J/kg,
+    symbol='Gy',
+    aliases=['grays', 'Sv', 'sievert', 'sieverts']
+)
+rem = UnitQuantity(
+    'rem',
+    1e-2*sievert,
+    aliases=['rems']
+)
+rads = UnitQuantity(
+    'rads',
+    1e-2*gray,
+    aliases=['rads']
+) # rad is commonly used symbol for radian, rads unit of radiation is deprecated
+R = roentgen = UnitQuantity(
+    'roentgen',
+    2.58e-4*coulomb/kg,
+    symbol='R',
+    aliases=['roentgens']
+)
 
 del UnitQuantity, s, kg, J, coulomb
