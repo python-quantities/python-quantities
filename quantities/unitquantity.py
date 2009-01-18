@@ -85,6 +85,22 @@ class UnitQuantity(Quantity):
         return s
 
     @quantity
+    def __add__(self, other):
+        return super(UnitQuantity, self).__add__(other)
+
+    @quantity
+    def __radd__(self, other):
+        return super(UnitQuantity, self).__radd__(other)
+
+    @quantity
+    def __sub__(self, other):
+        return super(UnitQuantity, self).__sub__(other)
+
+    @quantity
+    def __rsub__(self, other):
+        return super(UnitQuantity, self).__rsub__(other)
+
+    @quantity
     def __mul__(self, other):
         return super(UnitQuantity, self).__mul__(other)
 
@@ -103,9 +119,24 @@ class UnitQuantity(Quantity):
     @quantity
     def __div__(self, other):
         return super(UnitQuantity, self).__div__(other)
+
     @quantity
     def __rdiv__(self, other):
         return super(UnitQuantity, self).__rdiv__(other)
+
+    @quantity
+    def __pow__(self, other):
+        return super(UnitQuantity, self).__pow__(other)
+
+    @quantity
+    def __rpow__(self, other):
+        return super(UnitQuantity, self).__rpow__(other)
+
+    def __iadd__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __isub__(self, other):
+        raise TypeError('can not modify protected units')
 
     def __imul__(self, other):
         raise TypeError('can not modify protected units')
@@ -114,6 +145,9 @@ class UnitQuantity(Quantity):
         raise TypeError('can not modify protected units')
 
     def __idiv__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
 

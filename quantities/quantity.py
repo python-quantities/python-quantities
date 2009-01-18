@@ -290,11 +290,10 @@ class Quantity(numpy.ndarray):
         other = numpy.asarray(other)
         try:
             assert other.min() == other.max()
-            other = other.min()
         except AssertionError:
             raise ValueError('Quantities must be raised to a single power')
 
-        dims = self.dimensionality**other
+        dims = self.dimensionality**other.min()
         ret = super(Quantity, self).__pow__(other)
         ret._dimensionality = dims
         return ret
@@ -308,11 +307,10 @@ class Quantity(numpy.ndarray):
         other = numpy.asarray(other)
         try:
             assert other.min() == other.max()
-            other = other.min()
         except AssertionError:
             raise ValueError('Quantities must be raised to a single power')
 
-        self._dimensionality **= other
+        self._dimensionality **= other.min()
         return super(Quantity, self).__ipow__(other)
 
     def __rpow__(self, other):
