@@ -10,6 +10,8 @@ from quantities.dimensionality import BaseDimensionality, \
 from quantities.registry import unit_registry
 
 def prepare_compatible_units(s, o):
+    if not isinstance(o, Quantity):
+        o = Quantity(o, copy=False)
     try:
         assert s.dimensionality.simplified == o.dimensionality.simplified
         return s.simplified, o.simplified
@@ -180,7 +182,6 @@ class Quantity(numpy.ndarray):
         dims = self.dimensionality + other.dimensionality
         ret = super(Quantity, self).__add__(other)
         ret._dimensionality = dims
-
         return ret
 
     # TODO: in-place arithmetic should check for .base, and raise if not None
@@ -189,50 +190,42 @@ class Quantity(numpy.ndarray):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
 
-        sd = self.dimensionality
-        sd += other.dimensionality
-        m = self.magnitude
-        m += other.magnitude
-
-        return self
+        self._dimensionality += other.dimensionality
+        return super(Quantity, self).__iadd__(other)
 
     def __radd__(self, other):
         return self.__add__(other)
 
     def __sub__(self, other):
         if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
+            other = numpy.asarray(other).view(Quantity)
 
         dims = self.dimensionality - other.dimensionality
-        magnitude = self.magnitude - other.magnitude
-
-        return Quantity(magnitude, dims, magnitude.dtype)
+        ret = super(Quantity, self).__sub__(other)
+        ret._dimensionality = dims
+        return ret
 
     def __isub__(self, other):
         if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
+            other = numpy.asarray(other).view(Quantity)
 
-        sd = self.dimensionality
-        sd -= other.dimensionality
-        m = self.magnitude
-        m -= other.magnitude
-
-        return self
+        self._dimensionality -= other.dimensionality
+        return super(Quantity, self).__isub__(other)
 
     def __rsub__(self, other):
         if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
+            other = numpy.asarray(other).view(Quantity)
 
         dims = other.dimensionality - self.dimensionality
-        magnitude = other.magnitude - self.magnitude
-
-        return Quantity(magnitude, dims, magnitude.dtype)
+        ret = super(Quantity, self).__rsub__(other)
+        ret._dimensionality = dims
+        return ret
 
     def __mul__(self, other):
         try:
             dims = self.dimensionality * other.dimensionality
         except AttributeError:
-            other = Quantity(other, copy=False)
+            other = numpy.asarray(other).view(Quantity)
             dims = Dimensionality(self.dimensionality)
 
         ret = super(Quantity, self).__mul__(other)
@@ -241,14 +234,11 @@ class Quantity(numpy.ndarray):
 
     def __imul__(self, other):
         try:
-            sd = self.dimensionality
-            sd *= other.dimensionality
-            m = self.magnitude
-            m *= other.magnitude
+            self._dimensionality *= other.dimensionality
         except AttributeError:
-            m = self.magnitude
-            m *= other
-        return self
+            pass
+
+        return super(Quantity, self).__imul__(other)
 
     def __rmul__(self, other):
         return self.__mul__(other)
@@ -257,7 +247,7 @@ class Quantity(numpy.ndarray):
         try:
             dims = self.dimensionality / other.dimensionality
         except AttributeError:
-            other = Quantity(other, copy=False)
+            other = numpy.asarray(other).view(Quantity)
             dims = Dimensionality(self.dimensionality)
 
         ret = super(Quantity, self).__truediv__(other)
@@ -269,21 +259,24 @@ class Quantity(numpy.ndarray):
 
     def __itruediv__(self, other):
         try:
-            sd = self.dimensionality
-            sd /= other.dimensionality
-            m = self.magnitude
-            m /= other.magnitude
+            self._dimensionality /= other.dimensionality
         except AttributeError:
-            m = self.magnitude
-            m /= other
-        return self
+            pass
+        return super(Quantity, self).__itruediv__(other)
 
     def __idiv__(self, other):
         return self.__itruediv__(other)
 
     def __rtruediv__(self, other):
-        temp = Quantity(1/self.magnitude, self.dimensionality**-1, copy=False)
-        return other * temp
+        try:
+            dims = other.dimensionality / self.dimensionality
+        except AttributeError:
+            other = numpy.asarray(other).view(Quantity)
+            dims = Dimensionality(self.dimensionality**-1)
+
+        ret = super(Quantity, self).__rtruediv__(other)
+        ret._dimensionality = dims
+        return ret
 
     def __rdiv__(self, other):
         return self.__rtruediv__(other)
@@ -294,7 +287,7 @@ class Quantity(numpy.ndarray):
                 raise ValueError("exponent must be dimensionless")
             other = other.simplified.magnitude
 
-        other = numpy.array(other)
+        other = numpy.asarray(other)
         try:
             assert other.min() == other.max()
             other = other.min()
@@ -302,8 +295,9 @@ class Quantity(numpy.ndarray):
             raise ValueError('Quantities must be raised to a single power')
 
         dims = self.dimensionality**other
-        magnitude = self.magnitude**other
-        return Quantity(magnitude, dims, magnitude.dtype)
+        ret = super(Quantity, self).__pow__(other)
+        ret._dimensionality = dims
+        return ret
 
     def __ipow__(self, other):
         if isinstance(other, Quantity):
@@ -311,24 +305,21 @@ class Quantity(numpy.ndarray):
                 raise ValueError("exponent must be dimensionless")
             other = other.simplified.magnitude
 
-        other = numpy.array(other)
+        other = numpy.asarray(other)
         try:
             assert other.min() == other.max()
             other = other.min()
         except AssertionError:
             raise ValueError('Quantities must be raised to a single power')
 
-        sd = self.dimensionality
-        sd **= other
-        m = self.magnitude
-        m **= other
-        return self
+        self._dimensionality **= other
+        return super(Quantity, self).__ipow__(other)
 
     def __rpow__(self, other):
         if self.dimensionality.simplified:
             raise ValueError("exponent must be dimensionless")
 
-        return other**self.simplified.magnitude
+        return super(Quantity, self.simplified).__rpow__(other)
 
     def __repr__(self):
         return '%s %s'%(numpy.ndarray.__str__(self), self.dimensionality)

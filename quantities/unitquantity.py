@@ -14,6 +14,17 @@ __all__ = [
 ]
 
 
+def quantity(f):
+
+    def wrapped(*args, **kwargs):
+        ret = f(*args, **kwargs)
+        if isinstance(ret, UnitQuantity):
+            return ret.view(Quantity).copy()
+        return ret
+
+    return wrapped
+
+
 class UnitQuantity(Quantity):
 
     _primary_order = 99
@@ -72,6 +83,39 @@ class UnitQuantity(Quantity):
         if self.note:
             return s+'\nnote: %s'%self.note
         return s
+
+    @quantity
+    def __mul__(self, other):
+        return super(UnitQuantity, self).__mul__(other)
+
+    @quantity
+    def __rmul__(self, other):
+        return super(UnitQuantity, self).__rmul__(other)
+
+    @quantity
+    def __truediv__(self, other):
+        return super(UnitQuantity, self).__truediv__(other)
+
+    @quantity
+    def __rtruediv__(self, other):
+        return super(UnitQuantity, self).__rtruediv__(other)
+
+    @quantity
+    def __div__(self, other):
+        return super(UnitQuantity, self).__div__(other)
+    @quantity
+    def __rdiv__(self, other):
+        return super(UnitQuantity, self).__rdiv__(other)
+
+    def __imul__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __itruediv__(self, other):
+        raise TypeError('can not modify protected units')
+
+    def __idiv__(self, other):
+        raise TypeError('can not modify protected units')
+
 
     @property
     def format_order(self):

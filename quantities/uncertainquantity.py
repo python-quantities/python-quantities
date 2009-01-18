@@ -137,10 +137,10 @@ class UncertainQuantity(Quantity):
         return other * temp
 
     def __pow__(self, other):
-        res = Quantity.__pow__(self, other)
+        res = super(UncertainQuantity, self).__pow__(other)
         ru = other * self.relative_uncertainty
-        u = res * ru
-        return UncertainQuantity(res, uncertainty=u, copy=False)
+        res.uncertainty = res * ru
+#        return UncertainQuantity(res, uncertainty=u, copy=False)
 
     def __getitem__(self, key):
         return UncertainQuantity(

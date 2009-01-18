@@ -494,7 +494,7 @@ class TestQuantities(unittest.TestCase):
             103.0 * q.kPa*q.inch
         )
 
-        self.assertAlmostEqual((5.2 * q.eV) * (300.2 * q.eV), 1561.04 * q.eV**2)
+        self.assertAlmostEqual((5.2 * q.J) * (300.2 * q.J), 1561.04 * q.J**2)
 
         # the formatting should be the same
         self.assertEqual(
