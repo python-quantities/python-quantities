@@ -34,29 +34,22 @@ class UncertainQuantity(Quantity):
 
     @property
     def simplified(self):
-        sq = unit_registry['dimensionless']
-        for u, d in self.dimensionality.iteritems():
-            sq = sq * u.reference_quantity**d
-        u = self.uncertainty.simplified
-        # TODO: use view:
-        return UncertainQuantity(sq * self.magnitude, uncertainty=u, copy=False)
-
-    def set_units(self, units):
-        Quantity.set_units(self, units)
-        self.uncertainty.set_units(units)
-    units = property(Quantity.get_units, set_units)
+        ret = super(UncertainQuantity, self).simplified.view(UncertainQuantity)
+        ret.uncertainty = self.uncertainty.simplified
+        return ret
 
     def get_uncertainty(self):
         return self._uncertainty
     def set_uncertainty(self, uncertainty):
         if not isinstance(uncertainty, Quantity):
-            uncertainty = Quantity(uncertainty, self.units)
+            uncertainty = Quantity(uncertainty, self.units, copy=False)
         try:
             assert self.shape == uncertainty.shape
-            uncertainty.units = self.units
-            self._uncertainty = uncertainty
         except AssertionError:
             raise ValueError('data and uncertainty must have identical shape')
+        if uncertainty.units != self.units:
+            uncertainty = uncertainty.rescale(self.units)
+        self._uncertainty = uncertainty
     uncertainty = property(get_uncertainty, set_uncertainty)
 
     @property
@@ -67,9 +60,11 @@ class UncertainQuantity(Quantity):
         """
         Return a copy of the quantity converted to the specified units
         """
-        copy = UncertainQuantity(self)
-        copy.units = units
-        return copy
+        cls = UncertainQuantity
+        ret = super(cls, self).rescale(units).view(cls)
+        u = self.uncertainty.rescale(units)
+        ret.uncertainty = u
+        return ret
 
     def __array_finalize__(self, obj):
         Quantity.__array_finalize__(self, obj)
@@ -80,7 +75,7 @@ class UncertainQuantity(Quantity):
         )
 
     def __add__(self, other):
-        res = Quantity.__add__(self, other)
+        res = super(UncertainQuantity, self).__add__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
@@ -88,7 +83,7 @@ class UncertainQuantity(Quantity):
         return self.__add__(other)
 
     def __sub__(self, other):
-        res = Quantity.__sub__(self, other)
+        res = super(UncertainQuantity, self).__sub__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
@@ -106,7 +101,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = numpy.array(other, copy=False)
+            other = numpy.array(other, copy=False, subok=True)
             u = (self.uncertainty**2*other**2)**0.5
 
         res._uncertainty = u
@@ -138,9 +133,8 @@ class UncertainQuantity(Quantity):
 
     def __pow__(self, other):
         res = super(UncertainQuantity, self).__pow__(other)
-        ru = other * self.relative_uncertainty
-        res.uncertainty = res * ru
-#        return UncertainQuantity(res, uncertainty=u, copy=False)
+        res.uncertainty = res.view(Quantity) * other * self.relative_uncertainty
+        return res
 
     def __getitem__(self, key):
         return UncertainQuantity(
@@ -152,8 +146,8 @@ class UncertainQuantity(Quantity):
 
     def __repr__(self):
         return '%s %s\n+/-%s (1 sigma)'%(
-            numpy.ndarray.__str__(self),
-            str(self.dimensionality),
+            numpy.ndarray.__str__(self.magnitude),
+            self.dimensionality,
             self.uncertainty
         )
 

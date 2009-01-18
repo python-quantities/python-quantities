@@ -5,8 +5,7 @@ import copy
 
 import numpy
 
-from quantities.dimensionality import BaseDimensionality, \
-    Dimensionality, ImmutableDimensionality
+from quantities.dimensionality import Dimensionality
 from quantities.registry import unit_registry
 
 def prepare_compatible_units(s, o):
@@ -22,40 +21,20 @@ def prepare_compatible_units(s, o):
         )
 
 
-class QuantityIterator:
-
-    """an iterator for quantity objects"""
-
-    def __init__(self, object):
-        self.object = object
-        self._iterator = super(Quantity, object).__iter__()
-
-    def next(self):
-        return Quantity(self._iterator.next(), self.object.units)
-
-
 class Quantity(numpy.ndarray):
 
     # TODO: what is an appropriate value?
     __array_priority__ = 21
 
-    def __new__(cls, data, units='', dtype='d', copy=True):
-        if isinstance(data, Quantity):
+    def __new__(cls, data, units='', dtype=None, copy=True):
+        if isinstance(data, cls):
             if units:
-                # force a copy so we don't rescale a subset of the original
-                copy = True
+                data = data.rescale(units)
+            if copy or (dtype and data.dtype != dtype):
+                return data.astype(dtype)
+            return data
 
-            res = numpy.array(data, dtype=dtype, copy=copy).view(cls)
-            if copy:
-                res._dimensionality = data._dimensionality.copy()
-            else:
-                res._dimensionality = data._dimensionality
-            if units:
-                res.units = units
-
-            return res
-
-        res = numpy.array(data, dtype=dtype, copy=copy).view(cls)
+        ret = numpy.array(data, dtype, copy=copy).view(cls)
 
         if isinstance(units, str):
             if units in ('', 'dimensionless'):
@@ -64,16 +43,16 @@ class Quantity(numpy.ndarray):
                 dims = unit_registry[units].dimensionality
         elif isinstance(units, Quantity):
             dims = units.dimensionality
-        elif isinstance(units, (BaseDimensionality, dict)):
+        elif isinstance(units, (Dimensionality, dict)):
             dims = units
         else:
             raise TypeError(
                 'units must be a quantity, string, or dimensionality, got %s'\
                 %type(units)
             )
-        res._dimensionality = Dimensionality(dims)
+        ret._dimensionality = Dimensionality(dims)
 
-        return res
+        return ret
 
     @property
     def dimensionality(self):
@@ -83,47 +62,56 @@ class Quantity(numpy.ndarray):
     def magnitude(self):
         return self.view(type=numpy.ndarray)
 
-    def get_units(self):
-        return Quantity(1, self.dimensionality)
-    def set_units(self, other):
-        if not self.flags.writeable:
-            raise AttributeError("can not modify protected data")
-        if isinstance(other, str):
-            other = unit_registry[other]
-        if isinstance(other, BaseDimensionality):
-            other = Quantity(1, other)
-        if isinstance(other, Quantity):
-            try:
-                assert other.magnitude == 1
-            except AssertionError:
-                raise ValueError('units must have unit magnitude')
-        try:
-            sq = Quantity(1.0, self.dimensionality).simplified
-            osq = other.simplified
-            assert osq.dimensionality == sq.dimensionality
-            m = self.magnitude
-            m *= sq.magnitude / osq.magnitude
-            self._dimensionality = \
-                Dimensionality(other.dimensionality)
-        except AssertionError:
-            raise ValueError(
-                'Unable to convert between units of "%s" and "%s"'
-                %(sq.units, osq.units)
-            )
-    units = property(get_units, set_units)
-
-    def rescale(self, units):
-        """
-        Return a copy of the quantity converted to the specified units
-        """
-        return Quantity(self, units)
-
     @property
     def simplified(self):
         rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
             rq = rq * u.reference_quantity**d
         return rq * self.magnitude
+
+    @property
+    def units(self):
+        return Quantity(1, self.dimensionality)
+
+    def rescale(self, units):
+        """
+        Return a copy of the quantity converted to the specified units
+        """
+        other = units
+        if isinstance(other, str):
+            other = unit_registry[other]
+        if isinstance(other, Dimensionality):
+            other = Quantity(1, other)
+        if isinstance(other, Quantity):
+            try:
+                assert other.magnitude == 1
+            except AssertionError:
+                raise ValueError('units must have unit magnitude')
+        if self.dimensionality == other.dimensionality:
+            return self.astype(None)
+
+        try:
+            sq = Quantity(1.0, self.dimensionality).simplified
+            osq = other.simplified
+            assert osq.dimensionality == sq.dimensionality
+            m = self.magnitude.copy()
+            m *= sq.magnitude / osq.magnitude
+            return Quantity(m, other.units)
+        except AssertionError:
+            raise ValueError(
+                'Unable to convert between units of "%s" and "%s"'
+                %(sq.units, osq.units)
+            )
+
+        return ret
+
+    def astype(self, dtype=None):
+        # scalar quantities get converted to plain numbers
+        ret = super(Quantity, self).astype(dtype)
+        if not isinstance(ret, type(self)):
+            ret = type(self)(ret, self.units)
+
+        return ret
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(obj, '_dimensionality', Dimensionality())
@@ -184,8 +172,6 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    # TODO: in-place arithmetic should check for .base, and raise if not None
-
     def __iadd__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
@@ -233,10 +219,8 @@ class Quantity(numpy.ndarray):
         return ret
 
     def __imul__(self, other):
-        try:
-            self._dimensionality *= other.dimensionality
-        except AttributeError:
-            pass
+        if getattr(other, 'dimensionality', None):
+            raise ValueError('units can not be modified in place')
 
         return super(Quantity, self).__imul__(other)
 
@@ -258,10 +242,9 @@ class Quantity(numpy.ndarray):
         return self.__truediv__(other)
 
     def __itruediv__(self, other):
-        try:
-            self._dimensionality /= other.dimensionality
-        except AttributeError:
-            pass
+        if getattr(other, 'dimensionality', None):
+            raise ValueError('units can not be modified in place')
+
         return super(Quantity, self).__itruediv__(other)
 
     def __idiv__(self, other):
@@ -282,10 +265,8 @@ class Quantity(numpy.ndarray):
         return self.__rtruediv__(other)
 
     def __pow__(self, other):
-        if isinstance(other, Quantity):
-            if other.dimensionality.simplified:
-                raise ValueError("exponent must be dimensionless")
-            other = other.simplified.magnitude
+        if getattr(other, 'dimensionality', None):
+            raise ValueError("exponent must be dimensionless")
 
         other = numpy.asarray(other)
         try:
@@ -299,10 +280,10 @@ class Quantity(numpy.ndarray):
         return ret
 
     def __ipow__(self, other):
-        if isinstance(other, Quantity):
-            if other.dimensionality.simplified:
-                raise ValueError("exponent must be dimensionless")
-            other = other.simplified.magnitude
+        if self.dimensionality:
+            raise ValueError('units can not be modified in place')
+        if getattr(other, 'dimensionality', None):
+            raise ValueError("exponent must be dimensionless")
 
         other = numpy.asarray(other)
         try:
@@ -320,12 +301,17 @@ class Quantity(numpy.ndarray):
         return super(Quantity, self.simplified).__rpow__(other)
 
     def __repr__(self):
-        return '%s %s'%(numpy.ndarray.__str__(self), self.dimensionality)
+        return '%s %s'%(
+            numpy.ndarray.__str__(self.magnitude), self.dimensionality
+        )
 
     __str__ = __repr__
 
     def __getitem__(self, key):
-        return Quantity(self.magnitude[key], self.units)
+        if isinstance(key, int):
+            return Quantity(self.magnitude[key], self.units)
+        else:
+            return super(Quantity, self).__getitem__(key)
 
     def __setitem__(self, key, value):
         if not isinstance(value, Quantity):
@@ -333,9 +319,6 @@ class Quantity(numpy.ndarray):
 
         # TODO: do we want this kind of magic?
         self.magnitude[key] = value.rescale(self.units).magnitude
-
-    def __iter__(self):
-        return QuantityIterator(self)
 
     def __lt__(self, other):
         ss, os = prepare_compatible_units(self, other)

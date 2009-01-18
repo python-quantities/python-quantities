@@ -10,17 +10,22 @@ from quantities.markup import USE_UNICODE, format_units, format_units_unicode
 from quantities.registry import unit_registry
 
 
-class BaseDimensionality(object):
+class Dimensionality(object):
 
     """
     """
+
+    def __init__(self, dict=None):
+        self.__data = {}
+        if dict is not None:
+            self.__data.update(dict)
 
     @property
     def simplified(self):
         if len(self):
-            rq = 1*unit_registry['dimensionless']
+            rq = (1*unit_registry['dimensionless']).copy()
             for u, d in self.iteritems():
-                rq *= u.reference_quantity**d
+                rq = rq * u.reference_quantity**d
             return rq.dimensionality
         else:
             return self
@@ -40,7 +45,7 @@ class BaseDimensionality(object):
                 'can not add units of %s and %s'\
                 %(str(self), str(other))
             )
-        return Dimensionality(self)
+        return self.copy()
 
     def __sub__(self, other):
         try:
@@ -50,10 +55,10 @@ class BaseDimensionality(object):
                 'can not subtract units of %s and %s'\
                 %(str(self), str(other))
             )
-        return Dimensionality(self)
+        return self.copy()
 
     def __mul__(self, other):
-        new = Dimensionality(self)
+        new = dict(self)
         for unit, power in other.iteritems():
             try:
                 new[unit] += power
@@ -61,10 +66,10 @@ class BaseDimensionality(object):
                     new.pop(unit)
             except KeyError:
                 new[unit] = power
-        return new
+        return Dimensionality(new)
 
     def __truediv__(self, other):
-        new = Dimensionality(self)
+        new = dict(self)
         for unit, power in other.iteritems():
             try:
                 new[unit] -= power
@@ -72,17 +77,17 @@ class BaseDimensionality(object):
                     new.pop(unit)
             except KeyError:
                 new[unit] = -power
-        return new
+        return Dimensionality(new)
 
     def __div__(self, other):
         return self.__truediv__(other)
 
     def __pow__(self, other):
         assert isinstance(other, (int, float))
-        new = Dimensionality(self)
+        new = dict(self)
         for i in new:
             new[i] *= other
-        return new
+        return Dimensionality(new)
 
     def __repr__(self):
         if USE_UNICODE:
@@ -90,53 +95,17 @@ class BaseDimensionality(object):
         else:
             return self.string()
 
-    def string(self):
-        return format_units(self)
-
-    def unicode(self):
-        return format_units_unicode(self)
-
-
-class ImmutableDimensionality(BaseDimensionality):
-
-    def __init__(self, dict=None):
-        self.__data = {}
-        if dict is not None:
-            self.__data.update(dict)
-
-    def __iadd__(self, other):
-        raise TypeError('can not modify protected units')
-
-    def __isub__(self, other):
-        raise TypeError('can not modify protected units')
-
-    def __imul__(self, other):
-        raise TypeError('can not modify protected units')
-
-    def __itruediv__(self, other):
-        raise TypeError('can not modify protected units')
-
-    def __idiv__(self, other):
-        raise TypeError('can not modify protected units')
-
-    def __ipow__(self, other):
-        raise TypeError('can not modify protected units')
-
-#    def __repr__(self):
-#        if USE_UNICODE:
-#            return self.unicode()
-#        else:
-#            return self.string()
-#        return format_units(self.__data)
-
     def __cmp__(self, dict):
-        if isinstance(dict, ImmutableDimensionality):
+        if isinstance(dict, Dimensionality):
             return cmp(self.__data, dict.__data)
         else:
             return cmp(self.__data, dict)
 
     def __len__(self):
         return len(self.__data)
+
+    def __contains__(self, key):
+        return key in self.__data
 
     def __eq__(self, other):
         return hash(self) == hash(other)
@@ -148,7 +117,7 @@ class ImmutableDimensionality(BaseDimensionality):
         return self.__data.__iter__()
 
     def copy(self):
-        return ImmutableDimensionality(self.__data.copy())
+        return Dimensionality(self.__data.copy())
 
     def keys(self):
         return self.__data.keys()
@@ -176,67 +145,8 @@ class ImmutableDimensionality(BaseDimensionality):
             return failobj
         return self[key]
 
-    def __contains__(self, key):
-        return key in self.__data
+    def string(self):
+        return format_units(self)
 
-
-class Dimensionality(BaseDimensionality, dict):
-
-    def copy(self):
-        return Dimensionality(dict.copy(self))
-
-    def __iadd__(self, other):
-        try:
-            assert self == other
-        except AssertionError:
-            raise ValueError(
-                'can not add units of %s and %s'\
-                %(str(self), str(other))
-            )
-        return self
-
-    def __isub__(self, other):
-        try:
-            assert self == other
-        except AssertionError:
-            raise ValueError(
-                'can not subtract units of %s and %s'\
-                %(str(self), str(other))
-            )
-        return self
-
-    def __imul__(self, other):
-        if other is self:
-            other = other.copy()
-        for unit, power in other.iteritems():
-            try:
-                self[unit] += power
-                if self[unit] == 0:
-                    self.pop(unit)
-            except KeyError:
-                self[unit] = power
-        return self
-
-    def __itruediv__(self, other):
-        if other is self:
-            other = other.copy()
-        for unit, power in other.iteritems():
-            try:
-                self[unit] -= power
-                if self[unit] == 0:
-                    self.pop(unit)
-            except KeyError:
-                self[unit] = -power
-        return self
-
-    def __idiv__(self, other):
-        return self.__itruediv__(other)
-
-    def __ipow__(self, other):
-        assert isinstance(other, (int, float))
-        for i in self:
-            self[i] *= other
-        return self
-
-#    def __repr__(self):
-#        return format_units(self)
+    def unicode(self):
+        return format_units_unicode(self)

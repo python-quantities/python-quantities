@@ -35,7 +35,7 @@ def test_units_protected():
 
 def test_quantity_creation():
     assert_raises(LookupError, Quantity, 1, 'nonsense')
-    assert_equal(str(Quantity(1, '')), '1.0 dimensionless')
+    assert_equal(str(Quantity(1, '')), '1 dimensionless')
 
 def test_scalar_equality():
     assert_true(J == J)
@@ -165,15 +165,6 @@ def test_uncertainquantity_creation():
     assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.1  0.1  0.1] m (1 sigma)')
     assert_raises(ValueError, UncertainQuantity, [1, 1, 1], m, 1)
     assert_raises(ValueError, UncertainQuantity, [1, 1, 1], m, [1, 1])
-
-def test_uncertainquantity_set_units():
-    a = UncertainQuantity([1, 1, 1], m, [.1, .1, .1])
-    a.units = ft
-    assert_equal(
-        str(a),
-        '[ 3.2808399  3.2808399  3.2808399] ft'
-        '\n+/-[ 0.32808399  0.32808399  0.32808399] ft (1 sigma)'
-    )
 
 def test_uncertainquantity_rescale():
     a = UncertainQuantity([1, 1, 1], m, [.1, .1, .1])
@@ -324,9 +315,9 @@ class TestQuantities(unittest.TestCase):
         temp = pc_per_cc * q.CompoundUnit('m/m**3')
         self.assertEqual(str(temp), "1.0 (pc/cm³)·(m/m³)", str(temp))
         temp = temp.simplified
-        temp.units=q.pc**-4
+        temp = temp.rescale(q.pc**-4)
         self.assertEqual(str(temp), "2.79740021556e+88 1/pc⁴", str(temp))
-        temp.units=q.m**-4
+        temp = temp.rescale(q.m**-4)
         self.assertEqual(str(temp), "3.08568025e+22 1/m⁴", str(temp))
         self.assertEqual(str(1/temp), "3.24077648681e-23 m⁴", str(1/temp))
         self.assertEqual(
@@ -347,9 +338,6 @@ class TestQuantities(unittest.TestCase):
         test2 = 1.5 * q.km
 
         self.assertEqual(test1, test2)
-        test2.units = q.ft
-
-        self.assertAlmostEqual(test1, test2.rescale(q.km))
 
         # test less than and greater than
         self.assertTrue(1.5 * q.km > 2.5 * q.cm)
@@ -524,15 +512,15 @@ class TestQuantities(unittest.TestCase):
         )
 
         # in-place
-        temp1 = 1*m
-        temp2 = 1*m
-        temp1 *= temp1
-        self.assertEqual(str(temp1), str(temp2*temp2))
-
-        temp1 = [1, 2, 3, 4]*m
-        temp2 = [1, 2, 3, 4]*m
-        temp1 *= temp1
-        self.assertEqual(str(temp1), str(temp2*temp2))
+#        temp1 = 1*m
+#        temp2 = 1*m
+#        temp1 *= temp1
+#        self.assertEqual(str(temp1), str(temp2*temp2))
+#
+#        temp1 = [1, 2, 3, 4]*m
+#        temp2 = [1, 2, 3, 4]*m
+#        temp1 *= temp1
+#        self.assertEqual(str(temp1), str(temp2*temp2))
 
     def test_division(self):
         #arbitrary test of division
@@ -569,15 +557,15 @@ class TestQuantities(unittest.TestCase):
         )
 
         # in-place
-        temp1 = 1*m
-        temp2 = 1*m
-        temp1 /= temp1
-        self.assertEqual(str(temp1), str(temp2/temp2))
+#        temp1 = 1*m
+#        temp2 = 1*m
+#        temp1 /= temp1
+#        self.assertEqual(str(temp1), str(temp2/temp2))
 
-        temp1 = [1, 2, 3, 4]*m
-        temp2 = [1, 2, 3, 4]*m
-        temp1 /= temp1
-        self.assertEqual(str(temp1), str(temp2/temp2))
+#        temp1 = [1, 2, 3, 4]*m
+#        temp2 = [1, 2, 3, 4]*m
+#        temp1 /= temp1
+#        self.assertEqual(str(temp1), str(temp2/temp2))
 
     def test_powering(self):
         # test raising a quantity to a power
@@ -612,15 +600,15 @@ class TestQuantities(unittest.TestCase):
         self.assertEqual(10**(2*q.J/q.J), 100)
 
         # in-place
-        temp1 = 1*m
-        temp2 = 1*m
-        temp1 **= 2
-        self.assertEqual(str(temp1), str(temp2*temp2))
-
-        temp1 = [1, 2, 3, 4]*m
-        temp2 = [1, 2, 3, 4]*m
-        temp1 **= 2
-        self.assertEqual(str(temp1), str(temp2*temp2))
+#        temp1 = 1*m
+#        temp2 = 1*m
+#        temp1 **= 2
+#        self.assertEqual(str(temp1), str(temp2*temp2))
+#
+#        temp1 = [1, 2, 3, 4]*m
+#        temp2 = [1, 2, 3, 4]*m
+#        temp1 **= 2
+#        self.assertEqual(str(temp1), str(temp2*temp2))
 
         def ipow(q1, q2):
             q1 -= q2
@@ -893,20 +881,3 @@ class TestQuantities(unittest.TestCase):
 
         f = [1, 2, 3] * q.dimensionless
         self.numAssertEqual(f.cumprod(), [1,2,6] * q.dimensionless)
-
-    def test_specific_bugs(self):
-        # bug 1) where trying to modify units to incompatible ones
-        temp = q.Quantity(1, q.lb)
-
-        # needs to check for incompatible units
-        def test(units):
-            temp.units = units
-
-        # this currently screws up q.J
-        self.assertRaises(ValueError, test, q.inch * q.J)
-
-        # check for this bug
-        self.assertEqual(
-            str(q.J.rescale('kg*m**2/s**2')),
-            "1.0 kg·m²/s²"
-        )

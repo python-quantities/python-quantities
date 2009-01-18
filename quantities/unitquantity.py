@@ -3,7 +3,7 @@
 
 import numpy
 
-from quantities.dimensionality import ImmutableDimensionality
+from quantities.dimensionality import Dimensionality
 from quantities.quantity import Quantity
 from quantities.registry import unit_registry
 
@@ -55,7 +55,7 @@ class UnitQuantity(Quantity):
         ret._symbol = symbol
         ret._u_symbol = u_symbol
         ret._note = note
-        ret._dimensionality = ImmutableDimensionality({ret:1})
+        ret._dimensionality = Dimensionality({ret:1})
 
         try:
             reference_quantity = reference_quantity.simplified
@@ -245,7 +245,7 @@ class Dimensionless(UnitQuantity):
 
     def __init__(self, name, reference_quantity=None):
         self._name = name
-        self._dimensionality = ImmutableDimensionality({})
+        self._dimensionality = Dimensionality({})
 
         if reference_quantity is None:
             reference_quantity = self
