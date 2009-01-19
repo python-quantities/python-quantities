@@ -40,12 +40,11 @@ def test_quantity_creation():
 def test_scalar_equality():
     assert_true(J == J)
     assert_true(1*J == J)
-    assert_true(str(1*J) == str(J))
+    assert_true(str(1*J) == '1.0 J')
     assert_true(J == q.kg*q.m**2/q.s**2)
 
     assert_false(J == erg)
     assert_false(2*J == J)
-    assert_false(str(2*J) == str(J))
     assert_false(J == 2*q.kg*q.m**2/q.s**2)
 
     def eq(q1, q2):
@@ -60,7 +59,6 @@ def test_scalar_inequality():
 
     assert_false(J != J)
     assert_false(1*J != J)
-    assert_false(str(1*J) != str(J))
     assert_false(J != 1*q.kg*q.m**2/q.s**2)
 
 def test_scalar_comparison():
@@ -254,8 +252,8 @@ class TestQuantities(unittest.TestCase):
                 self.assertAlmostEqual(x1, x2, prec)
 
     def test_simple(self):
-        self.assertEqual(str(q.m), "1.0 m", str(q.m))
-        self.assertEqual(str(q.J), "1.0 J", str(q.J))
+        self.assertEqual(str(q.m), "1 m (meter)", str(q.m))
+        self.assertEqual(str(q.J), "1 J (joule)", str(q.J))
 
     def test_creation(self):
         self.numAssertEqual(

@@ -25,7 +25,7 @@ class Dimensionality(object):
         if len(self):
             rq = (1*unit_registry['dimensionless']).copy()
             for u, d in self.iteritems():
-                rq = rq * u.reference_quantity**d
+                rq = rq * u.simplified**d
             return rq.dimensionality
         else:
             return self

@@ -66,7 +66,7 @@ class Quantity(numpy.ndarray):
     def simplified(self):
         rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
-            rq = rq * u.reference_quantity**d
+            rq = rq * u.simplified**d
         return rq * self.magnitude
 
     @property
@@ -114,7 +114,7 @@ class Quantity(numpy.ndarray):
         return ret
 
     def __array_finalize__(self, obj):
-        self._dimensionality = getattr(obj, '_dimensionality', Dimensionality())
+        self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
         if self.base is None:
             self._dimensionality = self._dimensionality.copy()
 

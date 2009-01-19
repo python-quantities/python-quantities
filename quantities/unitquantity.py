@@ -9,21 +9,10 @@ from quantities.quantity import Quantity
 from quantities.registry import unit_registry
 
 __all__ = [
-    'Dimensionless', 'UnitAngle', 'UnitCurrency', 'UnitCurrent',
+    'Dimensionless', 'UnitAngle', 'UnitConstant', 'UnitCurrency', 'UnitCurrent',
     'UnitInformation', 'UnitLength', 'UnitLuminousIntensity', 'UnitMass',
     'UnitMass', 'UnitQuantity', 'UnitSubstance', 'UnitTemperature', 'UnitTime'
 ]
-
-
-def quantity(f):
-
-    def wrapped(*args, **kwargs):
-        ret = f(*args, **kwargs)
-        if isinstance(ret, UnitQuantity):
-            return ret.view(Quantity).copy()
-        return ret
-
-    return wrapped
 
 
 class UnitQuantity(Quantity):
@@ -56,7 +45,9 @@ class UnitQuantity(Quantity):
         ret._symbol = symbol
         ret._u_symbol = u_symbol
         ret._note = note
-        ret._dimensionality = Dimensionality({ret:1})
+
+        # handle dimensionality in the property
+        ret._dimensionality = None
 
         ret._reference_quantity = reference_quantity
 
@@ -84,53 +75,43 @@ class UnitQuantity(Quantity):
             return s+'\nnote: %s'%self.note
         return s
 
-    @quantity
+    __str__ = __repr__
+
     def __add__(self, other):
-        return super(UnitQuantity, self).__add__(other)
+        return self.view(Quantity).__add__(other)
 
-    @quantity
     def __radd__(self, other):
-        return super(UnitQuantity, self).__radd__(other)
+        return self.view(Quantity).__radd__(other)
 
-    @quantity
     def __sub__(self, other):
-        return super(UnitQuantity, self).__sub__(other)
+        return self.view(Quantity).__sub__(other)
 
-    @quantity
     def __rsub__(self, other):
-        return super(UnitQuantity, self).__rsub__(other)
+        return self.view(Quantity).__rsub__(other)
 
-    @quantity
     def __mul__(self, other):
-        return super(UnitQuantity, self).__mul__(other)
+        return self.view(Quantity).__mul__(other)
 
-    @quantity
     def __rmul__(self, other):
-        return super(UnitQuantity, self).__rmul__(other)
+        return self.view(Quantity).__rmul__(other)
 
-    @quantity
     def __truediv__(self, other):
-        return super(UnitQuantity, self).__truediv__(other)
+        return self.view(Quantity).__truediv__(other)
 
-    @quantity
     def __rtruediv__(self, other):
-        return super(UnitQuantity, self).__rtruediv__(other)
+        return self.view(Quantity).__rtruediv__(other)
 
-    @quantity
     def __div__(self, other):
-        return super(UnitQuantity, self).__div__(other)
+        return self.view(Quantity).__div__(other)
 
-    @quantity
     def __rdiv__(self, other):
-        return super(UnitQuantity, self).__rdiv__(other)
+        return self.view(Quantity).__rdiv__(other)
 
-    @quantity
     def __pow__(self, other):
-        return super(UnitQuantity, self).__pow__(other)
+        return self.view(Quantity).__pow__(other)
 
-    @quantity
     def __rpow__(self, other):
-        return super(UnitQuantity, self).__rpow__(other)
+        return self.view(Quantity).__rpow__(other)
 
     def __iadd__(self, other):
         raise TypeError('can not modify protected units')
@@ -150,6 +131,9 @@ class UnitQuantity(Quantity):
     def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
+    @property
+    def dimensionality(self):
+        return Dimensionality({self:1})
 
     @property
     def format_order(self):
@@ -166,9 +150,20 @@ class UnitQuantity(Quantity):
     @property
     def reference_quantity(self):
         if self._reference_quantity is not None:
-            return self._reference_quantity.simplified
+            return self._reference_quantity
         else:
             return self
+
+    @property
+    def simplified(self):
+        if self.reference_quantity is not self:
+            return self.reference_quantity.simplified
+            # if alternat unit system:
+            # return self.reference_quantity.simplified.simplified
+        else:
+            return self
+            # if alternate units:
+            # return self.rescale(alt)
 
     @property
     def symbol(self):
@@ -187,10 +182,6 @@ class UnitQuantity(Quantity):
     @property
     def units(self):
         return self
-
-    @property
-    def value(self):
-        return self._reference_quantity
 
 unit_registry['UnitQuantity'] = UnitQuantity
 
@@ -254,7 +245,7 @@ class Dimensionless(UnitQuantity):
 
     def __init__(self, name, reference_quantity=None):
         self._name = name
-        self._dimensionality = Dimensionality({})
+        self._dimensionality = None
 
         if reference_quantity is None:
             reference_quantity = self
@@ -264,5 +255,9 @@ class Dimensionless(UnitQuantity):
         self.__class__._secondary_order += 1
 
         unit_registry[name] = self
+
+    @property
+    def dimensionality(self):
+        return Dimensionality()
 
 dimensionless = Dimensionless('dimensionless')

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 """
-from __future__ import absolute_import
 
-from .utils import _cd
+from quantities.constants.utils import _cd
 from quantities.quantity import Quantity
 from quantities.uncertainquantity import UncertainQuantity
 from quantities.unitquantity import UnitConstant
@@ -807,4 +806,4 @@ u = unified_atomic_mass_unit = UnitConstant(
     symbol='u'
 )
 
-del absolute_import, UnitConstant, Quantity, UncertainQuantity, _cd
+del UnitConstant, Quantity, UncertainQuantity, _cd
