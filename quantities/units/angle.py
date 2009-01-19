@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from numpy import pi
+from math import pi
 
-from quantities.unitquantity import UnitAngle, UnitQuantity, dimensionless
+from ..unitquantity import UnitAngle, UnitQuantity, dimensionless
 
 radian = radians = UnitAngle(
     'radian',

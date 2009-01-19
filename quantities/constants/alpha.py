@@ -4,7 +4,7 @@
 from __future__ import absolute_import
 
 from ._utils import _cd
-from quantities.unitquantity import UnitConstant
+from ..unitquantity import UnitConstant
 
 
 m_alpha = alpha_particle_mass = UnitConstant(

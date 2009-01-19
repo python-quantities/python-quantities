@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitLength, UnitQuantity
+from ..unitquantity import UnitLength, UnitQuantity
 
 m = meter = metre = UnitLength(
     'meter',

@@ -1,9 +1,10 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.markup import USE_UNICODE, superscript
-from quantities.unitquantity import UnitQuantity
-from quantities.registry import unit_registry
+from ..markup import USE_UNICODE, superscript
+from ..unitquantity import UnitQuantity
+from ..registry import unit_registry
 
 class CompoundUnit(UnitQuantity):
 

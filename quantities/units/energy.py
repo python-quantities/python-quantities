@@ -1,10 +1,11 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.force import dyne, N
-from quantities.units.length import cm, m
-from quantities.units.time import s, h
+from ..unitquantity import UnitQuantity
+from .force import dyne, N
+from .length import cm, m
+from .time import s, h
 
 J = joule = UnitQuantity(
     'joule',

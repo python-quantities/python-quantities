@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.constants._utils import _cd
-from quantities.unitquantity import UnitConstant
+from ._utils import _cd
+from ..unitquantity import UnitConstant
 
 
 weak_mixing_angle = UnitConstant(

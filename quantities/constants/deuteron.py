@@ -3,9 +3,8 @@
 """
 from __future__ import absolute_import
 
-
 from ._utils import _cd
-from quantities.unitquantity import UnitConstant
+from ..unitquantity import UnitConstant
 
 
 R_d = deuteron_rms_charge_radius = UnitConstant(

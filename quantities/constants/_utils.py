@@ -1,3 +1,4 @@
+from __future__ import absolute_import
 
 from ._codata import physical_constants
 from quantities.quantity import Quantity

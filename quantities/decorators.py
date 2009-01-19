@@ -1,4 +1,6 @@
-from quantities.quantity import Quantity
+from __future__ import absolute_import
+
+from .quantity import Quantity
 
 def quantitizer(base_function,
                 handler_function = lambda *args, **kwargs: 1.0):

@@ -1,12 +1,13 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.temperature import K, degF
-from quantities.units.length import m, ft
-from quantities.units.power import W
-from quantities.units.energy import BTU
-from quantities.units.time import h
+from ..unitquantity import UnitQuantity
+from .temperature import K, degF
+from .length import m, ft
+from .power import W
+from .energy import BTU
+from .time import h
 
 
 RSI = UnitQuantity(

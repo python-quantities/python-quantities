@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.constants._utils import _cd
-from quantities.uncertainquantity import UncertainQuantity
-from quantities.unitquantity import UnitConstant
+from ._utils import _cd
+from ..uncertainquantity import UncertainQuantity
+from ..unitquantity import UnitConstant
 
 
 au = astronomical_unit = UnitConstant(

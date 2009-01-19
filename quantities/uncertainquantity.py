@@ -1,10 +1,11 @@
 ﻿"""
 """
+from __future__ import absolute_import
 
 import numpy
 
-from quantities.quantity import Quantity
-from quantities.registry import unit_registry
+from .quantity import Quantity
+from .registry import unit_registry
 
 class UncertainQuantity(Quantity):
 
@@ -62,8 +63,7 @@ class UncertainQuantity(Quantity):
         """
         cls = UncertainQuantity
         ret = super(cls, self).rescale(units).view(cls)
-        u = self.uncertainty.rescale(units)
-        ret.uncertainty = u
+        ret.uncertainty = self.uncertainty.rescale(units)
         return ret
 
     def __array_finalize__(self, obj):
@@ -71,7 +71,7 @@ class UncertainQuantity(Quantity):
         self._uncertainty = getattr(
             obj,
             'uncertainty',
-            Quantity(numpy.zeros(self.shape, self.dtype), self.units)
+            Quantity(numpy.zeros(self.shape, self.dtype), self.units, copy=False)
         )
 
     def __add__(self, other):

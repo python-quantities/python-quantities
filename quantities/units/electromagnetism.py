@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitCurrent, \
-    UnitLuminousIntensity, UnitQuantity
-from quantities.units.time import s
-from quantities.units.length import m
-from quantities.units.energy import J
-from quantities.units.velocity import c
-from quantities.units.force import N
+from ..unitquantity import UnitCurrent, UnitLuminousIntensity, UnitQuantity
+from .time import s
+from .length import m
+from .energy import J
+from .velocity import c
+from .force import N
 from math import pi
 
 
@@ -148,7 +148,7 @@ chemical_faraday = UnitQuantity(
     'chemical_faraday',
     9.64957e4*C
 )
-physical_faraday = physical_faradays = UnitQuantity(
+physical_faraday = UnitQuantity(
     'physical_faraday',
     9.65219e4*C
 )

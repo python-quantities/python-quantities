@@ -3,9 +3,9 @@
 """
 from __future__ import absolute_import
 
-
 from ._utils import _cd
-from quantities.unitquantity import UnitConstant
+from ..unitquantity import UnitConstant
+
 
 Angstrom_star = UnitConstant(
     'Angstrom_star',

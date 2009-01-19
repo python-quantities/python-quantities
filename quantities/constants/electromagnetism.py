@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.constants._utils import _cd
-from quantities.unitquantity import UnitConstant
+from ._utils import _cd
+from ..unitquantity import UnitConstant
 
 
 Z_0 = impedence_of_free_space = characteristic_impedance_of_vacuum = UnitConstant(

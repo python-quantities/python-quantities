@@ -1,13 +1,14 @@
 ﻿# -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
 import operator
 
 import numpy
 
-from quantities.markup import USE_UNICODE, format_units, format_units_unicode
-from quantities.registry import unit_registry
+from .markup import USE_UNICODE, format_units, format_units_unicode
+from .registry import unit_registry
 
 
 class Dimensionality(object):

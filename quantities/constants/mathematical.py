@@ -2,8 +2,7 @@
 
 import math as _math
 
-
-from quantities.unitquantity import UnitConstant
+from ..unitquantity import UnitConstant
 
 
 pi = UnitConstant(

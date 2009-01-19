@@ -1,12 +1,13 @@
 """
 """
+from __future__ import absolute_import
 
 import numpy
 
-from quantities.dimensionality import Dimensionality
-from quantities.markup import USE_UNICODE
-from quantities.quantity import Quantity
-from quantities.registry import unit_registry
+from .dimensionality import Dimensionality
+from .markup import USE_UNICODE
+from .quantity import Quantity
+from .registry import unit_registry
 
 __all__ = [
     'Dimensionless', 'UnitAngle', 'UnitConstant', 'UnitCurrency', 'UnitCurrent',

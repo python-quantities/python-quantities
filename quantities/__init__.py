@@ -24,7 +24,7 @@ Units can be converted in many cases::
 
 but will fail if the requested units fails a dimensional analysis::
 
-  >>> q.units = 'J'
+  >>> q.rescale('J')
   ValueError: Cannot convert between quanitites with units of 'ft' and 'J'
 
 Here's some tricks for working compound units, which can be preserved::
@@ -77,12 +77,14 @@ multiplicands are uncorrelated. It would be more accurate in this case to use::
   +/-1.6*J**2 (1 sigma)
 """
 
+from __future__ import absolute_import
+
 __version__ = '0.1(bzr)'
 
-from quantity import Quantity
-from uncertainquantity import UncertainQuantity
-from unitquantity import *
+from .quantity import Quantity
+from .uncertainquantity import UncertainQuantity
+from .unitquantity import *
 
-from units.api import *
+from .units import *
 
-from constants.api import *
+from . import constants

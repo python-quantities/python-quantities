@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-01-19, 13:09:44 -->
+<!-- Saved: 2009-01-19, 14:46:07 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -62,9 +62,7 @@
     <Source>quantities/constants/alpha.py</Source>
     <Source>quantities/constants/neutron.py</Source>
     <Source>quantities/constants/_codata.py</Source>
-    <Source>quantities/constants/rydberg.py</Source>
     <Source>quantities/constants/_utils.py</Source>
-    <Source>quantities/constants/nuclearmagneton.py</Source>
     <Source>quantities/constants/quantum.py</Source>
     <Source>quantities/constants/electromagnetism.py</Source>
     <Source>quantities/constants/weak.py</Source>

@@ -3,10 +3,8 @@
 """
 from __future__ import absolute_import
 
-
 from ._utils import _cd
-from quantities.unitquantity import UnitConstant
-
+from ..unitquantity import UnitConstant
 
 
 m_mu = muon_mass = UnitConstant(

@@ -1,12 +1,13 @@
 ﻿"""
 """
+from __future__ import absolute_import
 
 import copy
 
 import numpy
 
-from quantities.dimensionality import Dimensionality
-from quantities.registry import unit_registry
+from .dimensionality import Dimensionality
+from .registry import unit_registry
 
 def prepare_compatible_units(s, o):
     if not isinstance(o, Quantity):

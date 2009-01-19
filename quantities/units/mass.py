@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity, UnitMass
-from quantities.units.length import m
+from ..unitquantity import UnitQuantity, UnitMass
+from .length import m
 
 kg = kilogram =  UnitMass(
     'kilograms',

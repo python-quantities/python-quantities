@@ -3,10 +3,8 @@
 """
 from __future__ import absolute_import
 
-
 from ._utils import _cd
-from quantities.unitquantity import UnitConstant
-
+from ..unitquantity import UnitConstant
 
 
 molar_Planck_constant = UnitConstant(
@@ -26,7 +24,7 @@ h = Planck_constant = UnitConstant(
     _cd('Planck constant'),
     symbol='h'
 )
-Planck_constant_over_2_pi = UnitConstant(
+hbar = Planck_constant_over_2_pi = UnitConstant(
     'Planck_constant_over_2_pi',
     _cd('Planck constant over 2 pi'),
     symbol='(h/(2*pi))',
