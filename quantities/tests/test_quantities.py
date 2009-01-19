@@ -420,8 +420,8 @@ class TestQuantities(unittest.TestCase):
 
         # the formatting should be the same
         self.assertEqual(
-            str((5.2 * q.energy.eV) - (300.2 * q.energy.eV)),
-            str(-295.0 * q.energy.eV)
+            str((5.2 * q.J) - (300.2 * q.J)),
+            str(-295.0 * q.J)
         )
 
         # test of subtraction using different units
@@ -490,8 +490,8 @@ class TestQuantities(unittest.TestCase):
             str( 103.0 * q.kPa*q.inch)
         )
         self.assertEqual(
-            str((5.2 * q.energy.eV) * (300.2 * q.energy.eV)),
-            str(1561.04 * q.energy.eV**2)
+            str((5.2 * q.J) * (300.2 * q.J)),
+            str(1561.04 * q.J**2)
         )
 
         # does multiplication work with arrays?
@@ -536,7 +536,7 @@ class TestQuantities(unittest.TestCase):
 
         # the formatting should be the same
         self.assertEqual(
-            str((5.2 * q.energy.eV) / (400.0 * q.energy.eV)),
+            str((5.2 * q.J) / (400.0 * q.J)),
             str(q.Quantity(.013))
         )
 

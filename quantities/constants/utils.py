@@ -1,0 +1,14 @@
+
+from .codata import physical_constants
+from quantities.quantity import Quantity
+from quantities.uncertainquantity import UncertainQuantity
+
+
+def _cd(name):
+    entry = physical_constants[name]
+    if entry['precision']:
+        return UncertainQuantity(
+            entry['value'], entry['units'], entry['precision']
+        )
+    else:
+        return Quantity(entry['value'], entry['units'])

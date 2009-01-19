@@ -12,8 +12,16 @@ quantities.egg-info/SOURCES.txt
 quantities.egg-info/dependency_links.txt
 quantities.egg-info/top_level.txt
 quantities/constants/__init__.py
+quantities/constants/alternateunits.py
 quantities/constants/codata.py
+quantities/constants/comptonwavelengths.py
 quantities/constants/constants.py
+quantities/constants/magneticratios.py
+quantities/constants/massequivalence.py
+quantities/constants/massratios.py
+quantities/constants/mathematical.py
+quantities/constants/relationships.py
+quantities/constants/utils.py
 quantities/tests/__init__.py
 quantities/tests/test_quantities.py
 quantities/units/__init__.py
@@ -31,6 +39,7 @@ quantities/units/information.py
 quantities/units/length.py
 quantities/units/mass.py
 quantities/units/power.py
+quantities/units/prefixes.py
 quantities/units/pressure.py
 quantities/units/radiation.py
 quantities/units/substance.py

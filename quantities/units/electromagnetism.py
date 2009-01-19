@@ -137,25 +137,6 @@ abvolt = UnitQuantity(
     1e-8*V,
     aliases=['abvolts']
 )
-e = elementary_charge = UnitQuantity(
-    'elementary_charge',
-    1.602176487e-19*C,
-    symbol='e',
-    note='relative uncertainty = 6.64e-8'
-) # TODO: move to physical constants
-#chemical_faraday = UnitQuantity(
-#    'chemical_faraday', 9.64957e4*C)
-#physical_faraday = physical_faradays = \
-#    UnitQuantity('physical_faraday', 9.65219e4*C)
-faraday = C12_faraday = UnitQuantity(
-    'faraday',
-    96485.3399*C,
-    symbol='F',
-    aliases=['faradays']
-) # TODO: move to physical constants
-#gamma = UnitQuantity(
-#    'gamma',
-#    1e-9*T)
 gauss = UnitQuantity(
     'gauss',
     1e-4*T,

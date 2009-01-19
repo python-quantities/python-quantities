@@ -4,6 +4,7 @@
 import numpy
 
 from quantities.dimensionality import Dimensionality
+from quantities.markup import USE_UNICODE
 from quantities.quantity import Quantity
 from quantities.registry import unit_registry
 
@@ -57,10 +58,6 @@ class UnitQuantity(Quantity):
         ret._note = note
         ret._dimensionality = Dimensionality({ret:1})
 
-        try:
-            reference_quantity = reference_quantity.simplified
-        except AttributeError:
-            pass
         ret._reference_quantity = reference_quantity
 
         ret._format_order = (ret._primary_order, ret._secondary_order)
@@ -75,8 +72,11 @@ class UnitQuantity(Quantity):
         return ret
 
     def __repr__(self):
-        if self._symbol:
-            s = '1 %s (%s)'%(self.symbol, self.name)
+        if self.u_symbol != self.name:
+            if USE_UNICODE:
+                s = '1 %s (%s)'%(self.u_symbol, self.name)
+            else:
+                s = '1 %s (%s)'%(self.symbol, self.name)
         else:
             s = '1 %s'%self.name
 
@@ -166,7 +166,7 @@ class UnitQuantity(Quantity):
     @property
     def reference_quantity(self):
         if self._reference_quantity is not None:
-            return self._reference_quantity
+            return self._reference_quantity.simplified
         else:
             return self
 
@@ -188,7 +188,16 @@ class UnitQuantity(Quantity):
     def units(self):
         return self
 
+    @property
+    def value(self):
+        return self._reference_quantity
+
 unit_registry['UnitQuantity'] = UnitQuantity
+
+
+class UnitConstant(UnitQuantity):
+
+    _primary_order = 0
 
 
 class UnitMass(UnitQuantity):
