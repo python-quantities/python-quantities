@@ -7,7 +7,8 @@ import operator
 
 import numpy
 
-from .markup import USE_UNICODE, format_units, format_units_unicode
+from .config import USE_UNICODE
+from .markup import format_units, format_units_unicode
 from .registry import unit_registry
 
 

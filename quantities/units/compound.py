@@ -2,7 +2,8 @@
 """
 from __future__ import absolute_import
 
-from ..markup import USE_UNICODE, superscript
+from ..config import USE_UNICODE
+from ..markup import superscript
 from ..unitquantity import UnitQuantity
 from ..registry import unit_registry
 

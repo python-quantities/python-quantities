@@ -4,8 +4,8 @@ from __future__ import absolute_import
 
 import numpy
 
+from .config import USE_UNICODE
 from .dimensionality import Dimensionality
-from .markup import USE_UNICODE
 from .quantity import Quantity
 from .registry import unit_registry
 
