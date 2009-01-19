@@ -1,5 +1,5 @@
 
-from .codata import physical_constants
+from ._codata import physical_constants
 from quantities.quantity import Quantity
 from quantities.uncertainquantity import UncertainQuantity
 

@@ -226,6 +226,14 @@ vacuum_permittivity = epsilon_0 = electric_constant = UnitQuantity(
     u_symbol='ε₀',
     aliases=['vacuum_permittivity']
 )
+Z_0 = impedence_of_free_space = characteristic_impedance_of_vacuum = \
+        UnitQuantity(
+    'characteristic_impedance_of_vacuum',
+    mu_0*c,
+    symbol='Z_0',
+    u_symbol='Z₀',
+    aliases=['impedence_of_free_space']
+)
 
 cd = candle = candela = UnitLuminousIntensity(
     'candela',

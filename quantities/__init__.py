@@ -83,7 +83,6 @@ from quantity import Quantity
 from uncertainquantity import UncertainQuantity
 from unitquantity import *
 
-import units
-from units import *
+from units.api import *
 
-import constants
+from constants.api import *
