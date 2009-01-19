@@ -35,7 +35,9 @@ class Quantity(numpy.ndarray):
                 return data.astype(dtype)
             return data
 
-        ret = numpy.array(data, dtype, copy=copy).view(cls)
+        ret = numpy.asarray(data, dtype).view(cls)
+        if copy:
+            ret = ret.copy()
 
         if isinstance(units, str):
             if units in ('', 'dimensionless'):
@@ -107,12 +109,15 @@ class Quantity(numpy.ndarray):
         return ret
 
     def astype(self, dtype=None):
-        # scalar quantities get converted to plain numbers
         ret = super(Quantity, self).astype(dtype)
+        # scalar quantities get converted to plain numbers, so we fix this:
         if not isinstance(ret, type(self)):
             ret = type(self)(ret, self.units)
 
         return ret
+
+    def __array__(self, dtype=None):
+        return type(self)(self, dtype, copy=True)
 
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
@@ -221,7 +226,15 @@ class Quantity(numpy.ndarray):
 
     def __imul__(self, other):
         if getattr(other, 'dimensionality', None):
-            raise ValueError('units can not be modified in place')
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+
+        try:
+            self._dimensionality *= other.dimensionality
+        except AttributeError:
+            other = numpy.asarray(other).view(Quantity)
 
         return super(Quantity, self).__imul__(other)
 
@@ -244,7 +257,15 @@ class Quantity(numpy.ndarray):
 
     def __itruediv__(self, other):
         if getattr(other, 'dimensionality', None):
-            raise ValueError('units can not be modified in place')
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+
+        try:
+            self._dimensionality /= other.dimensionality
+        except AttributeError:
+            other = numpy.asarray(other).view(Quantity)
 
         return super(Quantity, self).__itruediv__(other)
 
@@ -281,8 +302,12 @@ class Quantity(numpy.ndarray):
         return ret
 
     def __ipow__(self, other):
-        if self.dimensionality:
-            raise ValueError('units can not be modified in place')
+        if getattr(other, 'dimensionality', None):
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+
         if getattr(other, 'dimensionality', None):
             raise ValueError("exponent must be dimensionless")
 

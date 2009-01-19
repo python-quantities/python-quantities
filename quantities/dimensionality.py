@@ -49,6 +49,16 @@ class Dimensionality(object):
             )
         return self.copy()
 
+    def __iadd__(self, other):
+        try:
+            assert self == other
+        except AssertionError:
+            raise ValueError(
+                'can not add units of %s and %s'\
+                %(str(self), str(other))
+            )
+        return self
+
     def __sub__(self, other):
         try:
             assert self == other
@@ -58,6 +68,16 @@ class Dimensionality(object):
                 %(str(self), str(other))
             )
         return self.copy()
+
+    def __isub__(self, other):
+        try:
+            assert self == other
+        except AssertionError:
+            raise ValueError(
+                'can not add units of %s and %s'\
+                %(str(self), str(other))
+            )
+        return self
 
     def __mul__(self, other):
         new = dict(self)
@@ -69,6 +89,16 @@ class Dimensionality(object):
             except KeyError:
                 new[unit] = power
         return Dimensionality(new)
+
+    def __imul__(self, other):
+        for unit, power in other.iteritems():
+            try:
+                self.__data[unit] += power
+                if self.__data[unit] == 0:
+                    self.__data.pop(unit)
+            except KeyError:
+                self.__data[unit] = power
+        return self
 
     def __truediv__(self, other):
         new = dict(self)
@@ -84,12 +114,31 @@ class Dimensionality(object):
     def __div__(self, other):
         return self.__truediv__(other)
 
+    def __itruediv__(self, other):
+        for unit, power in other.iteritems():
+            try:
+                self.__data[unit] -= power
+                if self.__data[unit] == 0:
+                    self.__data.pop(unit)
+            except KeyError:
+                self.__data[unit] = -power
+        return self
+
+    def __idiv__(self, other):
+        return self.__itruediv__(other)
+
     def __pow__(self, other):
         assert isinstance(other, (int, float))
         new = dict(self)
         for i in new:
             new[i] *= other
         return Dimensionality(new)
+
+    def __ipow__(self, other):
+        assert isinstance(other, (int, float))
+        for i in self.__dict:
+            self.__dict[i] *= other
+        return self
 
     def __repr__(self):
         if USE_UNICODE:
@@ -101,7 +150,7 @@ class Dimensionality(object):
         if isinstance(dict, Dimensionality):
             return cmp(self.__data, dict.__data)
         else:
-            return cmp(self.__data, dict)
+            return cmp(self, dict)
 
     def __len__(self):
         return len(self.__data)
