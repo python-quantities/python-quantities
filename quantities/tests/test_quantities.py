@@ -174,7 +174,7 @@ def test_uncertainquantity_rescale():
     )
 
 def test_uncertainquantity_simplified():
-    a = 1000*eV
+    a = 1000*constants.eV
     assert_equal(
         str(a.simplified),
         '1.602176487e-16 kg·m²/s²\n+/-4e-24 kg·m²/s² (1 sigma)'
