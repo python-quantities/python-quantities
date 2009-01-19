@@ -21,6 +21,28 @@ btu = Btu = BTU = british_thermal_unit = UnitQuantity(
     J*1.05505585262e3,
     symbol='BTU'
 )
+eV = electron_volt = UnitQuantity(
+    'electron_volt',
+    J*1.60217653e-19,
+    symbol='eV',
+    aliases=['electron_volts']
+)
+meV = UnitQuantity(
+    'meV',
+    eV/1000
+)
+keV = UnitQuantity(
+    'keV',
+    1000*eV
+)
+MeV = UnitQuantity(
+    'MeV',
+    1000*keV
+)
+bev = GeV = UnitQuantity(
+    'GeV',
+    1000*MeV
+)
 thm = therm = EC_therm = UnitQuantity(
     'EC_therm',
     100000*BTU,
@@ -69,6 +91,13 @@ GWh = gigawatthour = gigawatt_hour = UnitQuantity(
     1000*MWh,
     symbol='GWh',
     aliases=['gigawatthour', 'gigawatthours', 'gigawatt_hours']
+)
+E_h = hartree = hartree_energy = UnitQuantity(
+    'hartree',
+    4.35974394e-18*J,
+    symbol='E_h',
+    aliases=['hartrees', 'hartree_energy', 'Hartree_energy'],
+    note='relative uncertainty = 2.1e-6'
 )
 
 del UnitQuantity, dyne, N, cm, m, s, h

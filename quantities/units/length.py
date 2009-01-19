@@ -104,6 +104,13 @@ ly = light_year = UnitLength(
     symbol='ly',
     aliases=['light_years']
 )
+au = astronomical_unit = UnitLength(
+    'astronomical_unit',
+    149597870691*m,
+    symbol='au',
+    aliases=['astronomical_units'],
+    note='uncertainty ± 30 m'
+)
 
 nmi = nautical_mile = UnitLength(
     'nautical_mile',

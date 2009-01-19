@@ -19,6 +19,7 @@ class UnitQuantity(Quantity):
 
     _primary_order = 99
     _secondary_order = 0
+    _reference_quantity = None
 
     __array_priority__ = 20
 
@@ -54,13 +55,17 @@ class UnitQuantity(Quantity):
         ret._format_order = (ret._primary_order, ret._secondary_order)
         ret.__class__._secondary_order += 1
 
-        unit_registry[name] = ret
-        if symbol:
-            unit_registry[symbol] = ret
-        for alias in aliases:
-            unit_registry[alias] = ret
-
         return ret
+
+    def __init__(
+        self, name, reference_quantity=None, symbol=None, u_symbol=None,
+        aliases=[], note=None
+    ):
+        unit_registry[name] = self
+        if symbol:
+            unit_registry[symbol] = self
+        for alias in aliases:
+            unit_registry[alias] = self
 
     def __repr__(self):
         if self.u_symbol != self.name:
@@ -183,10 +188,37 @@ class UnitQuantity(Quantity):
     def units(self):
         return self
 
+    @classmethod
+    def set_reference_unit(cls, unit):
+        if cls.__name__ in ('UnitConstant', 'UnitQuantity', 'Dimensionless'):
+            raise ValueError(
+                'can not set alternate reference unit for type %'% cls.__name__
+            )
+        if isinstance(unit, str):
+            unit = unit_registry[unit]
+        try:
+            assert type(unit) == cls or unit is None
+        except:
+            raise TypeError('unit must be of same type or "None"')
+
+        cls._alt_reference_unit = unit
+
+    @property
+    def alt_reference_unit(self):
+        return self.__class__._alt_reference_unit
+
+
 unit_registry['UnitQuantity'] = UnitQuantity
 
 
 class UnitConstant(UnitQuantity):
+
+    def __init__(
+        self, name, reference_quantity=None, symbol=None, u_symbol=None,
+        aliases=[], note=None
+    ):
+        # we dont want to register constants in the unit registry
+        return
 
     _primary_order = 0
 

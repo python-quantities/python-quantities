@@ -8,38 +8,11 @@ from quantities.uncertainquantity import UncertainQuantity
 from quantities.unitquantity import UnitConstant
 
 
-# temporary units without uncertainty required for some other constants
-# we will redefine them with uncertainty later
-eV = electron_volt = UnitConstant(
-    'electron_volt',
-    _cd('electron volt').view(Quantity),
-    symbol='eV'
-)
-MeV = UnitConstant(
-    'MeV',
-    1e6*eV,
-)
-GeV = UnitConstant(
-    'GeV',
-    1e9*eV,
-)
-E_h = Hartree_energy = UnitConstant(
-    'Hartree_energy',
-    _cd('Hartree energy').view(Quantity),
-    symbol='E_h'
-)
-u = unified_atomic_mass_unit = UnitConstant(
-    'unified_atomic_mass_unit',
-    _cd('unified atomic mass unit').view(Quantity),
-    symbol='u'
-)
-
 d_220 = a_Si_220 = silicon_220_lattice_spacing = UnitConstant(
     'silicon_220_lattice_spacing',
     _cd('{220} lattice spacing of silicon'),
     symbol='d_220',
-    u_symbol='d₂₂₀',
-    aliases=['a_Si_220']
+    u_symbol='d₂₂₀'
 )
 m_alpha = alpha_particle_mass = UnitConstant(
     'alpha_particle_mass',
@@ -56,8 +29,7 @@ Angstrom_star = UnitConstant(
 au = astronomical_unit = UnitConstant(
     'astronomical_unit',
     UncertainQuantity(149597870691, 'm', 30),
-    symbol='au',
-    aliases=['astronomical_units'],
+    symbol='au'
 ) # http://en.wikipedia.org/wiki/Astronomical_unit
 amu = atomic_mass_constant = UnitConstant(
     'atomic_mass_constant',
@@ -288,8 +260,7 @@ vacuum_permittivity = epsilon_0 = electric_constant = UnitConstant(
     'electric_constant',
     _cd('electric constant'),
     symbol='epsilon_0',
-    u_symbol='ε₀',
-    aliases=['vacuum_permittivity']
+    u_symbol='ε₀'
 )
 electron_charge_to_mass_quotient = UnitConstant(
     'electron_charge_to_mass_quotient',
@@ -333,6 +304,11 @@ m_e = electron_mass = UnitConstant(
     symbol='m_e',
     u_symbol='mₑ'
 )
+eV = electron_volt = UnitConstant(
+    'electron_volt',
+    _cd('electron volt'),
+    symbol='eV'
+)
 e = elementary_charge = UnitConstant(
     'elementary_charge',
     _cd('elementary charge'),
@@ -373,6 +349,11 @@ c_1L = first_radiation_constant_for_spectral_radiance = UnitConstant(
     _cd('first radiation constant for spectral radiance'),
     symbol='c_1L',
     u_symbol='c₁_L'
+)
+E_h = Hartree_energy = UnitConstant(
+    'Hartree_energy',
+    _cd('Hartree energy'),
+    symbol='E_h'
 )
 m_h = helion_mass = UnitConstant(
     'helion_mass',
@@ -752,6 +733,11 @@ m_t = triton_mass = UnitConstant(
     _cd('triton mass'),
     symbol='m_t'
 )
+u = unified_atomic_mass_unit = UnitConstant(
+    'unified_atomic_mass_unit',
+    _cd('unified atomic mass unit'),
+    symbol='u'
+)
 R_K = von_Klitzing_constant = UnitConstant(
     'von_Klitzing_constant',
     _cd('von Klitzing constant'),
@@ -773,37 +759,5 @@ b = Wien_wavelength_displacement_law_constant = UnitConstant(
     symbol='b'
 )
 
-eV = electron_volt = UnitConstant(
-    'electron_volt',
-    _cd('electron volt'),
-    symbol='eV'
-)
-meV = UnitConstant(
-    'meV',
-    eV/1000,
-)
-keV = UnitConstant(
-    'keV',
-    1000*eV,
-)
-MeV = UnitConstant(
-    'MeV',
-    1000*keV,
-)
-GeV = beV = UnitConstant(
-    'GeV',
-    1000*MeV,
-    aliases=['beV']
-)
-E_h = Hartree_energy = UnitConstant(
-    'Hartree_energy',
-    _cd('Hartree energy'),
-    symbol='E_h'
-)
-u = unified_atomic_mass_unit = UnitConstant(
-    'unified_atomic_mass_unit',
-    _cd('unified atomic mass unit'),
-    symbol='u'
-)
 
 del UnitConstant, Quantity, UncertainQuantity, _cd

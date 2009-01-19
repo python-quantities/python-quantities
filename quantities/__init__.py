@@ -87,4 +87,3 @@ import units
 from units import *
 
 import constants
-from constants import *
