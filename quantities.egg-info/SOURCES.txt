@@ -5,6 +5,7 @@ quantities/dimensionality.py
 quantities/markup.py
 quantities/quantity.py
 quantities/registry.py
+quantities/trigfunctions.py
 quantities/uncertainquantity.py
 quantities/unitquantity.py
 quantities.egg-info/PKG-INFO

@@ -88,3 +88,7 @@ from units import *
 
 import constants
 from constants import *
+
+#import various groups of functions
+import trigfunctions
+from trigfunctions import *
