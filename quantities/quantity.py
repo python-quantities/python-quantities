@@ -40,10 +40,7 @@ class Quantity(numpy.ndarray):
             ret = ret.copy()
 
         if isinstance(units, str):
-            if units in ('', 'dimensionless'):
-                dims = {}
-            else:
-                dims = unit_registry[units].dimensionality
+            dims = unit_registry[units].dimensionality
         elif isinstance(units, Quantity):
             dims = units.dimensionality
         elif isinstance(units, (Dimensionality, dict)):
