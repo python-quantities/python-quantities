@@ -12,8 +12,12 @@ import quantities as q
 
 
 def test_immutabledimensionality_iter():
-    assert_equal(str([i for i in q.m.dimensionality]), '[1 m (meter)]')
-    assert_equal(str([i for i in q.m.dimensionality.iterkeys()]), '[1 m (meter)]')
+    assert_equal(
+        str([i for i in q.m.dimensionality]), "[UnitLength('meter', 'm')]"
+    )
+    assert_equal(
+        str([str(i) for i in q.m.dimensionality.iterkeys()]), "['1 m (meter)']"
+    )
 
 def test_immutabledimensionality_copy():
     assert_equal(q.m.dimensionality, q.m.dimensionality.copy())

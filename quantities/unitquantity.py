@@ -6,19 +6,22 @@ import numpy
 
 from .config import USE_UNICODE
 from .dimensionality import Dimensionality
+from .markup import superscript
 from .quantity import Quantity
 from .registry import unit_registry
 
+
 __all__ = [
-    'Dimensionless', 'UnitAngle', 'UnitConstant', 'UnitCurrency', 'UnitCurrent',
-    'UnitInformation', 'UnitLength', 'UnitLuminousIntensity', 'UnitMass',
-    'UnitMass', 'UnitQuantity', 'UnitSubstance', 'UnitTemperature', 'UnitTime'
+    'CompoundUnit', 'Dimensionless', 'UnitAngle', 'UnitConstant',
+    'UnitCurrency', 'UnitCurrent', 'UnitInformation', 'UnitLength',
+    'UnitLuminousIntensity', 'UnitMass', 'UnitMass', 'UnitQuantity',
+    'UnitSubstance', 'UnitTemperature', 'UnitTime'
 ]
 
 
 class UnitQuantity(Quantity):
 
-    _primary_order = 99
+    _primary_order = 90
     _secondary_order = 0
     _reference_quantity = None
 
@@ -53,6 +56,13 @@ class UnitQuantity(Quantity):
 
         ret._reference_quantity = reference_quantity
 
+        if reference_quantity is not None:
+            if not isinstance(reference_quantity, Quantity):
+                reference_quantity *= dimensionless
+            ret._simplified = reference_quantity.simplified
+        else:
+            ret._simplified = None
+
         ret._format_order = (ret._primary_order, ret._secondary_order)
         ret.__class__._secondary_order += 1
 
@@ -69,6 +79,23 @@ class UnitQuantity(Quantity):
             unit_registry[alias] = self
 
     def __repr__(self):
+        ref = self._reference_quantity
+        if ref:
+            ref = ', %s*%s'%(str(ref.magnitude), repr(ref.dimensionality))
+        else:
+            ref = ''
+        symbol = self._symbol
+        symbol = ', %s'%(repr(symbol)) if symbol else ''
+        if USE_UNICODE:
+            u_symbol = self._u_symbol
+            u_symbol = ', %s'%(repr(u_symbol)) if u_symbol else ''
+        else:
+            u_symbol = ''
+        return '%s(%s%s%s%s)'%(
+            self.__class__.__name__, repr(self.name), ref, symbol, u_symbol
+        )
+
+    def __str__(self):
         if self.u_symbol != self.name:
             if USE_UNICODE:
                 s = '1 %s (%s)'%(self.u_symbol, self.name)
@@ -77,11 +104,9 @@ class UnitQuantity(Quantity):
         else:
             s = '1 %s'%self.name
 
-        if self.note:
-            return s+'\nnote: %s'%self.note
+#        if self.note:
+#            return s+'\nnote: %s'%self.note
         return s
-
-    __str__ = __repr__
 
     def __add__(self, other):
         return self.view(Quantity).__add__(other)
@@ -162,8 +187,9 @@ class UnitQuantity(Quantity):
 
     @property
     def simplified(self):
-        if self.reference_quantity is not self:
-            return self.reference_quantity.simplified
+        if self._simplified is not None:
+            return self._simplified
+#            return self.reference_quantity.simplified
             # if alternat unit system:
             # return self.reference_quantity.simplified.simplified
         else:
@@ -185,9 +211,11 @@ class UnitQuantity(Quantity):
         else:
             return self.symbol
 
-    @property
-    def units(self):
+    def _get_units(self):
         return self
+    def _set_units(self, units):
+        raise AttributeError('can not modify protected units')
+    units = property(_get_units, _set_units)
 
     @classmethod
     def set_reference_unit(cls, unit):
@@ -214,14 +242,14 @@ unit_registry['UnitQuantity'] = UnitQuantity
 
 class UnitConstant(UnitQuantity):
 
+    _primary_order = 0
+
     def __init__(
         self, name, reference_quantity=None, symbol=None, u_symbol=None,
         aliases=[], note=None
     ):
         # we dont want to register constants in the unit registry
         return
-
-    _primary_order = 0
 
 
 class UnitMass(UnitQuantity):
@@ -274,7 +302,29 @@ class UnitCurrency(UnitQuantity):
     _primary_order = 10
 
 
+class CompoundUnit(UnitQuantity):
+
+    _primary_order = 99
+
+    def __new__(cls, name):
+        return UnitQuantity.__new__(cls, name, unit_registry[name])
+
+    def __repr__(self):
+        return '1 %s'%self.name
+
+    @property
+    def name(self):
+        if USE_UNICODE:
+            return '(%s)'%(superscript(self._name))
+        else:
+            return '(%s)'%self._name
+
+unit_registry['CompoundUnit'] = CompoundUnit
+
+
 class Dimensionless(UnitQuantity):
+
+    _primary_order = 100
 
     def __init__(self, name, reference_quantity=None):
         self._name = name

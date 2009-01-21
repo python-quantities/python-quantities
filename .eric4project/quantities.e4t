@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
 <!-- eric4 tasks file for project quantities -->
-<!-- Saved: 2009-01-20, 08:51:01 -->
+<!-- Saved: 2009-01-20, 18:13:35 -->
 <Tasks version="4.2">
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: move to physical constants</Summary>
@@ -69,7 +69,7 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-01-20, 08:44:41</Created>
+    <Created>2009-01-20, 18:13:18</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
       <Linenumber>27</Linenumber>
@@ -78,7 +78,7 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: do we want this kind of magic?</Summary>
     <Description></Description>
-    <Created>2009-01-20, 08:44:41</Created>
+    <Created>2009-01-20, 18:13:18</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
       <Linenumber>343</Linenumber>

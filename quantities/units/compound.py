@@ -2,22 +2,6 @@
 """
 from __future__ import absolute_import
 
-from ..config import USE_UNICODE
-from ..markup import superscript
-from ..unitquantity import UnitQuantity
-from ..registry import unit_registry
+from ..unitquantity import CompoundUnit
 
-class CompoundUnit(UnitQuantity):
-
-    def __new__(cls, name):
-        return UnitQuantity.__new__(cls, name, unit_registry[name])
-
-    def __repr__(self):
-        return '1 %s'%self.name
-
-    @property
-    def name(self):
-        if USE_UNICODE:
-            return '(%s)'%(superscript(self._name))
-        else:
-            return '(%s)'%self._name
+pc_per_cc = CompoundUnit("pc/cm**3")

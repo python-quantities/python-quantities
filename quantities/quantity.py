@@ -9,6 +9,7 @@ import numpy
 from .dimensionality import Dimensionality
 from .registry import unit_registry
 
+
 def prepare_compatible_units(s, o):
     if not isinstance(o, Quantity):
         o = Quantity(o, copy=False)
@@ -20,6 +21,40 @@ def prepare_compatible_units(s, o):
             'can not compare quantities with units of %s and %s'\
             %(s.units, o.units)
         )
+
+def validate_unit_quantity(value):
+    try:
+        assert isinstance(value, Quantity)
+        assert value.shape in ((), (1, ))
+        assert value.magnitude == 1
+    except AssertionError:
+        raise ValueError(
+                'units must be a scalar Quantity with unit magnitude, got %s'\
+                %value
+            )
+    return value
+
+def validate_dimensionality(value):
+    if isinstance(value, str):
+        return unit_registry[value].dimensionality.copy()
+    elif isinstance(value, Quantity):
+        validate_unit_quantity(value)
+        return value.dimensionality.copy()
+    elif isinstance(value, (Dimensionality, dict)):
+        return value.copy()
+    else:
+        raise TypeError(
+            'units must be a quantity, string, or dimensionality, got %s'\
+            %type(value)
+        )
+
+def get_conversion_factor(from_u, to_u):
+    validate_unit_quantity(from_u)
+    validate_unit_quantity(to_u)
+    from_u = from_u.simplified
+    to_u = to_u.simplified
+    assert from_u.dimensionality == to_u.dimensionality
+    return from_u.magnitude / to_u.magnitude
 
 
 class Quantity(numpy.ndarray):
@@ -39,18 +74,7 @@ class Quantity(numpy.ndarray):
         if copy:
             ret = ret.copy()
 
-        if isinstance(units, str):
-            dims = unit_registry[units].dimensionality
-        elif isinstance(units, Quantity):
-            dims = units.dimensionality
-        elif isinstance(units, (Dimensionality, dict)):
-            dims = units
-        else:
-            raise TypeError(
-                'units must be a quantity, string, or dimensionality, got %s'\
-                %type(units)
-            )
-        ret._dimensionality = Dimensionality(dims)
+        ret._dimensionality = validate_dimensionality(units)
 
         return ret
 
@@ -69,41 +93,50 @@ class Quantity(numpy.ndarray):
             rq = rq * u.simplified**d
         return rq * self.magnitude
 
-    @property
-    def units(self):
-        return Quantity(1, self.dimensionality)
+    def _get_units(self):
+        return Quantity(1.0, self.dimensionality)
+    def _set_units(self, units):
+        try:
+            assert not isinstance(self.base, Quantity)
+        except AssertionError:
+            raise ValueError('can not modify units of a view of a Quantity')
+        try:
+            assert self.flags.writeable
+        except AssertionError:
+            raise ValueError('array is not writeable')
+        to_dims = validate_dimensionality(units)
+        if self.dimensionality == to_dims:
+            return
+        to_u = Quantity(1.0, to_dims)
+        from_u = Quantity(1.0, self.dimensionality)
+        try:
+            cf = get_conversion_factor(from_u, to_u)
+        except AssertionError:
+            raise ValueError(
+                'Unable to convert between units of "%s" and "%s"'
+                %(from_u.units, to_u.units)
+            )
+        self.magnitude.flat[:] *= cf
+        self._dimensionality = to_u._dimensionality
+    units = property(_get_units, _set_units)
 
     def rescale(self, units):
         """
         Return a copy of the quantity converted to the specified units
         """
-        other = units
-        if isinstance(other, str):
-            other = unit_registry[other]
-        if isinstance(other, Dimensionality):
-            other = Quantity(1, other)
-        if isinstance(other, Quantity):
-            try:
-                assert other.magnitude == 1
-            except AssertionError:
-                raise ValueError('units must have unit magnitude')
-        if self.dimensionality == other.dimensionality:
+        to_dims = validate_dimensionality(units)
+        if self.dimensionality == to_dims:
             return self.astype(None)
-
+        to_u = Quantity(1.0, to_dims)
+        from_u = Quantity(1.0, self.dimensionality)
         try:
-            sq = Quantity(1.0, self.dimensionality).simplified
-            osq = other.simplified
-            assert osq.dimensionality == sq.dimensionality
-            m = self.magnitude.copy()
-            m *= sq.magnitude / osq.magnitude
-            return Quantity(m, other.units)
+            cf = get_conversion_factor(from_u, to_u)
         except AssertionError:
             raise ValueError(
                 'Unable to convert between units of "%s" and "%s"'
-                %(sq.units, osq.units)
+                %(from_u.units, to_u.units)
             )
-
-        return ret
+        return Quantity(cf*self.magnitude, to_u)
 
     def astype(self, dtype=None):
         ret = super(Quantity, self).astype(dtype)
@@ -324,11 +357,14 @@ class Quantity(numpy.ndarray):
         return super(Quantity, self.simplified).__rpow__(other)
 
     def __repr__(self):
-        return '%s %s'%(
-            numpy.ndarray.__str__(self.magnitude), self.dimensionality
+        return '%s*%s'%(
+            repr(self.magnitude), repr(self.dimensionality)
         )
 
-    __str__ = __repr__
+    def __str__(self):
+        return '%s %s'%(
+            str(self.magnitude), str(self.dimensionality)
+        )
 
     def __getitem__(self, key):
         if isinstance(key, int):

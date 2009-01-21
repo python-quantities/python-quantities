@@ -25,7 +25,7 @@ class Dimensionality(object):
     @property
     def simplified(self):
         if len(self):
-            rq = (1*unit_registry['dimensionless']).copy()
+            rq = 1*unit_registry['dimensionless']
             for u, d in self.iteritems():
                 rq = rq * u.simplified**d
             return rq.dimensionality
@@ -141,6 +141,9 @@ class Dimensionality(object):
         return self
 
     def __repr__(self):
+        return self.string()
+
+    def __str__(self):
         if USE_UNICODE:
             return self.unicode()
         else:

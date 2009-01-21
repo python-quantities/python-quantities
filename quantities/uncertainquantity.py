@@ -33,6 +33,11 @@ class UncertainQuantity(Quantity):
 
         return ret
 
+    def _set_units(self, units):
+        super(UncertainQuantity, self)._set_units(units)
+        self.uncertainty.units = self.units
+    units = property(Quantity._get_units, _set_units)
+
     @property
     def simplified(self):
         ret = super(UncertainQuantity, self).simplified.view(UncertainQuantity)
@@ -151,4 +156,17 @@ class UncertainQuantity(Quantity):
             self.uncertainty
         )
 
-    __str__ = __repr__
+    def __repr__(self):
+        return '%s(%s, %s, %s)'%(
+            self.__class__.__name__,
+            repr(self.magnitude),
+            repr(self.dimensionality),
+            repr(self.uncertainty.magnitude)
+        )
+
+    def __str__(self):
+        return '%s %s\n+/-%s (1 sigma)'%(
+            str(self.magnitude),
+            str(self.dimensionality),
+            str(self.uncertainty)
+        )
