@@ -1,9 +1,11 @@
-﻿"""
+﻿# -*- coding: utf-8 -*-
+"""
 """
 from __future__ import absolute_import
 
 import numpy
 
+from .config import USE_UNICODE
 from .quantity import Quantity
 from .registry import unit_registry
 
@@ -150,13 +152,6 @@ class UncertainQuantity(Quantity):
         )
 
     def __repr__(self):
-        return '%s %s\n+/-%s (1 sigma)'%(
-            numpy.ndarray.__str__(self.magnitude),
-            self.dimensionality,
-            self.uncertainty
-        )
-
-    def __repr__(self):
         return '%s(%s, %s, %s)'%(
             self.__class__.__name__,
             repr(self.magnitude),
@@ -165,8 +160,11 @@ class UncertainQuantity(Quantity):
         )
 
     def __str__(self):
-        return '%s %s\n+/-%s (1 sigma)'%(
+        s = '%s %s\n+/-%s (1 sigma)'%(
             str(self.magnitude),
             str(self.dimensionality),
             str(self.uncertainty)
         )
+        if USE_UNICODE:
+            return s.replace('+/-', '±').replace(' sigma', 'σ')
+        return s
