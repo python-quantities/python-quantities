@@ -36,12 +36,12 @@ def validate_unit_quantity(value):
 
 def validate_dimensionality(value):
     if isinstance(value, str):
-        return unit_registry[value].dimensionality.copy()
+        return unit_registry[value].dimensionality
     elif isinstance(value, Quantity):
         validate_unit_quantity(value)
-        return value.dimensionality.copy()
-    elif isinstance(value, (Dimensionality, dict)):
-        return value.copy()
+        return value.dimensionality
+    elif isinstance(value, Dimensionality):
+        return value
     else:
         raise TypeError(
             'units must be a quantity, string, or dimensionality, got %s'\
@@ -66,21 +66,15 @@ class Quantity(numpy.ndarray):
         if isinstance(data, cls):
             if units:
                 data = data.rescale(units)
-            if copy or (dtype and data.dtype != dtype):
-                return data.astype(dtype)
-            return data
+            return numpy.array(data, dtype=dtype, copy=copy, subok=True)
 
-        ret = numpy.asarray(data, dtype).view(cls)
-        if copy:
-            ret = ret.copy()
-
-        ret._dimensionality = validate_dimensionality(units)
-
+        ret = numpy.array(data, dtype=dtype, copy=copy).view(cls)
+        ret._dimensionality.update(validate_dimensionality(units))
         return ret
 
     @property
     def dimensionality(self):
-        return self._dimensionality
+        return self._dimensionality.copy()
 
     @property
     def magnitude(self):
@@ -142,17 +136,12 @@ class Quantity(numpy.ndarray):
         ret = super(Quantity, self).astype(dtype)
         # scalar quantities get converted to plain numbers, so we fix this:
         if not isinstance(ret, type(self)):
-            ret = type(self)(ret, self.units)
+            ret = type(self)(ret, self._dimensionality)
 
         return ret
 
-    def __array__(self, dtype=None):
-        return type(self)(self, dtype, copy=True)
-
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
-        if self.base is None:
-            self._dimensionality = self._dimensionality.copy()
 
 #    def __array_wrap__(self, obj, context=None):
 #        """
@@ -368,7 +357,7 @@ class Quantity(numpy.ndarray):
 
     def __getitem__(self, key):
         if isinstance(key, int):
-            return Quantity(self.magnitude[key], self.units)
+            return Quantity(self.magnitude[key], self._dimensionality)
         else:
             return super(Quantity, self).__getitem__(key)
 
@@ -377,7 +366,7 @@ class Quantity(numpy.ndarray):
             value = Quantity(value)
 
         # TODO: do we want this kind of magic?
-        self.magnitude[key] = value.rescale(self.units).magnitude
+        self.magnitude[key] = value.rescale(self._dimensionality).magnitude
 
     def __lt__(self, other):
         ss, os = prepare_compatible_units(self, other)
@@ -528,8 +517,8 @@ class Quantity(numpy.ndarray):
             )
 
         clipped = self.magnitude.clip(
-            min.rescale(self.units).magnitude,
-            max.rescale(self.units).magnitude,
+            min.rescale(self._dimensionality).magnitude,
+            max.rescale(self._dimensionality).magnitude,
             out
         )
         return Quantity(clipped, self.dimensionality, copy=False)

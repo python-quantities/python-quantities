@@ -79,7 +79,7 @@ multiplicands are uncorrelated. It would be more accurate in this case to use::
 
 from __future__ import absolute_import
 
-__version__ = '0.1(bzr)'
+__version__ = '0.5a1'
 
 from .quantity import Quantity
 from .uncertainquantity import UncertainQuantity

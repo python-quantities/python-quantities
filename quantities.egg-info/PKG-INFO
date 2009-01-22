@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: quantities
-Version: 0.1
+Version: 0.5a1
 Summary: Support for physical quantities based on the popular numpy library
 Home-page: http://packages.python.org/quantities
 Author: Darren Dale

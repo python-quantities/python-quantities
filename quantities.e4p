@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-01-19, 14:46:07 -->
+<!-- Saved: 2009-01-21, 13:57:13 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -19,7 +19,6 @@
     <Source>quantities/units/angle.py</Source>
     <Source>quantities/units/electromagnetism.py</Source>
     <Source>quantities/units/information.py</Source>
-    <Source>quantities/units/compound.py</Source>
     <Source>quantities/units/acceleration.py</Source>
     <Source>quantities/units/viscosity.py</Source>
     <Source>quantities/units/radiation.py</Source>
@@ -68,6 +67,7 @@
     <Source>quantities/constants/weak.py</Source>
     <Source>quantities/constants/astronomy.py</Source>
     <Source>quantities/constants/statisticalmechanics.py</Source>
+    <Source>quantities/units/compound.py</Source>
   </Sources>
   <Forms>
   </Forms>

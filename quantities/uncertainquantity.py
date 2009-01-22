@@ -16,28 +16,21 @@ class UncertainQuantity(Quantity):
 
     def __new__(cls, data, units='', uncertainty=None, dtype='d', copy=True):
         ret = Quantity.__new__(cls, data, units, dtype, copy)
+        # _uncertainty initialized to be dimensionless by __array_finalize__:
+        ret._uncertainty._dimensionality = ret._dimensionality
 
-        if uncertainty is None:
-            if isinstance(data, UncertainQuantity):
-                if copy:
-                    uncertainty = data.uncertainty.copy()
-                else:
-                    uncertainty = data.uncertainty
-            else:
-                uncertainty = numpy.zeros(ret.shape, dtype)
-        elif not isinstance(uncertainty, numpy.ndarray):
-            uncertainty = numpy.array(uncertainty, dtype)
-        try:
-            assert uncertainty.shape == ret.shape
-        except AssertionError:
-            raise ValueError('data and uncertainty must have identical shape')
-        ret.uncertainty = uncertainty
+        if uncertainty is None and isinstance(data, UncertainQuantity):
+            if copy or self._dimensionality != uncertainty._dimensionality:
+                uncertainty = data.uncertainty.rescale(ret.units)
+            ret.uncertainty = uncertainty
+        elif uncertainty:
+            ret.uncertainty = uncertainty
 
         return ret
 
     def _set_units(self, units):
         super(UncertainQuantity, self)._set_units(units)
-        self.uncertainty.units = self.units
+        self.uncertainty.units = self._dimensionality
     units = property(Quantity._get_units, _set_units)
 
     @property
@@ -50,13 +43,15 @@ class UncertainQuantity(Quantity):
         return self._uncertainty
     def set_uncertainty(self, uncertainty):
         if not isinstance(uncertainty, Quantity):
-            uncertainty = Quantity(uncertainty, self.units, copy=False)
+            uncertainty = Quantity(
+                uncertainty, self._dimensionality, copy=False
+            )
         try:
             assert self.shape == uncertainty.shape
         except AssertionError:
             raise ValueError('data and uncertainty must have identical shape')
-        if uncertainty.units != self.units:
-            uncertainty = uncertainty.rescale(self.units)
+        if uncertainty._dimensionality != self._dimensionality:
+            uncertainty = uncertainty.rescale(self._dimensionality)
         self._uncertainty = uncertainty
     uncertainty = property(get_uncertainty, set_uncertainty)
 
@@ -78,7 +73,11 @@ class UncertainQuantity(Quantity):
         self._uncertainty = getattr(
             obj,
             'uncertainty',
-            Quantity(numpy.zeros(self.shape, self.dtype), self.units, copy=False)
+            Quantity(
+                numpy.zeros(self.shape, self.dtype),
+                self._dimensionality,
+                copy=False
+            )
         )
 
     def __add__(self, other):
@@ -146,7 +145,7 @@ class UncertainQuantity(Quantity):
     def __getitem__(self, key):
         return UncertainQuantity(
             self.magnitude[key],
-            self.units,
+            self._dimensionality,
             self.uncertainty[key],
             copy=False
         )

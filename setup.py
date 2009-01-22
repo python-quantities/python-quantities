@@ -88,9 +88,14 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 
+for line in file('quantities/__init__.py').readlines():
+    if line[:11] == '__version__':
+        exec(line)
+        break
+
 setup(
     name = "quantities",
-    version = '0.1',
+    version = __version__,
     author = 'Darren Dale',
     author_email = 'dsdale24@gmail.com',
     description = desc,

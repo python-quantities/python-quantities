@@ -12,15 +12,10 @@ from .markup import format_units, format_units_unicode
 from .registry import unit_registry
 
 
-class Dimensionality(object):
+class Dimensionality(dict):
 
     """
     """
-
-    def __init__(self, dict=None):
-        self.__data = {}
-        if dict is not None:
-            self.__data.update(dict)
 
     @property
     def simplified(self):
@@ -31,6 +26,14 @@ class Dimensionality(object):
             return rq.dimensionality
         else:
             return self
+
+    @property
+    def string(self):
+        return format_units(self)
+
+    @property
+    def unicode(self):
+        return format_units_unicode(self)
 
     def __hash__(self):
         res = hash(unit_registry['dimensionless'])
@@ -80,7 +83,7 @@ class Dimensionality(object):
         return self
 
     def __mul__(self, other):
-        new = dict(self)
+        new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
                 new[unit] += power
@@ -88,20 +91,20 @@ class Dimensionality(object):
                     new.pop(unit)
             except KeyError:
                 new[unit] = power
-        return Dimensionality(new)
+        return new
 
     def __imul__(self, other):
         for unit, power in other.iteritems():
             try:
-                self.__data[unit] += power
-                if self.__data[unit] == 0:
-                    self.__data.pop(unit)
+                self[unit] += power
+                if self[unit] == 0:
+                    self.pop(unit)
             except KeyError:
-                self.__data[unit] = power
+                self[unit] = power
         return self
 
     def __truediv__(self, other):
-        new = dict(self)
+        new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
                 new[unit] -= power
@@ -109,7 +112,7 @@ class Dimensionality(object):
                     new.pop(unit)
             except KeyError:
                 new[unit] = -power
-        return Dimensionality(new)
+        return new
 
     def __div__(self, other):
         return self.__truediv__(other)
@@ -117,11 +120,11 @@ class Dimensionality(object):
     def __itruediv__(self, other):
         for unit, power in other.iteritems():
             try:
-                self.__data[unit] -= power
-                if self.__data[unit] == 0:
-                    self.__data.pop(unit)
+                self[unit] -= power
+                if self[unit] == 0:
+                    self.pop(unit)
             except KeyError:
-                self.__data[unit] = -power
+                self[unit] = -power
         return self
 
     def __idiv__(self, other):
@@ -129,78 +132,28 @@ class Dimensionality(object):
 
     def __pow__(self, other):
         assert isinstance(other, (int, float))
-        new = dict(self)
+        new = Dimensionality(self)
         for i in new:
             new[i] *= other
-        return Dimensionality(new)
+        return new
 
     def __ipow__(self, other):
         assert isinstance(other, (int, float))
-        for i in self.__dict:
-            self.__dict[i] *= other
+        for i in self:
+            self[i] *= other
         return self
 
     def __repr__(self):
-        return self.string()
+        return self.string
 
     def __str__(self):
         if USE_UNICODE:
-            return self.unicode()
+            return self.unicode
         else:
-            return self.string()
-
-    def __cmp__(self, dict):
-        if isinstance(dict, Dimensionality):
-            return cmp(self.__data, dict.__data)
-        else:
-            return cmp(self, dict)
-
-    def __len__(self):
-        return len(self.__data)
-
-    def __contains__(self, key):
-        return key in self.__data
+            return self.string
 
     def __eq__(self, other):
         return hash(self) == hash(other)
 
-    def __getitem__(self, key):
-        return self.__data[key]
-
-    def __iter__(self):
-        return self.__data.__iter__()
-
     def copy(self):
-        return Dimensionality(self.__data.copy())
-
-    def keys(self):
-        return self.__data.keys()
-
-    def items(self):
-        return self.__data.items()
-
-    def iteritems(self):
-        return self.__data.iteritems()
-
-    def iterkeys(self):
-        return self.__data.iterkeys()
-
-    def itervalues(self):
-        return self.__data.itervalues()
-
-    def values(self):
-        return self.__data.values()
-
-    def has_key(self, key):
-        return self.__data.has_key(key)
-
-    def get(self, key, failobj=None):
-        if not self.has_key(key):
-            return failobj
-        return self[key]
-
-    def string(self):
-        return format_units(self)
-
-    def unicode(self):
-        return format_units_unicode(self)
+        return Dimensionality(self)
