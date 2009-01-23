@@ -109,7 +109,6 @@ setup(
     long_description = long_desc,
     classifiers = classifiers,
     platforms = 'Any',
-    requires = ['numpy'],
     url = "http://packages.python.org/quantities",
     packages = [
         'quantities',
