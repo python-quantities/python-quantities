@@ -134,7 +134,8 @@ class Quantity(numpy.ndarray):
 
     def astype(self, dtype=None):
         ret = super(Quantity, self).astype(dtype)
-        # scalar quantities get converted to plain numbers, so we fix this:
+        # scalar quantities get converted to plain numbers, so we fix it
+        # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
             ret = type(self)(ret, self._dimensionality)
 
@@ -357,6 +358,7 @@ class Quantity(numpy.ndarray):
 
     def __getitem__(self, key):
         if isinstance(key, int):
+            # This might be resolved by issue # 826
             return Quantity(self.magnitude[key], self._dimensionality)
         else:
             return super(Quantity, self).__getitem__(key)
