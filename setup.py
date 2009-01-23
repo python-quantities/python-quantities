@@ -30,6 +30,7 @@
 
 from __future__ import with_statement
 
+import os
 import sys
 
 try:
@@ -37,7 +38,11 @@ try:
 except ImportError:
     from numpy.distutils.core import setup
 
-with file('quantities/quantities-data/NIST_codata.txt') as f:
+if os.path.exists('MANIFEST'): os.remove('MANIFEST')
+
+MIN_NUMPY = '1.2'
+
+with file('quantities-data/NIST_codata.txt') as f:
     data = f.read()
 data = data.split('\n')[10:-1]
 
@@ -112,5 +117,5 @@ setup(
         'quantities.constants',
         'quantities.tests'
     ],
-    test_suite = 'nose.collector',
+    requires = ['numpy (>=%s)' % MIN_NUMPY],
 )

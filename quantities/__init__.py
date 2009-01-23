@@ -77,14 +77,14 @@ multiplicands are uncorrelated. It would be more accurate in this case to use::
   +/-1.6*J**2 (1 sigma)
 """
 
-from __future__ import absolute_import
+#from __future__ import absolute_import
 
-__version__ = '0.5a2'
+__version__ = '0.5a3'
 
-from .quantity import Quantity
-from .uncertainquantity import UncertainQuantity
-from .unitquantity import *
+from quantity import Quantity
+from uncertainquantity import UncertainQuantity
+from unitquantity import *
 
-from .units import *
+from units import *
 
-from . import constants
+import constants

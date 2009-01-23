@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: quantities
-Version: 0.5a1
+Version: 0.5a3
 Summary: Support for physical quantities based on the popular numpy library
 Home-page: http://packages.python.org/quantities
 Author: Darren Dale
@@ -21,4 +21,4 @@ Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Topic :: Education
 Classifier: Topic :: Scientific/Engineering
-Requires: numpy
+Requires: numpy (>=1.2)

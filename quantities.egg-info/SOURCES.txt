@@ -1,3 +1,5 @@
+MANIFEST.in
+README
 setup.py
 quantities/__init__.py
 quantities/config.py
@@ -8,6 +10,7 @@ quantities/quantity.py
 quantities/registry.py
 quantities/uncertainquantity.py
 quantities/unitquantity.py
+quantities-data/NIST_codata.txt
 quantities.egg-info/PKG-INFO
 quantities.egg-info/SOURCES.txt
 quantities.egg-info/dependency_links.txt
