@@ -27,7 +27,7 @@ degC = celsius = Celsius = UnitTemperature(
 )
 degF = fahrenheit = Fahrenheit = UnitTemperature(
     'Fahrenheit',
-    K,
+    degR,
     symbol='degF',
     u_symbol='°F',
     aliases=['degF', 'fahrenheit']
