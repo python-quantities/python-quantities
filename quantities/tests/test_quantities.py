@@ -4,194 +4,199 @@ import tempfile
 import shutil
 import os
 import numpy
-from quantities import *
-import quantities as q
+
 from nose.tools import *
 
+import quantities as q
+
+
+
 def test_immutabledimensionality_iter():
-    assert_equal(str([i for i in m.dimensionality]), '[1 m (meter)]')
-    assert_equal(str([i for i in m.dimensionality.iterkeys()]), '[1 m (meter)]')
+    assert_equal(
+        str([i for i in q.m.dimensionality]), "[UnitLength('meter', 'm')]"
+    )
+    assert_equal(
+        str([str(i) for i in q.m.dimensionality.iterkeys()]), "['1 m (meter)']"
+    )
 
 def test_immutabledimensionality_copy():
-    assert_equal(m.dimensionality, m.dimensionality.copy())
+    assert_equal(q.m.dimensionality, q.m.dimensionality.copy())
 
 def test_immutabledimensionality_get():
-    assert_equal(m.dimensionality.get(m), 1)
-    assert_equal(m.dimensionality.get(ft, 2), 2)
-    assert_true(m in m.dimensionality)
+    assert_equal(q.m.dimensionality.get(q.m), 1)
+    assert_equal(q.m.dimensionality.get(q.ft, 2), 2)
+    assert_true(q.m in q.m.dimensionality)
 
 def test_units_protected():
     def setunits(u, v):
         u.units = v
     def inplace(op, u, val):
         getattr(u, '__i%s__'%op)(val)
-    assert_raises(AttributeError, setunits, m, ft)
-    assert_raises(TypeError, inplace, 'add', m, m)
-    assert_raises(TypeError, inplace, 'sub', m, m)
-    assert_raises(TypeError, inplace, 'mul', m, m)
-    assert_raises(TypeError, inplace, 'div', m, m)
-    assert_raises(TypeError, inplace, 'truediv', m, m)
-    assert_raises(TypeError, inplace, 'pow', m, 2)
+    assert_raises(AttributeError, setunits, q.m, q.ft)
+    assert_raises(TypeError, inplace, 'add', q.m, q.m)
+    assert_raises(TypeError, inplace, 'sub', q.m, q.m)
+    assert_raises(TypeError, inplace, 'mul', q.m, q.m)
+    assert_raises(TypeError, inplace, 'div', q.m, q.m)
+    assert_raises(TypeError, inplace, 'truediv', q.m, q.m)
+    assert_raises(TypeError, inplace, 'pow', q.m, 2)
 
 def test_quantity_creation():
-    assert_raises(LookupError, Quantity, 1, 'nonsense')
-    assert_equal(str(Quantity(1, '')), '1 dimensionless')
+    assert_raises(LookupError, q.Quantity, 1, 'nonsense')
+    assert_equal(str(q.Quantity(1, '')), '1 dimensionless')
 
 def test_scalar_equality():
-    assert_true(J == J)
-    assert_true(1*J == J)
-    assert_true(str(1*J) == str(J))
-    assert_true(J == q.kg*q.m**2/q.s**2)
+    assert_true(q.J == q.J)
+    assert_true(1*q.J == q.J)
+    assert_true(str(1*q.J) == '1.0 J')
+    assert_true(q.J == q.kg*q.m**2/q.s**2)
 
-    assert_false(J == erg)
-    assert_false(2*J == J)
-    assert_false(str(2*J) == str(J))
-    assert_false(J == 2*q.kg*q.m**2/q.s**2)
+    assert_false(q.J == q.erg)
+    assert_false(2*q.J == q.J)
+    assert_false(q.J == 2*q.kg*q.m**2/q.s**2)
 
     def eq(q1, q2):
         return q1 == q2
-    assert_raises(ValueError, eq, J, kg)
+    assert_raises(ValueError, eq, q.J, q.kg)
 
 def test_scalar_inequality():
-    assert_true(J != erg)
-    assert_true(2*J != J)
-    assert_true(str(2*J) != str(J))
-    assert_true(J != 2*q.kg*q.m**2/q.s**2)
+    assert_true(q.J != q.erg)
+    assert_true(2*q.J != q.J)
+    assert_true(str(2*q.J) != str(q.J))
+    assert_true(q.J != 2*q.kg*q.m**2/q.s**2)
 
-    assert_false(J != J)
-    assert_false(1*J != J)
-    assert_false(str(1*J) != str(J))
-    assert_false(J != 1*q.kg*q.m**2/q.s**2)
+    assert_false(q.J != q.J)
+    assert_false(1*q.J != q.J)
+    assert_false(q.J != 1*q.kg*q.m**2/q.s**2)
 
 def test_scalar_comparison():
-    assert_true(2*J > J)
-    assert_true(2*J > 1*J)
-    assert_true(1*J >= J)
-    assert_true(1*J >= 1*J)
-    assert_true(2*J >= J)
-    assert_true(2*J >= 1*J)
+    assert_true(2*q.J > q.J)
+    assert_true(2*q.J > 1*q.J)
+    assert_true(1*q.J >= q.J)
+    assert_true(1*q.J >= 1*q.J)
+    assert_true(2*q.J >= q.J)
+    assert_true(2*q.J >= 1*q.J)
 
-    assert_true(0.5*J < J)
-    assert_true(0.5*J < 1*J)
-    assert_true(0.5*J <= J)
-    assert_true(0.5*J <= 1*J)
-    assert_true(1.0*J <= J)
-    assert_true(1.0*J <= 1*J)
+    assert_true(0.5*q.J < q.J)
+    assert_true(0.5*q.J < 1*q.J)
+    assert_true(0.5*q.J <= q.J)
+    assert_true(0.5*q.J <= 1*q.J)
+    assert_true(1.0*q.J <= q.J)
+    assert_true(1.0*q.J <= 1*q.J)
 
-    assert_false(2*J < J)
-    assert_false(2*J < 1*J)
-    assert_false(2*J <= J)
-    assert_false(2*J <= 1*J)
+    assert_false(2*q.J < q.J)
+    assert_false(2*q.J < 1*q.J)
+    assert_false(2*q.J <= q.J)
+    assert_false(2*q.J <= 1*q.J)
 
-    assert_false(0.5*J > J)
-    assert_false(0.5*J > 1*J)
-    assert_false(0.5*J >= J)
-    assert_false(0.5*J >= 1*J)
+    assert_false(0.5*q.J > q.J)
+    assert_false(0.5*q.J > 1*q.J)
+    assert_false(0.5*q.J >= q.J)
+    assert_false(0.5*q.J >= 1*q.J)
 
 def test_array_equality():
     assert_false(
-        str(Quantity([1, 2, 3, 4], 'J')) == str(Quantity([1, 22, 3, 44], 'J'))
+        str(q.Quantity([1, 2, 3, 4], 'J')) == str(q.Quantity([1, 22, 3, 44], 'J'))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')) == str(Quantity([1, 2, 3, 4], 'J'))
+        str(q.Quantity([1, 2, 3, 4], 'J')) == str(q.Quantity([1, 2, 3, 4], 'J'))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==Quantity([1, 22, 3, 44], 'J')) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==q.Quantity([1, 22, 3, 44], 'J')) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==Quantity([1, 22, 3, 44], J)) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==q.Quantity([1, 22, 3, 44], q.J)) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==[1, 22, 3, 44]*J) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==[1, 22, 3, 44]*q.J) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==numpy.array([1, 22, 3, 44])*J) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==numpy.array([1, 22, 3, 44])*q.J) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==\
-            Quantity(numpy.array([1, 22, 3, 44]), 'J')) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==\
+            q.Quantity(numpy.array([1, 22, 3, 44]), 'J')) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==\
-            Quantity(Quantity([1, 22, 3, 44], 'J'))) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==\
+            q.Quantity(q.Quantity([1, 22, 3, 44], 'J'))) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==[1, 22, 3, 44]*kg*m**2/s**2) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==[1, 22, 3, 44]*q.kg*q.m**2/q.s**2) == \
             str(numpy.array([True, False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')==Quantity([1, 22, 3, 44], 'J')) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')==q.Quantity([1, 22, 3, 44], 'J')) == \
             str(numpy.array([True, False, True, False]))
     )
 
 def test_array_inequality():
     assert_true(
-        str(Quantity([1, 2, 3, 4], 'J')!=Quantity([1, 22, 3, 44], 'J')) == \
+        str(q.Quantity([1, 2, 3, 4], 'J')!=q.Quantity([1, 22, 3, 44], 'J')) == \
             str(numpy.array([False, True, False, True]))
     )
 
 def test_array_comparison():
     assert_true(
-        str(Quantity([1, 2, 33], 'J')>Quantity([1, 22, 3], 'J')) == \
+        str(q.Quantity([1, 2, 33], 'J')>q.Quantity([1, 22, 3], 'J')) == \
             str(numpy.array([False, False, True]))
     )
     assert_true(
-        str(Quantity([1, 2, 33], 'J')>=Quantity([1, 22, 3], 'J')) == \
+        str(q.Quantity([1, 2, 33], 'J')>=q.Quantity([1, 22, 3], 'J')) == \
             str(numpy.array([True, False, True]))
     )
     assert_true(
-        str(Quantity([1, 2, 33], 'J')<Quantity([1, 22, 3], 'J')) == \
+        str(q.Quantity([1, 2, 33], 'J')<q.Quantity([1, 22, 3], 'J')) == \
             str(numpy.array([False, True, False]))
     )
     assert_true(
-        str(Quantity([1, 2, 33], 'J')<=Quantity([1, 22, 3], 'J')) == \
+        str(q.Quantity([1, 2, 33], 'J')<=q.Quantity([1, 22, 3], 'J')) == \
             str(numpy.array([True, True, False]))
     )
 
 def test_uncertainquantity_creation():
-    a = UncertainQuantity(1, m)
-    assert_equal(str(a), '1.0 m\n+/-0.0 m (1 sigma)')
-    a = UncertainQuantity([1, 1, 1], m)
-    assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.  0.  0.] m (1 sigma)')
-    a = UncertainQuantity(a)
-    assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.  0.  0.] m (1 sigma)')
-    a = UncertainQuantity([1, 1, 1], m, [.1, .1, .1])
-    assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.1  0.1  0.1] m (1 sigma)')
-    assert_raises(ValueError, UncertainQuantity, [1, 1, 1], m, 1)
-    assert_raises(ValueError, UncertainQuantity, [1, 1, 1], m, [1, 1])
+    a = q.UncertainQuantity(1, q.m)
+    assert_equal(str(a), '1.0 m\n±0.0 m (1σ)')
+    a = q.UncertainQuantity([1, 1, 1], q.m)
+    assert_equal(str(a), '[ 1.  1.  1.] m\n±[ 0.  0.  0.] m (1σ)')
+    a = q.UncertainQuantity(a)
+    assert_equal(str(a), '[ 1.  1.  1.] m\n±[ 0.  0.  0.] m (1σ)')
+    a = q.UncertainQuantity([1, 1, 1], q.m, [.1, .1, .1])
+    assert_equal(str(a), '[ 1.  1.  1.] m\n±[ 0.1  0.1  0.1] m (1σ)')
+    assert_raises(ValueError, q.UncertainQuantity, [1, 1, 1], q.m, 1)
+    assert_raises(ValueError, q.UncertainQuantity, [1, 1, 1], q.m, [1, 1])
 
 def test_uncertainquantity_rescale():
-    a = UncertainQuantity([1, 1, 1], m, [.1, .1, .1])
-    b = a.rescale(ft)
+    a = q.UncertainQuantity([1, 1, 1], q.m, [.1, .1, .1])
+    b = a.rescale(q.ft)
     assert_equal(
         str(b),
         '[ 3.2808399  3.2808399  3.2808399] ft'
-        '\n+/-[ 0.32808399  0.32808399  0.32808399] ft (1 sigma)'
+        '\n±[ 0.32808399  0.32808399  0.32808399] ft (1σ)'
     )
 
 def test_uncertainquantity_simplified():
-    a = 1000*eV
+    a = 1000*q.constants.electron_volt
     assert_equal(
         str(a.simplified),
-        '1.602176487e-16 kg·m²/s²\n+/-4e-24 kg·m²/s² (1 sigma)'
+        '1.602176487e-16 kg·m²/s²\n±4e-24 kg·m²/s² (1σ)'
     )
 
 def test_uncertainquantity_set_uncertainty():
-    a = UncertainQuantity([1, 2], 'm', [.1, .2])
+    a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a),
-        '[ 1.  2.] m\n+/-[ 0.1  0.2] m (1 sigma)'
+        '[ 1.  2.] m\n±[ 0.1  0.2] m (1σ)'
     )
     a.uncertainty = [1., 2.]
     assert_equal(
         str(a),
-        '[ 1.  2.] m\n+/-[ 1.  2.] m (1 sigma)'
+        '[ 1.  2.] m\n±[ 1.  2.] m (1σ)'
     )
     def set_u(q, u):
         q.uncertainty = u
@@ -199,26 +204,26 @@ def test_uncertainquantity_set_uncertainty():
 
 
 def test_uncertainquantity_multiply():
-    a = UncertainQuantity([1, 2], 'm', [.1, .2])
+    a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a*a),
-        '[ 1.  4.] m²\n+/-[ 0.14142136  0.56568542] m² (1 sigma)'
+        '[ 1.  4.] m²\n±[ 0.14142136  0.56568542] m² (1σ)'
     )
     assert_equal(
         str(a*2),
-        '[ 2.  4.] m\n+/-[ 0.2  0.4] m (1 sigma)'
+        '[ 2.  4.] m\n±[ 0.2  0.4] m (1σ)'
     )
 
 def test_uncertainquantity_divide():
-    a = UncertainQuantity([1, 2], 'm', [.1, .2])
+    a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a/a),
-        '[ 1.  1.] dimensionless\n+/-[ 0.14142136  0.14142136] '
-        'dimensionless (1 sigma)'
+        '[ 1.  1.] dimensionless\n±[ 0.14142136  0.14142136] '
+        'dimensionless (1σ)'
     )
     assert_equal(
         str(a/2),
-        '[ 0.5  1. ] m\n+/-[ 0.05  0.1 ] m (1 sigma)'
+        '[ 0.5  1. ] m\n±[ 0.05  0.1 ] m (1σ)'
     )
 
 class TestQuantities(unittest.TestCase):
@@ -256,8 +261,8 @@ class TestQuantities(unittest.TestCase):
                 self.assertAlmostEqual(x1, x2, prec)
 
     def test_simple(self):
-        self.assertEqual(str(q.m), "1.0 m", str(q.m))
-        self.assertEqual(str(q.J), "1.0 J", str(q.J))
+        self.assertEqual(str(q.m), "1 m (meter)", str(q.m))
+        self.assertEqual(str(q.J), "1 J (joule)", str(q.J))
 
     def test_creation(self):
         self.numAssertEqual(
@@ -402,19 +407,19 @@ class TestQuantities(unittest.TestCase):
         )
 
         # in-place addition
-        temp1 = 1*m
-        temp2 = 1*m
+        temp1 = 1*q.m
+        temp2 = 1*q.m
         temp1+=temp1
         self.assertEqual(str(temp1), str(temp2+temp2))
 
-        temp1 = [1, 2, 3, 4]*m
-        temp2 = [1, 2, 3, 4]*m
+        temp1 = [1, 2, 3, 4]*q.m
+        temp2 = [1, 2, 3, 4]*q.m
         temp1+=temp1
         self.assertEqual(str(temp1), str(temp2+temp2))
 
         def iadd(q1, q2):
             q1 -= q2
-        self.assertRaises(ValueError, iadd, 1*m, 1)
+        self.assertRaises(ValueError, iadd, 1*q.m, 1)
 
     def test_substraction(self):
         # arbitrary test of subtraction
@@ -422,8 +427,8 @@ class TestQuantities(unittest.TestCase):
 
         # the formatting should be the same
         self.assertEqual(
-            str((5.2 * q.energy.eV) - (300.2 * q.energy.eV)),
-            str(-295.0 * q.energy.eV)
+            str((5.2 * q.J) - (300.2 * q.J)),
+            str(-295.0 * q.J)
         )
 
         # test of subtraction using different units
@@ -463,13 +468,13 @@ class TestQuantities(unittest.TestCase):
         )
 
         # in-place
-        temp1 = 1*m
-        temp2 = 1*m
+        temp1 = 1*q.m
+        temp2 = 1*q.m
         temp1-=temp1
         self.assertEqual(str(temp1), str(temp2-temp2))
 
-        temp1 = [1, 2, 3, 4]*m
-        temp2 = [1, 2, 3, 4]*m
+        temp1 = [1, 2, 3, 4]*q.m
+        temp2 = [1, 2, 3, 4]*q.m
         temp1-=temp1
         self.assertEqual(str(temp1), str(temp2-temp2))
 
@@ -492,8 +497,8 @@ class TestQuantities(unittest.TestCase):
             str( 103.0 * q.kPa*q.inch)
         )
         self.assertEqual(
-            str((5.2 * q.energy.eV) * (300.2 * q.energy.eV)),
-            str(1561.04 * q.energy.eV**2)
+            str((5.2 * q.J) * (300.2 * q.J)),
+            str(1561.04 * q.J**2)
         )
 
         # does multiplication work with arrays?
@@ -538,7 +543,7 @@ class TestQuantities(unittest.TestCase):
 
         # the formatting should be the same
         self.assertEqual(
-            str((5.2 * q.energy.eV) / (400.0 * q.energy.eV)),
+            str((5.2 * q.J) / (400.0 * q.J)),
             str(q.Quantity(.013))
         )
 
@@ -614,7 +619,7 @@ class TestQuantities(unittest.TestCase):
 
         def ipow(q1, q2):
             q1 -= q2
-        self.assertRaises(ValueError, ipow, 1*m, [1, 2])
+        self.assertRaises(ValueError, ipow, 1*q.m, [1, 2])
 
     def test_getitem(self):
         tempArray1 = q.Quantity(numpy.array([1.5, 2.5 , 3, 5]), q.J)

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitTemperature
+from ..unitquantity import UnitTemperature
+
 
 K = degK = kelvin = Kelvin = UnitTemperature(
     'Kelvin',
@@ -25,7 +27,7 @@ degC = celsius = Celsius = UnitTemperature(
 )
 degF = fahrenheit = Fahrenheit = UnitTemperature(
     'Fahrenheit',
-    K,
+    degR,
     symbol='degF',
     u_symbol='°F',
     aliases=['degF', 'fahrenheit']

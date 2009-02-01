@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity, UnitMass
-from quantities.units.length import m
+from ..unitquantity import UnitQuantity, UnitMass
+from .length import m
 
 kg = kilogram =  UnitMass(
     'kilograms',
@@ -99,7 +100,7 @@ u = amu = atomic_mass_unit = UnitMass(
     symbol='u',
     aliases=['amu'],
     note='relative uncertainty = 5e-8'
-) # TODO: needs uncertainty: 0.000000083e-27*kg
+)
 scruple = UnitMass(
     'scruple',
     20*gr,

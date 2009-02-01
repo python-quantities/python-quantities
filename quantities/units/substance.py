@@ -1,7 +1,8 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitSubstance
+from ..unitquantity import UnitSubstance
 
 mol = mole = UnitSubstance(
     'mole',

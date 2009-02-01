@@ -1,11 +1,12 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.acceleration import gravity
-from quantities.units.mass import g, kg, pound
-from quantities.units.length import m, mm, cm, inch, ft
-from quantities.units.force import N, kip
+from ..unitquantity import UnitQuantity
+from .acceleration import gravity
+from .mass import g, kg, pound
+from .length import m, mm, cm, inch, ft
+from .force import N, kip
 
 
 Hg = mercury = conventional_mercury = UnitQuantity(

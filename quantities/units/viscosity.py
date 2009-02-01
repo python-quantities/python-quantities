@@ -1,10 +1,11 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.time import s
-from quantities.units.length import m
-from quantities.units.pressure import Pa
+from ..unitquantity import UnitQuantity
+from .time import s
+from .length import m
+from .pressure import Pa
 
 
 P = poise = UnitQuantity(

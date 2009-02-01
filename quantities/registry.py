@@ -20,6 +20,7 @@ class UnitRegistry:
             try:
                 return eval(string, self.__context)
             except NameError:
+                # could return self['UnitQuantity'](string)
                 raise LookupError(
                     'Unable to parse units: "%s"'%string
                 )
@@ -41,6 +42,7 @@ class UnitRegistry:
             r"\g<1>*\g<2>", label.replace('^', '**').replace('·', '*'))
 
         # make sure we can parse the label ....
+        if label == '': label = 'dimensionless'
         if label == "%": label = "percent"
         if label.lower() == "in": label = "inch"
 

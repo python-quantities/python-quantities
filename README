@@ -1,0 +1,9 @@
+to install quantities, run the following in the source directory:
+
+python setup.py install
+
+By default, quantities uses Unicode to present units, which can be 
+problematic on some platforms like windows. Unicode can be disabled
+by doing:
+
+python setup.py install --no-unicode

@@ -1,11 +1,12 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.time import s
-from quantities.units.mass import kg
-from quantities.units.energy import J
-from quantities.units.electromagnetism import coulomb
+from ..unitquantity import UnitQuantity
+from .time import s
+from .mass import kg
+from .energy import J
+from .electromagnetism import coulomb
 
 
 Bq = becquerel = UnitQuantity(

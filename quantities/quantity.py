@@ -1,12 +1,15 @@
 ﻿"""
 """
+from __future__ import absolute_import
 
 import copy
 
 import numpy
 
-from quantities.dimensionality import Dimensionality
-from quantities.registry import unit_registry
+from .dimensionality import Dimensionality
+from .registry import unit_registry
+from .utilities import usedoc
+
 
 def prepare_compatible_units(s, o):
     if not isinstance(o, Quantity):
@@ -20,6 +23,40 @@ def prepare_compatible_units(s, o):
             %(s.units, o.units)
         )
 
+def validate_unit_quantity(value):
+    try:
+        assert isinstance(value, Quantity)
+        assert value.shape in ((), (1, ))
+        assert value.magnitude == 1
+    except AssertionError:
+        raise ValueError(
+                'units must be a scalar Quantity with unit magnitude, got %s'\
+                %value
+            )
+    return value
+
+def validate_dimensionality(value):
+    if isinstance(value, str):
+        return unit_registry[value].dimensionality
+    elif isinstance(value, Quantity):
+        validate_unit_quantity(value)
+        return value.dimensionality
+    elif isinstance(value, Dimensionality):
+        return value
+    else:
+        raise TypeError(
+            'units must be a quantity, string, or dimensionality, got %s'\
+            %type(value)
+        )
+
+def get_conversion_factor(from_u, to_u):
+    validate_unit_quantity(from_u)
+    validate_unit_quantity(to_u)
+    from_u = from_u.simplified
+    to_u = to_u.simplified
+    assert from_u.dimensionality == to_u.dimensionality
+    return from_u.magnitude / to_u.magnitude
+
 
 class Quantity(numpy.ndarray):
 
@@ -30,33 +67,15 @@ class Quantity(numpy.ndarray):
         if isinstance(data, cls):
             if units:
                 data = data.rescale(units)
-            if copy or (dtype and data.dtype != dtype):
-                return data.astype(dtype)
-            return data
+            return numpy.array(data, dtype=dtype, copy=copy, subok=True)
 
-        ret = numpy.array(data, dtype, copy=copy).view(cls)
-
-        if isinstance(units, str):
-            if units in ('', 'dimensionless'):
-                dims = {}
-            else:
-                dims = unit_registry[units].dimensionality
-        elif isinstance(units, Quantity):
-            dims = units.dimensionality
-        elif isinstance(units, (Dimensionality, dict)):
-            dims = units
-        else:
-            raise TypeError(
-                'units must be a quantity, string, or dimensionality, got %s'\
-                %type(units)
-            )
-        ret._dimensionality = Dimensionality(dims)
-
+        ret = numpy.array(data, dtype=dtype, copy=copy).view(cls)
+        ret._dimensionality.update(validate_dimensionality(units))
         return ret
 
     @property
     def dimensionality(self):
-        return self._dimensionality
+        return self._dimensionality.copy()
 
     @property
     def magnitude(self):
@@ -66,57 +85,69 @@ class Quantity(numpy.ndarray):
     def simplified(self):
         rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
-            rq = rq * u.reference_quantity**d
+            rq = rq * u.simplified**d
         return rq * self.magnitude
 
-    @property
-    def units(self):
-        return Quantity(1, self.dimensionality)
+    def _get_units(self):
+        return Quantity(1.0, self.dimensionality)
+    def _set_units(self, units):
+        try:
+            assert not isinstance(self.base, Quantity)
+        except AssertionError:
+            raise ValueError('can not modify units of a view of a Quantity')
+        try:
+            assert self.flags.writeable
+        except AssertionError:
+            raise ValueError('array is not writeable')
+        to_dims = validate_dimensionality(units)
+        if self.dimensionality == to_dims:
+            return
+        to_u = Quantity(1.0, to_dims)
+        from_u = Quantity(1.0, self.dimensionality)
+        try:
+            cf = get_conversion_factor(from_u, to_u)
+        except AssertionError:
+            raise ValueError(
+                'Unable to convert between units of "%s" and "%s"'
+                %(from_u.units, to_u.units)
+            )
+        self.magnitude.flat[:] *= cf
+        self._dimensionality = to_u._dimensionality
+    units = property(_get_units, _set_units)
 
     def rescale(self, units):
         """
         Return a copy of the quantity converted to the specified units
         """
-        other = units
-        if isinstance(other, str):
-            other = unit_registry[other]
-        if isinstance(other, Dimensionality):
-            other = Quantity(1, other)
-        if isinstance(other, Quantity):
-            try:
-                assert other.magnitude == 1
-            except AssertionError:
-                raise ValueError('units must have unit magnitude')
-        if self.dimensionality == other.dimensionality:
+        to_dims = validate_dimensionality(units)
+        if self.dimensionality == to_dims:
             return self.astype(None)
-
+        to_u = Quantity(1.0, to_dims)
+        from_u = Quantity(1.0, self.dimensionality)
         try:
-            sq = Quantity(1.0, self.dimensionality).simplified
-            osq = other.simplified
-            assert osq.dimensionality == sq.dimensionality
-            m = self.magnitude.copy()
-            m *= sq.magnitude / osq.magnitude
-            return Quantity(m, other.units)
+            cf = get_conversion_factor(from_u, to_u)
         except AssertionError:
             raise ValueError(
                 'Unable to convert between units of "%s" and "%s"'
-                %(sq.units, osq.units)
+                %(from_u.units, to_u.units)
             )
+        return Quantity(cf*self.magnitude, to_u)
 
-        return ret
-
+    @usedoc(
+        numpy.ndarray.astype,
+        suffix='Scalars are returned as scalar Quantity arrays.'
+    )
     def astype(self, dtype=None):
-        # scalar quantities get converted to plain numbers
         ret = super(Quantity, self).astype(dtype)
+        # scalar quantities get converted to plain numbers, so we fix it
+        # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
-            ret = type(self)(ret, self.units)
+            ret = type(self)(ret, self._dimensionality)
 
         return ret
 
     def __array_finalize__(self, obj):
-        self._dimensionality = getattr(obj, '_dimensionality', Dimensionality())
-        if self.base is None:
-            self._dimensionality = self._dimensionality.copy()
+        self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
 
 #    def __array_wrap__(self, obj, context=None):
 #        """
@@ -163,6 +194,7 @@ class Quantity(numpy.ndarray):
 #        #....
 #        return result
 
+    @usedoc(numpy.ndarray.__add__)
     def __add__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
@@ -220,7 +252,15 @@ class Quantity(numpy.ndarray):
 
     def __imul__(self, other):
         if getattr(other, 'dimensionality', None):
-            raise ValueError('units can not be modified in place')
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+
+        try:
+            self._dimensionality *= other.dimensionality
+        except AttributeError:
+            other = numpy.asarray(other).view(Quantity)
 
         return super(Quantity, self).__imul__(other)
 
@@ -243,7 +283,15 @@ class Quantity(numpy.ndarray):
 
     def __itruediv__(self, other):
         if getattr(other, 'dimensionality', None):
-            raise ValueError('units can not be modified in place')
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+
+        try:
+            self._dimensionality /= other.dimensionality
+        except AttributeError:
+            other = numpy.asarray(other).view(Quantity)
 
         return super(Quantity, self).__itruediv__(other)
 
@@ -280,8 +328,12 @@ class Quantity(numpy.ndarray):
         return ret
 
     def __ipow__(self, other):
-        if self.dimensionality:
-            raise ValueError('units can not be modified in place')
+        if getattr(other, 'dimensionality', None):
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+
         if getattr(other, 'dimensionality', None):
             raise ValueError("exponent must be dimensionless")
 
@@ -301,15 +353,19 @@ class Quantity(numpy.ndarray):
         return super(Quantity, self.simplified).__rpow__(other)
 
     def __repr__(self):
-        return '%s %s'%(
-            numpy.ndarray.__str__(self.magnitude), self.dimensionality
+        return '%s*%s'%(
+            repr(self.magnitude), repr(self.dimensionality)
         )
 
-    __str__ = __repr__
+    def __str__(self):
+        return '%s %s'%(
+            str(self.magnitude), str(self.dimensionality)
+        )
 
     def __getitem__(self, key):
         if isinstance(key, int):
-            return Quantity(self.magnitude[key], self.units)
+            # This might be resolved by issue # 826
+            return Quantity(self.magnitude[key], self._dimensionality)
         else:
             return super(Quantity, self).__getitem__(key)
 
@@ -318,7 +374,7 @@ class Quantity(numpy.ndarray):
             value = Quantity(value)
 
         # TODO: do we want this kind of magic?
-        self.magnitude[key] = value.rescale(self.units).magnitude
+        self.magnitude[key] = value.rescale(self._dimensionality).magnitude
 
     def __lt__(self, other):
         ss, os = prepare_compatible_units(self, other)
@@ -473,8 +529,8 @@ class Quantity(numpy.ndarray):
             )
 
         clipped = self.magnitude.clip(
-            min.rescale(self.units).magnitude,
-            max.rescale(self.units).magnitude,
+            min.rescale(self._dimensionality).magnitude,
+            max.rescale(self._dimensionality).magnitude,
             out
         )
         return Quantity(clipped, self.dimensionality, copy=False)

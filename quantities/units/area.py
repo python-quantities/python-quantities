@@ -1,8 +1,9 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.length import m, rod
+from ..unitquantity import UnitQuantity
+from .length import m, rod
 
 are = ares = UnitQuantity(
     'are',

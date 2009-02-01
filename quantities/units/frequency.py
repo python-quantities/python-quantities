@@ -1,8 +1,9 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.time import s, min
+from ..unitquantity import UnitQuantity
+from .time import s, min
 
 
 Hz = hertz = rps = UnitQuantity(

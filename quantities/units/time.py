@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity, UnitTime
+from ..unitquantity import UnitQuantity, UnitTime
 
 
 s = sec = second = UnitTime(
@@ -83,7 +84,7 @@ fortnight = UnitTime(
 )
 yr = year = tropical_year = a = UnitTime(
     'year',
-    3.15569259747e7*s,
+    31556925.9747*s,
     symbol='yr',
     aliases=['a', 'years', 'tropical_year', 'tropical_years']
 ) # a for anno
