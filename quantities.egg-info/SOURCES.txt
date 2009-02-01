@@ -41,7 +41,7 @@ quantities/constants/weak.py
 quantities/constants/xray.py
 quantities/tests/__init__.py
 quantities/tests/test_quantities.py
-quantities/tests/test_ufuncs.py
+quantities/tests/test_umath.py
 quantities/units/__init__.py
 quantities/units/acceleration.py
 quantities/units/angle.py
