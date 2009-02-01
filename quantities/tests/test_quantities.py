@@ -9,6 +9,7 @@ from nose.tools import *
 
 import quantities as q
 
+
 def test_immutabledimensionality_iter():
     assert_equal(
         str([i for i in q.m.dimensionality]), "[UnitLength('meter', 'm')]"
@@ -200,7 +201,6 @@ def test_uncertainquantity_set_uncertainty():
         q.uncertainty = u
     assert_raises(ValueError, set_u, a, 1)
 
-
 def test_uncertainquantity_multiply():
     a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
@@ -223,7 +223,6 @@ def test_uncertainquantity_divide():
         str(a/2),
         '[ 0.5  1. ] m\n±[ 0.05  0.1 ] m (1σ)'
     )
-
 
 
 class TestQuantities(unittest.TestCase):
@@ -889,8 +888,101 @@ class TestQuantities(unittest.TestCase):
         f = [1, 2, 3] * q.dimensionless
         self.numAssertEqual(f.cumprod(), [1,2,6] * q.dimensionless)
 
-
         #test conj and conjugate()
         w1 = [1 - 5j, 3 , 6 + 1j] * q.MeV
         self.numAssertEqual(w1.conj(), [1+5j, 3, 6-1j]* q.MeV)
         self.numAssertEqual(w1.conjugate(), [1+5j, 3, 6-1j]* q.MeV)
+
+
+    def test_numpy_trig_functions(self):
+
+        #exp
+        self.assertAlmostEqual(q.exp(1.2 * q.dimensionless), 3.32011692)
+
+        t1 = [1,1.5,2.0] * q.radian
+        self.numAssertAlmostEqual(q.exp(t1), [2.71828183, 4.48168907, 7.3890561] * q.dimensionless, 8)
+
+        # sin
+
+        self.assertAlmostEqual(q.sin( 5 * q.radian), -0.958924275 * q.dimensionless)
+        t2 = [1,2,3,4] * q.radian
+        self.numAssertAlmostEqual(q.sin(t2) , [0.841470985, 0.909297427, 0.141120008, -0.756802495] * q.dimensionless, 8)
+
+        # arcsin
+        self.assertAlmostEqual(q.arcsin( -0.958924275 * q.dimensionless),  -1.28318531 * q.radian)
+        t3 = [0.841470985, 0.909297427, 0.141120008, -0.756802495] * q.dimensionless
+        self.numAssertAlmostEqual(q.arcsin(t3) , [1,1.14159265,0.141592654,-0.858407346] * q.radian, 8)
+
+
+        # cos
+
+        self.assertAlmostEqual(q.cos( 5 * q.radian),
+                                0.283662185 * q.dimensionless)
+        t2 = [1,2,3,4] * q.radian
+        self.numAssertAlmostEqual(q.cos(t2) , [0.540302306, -0.416146837,
+                                                -0.989992497, -0.653643621]
+                                                 * q.dimensionless, 8)
+
+        # arccos
+        self.assertAlmostEqual(q.arccos( 0.283662185 * q.dimensionless),
+                               1.28318531 * q.radian)
+        t3 = [0.540302306, -0.416146837,
+              -0.989992497, -0.653643621] * q.dimensionless
+        self.numAssertAlmostEqual(q.arccos(t3) ,
+                                   [1,2,3,2.28318531] * q.radian, 8)
+
+        # tan
+
+        self.assertAlmostEqual(q.tan( 5 * q.radian),
+                               -3.38051501 * q.dimensionless)
+        t2 = [1,2,3,4] * q.radian
+        self.numAssertAlmostEqual(q.tan(t2) ,
+                                  [1.55740772, -2.18503986,
+                                   -0.142546543, 1.15782128] * q.dimensionless, 8)
+
+        # arctan
+        self.assertAlmostEqual(q.arctan( 0.283662185 * q.dimensionless),
+                                 0.276401407 * q.radian)
+        t3 = [1.55740772, -2.18503986, -0.142546543, 1.15782128] * q.dimensionless
+        self.numAssertAlmostEqual(q.arctan(t3) ,
+                                   [1,-1.14159265,-0.141592654,0.858407346] * q.radian, 8)
+        #arctan2
+
+
+        self.assertAlmostEqual(q.arctan2(1 * q.dimensionless,
+                                          0.283662185 * q.dimensionless),
+                                           1.2943949196743 * q.radian)
+        t4 = [1.55740772, -2.18503986, -0.142546543, 1.15782128] * q.dimensionless
+        self.numAssertAlmostEqual(q.arctan2([1,1,1,1] * q.dimensionless ,t3) ,
+                                [0.57079632815379,2.7123889798199,
+                                 1.7123889803119,0.71238898138855] * q.radian, 8)
+
+
+        #hypot
+
+        self.assertAlmostEqual(q.hypot(3 * q.m, 4 * q.m),  5 * q.m)
+        t5 = [3, 4, 5, 6] * q.J
+        self.numAssertAlmostEqual(q.hypot([1,1,1,1] * q.J,t5) , [3.16227766,4.12310563,5.09901951,6.08276253] * q.J, 8)
+
+        #to_degrees
+        self.assertAlmostEqual( q.to_degrees(6 * q.radians), (6 * q.radians).rescale(q.degree))
+        self.assertAlmostEqual( q.to_degrees(6 * q.radians).magnitude, (6 * q.radians).rescale(q.degree).magnitude)
+
+
+        self.assertRaises(ValueError, q.to_degrees, t5)
+
+        #to_radians
+        self.assertAlmostEqual( q.to_radians(6 * q.degree), (6 * q.degree).rescale(q.radian))
+        self.assertAlmostEqual( q.to_radians(6 * q.degree).magnitude, (6 * q.degree).rescale(q.radian).magnitude)
+
+
+        self.assertRaises(ValueError, q.to_radians, t5)
+
+        #unwrap
+
+        t5 = [5, 10, 20, 30, 40] * q.radians
+        t6 = [5., 3.71681469, 1.15044408, -1.41592654, -3.98229715] * q.radians
+
+        self.numAssertAlmostEqual( q.unwrap(t5), t6, 8)
+
+        self.numAssertAlmostEqual(q.unwrap(t5, discont = numpy.pi * q.radians ), t6, 8)
