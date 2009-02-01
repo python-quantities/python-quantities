@@ -1,11 +1,12 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.mass import gram, kg, ounce, lb
-from quantities.units.length import cm, m, ft
-from quantities.units.time import s
-from quantities.units.acceleration import g_0
+from ..unitquantity import UnitQuantity
+from .mass import gram, kg, ounce, lb
+from .length import cm, m, ft
+from .time import s
+from .acceleration import g_0
 
 
 N = newton = UnitQuantity(

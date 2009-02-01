@@ -1,9 +1,10 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.length import m, nmi
-from quantities.units.time import s, h
+from ..unitquantity import UnitQuantity
+from .length import m, nmi
+from .time import s, h
 
 
 c = speed_of_light = UnitQuantity(

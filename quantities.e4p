@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-01-16, 16:35:44 -->
+<!-- Saved: 2009-01-21, 13:57:13 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -19,7 +19,6 @@
     <Source>quantities/units/angle.py</Source>
     <Source>quantities/units/electromagnetism.py</Source>
     <Source>quantities/units/information.py</Source>
-    <Source>quantities/units/compound.py</Source>
     <Source>quantities/units/acceleration.py</Source>
     <Source>quantities/units/viscosity.py</Source>
     <Source>quantities/units/radiation.py</Source>
@@ -38,8 +37,6 @@
     <Source>quantities/units/dimensionless.py</Source>
     <Source>quantities/units/temperature.py</Source>
     <Source>quantities/dimensionality.py</Source>
-    <Source>quantities/constants/constants.py</Source>
-    <Source>quantities/constants/codata.py</Source>
     <Source>quantities/constants/__init__.py</Source>
     <Source>quantities/quantity.py</Source>
     <Source>quantities/__init__.py</Source>
@@ -49,6 +46,28 @@
     <Source>quantities/uncertainquantity.py</Source>
     <Source>quantities/unitquantity.py</Source>
     <Source>quantities/markup.py</Source>
+    <Source>quantities/constants/relationships.py</Source>
+    <Source>quantities/constants/mathematical.py</Source>
+    <Source>quantities/constants/deuteron.py</Source>
+    <Source>quantities/constants/naturalunits.py</Source>
+    <Source>quantities/constants/electron.py</Source>
+    <Source>quantities/constants/atomicunits.py</Source>
+    <Source>quantities/constants/muon.py</Source>
+    <Source>quantities/constants/helion.py</Source>
+    <Source>quantities/constants/proton.py</Source>
+    <Source>quantities/constants/xray.py</Source>
+    <Source>quantities/constants/triton.py</Source>
+    <Source>quantities/constants/tau.py</Source>
+    <Source>quantities/constants/alpha.py</Source>
+    <Source>quantities/constants/neutron.py</Source>
+    <Source>quantities/constants/_codata.py</Source>
+    <Source>quantities/constants/_utils.py</Source>
+    <Source>quantities/constants/quantum.py</Source>
+    <Source>quantities/constants/electromagnetism.py</Source>
+    <Source>quantities/constants/weak.py</Source>
+    <Source>quantities/constants/astronomy.py</Source>
+    <Source>quantities/constants/statisticalmechanics.py</Source>
+    <Source>quantities/units/compound.py</Source>
   </Sources>
   <Forms>
   </Forms>

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitLength, UnitQuantity
+from ..unitquantity import UnitLength, UnitQuantity
 
 m = meter = metre = UnitLength(
     'meter',
@@ -110,7 +111,8 @@ au = astronomical_unit = UnitLength(
     symbol='au',
     aliases=['astronomical_units'],
     note='uncertainty ± 30 m'
-) # TODO: needs uncertainty: http://en.wikipedia.org/wiki/Astronomical_unit
+)
+
 nmi = nautical_mile = UnitLength(
     'nautical_mile',
     1.852e3*m,

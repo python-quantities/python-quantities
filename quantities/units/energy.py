@@ -1,10 +1,11 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.force import dyne, N
-from quantities.units.length import cm, m
-from quantities.units.time import s, h
+from ..unitquantity import UnitQuantity
+from .force import dyne, N
+from .length import cm, m
+from .time import s, h
 
 J = joule = UnitQuantity(
     'joule',
@@ -26,7 +27,7 @@ eV = electron_volt = UnitQuantity(
     J*1.60217653e-19,
     symbol='eV',
     aliases=['electron_volts']
-) # TODO: move to constants
+)
 meV = UnitQuantity(
     'meV',
     eV/1000
@@ -98,6 +99,6 @@ E_h = hartree = hartree_energy = UnitQuantity(
     symbol='E_h',
     aliases=['hartrees', 'hartree_energy', 'Hartree_energy'],
     note='relative uncertainty = 2.1e-6'
-) # TODO: move to physical constants
+)
 
 del UnitQuantity, dyne, N, cm, m, s, h

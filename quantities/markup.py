@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
 import operator
 
-USE_UNICODE = True
+from .config import USE_UNICODE
 
 def superscript(val):
     # TODO: use a regexp:

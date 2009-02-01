@@ -1,4 +1,6 @@
-from quantities.quantity import Quantity
+from __future__ import absolute_import
+
+from .quantity import Quantity
 
 
 class usedoc:

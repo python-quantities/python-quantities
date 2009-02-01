@@ -1,9 +1,9 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity, UnitInformation, \
-    dimensionless
-from quantities.units.time import s
+from ..unitquantity import UnitQuantity, UnitInformation, dimensionless
+from .time import s
 
 bit = UnitInformation(
     'bit',

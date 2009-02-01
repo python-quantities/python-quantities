@@ -1,12 +1,13 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitQuantity
-from quantities.units.energy import Btu, J
-from quantities.units.time import s, h, min
-from quantities.units.electromagnetism import A, V
-from quantities.units.length import ft
-from quantities.units.force import lbf
+from ..unitquantity import UnitQuantity
+from .energy import Btu, J
+from .time import s, h, min
+from .electromagnetism import A, V
+from .length import ft
+from .force import lbf
 
 
 W = watt = volt_ampere = UnitQuantity(

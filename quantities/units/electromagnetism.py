@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import UnitCurrent, \
-    UnitLuminousIntensity, UnitQuantity
-from quantities.units.time import s
-from quantities.units.length import m
-from quantities.units.energy import J
-from quantities.units.velocity import c
+from ..unitquantity import UnitCurrent, UnitLuminousIntensity, UnitQuantity
+from .time import s
+from .length import m
+from .energy import J
+from .velocity import c
+from .force import N
 from math import pi
 
 
@@ -142,20 +143,25 @@ e = elementary_charge = UnitQuantity(
     1.602176487e-19*C,
     symbol='e',
     note='relative uncertainty = 6.64e-8'
-) # TODO: move to physical constants
-#chemical_faraday = UnitQuantity(
-#    'chemical_faraday', 9.64957e4*C)
-#physical_faraday = physical_faradays = \
-#    UnitQuantity('physical_faraday', 9.65219e4*C)
+)
+chemical_faraday = UnitQuantity(
+    'chemical_faraday',
+    9.64957e4*C
+)
+physical_faraday = UnitQuantity(
+    'physical_faraday',
+    9.65219e4*C
+)
 faraday = C12_faraday = UnitQuantity(
     'faraday',
     96485.3399*C,
     symbol='F',
     aliases=['faradays']
-) # TODO: move to physical constants
-#gamma = UnitQuantity(
-#    'gamma',
-#    1e-9*T)
+)
+gamma = UnitQuantity(
+    'gamma',
+    1e-9*T
+)
 gauss = UnitQuantity(
     'gauss',
     1e-4*T,
@@ -205,6 +211,28 @@ statvolt = statV = stV = UnitQuantity(
 unit_pole = UnitQuantity(
     'unit_pole',
     1.256637e-7*Wb
+)
+vacuum_permeability = mu_0 = magnetic_constant = UnitQuantity(
+    'magnetic_constant',
+    4*pi*10**-7*N/A**2,
+    symbol='epsilon_0',
+    u_symbol='μ₀',
+    aliases=['vacuum_permeability']
+)
+vacuum_permittivity = epsilon_0 = electric_constant = UnitQuantity(
+    'electric_constant',
+    1/(mu_0*c**2),
+    symbol='epsilon_0',
+    u_symbol='ε₀',
+    aliases=['vacuum_permittivity']
+)
+Z_0 = impedence_of_free_space = characteristic_impedance_of_vacuum = \
+        UnitQuantity(
+    'characteristic_impedance_of_vacuum',
+    mu_0*c,
+    symbol='Z_0',
+    u_symbol='Z₀',
+    aliases=['impedence_of_free_space']
 )
 
 cd = candle = candela = UnitLuminousIntensity(

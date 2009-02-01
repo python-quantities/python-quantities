@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 """
+from __future__ import absolute_import
 
-from numpy import pi
+from math import pi
 
-from quantities.unitquantity import UnitAngle, UnitQuantity, dimensionless
+from ..unitquantity import UnitAngle, UnitQuantity, dimensionless
 
 radian = radians = UnitAngle(
     'radian',
@@ -17,14 +18,14 @@ turn = revolution = cycle = turns = circle = circles = UnitAngle(
     2*pi*radian,
     aliases=['turns', 'revolutions', 'circles', 'cycles']
 )
-degree = arcdeg = arcdegree = angular_degree = UnitAngle(
+deg = degree = arcdeg = arcdegree = angular_degree = UnitAngle(
     'arcdegree',
     pi/180*radian,
     symbol='deg',
     u_symbol='°',
     aliases=[
         'degree', 'degrees', 'arc_degree', 'arc_degrees', 'angular_degree',
-        'angular_degrees', 'arcdegrees'
+        'angular_degrees', 'arcdegrees', 'arcdeg'
     ]
 )
 arcminute = arcmin = arc_minute = angular_minute = UnitAngle(

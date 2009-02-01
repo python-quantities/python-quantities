@@ -1,7 +1,8 @@
 """
 """
+from __future__ import absolute_import
 
-from quantities.unitquantity import dimensionless, UnitQuantity
+from ..unitquantity import dimensionless, UnitQuantity
 
 percent = UnitQuantity(
     'percent',
