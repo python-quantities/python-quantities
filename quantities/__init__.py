@@ -92,3 +92,9 @@ from constants import *
 #import various groups of functions
 import trigfunctions
 from trigfunctions import *
+
+import hyperbolicfunctions
+from hyperbolicfunctions import *
+
+import sumproddifffuncs
+from sumproddifffuncs import *

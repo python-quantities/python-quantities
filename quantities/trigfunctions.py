@@ -1,13 +1,12 @@
 ﻿import numpy
 import quantities
 from quantities import Quantity, dimensionless
+from decorators import usedoc
 
-
+@usedoc(numpy.exp, suffix = """checks to make sure exponents are dimensionless
+                            so the operation makes
+                            sense""")
 def exp(x):
-    """
-    checks to make sure exponents are dimensionless so the operation makes
-    sense
-    """
     # we want this to be useable for both quantities are other types
     if not isinstance(x, Quantity):
         return numpy.exp(x, out)
@@ -15,12 +14,9 @@ def exp(x):
 
     return Quantity(numpy.exp(x.magnitude), copy = False)
 
-
+@usedoc(numpy.sin, suffix = "checks to see if arguments are angles\
+    returns a dimensionless quantity")
 def sin(x, out = None):
-    """
-    checks to see if arguments are angles
-    returns a dimensionless quantity
-    """
 
     # we want this to be useable for both quantities are other types
     if not isinstance(x, Quantity):
@@ -29,11 +25,10 @@ def sin(x, out = None):
     return Quantity(numpy.sin(x.rescale(quantities.radian).magnitude, out),
                     copy=False)
 
+@usedoc(numpy.arcsin, suffix = "checks to see if arguments are dimensionless\
+    returns an array of radians")
 def arcsin(x, out = None):
-    """
-    checks to see if arguments are dimensionless
-    returns an array of radians
-    """
+
     # we want this to be useable for both quantities are other types
     if not isinstance(x, Quantity):
         return numpy.arcsin(x, out)
@@ -41,12 +36,10 @@ def arcsin(x, out = None):
     return Quantity(numpy.arcsin(x.rescale(dimensionless).magnitude, out),
                                 quantities.radians,
                                 copy=False)
-
+@usedoc(numpy.arccos, suffix = "checks to see if arguments are in radians\
+    returns a dimensionless quantity ")
 def cos (x, out = None):
-    """
-    checks to see if arguments are angles
-    returns a dimensionless quantity
-    """
+
     # we want this to be useable for both quantities are other types
     if not isinstance(x, Quantity):
         return numpy.cos(x, out)
@@ -54,11 +47,10 @@ def cos (x, out = None):
     return Quantity(numpy.cos(x.rescale(quantities.radian).magnitude),
                     copy=False)
 
+@usedoc(numpy.arccos, suffix = "checks to see if arguments are dimensionless\
+    returns an array of radians")
 def arccos(x, out = None):
-    """
-    checks to see if arguments are dimensionless
-    returns an array of radians
-    """
+
     # we want this to be useable for both quantities are other types
     if not isinstance(x, Quantity):
         return numpy.arccos(x, out)
@@ -68,6 +60,8 @@ def arccos(x, out = None):
                                 quantities.radians,
                                 copy=False)
 
+@usedoc(numpy.arccos, suffix = "checks to see if arguments are in radians\
+    returns a dimensionless quantity ")
 def tan (x, out = None):
     """
     checks to see if arguments are angles
@@ -80,6 +74,8 @@ def tan (x, out = None):
     return Quantity(numpy.tan(x.rescale(quantities.radian).magnitude),
                     copy=False)
 
+@usedoc(numpy.arccos, suffix = "checks to see if arguments are dimensionless\
+    returns an array of radians")
 def arctan(x, out = None):
     """
     checks to see if arguments are dimensionless

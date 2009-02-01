@@ -2,9 +2,11 @@ setup.py
 quantities/__init__.py
 quantities/decorators.py
 quantities/dimensionality.py
+quantities/hyperbolicfunctions.py
 quantities/markup.py
 quantities/quantity.py
 quantities/registry.py
+quantities/sumproddifffuncs.py
 quantities/trigfunctions.py
 quantities/uncertainquantity.py
 quantities/unitquantity.py
@@ -17,6 +19,7 @@ quantities/constants/codata.py
 quantities/constants/constants.py
 quantities/tests/__init__.py
 quantities/tests/test_quantities.py
+quantities/tests/test_ufuncs.py
 quantities/units/__init__.py
 quantities/units/acceleration.py
 quantities/units/angle.py

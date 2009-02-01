@@ -368,12 +368,12 @@ class Quantity(numpy.ndarray):
     # item, itemset, tofile, dump, astype, byteswap
 
 #    proper ndarray subclassing eliminates the need for this
-#    def sum(self, axis=None, dtype=None, out=None):
-#        return Quantity(
-#            self.magnitude.sum(axis, dtype, out),
-#            self.dimensionality,
-#            copy=False
-#        )
+    def sum(self, axis=None, dtype=None, out=None):
+        return Quantity(
+            self.magnitude.sum(axis, dtype, out),
+            self.dimensionality,
+            copy=False
+        )
 
     def fill(self, scalar):
         if not isinstance (scalar, Quantity):
@@ -431,33 +431,33 @@ class Quantity(numpy.ndarray):
     # diagonal works as intended
 
 #    proper ndarray subclassing eliminates the need for this
-#    def max(self, axis=None, out=None):
-#        return Quantity(
-#            self.magnitude.max(),
-#            self.dimensionality,
-#            copy=False
-#        )
+    def max(self, axis=None, out=None):
+        return Quantity(
+            self.magnitude.max(),
+            self.dimensionality,
+            copy=False
+        )
 
     # argmax works as intended
 
 #    proper ndarray subclassing eliminates the need for this
-#    def min(self, axis=None, out=None):
-#        return Quantity(
-#            self.magnitude.min(),
-#            self.dimensionality,
-#            copy=False
-#        )
+    def min(self, axis=None, out=None):
+        return Quantity(
+            self.magnitude.min(),
+            self.dimensionality,
+            copy=False
+        )
 
     def argmin(self,axis=None, out=None):
         return self.magnitude.argmin()
 
 #    proper ndarray subclassing eliminates the need for this
-#    def ptp(self, axis=None, out=None):
-#        return Quantity(
-#            self.magnitude.ptp(),
-#            self.dimensionality,
-#            copy=False
-#        )
+    def ptp(self, axis=None, out=None):
+        return Quantity(
+            self.magnitude.ptp(),
+            self.dimensionality,
+            copy=False
+        )
 
     def clip(self, min=None, max=None, out=None):
         if min is None and max is None:
@@ -491,21 +491,21 @@ class Quantity(numpy.ndarray):
         )
 
 #    proper ndarray subclassing eliminates the need for this
-#    def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
-#        return Quantity(
-#            self.magnitude.trace(offset, axis1, axis2, dtype, out),
-#            self.dimensionality,
-#            copy=False
-#        )
+    def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
+        return Quantity(
+            self.magnitude.trace(offset, axis1, axis2, dtype, out),
+            self.dimensionality,
+            copy=False
+        )
 
     # cumsum works as intended
 
 #    proper ndarray subclassing eliminates the need for this
-#    def mean(self, axis=None, dtype=None, out=None):
-#        return Quantity(
-#            self.magnitude.mean(axis, dtype, out),
-#            self.dimensionality,
-#            copy=False)
+    def mean(self, axis=None, dtype=None, out=None):
+        return Quantity(
+            self.magnitude.mean(axis, dtype, out),
+            self.dimensionality,
+            copy=False)
 
     def var(self, axis=None, dtype=None, out=None):
         return Quantity(
