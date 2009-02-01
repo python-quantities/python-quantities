@@ -194,6 +194,7 @@ class Quantity(numpy.ndarray):
 #        #....
 #        return result
 
+    @usedoc(numpy.ndarray.__add__)
     def __add__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
