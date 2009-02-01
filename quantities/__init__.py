@@ -88,3 +88,6 @@ from unitquantity import *
 from units import *
 
 import constants
+
+#import various groups of functions
+from umath import *

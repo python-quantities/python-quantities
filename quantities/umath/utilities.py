@@ -1,5 +1,6 @@
 class usedoc:
 
+
     """
     This decorator gives the function the doc string of another method
 
@@ -7,16 +8,11 @@ class usedoc:
     prefix - a string to append to the front of the doc string
     suffix - a string to append to the beginning of the doc string
     """
+    def __init__(self, doc_method, prefix = "", suffix ="" ):
 
-    def __init__(self, doc_method, prefix=None, suffix=None):
-        doc = doc_method.__doc__
-        if prefix:
-            doc = '\n\n'.join([prefix, doc])
-        if suffix:
-            note = 'Specific to quantities\n----------------------'
-            doc = '\n\n'.join([doc, note, suffix])
-        self.doc = doc
 
+        self.doc = prefix + doc_method.__doc__ + suffix
     def __call__(self, new_method):
+
         new_method.__doc__ = self.doc
         return new_method

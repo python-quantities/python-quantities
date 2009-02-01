@@ -423,6 +423,7 @@ class Quantity(numpy.ndarray):
     #need to implement other Array conversion methods:
     # item, itemset, tofile, dump, astype, byteswap
 
+#    proper ndarray subclassing eliminates the need for this
     def sum(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.sum(axis, dtype, out),
@@ -434,7 +435,7 @@ class Quantity(numpy.ndarray):
         if not isinstance (scalar, Quantity):
             scalar = Quantity(scalar, copy=False)
 
-        if scalar.dimensionality == self.dimensionality:
+        if scalar._dimensionality == self._dimensionality:
             self.magnitude.fill(scalar.magnitude)
         else:
             raise ValueError("scalar must have the same units as self")
@@ -453,7 +454,7 @@ class Quantity(numpy.ndarray):
         values - must be an Quantity with the same units as self
         """
         if isinstance(values, Quantity):
-            if values.dimensionality == self.dimensionality:
+            if values._dimensionality == self._dimensionality:
                 self.magnitude.put(indicies, values, mode)
             else:
                 raise ValueError("values must have the same units as self")
@@ -474,7 +475,7 @@ class Quantity(numpy.ndarray):
         if not isinstance (values, Quantity):
             values = Quantity(values, copy=False)
 
-        if values.dimensionality != self.dimensionality:
+        if values._dimensionality != self._dimensionality:
             raise ValueError("values does not have the same units as self")
 
         return self.magnitude.searchsorted(values.magnitude, side)
@@ -485,6 +486,7 @@ class Quantity(numpy.ndarray):
     # compress works as intended
     # diagonal works as intended
 
+#    proper ndarray subclassing eliminates the need for this
     def max(self, axis=None, out=None):
         return Quantity(
             self.magnitude.max(),
@@ -494,6 +496,7 @@ class Quantity(numpy.ndarray):
 
     # argmax works as intended
 
+#    proper ndarray subclassing eliminates the need for this
     def min(self, axis=None, out=None):
         return Quantity(
             self.magnitude.min(),
@@ -504,6 +507,7 @@ class Quantity(numpy.ndarray):
     def argmin(self,axis=None, out=None):
         return self.magnitude.argmin()
 
+#    proper ndarray subclassing eliminates the need for this
     def ptp(self, axis=None, out=None):
         return Quantity(
             self.magnitude.ptp(),
@@ -515,8 +519,8 @@ class Quantity(numpy.ndarray):
         if min is None and max is None:
             raise ValueError("at least one of min or max must be set")
         else:
-            if min is None: min = Quantity(-numpy.Inf, self.dimensionality)
-            if max is None: max = Quantity(numpy.Inf, self.dimensionality)
+            if min is None: min = Quantity(-numpy.Inf, self._dimensionality)
+            if max is None: max = Quantity(numpy.Inf, self._dimensionality)
 
         if self.dimensionality and not \
                 (isinstance(min, Quantity) and isinstance(max, Quantity)):
@@ -542,32 +546,35 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
+#    proper ndarray subclassing eliminates the need for this
     def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
         return Quantity(
             self.magnitude.trace(offset, axis1, axis2, dtype, out),
-            self.dimensionality,
+            self._dimensionality,
             copy=False
         )
 
     # cumsum works as intended
 
+#    proper ndarray subclassing eliminates the need for this
     def mean(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.mean(axis, dtype, out),
-            self.dimensionality,
+            self._dimensionality,
             copy=False)
 
     def var(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.var(axis, dtype, out),
-            self.dimensionality**2,
+            self._dimensionality**2,
             copy=False
         )
+
 
     def std(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.std(axis, dtype, out),
-            self.dimensionality,
+            self._dimensionality,
             copy=False
         )
 
@@ -579,12 +586,12 @@ class Quantity(numpy.ndarray):
 
         return Quantity(
             self.magnitude.prod(axis, dtype, out),
-            self.dimensionality**power,
+            self._dimensionality**power,
             copy=False
         )
 
     def cumprod(self, axis=None, dtype=None, out=None):
-        if self.dimensionality:
+        if self._dimensionality:
             # different array elements would have different dimensionality
             raise ValueError(
                 "Quantity must be dimensionless, try using simplified"
@@ -594,5 +601,6 @@ class Quantity(numpy.ndarray):
                 self.magnitude.cumprod(axis, dtype, out),
                 copy=False
                 )
+    # conj and conjugate work as intended
 
-    # list of unsupported functions: [conj, conjugate, choose]
+    # list of unsupported functions: [choose]
