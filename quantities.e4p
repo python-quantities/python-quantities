@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-02-01, 11:21:04 -->
+<!-- Saved: 2009-02-01, 18:38:16 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -69,6 +69,11 @@
     <Source>quantities/constants/statisticalmechanics.py</Source>
     <Source>quantities/units/compound.py</Source>
     <Source>quantities/utilities.py</Source>
+    <Source>quantities/umath/fromnumeric.py</Source>
+    <Source>quantities/umath/ufunclike.py</Source>
+    <Source>quantities/umath/__init__.py</Source>
+    <Source>quantities/umath/umath.py</Source>
+    <Source>quantities/tests/test_umath.py</Source>
   </Sources>
   <Forms>
   </Forms>

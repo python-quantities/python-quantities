@@ -152,7 +152,9 @@ class Quantity(numpy.ndarray):
     def __array_wrap__(self, obj, context):
         # this is experimental right now, there is probably a better
         # way to implement it, but for now lets identify which
-        # ufuncs need to be addressed:
+        # ufuncs need to be addressed. Maybe a good way to do this would
+        # be something like a dictionary mapping of ufuncs to functions
+        # that return a proper dimensionality based on the inputs.
 #        print obj, context
         uf, objs, huh = context
 
