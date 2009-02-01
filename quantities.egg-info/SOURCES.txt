@@ -5,12 +5,9 @@ quantities/__init__.py
 quantities/config.py
 quantities/decorators.py
 quantities/dimensionality.py
-quantities/hyperbolicfunctions.py
 quantities/markup.py
 quantities/quantity.py
 quantities/registry.py
-quantities/sumproddifffuncs.py
-quantities/trigfunctions.py
 quantities/uncertainquantity.py
 quantities/unitquantity.py
 quantities-data/NIST_codata.txt

@@ -429,7 +429,7 @@ class Quantity(numpy.ndarray):
         if not isinstance (scalar, Quantity):
             scalar = Quantity(scalar, copy=False)
 
-        if scalar.dimensionality == self.dimensionality:
+        if scalar._dimensionality == self._dimensionality:
             self.magnitude.fill(scalar.magnitude)
         else:
             raise ValueError("scalar must have the same units as self")
@@ -448,7 +448,7 @@ class Quantity(numpy.ndarray):
         values - must be an Quantity with the same units as self
         """
         if isinstance(values, Quantity):
-            if values.dimensionality == self.dimensionality:
+            if values._dimensionality == self._dimensionality:
                 self.magnitude.put(indicies, values, mode)
             else:
                 raise ValueError("values must have the same units as self")
@@ -469,7 +469,7 @@ class Quantity(numpy.ndarray):
         if not isinstance (values, Quantity):
             values = Quantity(values, copy=False)
 
-        if values.dimensionality != self.dimensionality:
+        if values._dimensionality != self._dimensionality:
             raise ValueError("values does not have the same units as self")
 
         return self.magnitude.searchsorted(values.magnitude, side)
@@ -513,8 +513,8 @@ class Quantity(numpy.ndarray):
         if min is None and max is None:
             raise ValueError("at least one of min or max must be set")
         else:
-            if min is None: min = Quantity(-numpy.Inf, self.dimensionality)
-            if max is None: max = Quantity(numpy.Inf, self.dimensionality)
+            if min is None: min = Quantity(-numpy.Inf, self._dimensionality)
+            if max is None: max = Quantity(numpy.Inf, self._dimensionality)
 
         if self.dimensionality and not \
                 (isinstance(min, Quantity) and isinstance(max, Quantity)):
@@ -544,7 +544,7 @@ class Quantity(numpy.ndarray):
     def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
         return Quantity(
             self.magnitude.trace(offset, axis1, axis2, dtype, out),
-            self.dimensionality,
+            self._dimensionality,
             copy=False
         )
 
@@ -554,13 +554,13 @@ class Quantity(numpy.ndarray):
     def mean(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.mean(axis, dtype, out),
-            self.dimensionality,
+            self._dimensionality,
             copy=False)
 
     def var(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.var(axis, dtype, out),
-            self.dimensionality**2,
+            self._dimensionality**2,
             copy=False
         )
 
@@ -568,7 +568,7 @@ class Quantity(numpy.ndarray):
     def std(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.std(axis, dtype, out),
-            self.dimensionality,
+            self._dimensionality,
             copy=False
         )
 
@@ -580,12 +580,12 @@ class Quantity(numpy.ndarray):
 
         return Quantity(
             self.magnitude.prod(axis, dtype, out),
-            self.dimensionality**power,
+            self._dimensionality**power,
             copy=False
         )
 
     def cumprod(self, axis=None, dtype=None, out=None):
-        if self.dimensionality:
+        if self._dimensionality:
             # different array elements would have different dimensionality
             raise ValueError(
                 "Quantity must be dimensionless, try using simplified"

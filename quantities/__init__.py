@@ -90,11 +90,17 @@ from units import *
 import constants
 
 #import various groups of functions
-import trigfunctions
-from trigfunctions import *
+import ufuncs.trigfunctions
+from ufuncs.trigfunctions import *
 
-import hyperbolicfunctions
-from hyperbolicfunctions import *
+import ufuncs.hyperbolicfunctions
+from ufuncs.hyperbolicfunctions import *
 
-import sumproddifffuncs
-from sumproddifffuncs import *
+import ufuncs.sumproddifffuncs
+from ufuncs.sumproddifffuncs import *
+
+import ufuncs.exponentslogarithms
+from ufuncs.exponentslogarithms import *
+
+import ufuncs.rounding
+from ufuncs.rounding import *

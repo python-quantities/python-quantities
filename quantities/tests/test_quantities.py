@@ -908,12 +908,12 @@ class TestQuantities(unittest.TestCase):
         # sin
 
         self.assertAlmostEqual(q.sin( 5 * q.radian), -0.958924275 * q.dimensionless)
-        t2 = [1,2,3,4] * radian
-        self.numAssertAlmostEqual(q.sin(t2) , [0.841470985, 0.909297427, 0.141120008, -0.756802495] * dimensionless, 8)
+        t2 = [1,2,3,4] * q.radian
+        self.numAssertAlmostEqual(q.sin(t2) , [0.841470985, 0.909297427, 0.141120008, -0.756802495] * q.dimensionless, 8)
 
         # arcsin
         self.assertAlmostEqual(q.arcsin( -0.958924275 * q.dimensionless),  -1.28318531 * q.radian)
-        t3 = [0.841470985, 0.909297427, 0.141120008, -0.756802495] * dimensionless
+        t3 = [0.841470985, 0.909297427, 0.141120008, -0.756802495] * q.dimensionless
         self.numAssertAlmostEqual(q.arcsin(t3) , [1,1.14159265,0.141592654,-0.858407346] * q.radian, 8)
 
 
@@ -921,16 +921,16 @@ class TestQuantities(unittest.TestCase):
 
         self.assertAlmostEqual(q.cos( 5 * q.radian),
                                 0.283662185 * q.dimensionless)
-        t2 = [1,2,3,4] * radian
+        t2 = [1,2,3,4] * q.radian
         self.numAssertAlmostEqual(q.cos(t2) , [0.540302306, -0.416146837,
                                                 -0.989992497, -0.653643621]
-                                                 * dimensionless, 8)
+                                                 * q.dimensionless, 8)
 
         # arccos
         self.assertAlmostEqual(q.arccos( 0.283662185 * q.dimensionless),
                                1.28318531 * q.radian)
         t3 = [0.540302306, -0.416146837,
-              -0.989992497, -0.653643621] * dimensionless
+              -0.989992497, -0.653643621] * q.dimensionless
         self.numAssertAlmostEqual(q.arccos(t3) ,
                                    [1,2,3,2.28318531] * q.radian, 8)
 
@@ -938,10 +938,10 @@ class TestQuantities(unittest.TestCase):
 
         self.assertAlmostEqual(q.tan( 5 * q.radian),
                                -3.38051501 * q.dimensionless)
-        t2 = [1,2,3,4] * radian
+        t2 = [1,2,3,4] * q.radian
         self.numAssertAlmostEqual(q.tan(t2) ,
                                   [1.55740772, -2.18503986,
-                                   -0.142546543, 1.15782128] * dimensionless, 8)
+                                   -0.142546543, 1.15782128] * q.dimensionless, 8)
 
         # arctan
         self.assertAlmostEqual(q.arctan( 0.283662185 * q.dimensionless),
@@ -992,7 +992,7 @@ class TestQuantities(unittest.TestCase):
         self.numAssertAlmostEqual( q.unwrap(t5), t6, 8)
 
 
-        self.numAssertAlmostEqual(unwrap(t5, discont = numpy.pi * q.radians ), t6, 8)
+        self.numAssertAlmostEqual(q.unwrap(t5, discont = numpy.pi * q.radians ), t6, 8)
 
 
 

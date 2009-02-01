@@ -132,3 +132,88 @@ def test_hyperbolicfunctions():
 
     c = [.01,.5,.6,.8,.99] * q.dimensionless
     num_assert_almost_equal( q.arctanh(c) , numpy.arctanh(numpy.array([.01,.5,.6,.8,.99])) * q.dimensionless)
+
+def test_rounding():
+
+    """test rounding unctions"""
+
+    #test around
+    num_assert_almost_equal( q.around([.5, 1.5, 2.5, 3.5, 4.5] * J) ,
+                              [ 0.,  2.,  2.,  4.,  4.] * q.J)
+
+    num_assert_almost_equal( q.around([1,2,3,11] * BTU,
+                                       decimals=1) , [ 1,  2,  3, 11] * q.J)
+
+    num_assert_almost_equal( q.around([1,2,3,11] * BTU,
+                                       decimals=-1) , [ 0,  0,  0, 10] * q.J)
+
+    # round_ and around are equivalent
+    num_assert_almost_equal( q.round_([.5, 1.5, 2.5, 3.5,
+                                        4.5] * J) ,
+                                         [ 0.,  2.,  2.,  4.,  4.] * q.J)
+
+    num_assert_almost_equal( q.round_([1,2,3,11] * BTU,
+                                       decimals=1) , [ 1,  2,  3, 11] * q.J)
+
+    num_assert_almost_equal( q.round_([1,2,3,11] * BTU,
+                                       decimals=-1) , [ 0,  0,  0, 10] * q.J)
+
+
+    #test rint
+    a = [-4.1, -3.6, -2.5, 0.1, 2.5, 3.1, 3.9] * q.kPa
+    num_assert_almost_equal(q.rint(a), [-4., -4., -2.,  0.,
+                                          2.,  3.,  4.] * q.kPa)
+
+    # test fix
+
+    assert_almost_equal(q.fix(3.14 * q.degF), 3.0 * q.degF)
+
+    assert_almost_equal(q.fix(3.0 * q.degF), 3.0 * q.degF)
+
+    num_assert_almost_equal(q.fix([2.1, 2.9, -2.1, -2.9] * q.degF),
+                             [ 2.,  2., -2., -2.] * q.degF)
+
+    # test floor
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * degC
+    num_assert_almost_equal( q.floor(a), [-2., -2., -1.,  0.,
+                                            1.,  1.,  2.] * degC)
+
+    # test ceil
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * degC
+    num_assert_almost_equal( q.ceil(a), [-1., -1., -0.,
+                                           1.,  2.,  2.,  2.] * degC)
+
+
+
+def test_exponents_and_logarithms():
+
+        a = [12,3,4,5,6,7, -1, -10] * dimensionless
+        b = [  1.62754791e+05,   2.00855369e+01,   5.45981500e+01,
+            1.48413159e+02,   4.03428793e+02,   1.09663316e+03,
+            3.67879441e-01,   4.53999298e-05] * dimensionless
+        num_assert_almost_equal(q.exp(a), b, prec = 3)
+
+        num_assert_almost_equal(a, q.log(b) , prec = 8)
+
+        c = [100,10000, 5, 4, 1] * dimensionless
+
+        num_assert_almost_equal(q.log10(c), [ 2.        ,  4.        ,
+                                               0.69897   ,  0.60205999,
+                                                 0.        ] * dimensionless,
+                                                  prec = 8)
+
+        num_assert_almost_equal(q.log2(c), [  6.64385619,  13.28771238,
+                                            2.32192809, 2.,0.]
+                                            * dimensionless, prec = 8)
+
+        e = [1e-10, -1e-10, -7e-10, 1, 0, 1e-5] * dimensionless
+
+        f = [  1.00000000e-10,  -1.00000000e-10,  -7.00000000e-10,
+        1.71828183e+00,   0.00000000e+00,   1.00000500e-05] * dimensionless
+        num_assert_almost_equal(q.expm1(e), f, prec = 8)
+
+        num_assert_almost_equal(q.log1p(f), e, prec = 8)
+
+
+
+
