@@ -10,6 +10,7 @@ quantities/quantity.py
 quantities/registry.py
 quantities/uncertainquantity.py
 quantities/unitquantity.py
+quantities/utilities.py
 quantities-data/NIST_codata.txt
 quantities.egg-info/PKG-INFO
 quantities.egg-info/SOURCES.txt

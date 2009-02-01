@@ -8,6 +8,7 @@ import numpy
 
 from .dimensionality import Dimensionality
 from .registry import unit_registry
+from .utilities import usedoc
 
 
 def prepare_compatible_units(s, o):
@@ -132,6 +133,10 @@ class Quantity(numpy.ndarray):
             )
         return Quantity(cf*self.magnitude, to_u)
 
+    @usedoc(
+        numpy.ndarray.astype,
+        suffix='Scalars are returned as scalar Quantity arrays.'
+    )
     def astype(self, dtype=None):
         ret = super(Quantity, self).astype(dtype)
         # scalar quantities get converted to plain numbers, so we fix it

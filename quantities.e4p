@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-01-21, 13:57:13 -->
+<!-- Saved: 2009-02-01, 11:21:04 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -68,6 +68,7 @@
     <Source>quantities/constants/astronomy.py</Source>
     <Source>quantities/constants/statisticalmechanics.py</Source>
     <Source>quantities/units/compound.py</Source>
+    <Source>quantities/utilities.py</Source>
   </Sources>
   <Forms>
   </Forms>
