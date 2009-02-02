@@ -9,6 +9,7 @@ from .dimensionality import Dimensionality
 from .markup import superscript
 from .quantity import Quantity
 from .registry import unit_registry
+from .utilities import usedoc
 
 
 __all__ = [
@@ -78,6 +79,7 @@ class UnitQuantity(Quantity):
         for alias in aliases:
             unit_registry[alias] = self
 
+    @usedoc(Quantity.__repr__)
     def __repr__(self):
         ref = self._reference_quantity
         if ref:
@@ -95,6 +97,7 @@ class UnitQuantity(Quantity):
             self.__class__.__name__, repr(self.name), ref, symbol, u_symbol
         )
 
+    @usedoc(Quantity.__str__)
     def __str__(self):
         if self.u_symbol != self.name:
             if USE_UNICODE:
@@ -108,57 +111,75 @@ class UnitQuantity(Quantity):
 #            return s+'\nnote: %s'%self.note
         return s
 
+    @usedoc(Quantity.__add__)
     def __add__(self, other):
         return self.view(Quantity).__add__(other)
 
+    @usedoc(Quantity.__radd__)
     def __radd__(self, other):
         return self.view(Quantity).__radd__(other)
 
+    @usedoc(Quantity.__sub__)
     def __sub__(self, other):
         return self.view(Quantity).__sub__(other)
 
+    @usedoc(Quantity.__rsub__)
     def __rsub__(self, other):
         return self.view(Quantity).__rsub__(other)
 
+    @usedoc(Quantity.__mul__)
     def __mul__(self, other):
         return self.view(Quantity).__mul__(other)
 
+    @usedoc(Quantity.__rmul__)
     def __rmul__(self, other):
         return self.view(Quantity).__rmul__(other)
 
+    @usedoc(Quantity.__truediv__)
     def __truediv__(self, other):
         return self.view(Quantity).__truediv__(other)
 
+    @usedoc(Quantity.__rtruediv__)
     def __rtruediv__(self, other):
         return self.view(Quantity).__rtruediv__(other)
 
+    @usedoc(Quantity.__div__)
     def __div__(self, other):
         return self.view(Quantity).__div__(other)
 
+    @usedoc(Quantity.__rdiv__)
     def __rdiv__(self, other):
         return self.view(Quantity).__rdiv__(other)
 
+    @usedoc(Quantity.__pow__)
     def __pow__(self, other):
         return self.view(Quantity).__pow__(other)
 
+    @usedoc(Quantity.__rpow__)
     def __rpow__(self, other):
         return self.view(Quantity).__rpow__(other)
 
+    @usedoc(Quantity.__iadd__)
     def __iadd__(self, other):
         raise TypeError('can not modify protected units')
 
+    @usedoc(Quantity.__isub__)
     def __isub__(self, other):
         raise TypeError('can not modify protected units')
 
+    @usedoc(Quantity.__imul__)
     def __imul__(self, other):
         raise TypeError('can not modify protected units')
 
+    @usedoc(Quantity.__itruediv__)
     def __itruediv__(self, other):
         raise TypeError('can not modify protected units')
 
+    @usedoc(Quantity.__idiv__)
     def __idiv__(self, other):
         raise TypeError('can not modify protected units')
 
+    @usedoc(Quantity.__ipow__)
     def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
@@ -309,6 +330,7 @@ class CompoundUnit(UnitQuantity):
     def __new__(cls, name):
         return UnitQuantity.__new__(cls, name, unit_registry[name])
 
+    @usedoc(UnitQuantity.__add__)
     def __repr__(self):
         return '1 %s'%self.name
 

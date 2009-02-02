@@ -8,6 +8,7 @@ import numpy
 from .config import USE_UNICODE
 from .quantity import Quantity
 from .registry import unit_registry
+from .utilities import usedoc
 
 class UncertainQuantity(Quantity):
 
@@ -59,10 +60,8 @@ class UncertainQuantity(Quantity):
     def relative_uncertainty(self):
         return self.uncertainty.magnitude/self.magnitude
 
+    @usedoc(Quantity.rescale)
     def rescale(self, units):
-        """
-        Return a copy of the quantity converted to the specified units
-        """
         cls = UncertainQuantity
         ret = super(cls, self).rescale(units).view(cls)
         ret.uncertainty = self.uncertainty.rescale(units)
@@ -80,25 +79,30 @@ class UncertainQuantity(Quantity):
             )
         )
 
+    @usedoc(Quantity.__add__)
     def __add__(self, other):
         res = super(UncertainQuantity, self).__add__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
+    @usedoc(Quantity.__radd__)
     def __radd__(self, other):
         return self.__add__(other)
 
+    @usedoc(Quantity.__sub__)
     def __sub__(self, other):
         res = super(UncertainQuantity, self).__sub__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
+    @usedoc(Quantity.__rsub__)
     def __rsub__(self, other):
         if not isinstance(other, UncertainQuantity):
             other = UncertainQuantity(other, copy=False)
 
         return UncertainQuantity.__sub__(other, self)
 
+    @usedoc(Quantity.__mul__)
     def __mul__(self, other):
         res = super(UncertainQuantity, self).__mul__(other)
         try:
@@ -113,9 +117,11 @@ class UncertainQuantity(Quantity):
         res._uncertainty = u
         return res
 
+    @usedoc(Quantity.__rmul__)
     def __rmul__(self, other):
         return self.__mul__(other)
 
+    @usedoc(Quantity.__truediv__)
     def __truediv__(self, other):
         res = super(UncertainQuantity, self).__truediv__(other)
         try:
@@ -130,6 +136,7 @@ class UncertainQuantity(Quantity):
         res._uncertainty = u
         return res
 
+    @usedoc(Quantity.__rtruediv__)
     def __rtruediv__(self, other):
         temp = UncertainQuantity(
             1/self.magnitude, self.dimensionality**-1,
@@ -137,11 +144,13 @@ class UncertainQuantity(Quantity):
         )
         return other * temp
 
+    @usedoc(Quantity.__pow__)
     def __pow__(self, other):
         res = super(UncertainQuantity, self).__pow__(other)
         res.uncertainty = res.view(Quantity) * other * self.relative_uncertainty
         return res
 
+    @usedoc(Quantity.__getitem__)
     def __getitem__(self, key):
         return UncertainQuantity(
             self.magnitude[key],
@@ -150,6 +159,7 @@ class UncertainQuantity(Quantity):
             copy=False
         )
 
+    @usedoc(Quantity.__repr__)
     def __repr__(self):
         return '%s(%s, %s, %s)'%(
             self.__class__.__name__,
@@ -158,6 +168,7 @@ class UncertainQuantity(Quantity):
             repr(self.uncertainty.magnitude)
         )
 
+    @usedoc(Quantity.__str__)
     def __str__(self):
         s = '%s %s\n+/-%s (1 sigma)'%(
             str(self.magnitude),
