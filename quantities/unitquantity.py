@@ -339,7 +339,7 @@ class Dimensionless(UnitQuantity):
         unit_registry[name] = self
 
     @property
-    def dimensionality(self):
+    def _dimensionality(self):
         return Dimensionality()
 
 dimensionless = Dimensionless('dimensionless')
