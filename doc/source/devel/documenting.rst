@@ -20,7 +20,7 @@ repository by doing::
 
 The documentation sources are found in the :file:`doc/` directory in the trunk.
 The output produced by Sphinx can be configured by editing the :file:`conf.py`
-file located in the :file:`doc/` directory. To build the users guide in html 
+file located in the :file:`doc/` directory. To build the users guide in html
 format, run from the main quantities directory::
 
   python setup.py build_sphinx
@@ -35,13 +35,12 @@ and the html will be produced in `build/sphinx/html`. To build the pdf file::
 Organization of Quantities' documentation
 ==========================================
 
-The actual ReStructured Text files are kept in :file:`doc/users`,
-:file:`doc/devel`, :file:`doc/api` and :file:`doc/faq`. The main entry point is
-:file:`doc/index.rst`, which pulls in the :file:`index.rst` file for the users
-guide, developers guide, api reference, and faqs. The documentation suite is
-built as a single document in order to make the most effective use of cross
-referencing, we want to make navigating the Quantities documentation as easy as
-possible.
+The actual ReStructured Text files are kept in :file:`doc/source`. The main
+entry point is :file:`doc/source/contents.rst`, which pulls in the
+:file:`index.rst` file for the user guide, developers guide, api reference,
+and the glossary. The documentation suite is built as a single document in
+order to make the most effective use of cross referencing, we want to make
+navigating the Quantities documentation as easy as possible.
 
 Additional files can be added to the various guides by including their base
 file name (the .rst extension is not necessary) in the table of contents.
@@ -50,14 +49,23 @@ statement, such as::
 
   .. include:: ../../TODO
 
-
 .. _formatting-quantities-docs:
 
 Formatting
 ==========
 
 The Sphinx website contains plenty of documentation_ concerning ReST markup and
-working with Sphinx in general. Here are a few additional things to keep in mind:
+working with Sphinx in general. Since quantities is so closely coupled with the
+numpy package, quantities will conform to numpy's documentation standards and
+use numpy's documentation tools. Please familiarize yourself with the `docstring
+standard`_ and the examples_ `like these`_.
+
+.. _`docstring standard`: http://projects.scipy.org/scipy/numpy/wiki/CodingStyleGuidelines#docstring-standard
+.. _examples: http://projects.scipy.org/scipy/numpy/browser/trunk/doc/example.py#L37
+.. _`like these`: http://projects.scipy.org/scipy/numpy/browser/trunk/doc/EXAMPLE_DOCSTRING.txt
+
+Here are a few additional things to keep in
+mind:
 
 * Please familiarize yourself with the Sphinx directives for `inline
   markup`_. Quantities' documentation makes heavy use of cross-referencing and
@@ -241,8 +249,8 @@ taken, these figures can be included in the usual way::
 Referring to quantities documents
 =================================
 
-In the documentation, you may want to include to a document in the Quantities 
-src, e.g. a license file or an example.  When you include these files, 
+In the documentation, you may want to include to a document in the Quantities
+src, e.g. a license file or an example.  When you include these files,
 include them using the ``literalinclude`` directive::
 
    .. literalinclude:: ../examples/some_example.py
