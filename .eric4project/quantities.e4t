@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
 <!-- eric4 tasks file for project quantities -->
-<!-- Saved: 2009-02-01, 19:22:24 -->
+<!-- Saved: 2009-02-08, 08:44:25 -->
 <Tasks version="4.2">
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: move to constants</Summary>
@@ -42,7 +42,16 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-02-01, 19:15:13</Created>
+    <Created>2009-02-01, 19:18:23</Created>
+    <Resource>
+      <Filename>quantities/uncertainquantity.py</Filename>
+      <Linenumber>15</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="False" bugfix="False">
+    <Summary>TODO: what is an appropriate value?</Summary>
+    <Description></Description>
+    <Created>2009-02-08, 08:39:52</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
       <Linenumber>63</Linenumber>
@@ -51,19 +60,10 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: do we want this kind of magic?</Summary>
     <Description></Description>
-    <Created>2009-02-01, 19:15:14</Created>
+    <Created>2009-02-08, 08:39:52</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
-      <Linenumber>417</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="False" bugfix="False">
-    <Summary>TODO: what is an appropriate value?</Summary>
-    <Description></Description>
-    <Created>2009-02-01, 19:18:23</Created>
-    <Resource>
-      <Filename>quantities/uncertainquantity.py</Filename>
-      <Linenumber>15</Linenumber>
+      <Linenumber>415</Linenumber>
     </Resource>
   </Task>
 </Tasks>

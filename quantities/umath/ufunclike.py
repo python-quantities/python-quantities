@@ -2,15 +2,14 @@
 
 import numpy
 from ..quantities import Quantity
-from ..utilities import usedoc
+from ..utilities import with_doc
 
 
 __all__ = ['fix']
 
 
-@usedoc(numpy.fix)
+@with_doc(numpy.fix)
 def fix(x , y = None):
-    # we want this to be useable for both quantities are other types
     if not isinstance(x, Quantity):
         return numpy.fix(x, out)
 

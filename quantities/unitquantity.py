@@ -9,7 +9,7 @@ from .dimensionality import Dimensionality
 from .markup import superscript
 from .quantity import Quantity
 from .registry import unit_registry
-from .utilities import usedoc
+from .utilities import with_doc
 
 
 __all__ = [
@@ -79,7 +79,7 @@ class UnitQuantity(Quantity):
         for alias in aliases:
             unit_registry[alias] = self
 
-    @usedoc(Quantity.__repr__)
+    @with_doc(Quantity.__repr__, use_header=False)
     def __repr__(self):
         ref = self._reference_quantity
         if ref:
@@ -97,7 +97,7 @@ class UnitQuantity(Quantity):
             self.__class__.__name__, repr(self.name), ref, symbol, u_symbol
         )
 
-    @usedoc(Quantity.__str__)
+    @with_doc(Quantity.__str__, use_header=False)
     def __str__(self):
         if self.u_symbol != self.name:
             if USE_UNICODE:
@@ -111,75 +111,75 @@ class UnitQuantity(Quantity):
 #            return s+'\nnote: %s'%self.note
         return s
 
-    @usedoc(Quantity.__add__)
+    @with_doc(Quantity.__add__, use_header=False)
     def __add__(self, other):
         return self.view(Quantity).__add__(other)
 
-    @usedoc(Quantity.__radd__)
+    @with_doc(Quantity.__radd__, use_header=False)
     def __radd__(self, other):
         return self.view(Quantity).__radd__(other)
 
-    @usedoc(Quantity.__sub__)
+    @with_doc(Quantity.__sub__, use_header=False)
     def __sub__(self, other):
         return self.view(Quantity).__sub__(other)
 
-    @usedoc(Quantity.__rsub__)
+    @with_doc(Quantity.__rsub__, use_header=False)
     def __rsub__(self, other):
         return self.view(Quantity).__rsub__(other)
 
-    @usedoc(Quantity.__mul__)
+    @with_doc(Quantity.__mul__, use_header=False)
     def __mul__(self, other):
         return self.view(Quantity).__mul__(other)
 
-    @usedoc(Quantity.__rmul__)
+    @with_doc(Quantity.__rmul__, use_header=False)
     def __rmul__(self, other):
         return self.view(Quantity).__rmul__(other)
 
-    @usedoc(Quantity.__truediv__)
+    @with_doc(Quantity.__truediv__, use_header=False)
     def __truediv__(self, other):
         return self.view(Quantity).__truediv__(other)
 
-    @usedoc(Quantity.__rtruediv__)
+    @with_doc(Quantity.__rtruediv__, use_header=False)
     def __rtruediv__(self, other):
         return self.view(Quantity).__rtruediv__(other)
 
-    @usedoc(Quantity.__div__)
+    @with_doc(Quantity.__div__, use_header=False)
     def __div__(self, other):
         return self.view(Quantity).__div__(other)
 
-    @usedoc(Quantity.__rdiv__)
+    @with_doc(Quantity.__rdiv__, use_header=False)
     def __rdiv__(self, other):
         return self.view(Quantity).__rdiv__(other)
 
-    @usedoc(Quantity.__pow__)
+    @with_doc(Quantity.__pow__, use_header=False)
     def __pow__(self, other):
         return self.view(Quantity).__pow__(other)
 
-    @usedoc(Quantity.__rpow__)
+    @with_doc(Quantity.__rpow__, use_header=False)
     def __rpow__(self, other):
         return self.view(Quantity).__rpow__(other)
 
-    @usedoc(Quantity.__iadd__)
+    @with_doc(Quantity.__iadd__, use_header=False)
     def __iadd__(self, other):
         raise TypeError('can not modify protected units')
 
-    @usedoc(Quantity.__isub__)
+    @with_doc(Quantity.__isub__, use_header=False)
     def __isub__(self, other):
         raise TypeError('can not modify protected units')
 
-    @usedoc(Quantity.__imul__)
+    @with_doc(Quantity.__imul__, use_header=False)
     def __imul__(self, other):
         raise TypeError('can not modify protected units')
 
-    @usedoc(Quantity.__itruediv__)
+    @with_doc(Quantity.__itruediv__, use_header=False)
     def __itruediv__(self, other):
         raise TypeError('can not modify protected units')
 
-    @usedoc(Quantity.__idiv__)
+    @with_doc(Quantity.__idiv__, use_header=False)
     def __idiv__(self, other):
         raise TypeError('can not modify protected units')
 
-    @usedoc(Quantity.__ipow__)
+    @with_doc(Quantity.__ipow__, use_header=False)
     def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
@@ -330,7 +330,7 @@ class CompoundUnit(UnitQuantity):
     def __new__(cls, name):
         return UnitQuantity.__new__(cls, name, unit_registry[name])
 
-    @usedoc(UnitQuantity.__add__)
+    @with_doc(UnitQuantity.__add__, use_header=False)
     def __repr__(self):
         return '1 %s'%self.name
 

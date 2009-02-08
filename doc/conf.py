@@ -24,7 +24,7 @@ sys.path.append(os.path.abspath('ext'))
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'only_directives', 
-              'ipython_console_highlighting', 'plot_directive']
+              'ipython_console_highlighting', 'plot_directive', 'numpydoc']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -140,3 +140,9 @@ latex_appendices = []
 latex_use_modindex = True
 
 latex_use_parts = True
+
+#############################################################
+# numpy extensions
+
+# Edit links
+numpydoc_edit_link = '`Edit </numpy/docs/%(full_name)s/>`__'

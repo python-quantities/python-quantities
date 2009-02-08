@@ -7,7 +7,7 @@ from math import pi
 
 from ..unitquantity import UnitAngle, UnitQuantity, dimensionless
 
-radian = radians = UnitAngle(
+rad = radian = radians = UnitAngle(
     'radian',
     1*dimensionless,
     symbol='rad',

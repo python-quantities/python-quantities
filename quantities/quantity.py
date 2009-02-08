@@ -8,7 +8,7 @@ import numpy
 
 from .dimensionality import Dimensionality
 from .registry import unit_registry
-from .utilities import usedoc
+from .utilities import with_doc
 
 
 def prepare_compatible_units(s, o):
@@ -133,11 +133,9 @@ class Quantity(numpy.ndarray):
             )
         return Quantity(cf*self.magnitude, to_u)
 
-    @usedoc(
-        numpy.ndarray.astype,
-        suffix='Scalars are returned as scalar Quantity arrays.'
-    )
+    @with_doc(numpy.ndarray.astype)
     def astype(self, dtype=None):
+        '''Scalars are returned as scalar Quantity arrays.'''
         ret = super(Quantity, self).astype(dtype)
         # scalar quantities get converted to plain numbers, so we fix it
         # might be related to numpy ticket # 826
@@ -214,7 +212,7 @@ class Quantity(numpy.ndarray):
 #        #....
 #        return result
 
-    @usedoc(numpy.ndarray.__add__)
+    @with_doc(numpy.ndarray.__add__)
     def __add__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
@@ -224,7 +222,7 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__iadd__)
+    @with_doc(numpy.ndarray.__iadd__)
     def __iadd__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
@@ -232,11 +230,11 @@ class Quantity(numpy.ndarray):
         self._dimensionality += other.dimensionality
         return super(Quantity, self).__iadd__(other)
 
-    @usedoc(numpy.ndarray.__radd__)
+    @with_doc(numpy.ndarray.__radd__)
     def __radd__(self, other):
         return self.__add__(other)
 
-    @usedoc(numpy.ndarray.__sub__)
+    @with_doc(numpy.ndarray.__sub__)
     def __sub__(self, other):
         if not isinstance(other, Quantity):
             other = numpy.asarray(other).view(Quantity)
@@ -246,7 +244,7 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__isub__)
+    @with_doc(numpy.ndarray.__isub__)
     def __isub__(self, other):
         if not isinstance(other, Quantity):
             other = numpy.asarray(other).view(Quantity)
@@ -254,7 +252,7 @@ class Quantity(numpy.ndarray):
         self._dimensionality -= other.dimensionality
         return super(Quantity, self).__isub__(other)
 
-    @usedoc(numpy.ndarray.__rsub__)
+    @with_doc(numpy.ndarray.__rsub__)
     def __rsub__(self, other):
         if not isinstance(other, Quantity):
             other = numpy.asarray(other).view(Quantity)
@@ -264,7 +262,7 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__mul__)
+    @with_doc(numpy.ndarray.__mul__)
     def __mul__(self, other):
         try:
             dims = self.dimensionality * other.dimensionality
@@ -276,7 +274,7 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__imul__)
+    @with_doc(numpy.ndarray.__imul__)
     def __imul__(self, other):
         if getattr(other, 'dimensionality', None):
             try:
@@ -291,11 +289,11 @@ class Quantity(numpy.ndarray):
 
         return super(Quantity, self).__imul__(other)
 
-    @usedoc(numpy.ndarray.__rmul__)
+    @with_doc(numpy.ndarray.__rmul__)
     def __rmul__(self, other):
         return self.__mul__(other)
 
-    @usedoc(numpy.ndarray.__truediv__)
+    @with_doc(numpy.ndarray.__truediv__)
     def __truediv__(self, other):
         try:
             dims = self.dimensionality / other.dimensionality
@@ -307,11 +305,11 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__div__)
+    @with_doc(numpy.ndarray.__div__)
     def __div__(self, other):
         return self.__truediv__(other)
 
-    @usedoc(numpy.ndarray.__itruediv__)
+    @with_doc(numpy.ndarray.__itruediv__)
     def __itruediv__(self, other):
         if getattr(other, 'dimensionality', None):
             try:
@@ -326,11 +324,11 @@ class Quantity(numpy.ndarray):
 
         return super(Quantity, self).__itruediv__(other)
 
-    @usedoc(numpy.ndarray.__idiv__)
+    @with_doc(numpy.ndarray.__idiv__)
     def __idiv__(self, other):
         return self.__itruediv__(other)
 
-    @usedoc(numpy.ndarray.__rtruediv__)
+    @with_doc(numpy.ndarray.__rtruediv__)
     def __rtruediv__(self, other):
         try:
             dims = other.dimensionality / self.dimensionality
@@ -342,11 +340,11 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__rdiv__)
+    @with_doc(numpy.ndarray.__rdiv__)
     def __rdiv__(self, other):
         return self.__rtruediv__(other)
 
-    @usedoc(numpy.ndarray.__pow__)
+    @with_doc(numpy.ndarray.__pow__)
     def __pow__(self, other):
         if getattr(other, 'dimensionality', None):
             raise ValueError("exponent must be dimensionless")
@@ -362,7 +360,7 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @usedoc(numpy.ndarray.__ipow__)
+    @with_doc(numpy.ndarray.__ipow__)
     def __ipow__(self, other):
         if getattr(other, 'dimensionality', None):
             try:
@@ -382,26 +380,26 @@ class Quantity(numpy.ndarray):
         self._dimensionality **= other.min()
         return super(Quantity, self).__ipow__(other)
 
-    @usedoc(numpy.ndarray.__rpow__)
+    @with_doc(numpy.ndarray.__rpow__)
     def __rpow__(self, other):
         if self.dimensionality.simplified:
             raise ValueError("exponent must be dimensionless")
 
         return super(Quantity, self.simplified).__rpow__(other)
 
-    @usedoc(numpy.ndarray.__repr__)
+    @with_doc(numpy.ndarray.__repr__)
     def __repr__(self):
         return '%s*%s'%(
             repr(self.magnitude), repr(self.dimensionality)
         )
 
-    @usedoc(numpy.ndarray.__str__)
+    @with_doc(numpy.ndarray.__str__)
     def __str__(self):
         return '%s %s'%(
             str(self.magnitude), str(self.dimensionality)
         )
 
-    @usedoc(numpy.ndarray.__getitem__)
+    @with_doc(numpy.ndarray.__getitem__)
     def __getitem__(self, key):
         if isinstance(key, int):
             # This might be resolved by issue # 826
@@ -409,7 +407,7 @@ class Quantity(numpy.ndarray):
         else:
             return super(Quantity, self).__getitem__(key)
 
-    @usedoc(numpy.ndarray.__setitem__)
+    @with_doc(numpy.ndarray.__setitem__)
     def __setitem__(self, key, value):
         if not isinstance(value, Quantity):
             value = Quantity(value)
@@ -417,39 +415,39 @@ class Quantity(numpy.ndarray):
         # TODO: do we want this kind of magic?
         self.magnitude[key] = value.rescale(self._dimensionality).magnitude
 
-    @usedoc(numpy.ndarray.__lt__)
+    @with_doc(numpy.ndarray.__lt__)
     def __lt__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude < os.magnitude
 
-    @usedoc(numpy.ndarray.__le__)
+    @with_doc(numpy.ndarray.__le__)
     def __le__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude <= os.magnitude
 
-    @usedoc(numpy.ndarray.__eq__)
+    @with_doc(numpy.ndarray.__eq__)
     def __eq__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude == os.magnitude
 
-    @usedoc(numpy.ndarray.__ne__)
+    @with_doc(numpy.ndarray.__ne__)
     def __ne__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude != os.magnitude
 
-    @usedoc(numpy.ndarray.__gt__)
+    @with_doc(numpy.ndarray.__gt__)
     def __gt__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude > os.magnitude
 
-    @usedoc(numpy.ndarray.__ge__)
+    @with_doc(numpy.ndarray.__ge__)
     def __ge__(self, other):
         ss, os = prepare_compatible_units(self, other)
         return ss.magnitude >= os.magnitude
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
-    @usedoc(numpy.ndarray.tolist)
+    @with_doc(numpy.ndarray.tolist)
     def tolist(self):
         #first get a dummy array from the ndarray method
         work_list = self.magnitude.tolist()
@@ -470,7 +468,7 @@ class Quantity(numpy.ndarray):
     #need to implement other Array conversion methods:
     # item, itemset, tofile, dump, byteswap
 
-    @usedoc(numpy.ndarray.sum)
+    @with_doc(numpy.ndarray.sum)
     def sum(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.sum(axis, dtype, out),
@@ -478,7 +476,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.fill)
+    @with_doc(numpy.ndarray.fill)
     def fill(self, scalar):
         if not isinstance (scalar, Quantity):
             scalar = Quantity(scalar, copy=False)
@@ -488,7 +486,7 @@ class Quantity(numpy.ndarray):
         else:
             raise ValueError("scalar must have the same units as self")
 
-    @usedoc(numpy.ndarray.put)
+    @with_doc(numpy.ndarray.put)
     def put(self, indicies, values, mode='raise'):
         """
         performs the equivalent of ndarray.put() but enforces units
@@ -505,11 +503,11 @@ class Quantity(numpy.ndarray):
     # choose does not function correctly, and it is not clear
     # how it would function, so for now it will not be implemented
 
-    @usedoc(numpy.ndarray.argsort)
+    @with_doc(numpy.ndarray.argsort)
     def argsort(self, axis=-1, kind='quick', order=None):
         return self.magnitude.argsort(axis, kind, order)
 
-    @usedoc(numpy.ndarray.searchsorted)
+    @with_doc(numpy.ndarray.searchsorted)
     def searchsorted(self,values, side='left'):
         if not isinstance (values, Quantity):
             values = Quantity(values, copy=False)
@@ -519,11 +517,11 @@ class Quantity(numpy.ndarray):
 
         return self.magnitude.searchsorted(values.magnitude, side)
 
-    @usedoc(numpy.ndarray.nonzero)
+    @with_doc(numpy.ndarray.nonzero)
     def nonzero(self):
         return self.magnitude.nonzero()
 
-    @usedoc(numpy.ndarray.max)
+    @with_doc(numpy.ndarray.max)
     def max(self, axis=None, out=None):
         return Quantity(
             self.magnitude.max(),
@@ -531,7 +529,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.min)
+    @with_doc(numpy.ndarray.min)
     def min(self, axis=None, out=None):
         return Quantity(
             self.magnitude.min(),
@@ -539,11 +537,11 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.argmin)
+    @with_doc(numpy.ndarray.argmin)
     def argmin(self,axis=None, out=None):
         return self.magnitude.argmin()
 
-    @usedoc(numpy.ndarray.ptp)
+    @with_doc(numpy.ndarray.ptp)
     def ptp(self, axis=None, out=None):
         return Quantity(
             self.magnitude.ptp(),
@@ -551,7 +549,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.clip)
+    @with_doc(numpy.ndarray.clip)
     def clip(self, min=None, max=None, out=None):
         if min is None and max is None:
             raise ValueError("at least one of min or max must be set")
@@ -572,7 +570,7 @@ class Quantity(numpy.ndarray):
         )
         return Quantity(clipped, self.dimensionality, copy=False)
 
-    @usedoc(numpy.ndarray.round)
+    @with_doc(numpy.ndarray.round)
     def round(self, decimals=0, out=None):
         return Quantity(
             self.magnitude.round(decimals, out),
@@ -580,7 +578,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.trace)
+    @with_doc(numpy.ndarray.trace)
     def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
         return Quantity(
             self.magnitude.trace(offset, axis1, axis2, dtype, out),
@@ -588,14 +586,14 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.mean)
+    @with_doc(numpy.ndarray.mean)
     def mean(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.mean(axis, dtype, out),
             self.dimensionality,
             copy=False)
 
-    @usedoc(numpy.ndarray.var)
+    @with_doc(numpy.ndarray.var)
     def var(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.var(axis, dtype, out),
@@ -603,7 +601,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.std)
+    @with_doc(numpy.ndarray.std)
     def std(self, axis=None, dtype=None, out=None):
         return Quantity(
             self.magnitude.std(axis, dtype, out),
@@ -611,7 +609,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.prod)
+    @with_doc(numpy.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
         if axis == None:
             power = self.size
@@ -624,7 +622,7 @@ class Quantity(numpy.ndarray):
             copy=False
         )
 
-    @usedoc(numpy.ndarray.cumprod)
+    @with_doc(numpy.ndarray.cumprod)
     def cumprod(self, axis=None, dtype=None, out=None):
         if self._dimensionality:
             # different array elements would have different dimensionality
