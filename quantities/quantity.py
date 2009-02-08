@@ -42,7 +42,7 @@ def validate_dimensionality(value):
         validate_unit_quantity(value)
         return value.dimensionality
     elif isinstance(value, Dimensionality):
-        return value
+        return value.copy()
     else:
         raise TypeError(
             'units must be a quantity, string, or dimensionality, got %s'\
@@ -100,19 +100,20 @@ class Quantity(numpy.ndarray):
         except AssertionError:
             raise ValueError('array is not writeable')
         to_dims = validate_dimensionality(units)
-        if self.dimensionality == to_dims:
+        if self._dimensionality == to_dims:
             return
         to_u = Quantity(1.0, to_dims)
-        from_u = Quantity(1.0, self.dimensionality)
+        from_u = Quantity(1.0, self._dimensionality)
         try:
             cf = get_conversion_factor(from_u, to_u)
         except AssertionError:
             raise ValueError(
                 'Unable to convert between units of "%s" and "%s"'
-                %(from_u.units, to_u.units)
+                %(from_u._dimensionality, to_u._dimensionality)
             )
-        self.magnitude.flat[:] *= cf
-        self._dimensionality = to_u._dimensionality
+        mag = self.magnitude
+        mag *= cf
+        self._dimensionality = to_u.dimensionality
     units = property(_get_units, _set_units)
 
     def rescale(self, units):
@@ -129,7 +130,7 @@ class Quantity(numpy.ndarray):
         except AssertionError:
             raise ValueError(
                 'Unable to convert between units of "%s" and "%s"'
-                %(from_u.units, to_u.units)
+                %(from_u._dimensionality, to_u._dimensionality)
             )
         return Quantity(cf*self.magnitude, to_u)
 
@@ -268,7 +269,7 @@ class Quantity(numpy.ndarray):
             dims = self.dimensionality * other.dimensionality
         except AttributeError:
             other = numpy.asarray(other).view(Quantity)
-            dims = Dimensionality(self.dimensionality)
+            dims = self.dimensionality
 
         ret = super(Quantity, self).__mul__(other)
         ret._dimensionality = dims
@@ -299,7 +300,7 @@ class Quantity(numpy.ndarray):
             dims = self.dimensionality / other.dimensionality
         except AttributeError:
             other = numpy.asarray(other).view(Quantity)
-            dims = Dimensionality(self.dimensionality)
+            dims = self.dimensionality
 
         ret = super(Quantity, self).__truediv__(other)
         ret._dimensionality = dims
@@ -334,7 +335,7 @@ class Quantity(numpy.ndarray):
             dims = other.dimensionality / self.dimensionality
         except AttributeError:
             other = numpy.asarray(other).view(Quantity)
-            dims = Dimensionality(self.dimensionality**-1)
+            dims = self._dimensionality**-1
 
         ret = super(Quantity, self).__rtruediv__(other)
         ret._dimensionality = dims
@@ -355,7 +356,7 @@ class Quantity(numpy.ndarray):
         except AssertionError:
             raise ValueError('Quantities must be raised to a single power')
 
-        dims = self.dimensionality**other.min()
+        dims = self._dimensionality**other.min()
         ret = super(Quantity, self).__pow__(other)
         ret._dimensionality = dims
         return ret

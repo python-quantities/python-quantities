@@ -1,4 +1,4 @@
-"""
+﻿"""
 """
 from __future__ import absolute_import
 
@@ -52,9 +52,6 @@ class UnitQuantity(Quantity):
         ret._u_symbol = u_symbol
         ret._note = note
 
-        # handle dimensionality in the property
-        ret._dimensionality = None
-
         ret._reference_quantity = reference_quantity
 
         if reference_quantity is not None:
@@ -79,7 +76,9 @@ class UnitQuantity(Quantity):
         for alias in aliases:
             unit_registry[alias] = self
 
-    @with_doc(Quantity.__repr__, use_header=False)
+    def __array_finalize__(self, obj):
+        pass
+
     def __repr__(self):
         ref = self._reference_quantity
         if ref:
@@ -184,7 +183,7 @@ class UnitQuantity(Quantity):
         raise TypeError('can not modify protected units')
 
     @property
-    def dimensionality(self):
+    def _dimensionality(self):
         return Dimensionality({self:1})
 
     @property
@@ -350,7 +349,6 @@ class Dimensionless(UnitQuantity):
 
     def __init__(self, name, reference_quantity=None):
         self._name = name
-        self._dimensionality = None
 
         if reference_quantity is None:
             reference_quantity = self
@@ -362,7 +360,7 @@ class Dimensionless(UnitQuantity):
         unit_registry[name] = self
 
     @property
-    def dimensionality(self):
+    def _dimensionality(self):
         return Dimensionality()
 
 dimensionless = Dimensionless('dimensionless')
