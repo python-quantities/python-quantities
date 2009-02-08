@@ -101,7 +101,6 @@ class NumpyDocString(object):
             'Methods': [],
             'See Also': [],
             'Notes': [],
-            'Specific To Quantities': [],
             'Warnings': [],
             'References': '',
             'Examples': '',
@@ -385,7 +384,7 @@ class NumpyDocString(object):
             out += self._str_param_list(param_list)
         out += self._str_section('Warnings')
         out += self._str_see_also(func_role)
-        for s in ('Notes','Specific To Quantities','References','Examples'):
+        for s in ('Notes','References','Examples'):
             out += self._str_section(s)
         out += self._str_index()
         return '\n'.join(out)
