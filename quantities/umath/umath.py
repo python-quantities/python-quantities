@@ -80,13 +80,13 @@ def gradient(f, *varargs):
 
 @with_doc(numpy.cross)
 def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
-    if not (isinstance(x1, Quantity) and isinstance(x2, Quantity)):
+    if not (isinstance(a, Quantity) and isinstance(b, Quantity)):
         return numpy.cross(a, b, axisa, axisb, axisc, axis)
 
-    if not isinstance(x1, Quantity):
-        x1 = Quantity(x1, dimensionless, copy=False)
-    if not isinstance(x2, Quantity):
-        x2 = Quantity(x2, dimensionless, copy=False)
+    if not isinstance(a, Quantity):
+        a = Quantity(a, dimensionless, copy=False)
+    if not isinstance(b, Quantity):
+        b = Quantity(b, dimensionless, copy=False)
 
     return Quantity(
         numpy.cross(a, b, axisa, axisb, axisc, axis),
@@ -98,10 +98,10 @@ def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
 def trapz(y, x=None, dx=1.0, axis=-1):
     # this function has a weird input structure, so it is tricky to wrap it
     # perhaps there is a simpler way to do this
-    if not (
-        isinstance(y, Quantity)
-        and isinstance(x, Quantity)
-        and isinstance(dx, Quantity)
+    if (
+        not isinstance(y, Quantity)
+        and not isinstance(x, Quantity)
+        and not isinstance(dx, Quantity)
     ):
         return numpy.trapz(y, x, dx, axis)
 
@@ -397,7 +397,7 @@ def sinh(x, out=None):
         return numpy.sinh(x, out)
 
     return Quantity(
-        numpy.sinh(x.rescale(dimensionless), out),
+        numpy.sinh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
@@ -411,11 +411,11 @@ def cosh(x, out=None):
     if not isinstance(x, Quantity):
         return numpy.cosh(x, out)
 
-    x = x.rescale(dimensionless)
-
-    return Quantity(numpy.cosh(x.magnitude, out),
-                    dimensionless,
-                    copy = False)
+    return Quantity(
+        numpy.cosh(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+        copy=False
+    )
 
 @with_doc(numpy.tanh)
 def tanh(x, out=None):
@@ -426,11 +426,11 @@ def tanh(x, out=None):
     if not isinstance(x, Quantity):
         return numpy.tanh(x, out)
 
-    x = x.rescale(dimensionless)
-
-    return Quantity(numpy.tanh(x.magnitude, out),
-                    dimensionless,
-                    copy = False)
+    return Quantity(
+        numpy.tanh(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+        copy=False
+    )
 
 @with_doc(numpy.arcsinh)
 def arcsinh(x, out=None):
@@ -442,7 +442,7 @@ def arcsinh(x, out=None):
         return numpy.arcsinh(x, out)
 
     return Quantity(
-        numpy.arcsinh(x.rescale(dimensionless), out),
+        numpy.arcsinh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
@@ -457,7 +457,7 @@ def arccosh(x, out=None):
         return numpy.arccosh(x, out)
 
     return Quantity(
-        numpy.arccosh(x.rescale(dimensionless), out),
+        numpy.arccosh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
@@ -472,7 +472,7 @@ def arctanh(x, out=None):
         return numpy.arctanh(x, out)
 
     return Quantity(
-        numpy.arctanh(x.rescale(dimensionless), out),
+        numpy.arctanh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
