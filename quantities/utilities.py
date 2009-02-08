@@ -11,8 +11,8 @@ class with_doc:
             self.header = \
     """
 
-    Specific to quantities
-    ----------------------
+    Notes
+    -----
     """
         else:
             self.header = ''
