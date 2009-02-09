@@ -10,4 +10,11 @@ percent = UnitQuantity(
     symbol='%'
 )
 
+count = counts = UnitQuantity(
+    'count',
+    1*dimensionless,
+    symbol='ct',
+    aliases=['cts', 'counts']
+)
+
 del UnitQuantity

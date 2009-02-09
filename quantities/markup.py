@@ -4,15 +4,23 @@
 from __future__ import absolute_import
 
 import operator
+import re
 
 from .config import USE_UNICODE
+superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
 
 def superscript(val):
     # TODO: use a regexp:
-    for k, v in enumerate(['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']):
-        val = val.replace('**'+str(k), v)
-        val = val.replace('^'+str(k), v)
-    return val
+    items = re.split(r'\*{2}([\d]+)(?!\.)', val)
+    ret = []
+    while items:
+        try:
+            s = items.pop(0)
+            e = items.pop(0)
+            ret.append(s+''.join(superscripts[int(i)] for i in e))
+        except IndexError:
+            ret.append(s)
+    return ''.join(ret)
 
 def format_units(udict):
     '''
@@ -33,12 +41,12 @@ def format_units(udict):
         else:
             u = key.symbol
         if d>0:
-            if d > 1:
+            if d != 1:
                 u = u + ('**%s'%d).rstrip('0').rstrip('.')
             num.append(u)
         elif d<0:
             d = -d
-            if d > 1:
+            if d != 1:
                 u = u + ('**%s'%d).rstrip('0').rstrip('.')
             den.append(u)
     res = '*'.join(num)
@@ -52,6 +60,6 @@ def format_units(udict):
 def format_units_unicode(udict):
     res = format_units(udict)
     res = superscript(res)
-    res = res.replace('*','·')
+    res = res.replace('**', '^').replace('*','·')
 
     return res

@@ -49,15 +49,17 @@ thm = therm = EC_therm = UnitQuantity(
     100000*BTU,
     symbol='thm'
 )
-thermochemical_calorie = UnitQuantity(
+cal = calorie = thermochemical_calorie = UnitQuantity(
     'thermochemical_calorie',
-    4.184*J
-)
-cal = calorie = IT_calorie = UnitQuantity(
-    'calorie',
-    J*4.1868,
+    4.184*J,
     symbol='cal',
-    aliases=['calories', 'IT_calorie', 'IT_calories']
+    aliases=['calorie', 'calories', 'thermochemical_calories']
+)
+international_steam_table_calorie = UnitQuantity(
+    'international_steam_table_calorie',
+    J*4.1868,
+    symbol='cal_IT',
+    aliases=['international_steam_table_calories']
 )
 ton_TNT = UnitQuantity(
     'ton_TNT',

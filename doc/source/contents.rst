@@ -14,7 +14,7 @@ Quantities -- Support for physical quantities based on the popular numpy library
 .. toctree::
    :maxdepth: 2
 
-   users/index.rst
+   user/index.rst
    devel/index.rst
-   api/index.rst
-   glossary/index.rst
+   reference/index.rst
+   glossary.rst

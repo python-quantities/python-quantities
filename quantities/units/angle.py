@@ -5,20 +5,20 @@ from __future__ import absolute_import
 
 from math import pi
 
-from ..unitquantity import UnitAngle, UnitQuantity, dimensionless
+from ..unitquantity import UnitQuantity, dimensionless
 
-radian = radians = UnitAngle(
+rad = radian = radians = UnitQuantity(
     'radian',
     1*dimensionless,
     symbol='rad',
     aliases=['radians']
 )
-turn = revolution = cycle = turns = circle = circles = UnitAngle(
+turn = revolution = cycle = turns = circle = circles = UnitQuantity(
     'turn',
     2*pi*radian,
     aliases=['turns', 'revolutions', 'circles', 'cycles']
 )
-deg = degree = arcdeg = arcdegree = angular_degree = UnitAngle(
+deg = degree = arcdeg = arcdegree = angular_degree = UnitQuantity(
     'arcdegree',
     pi/180*radian,
     symbol='deg',
@@ -28,7 +28,7 @@ deg = degree = arcdeg = arcdegree = angular_degree = UnitAngle(
         'angular_degrees', 'arcdegrees', 'arcdeg'
     ]
 )
-arcminute = arcmin = arc_minute = angular_minute = UnitAngle(
+arcminute = arcmin = arc_minute = angular_minute = UnitQuantity(
     'arcminute',
     arcdeg/60,
     symbol='arcmin',
@@ -38,7 +38,7 @@ arcminute = arcmin = arc_minute = angular_minute = UnitAngle(
         'angular_minute', 'angular_minutes'
     ]
 )
-arcsecond = arcsec = arc_second = angular_second = UnitAngle(
+arcsecond = arcsec = arc_second = angular_second = UnitQuantity(
     'arcsecond',
     arcmin/60,
     symbol='arcsec',
@@ -48,34 +48,34 @@ arcsecond = arcsec = arc_second = angular_second = UnitAngle(
         'angular_second', 'angular_seconds'
     ]
 )
-grad = grade = UnitAngle(
+grad = grade = UnitQuantity(
     'grad',
     0.9*arcdeg,
     aliases=['grads', 'grade', 'grades', 'gron', 'grons', 'gradian', 'gradians']
 )
 
-degrees_north = degrees_N = UnitAngle(
+degrees_north = degrees_N = UnitQuantity(
     'degrees_north',
     arcdeg,
     symbol='degN',
     u_symbol='°N',
     aliases=['degrees_N']
 )
-degrees_east = degrees_E = UnitAngle(
+degrees_east = degrees_E = UnitQuantity(
     'degrees_east',
     arcdeg,
     symbol='degE',
     u_symbol='°E',
     aliases=['degrees_E']
 )
-degrees_west = degrees_W = UnitAngle(
+degrees_west = degrees_W = UnitQuantity(
     'degrees_west',
     arcdeg,
     symbol='degW',
     u_symbol='°W',
     aliases=['degrees_W']
 )
-degrees_true = degrees_T = UnitAngle(
+degrees_true = degrees_T = UnitQuantity(
     'degrees_true',
     arcdeg,
     symbol='degT',

@@ -2,71 +2,110 @@
 #
 
 # You can set these variables from the command line.
-SPHINXOPTS   =
-SPHINXBUILD  = sphinx-build
-PAPER        =
+SPHINXOPTS    =
+SPHINXBUILD   = LANG=C sphinx-build
+PAPER         =
 
-PAPEROPT_a4      = -D latex_paper_size=a4
-PAPEROPT_letter  = -D latex_paper_size=letter
-ALLSPHINXOPTS = -d _build/doctrees $(PAPEROPT_$(PAPER)) \
-                $(SPHINXOPTS) .
+# Internal variables.
+PAPEROPT_a4     = -D latex_paper_size=a4
+PAPEROPT_letter = -D latex_paper_size=letter
+ALLSPHINXOPTS   = -d build/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
-.PHONY: help clean html web htmlhelp latex changes linkcheck
+.PHONY: help clean html web pickle htmlhelp latex changes linkcheck
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
+	@echo "  dist      to make a distribution-ready tree"
 	@echo "  html      to make standalone HTML files"
-	@echo "  web       to make files usable by Sphinx.web"
+	@echo "  pickle    to make pickle files (usable by e.g. sphinx-web)"
 	@echo "  htmlhelp  to make HTML files and a HTML help project"
 	@echo "  latex     to make LaTeX files, you can set PAPER=a4 or PAPER=letter"
 	@echo "  changes   to make an overview over all changed/added/deprecated items"
 	@echo "  linkcheck to check all external links for integrity"
+	@echo "  upload USER=...  to upload results to docs.scipy.org"
 
 clean:
-	-rm -rf _build/*
+	-rm -rf build/* source/reference/generated
 
-html:
-	mkdir -p _build/html _build/doctrees
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) _build/html
+upload:
+	@test -e build/dist || { echo "make dist is required first"; exit 1; }
+	@test output-is-fine -nt build/dist || { \
+		echo "Review the output in build/dist, and do 'touch output-is-fine' before uploading."; exit 1; }
+	rsync -r -z --delete-after -p build/dist/ $(USER)@docs.scipy.org:/home/docserver/www-root/doc/numpy/
+
+dist: html
+	test -d build/latex || make latex
+	make -C build/latex all-pdf
+	-test -d build/htmlhelp || make htmlhelp-build
+	-rm -rf build/dist
+	cp -r build/html build/dist
+	perl -pi -e 's#^\s*(<li><a href=".*?">NumPy.*?Manual.*?&raquo;</li>)#<li><a href="/">Numpy and Scipy Documentation</a> &raquo;</li>#;' build/dist/*.html build/dist/*/*.html build/dist/*/*/*.html
+	cd build/html && zip -9r ../dist/numpy-html.zip .
+	cp build/latex/numpy-*.pdf build/dist
+	-zip build/dist/numpy-chm.zip build/htmlhelp/numpy.chm
+	cd build/dist && tar czf ../dist.tar.gz *
+	chmod ug=rwX,o=rX -R build/dist
+	find build/dist -type d -print0 | xargs -0r chmod g+s
+
+generate: build/generate-stamp
+build/generate-stamp: $(wildcard source/reference/*.rst)
+	mkdir -p build
+	./sphinxext/autosummary_generate.py source/reference/*.rst \
+		-p dump.xml -o source/reference/generated 
+	touch build/generate-stamp
+
+html: generate
+	mkdir -p build/html build/doctrees
+	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) build/html
+	python postprocess.py html build/html/*.html
 	@echo
-	@echo "Build finished. The HTML pages are in _build/html."
+	@echo "Build finished. The HTML pages are in build/html."
 
-pickle:
-	mkdir -p _build/pickle _build/doctrees
-	$(SPHINXBUILD) -b pickle $(ALLSPHINXOPTS) _build/pickle
+pickle: generate
+	mkdir -p build/pickle build/doctrees
+	$(SPHINXBUILD) -b pickle $(ALLSPHINXOPTS) build/pickle
 	@echo
-	@echo "Build finished; now you can run"
-	@echo "  python -m sphinx.web _build/pickle"
-	@echo "to start the server."
+	@echo "Build finished; now you can process the pickle files or run"
+	@echo "  sphinx-web build/pickle"
+	@echo "to start the sphinx-web server."
 
-htmlhelp:
-	mkdir -p _build/htmlhelp _build/doctrees
-	$(SPHINXBUILD) -b htmlhelp $(ALLSPHINXOPTS) _build/htmlhelp
+web: pickle
+
+htmlhelp: generate
+	mkdir -p build/htmlhelp build/doctrees
+	$(SPHINXBUILD) -b htmlhelp $(ALLSPHINXOPTS) build/htmlhelp
 	@echo
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
-	      ".hhp project file in _build/htmlhelp."
+	      ".hhp project file in build/htmlhelp."
 
-latex:
-	mkdir -p _build/latex _build/doctrees
-	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
+htmlhelp-build: htmlhelp build/htmlhelp/numpy.chm
+%.chm: %.hhp
+	-hhc.exe $^
+
+latex: generate
+	mkdir -p build/latex build/doctrees
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) build/latex
+	python postprocess.py tex build/latex/*.tex
+	perl -pi -e 's/\t(latex.*|pdflatex) (.*)/\t-$$1 -interaction batchmode $$2/' build/latex/Makefile
 	@echo
-	@echo "Build finished; the LaTeX files are in _build/latex."
+	@echo "Build finished; the LaTeX files are in build/latex."
 	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
 	      "run these through (pdf)latex."
 
-changes:
-	mkdir -p _build/changes _build/doctrees
-	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) _build/changes
-	@echo
-	@echo "The overview file is in _build/changes."
+coverage: build
+	mkdir -p build/coverage build/doctrees
+	$(SPHINXBUILD) -b coverage $(ALLSPHINXOPTS) build/coverage
+	@echo "Coverage finished; see c.txt and python.txt in build/coverage"
 
-linkcheck:
-	mkdir -p _build/linkcheck _build/doctrees
-	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) _build/linkcheck
+changes: generate
+	mkdir -p build/changes build/doctrees
+	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) build/changes
+	@echo
+	@echo "The overview file is in build/changes."
+
+linkcheck: generate
+	mkdir -p build/linkcheck build/doctrees
+	$(SPHINXBUILD) -b linkcheck $(ALLSPHINXOPTS) build/linkcheck
 	@echo
 	@echo "Link check complete; look for any errors in the above output " \
-	      "or in _build/linkcheck/output.txt."
-
-doctest:
-	mkdir -p _build/doctest _build/doctrees
-	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) _build/doctest
+	      "or in build/linkcheck/output.txt."
