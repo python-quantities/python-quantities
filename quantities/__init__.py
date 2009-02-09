@@ -225,7 +225,7 @@ project.
 
 #from __future__ import absolute_import
 
-__version__ = '0.5b1'
+__version__ = '0.5b2'
 
 from quantity import Quantity
 from uncertainquantity import UncertainQuantity
