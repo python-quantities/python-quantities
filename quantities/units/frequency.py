@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 from ..unitquantity import UnitQuantity
 from .time import s, min
+from .dimensionless import count
 
 
 Hz = hertz = rps = UnitQuantity(
@@ -30,6 +31,10 @@ rpm = revolutions_per_minute = UnitQuantity(
     'revolutions_per_minute',
     min**-1,
     symbol='rpm'
+)
+cps = UnitQuantity(
+    'counts_per_second',
+    count/s
 )
 
 del UnitQuantity, s, min

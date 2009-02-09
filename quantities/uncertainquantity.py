@@ -35,6 +35,12 @@ class UncertainQuantity(Quantity):
     units = property(Quantity._get_units, _set_units)
 
     @property
+    def _reference(self):
+        ret = super(UncertainQuantity, self)._reference.view(UncertainQuantity)
+        ret.uncertainty = self.uncertainty._reference
+        return ret
+
+    @property
     def simplified(self):
         ret = super(UncertainQuantity, self).simplified.view(UncertainQuantity)
         ret.uncertainty = self.uncertainty.simplified

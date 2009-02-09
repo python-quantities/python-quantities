@@ -21,6 +21,7 @@ class UnitRegistry:
                 return eval(string, self.__context)
             except NameError:
                 # could return self['UnitQuantity'](string)
+                print self.__context
                 raise LookupError(
                     'Unable to parse units: "%s"'%string
                 )

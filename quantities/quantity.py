@@ -16,7 +16,7 @@ def prepare_compatible_units(s, o):
         o = Quantity(o, copy=False)
     try:
         assert s.dimensionality.simplified == o.dimensionality.simplified
-        return s.simplified, o.simplified
+        return s._reference, o._reference
     except AssertionError:
         raise ValueError(
             'can not compare quantities with units of %s and %s'\
@@ -52,8 +52,8 @@ def validate_dimensionality(value):
 def get_conversion_factor(from_u, to_u):
     validate_unit_quantity(from_u)
     validate_unit_quantity(to_u)
-    from_u = from_u.simplified
-    to_u = to_u.simplified
+    from_u = from_u._reference
+    to_u = to_u._reference
     assert from_u.dimensionality == to_u.dimensionality
     return from_u.magnitude / to_u.magnitude
 
@@ -76,6 +76,13 @@ class Quantity(numpy.ndarray):
     @property
     def dimensionality(self):
         return self._dimensionality.copy()
+
+    @property
+    def _reference(self):
+        rq = 1*unit_registry['dimensionless']
+        for u, d in self.dimensionality.iteritems():
+            rq = rq * u._reference**d
+        return rq * self.magnitude
 
     @property
     def magnitude(self):
@@ -148,69 +155,24 @@ class Quantity(numpy.ndarray):
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
 
-    def __array_wrap__(self, obj, context):
-        # this is experimental right now, there is probably a better
-        # way to implement it, but for now lets identify which
-        # ufuncs need to be addressed. Maybe a good way to do this would
-        # be something like a dictionary mapping of ufuncs to functions
-        # that return a proper dimensionality based on the inputs.
-#        print obj, context
-        uf, objs, huh = context
-
-        result = obj.view(type(self))
-        if uf is numpy.multiply:
-            result._dimensionality = objs[0].dimensionality * objs[1].dimensionality
-        elif uf is numpy.sqrt:
-            result._dimensionality = objs[0].dimensionality**(0.5)
-        elif uf is numpy.rint:
-            result._dimensionality = objs[0].dimensionality
-        elif uf is numpy.conjugate:
-            result._dimensionality = objs[0].dimensionality
-        return result
-
-#    def __array_wrap__(self, obj, context=None):
-#        """
-#        Special hook for ufuncs.
-#        Wraps the numpy array and sets the mask according to context.
-#        """
-#        result = obj.view(type(self))
+#    def __array_wrap__(self, obj, context):
+#        # this is experimental right now, there is probably a better
+#        # way to implement it, but for now lets identify which
+#        # ufuncs need to be addressed. Maybe a good way to do this would
+#        # be something like a dictionary mapping of ufuncs to functions
+#        # that return a proper dimensionality based on the inputs.
+##        print obj, context
+#        uf, objs, huh = context
 #
-#        if context is not None:
-#            result._dimensionality = result._dimensionality.copy()
-#            (func, args, _) = context
-#            m = reduce(mask_or, [getmaskarray(arg) for arg in args])
-#            # Get the domain mask................
-#            domain = ufunc_domain.get(func, None)
-#            if domain is not None:
-#                if len(args) > 2:
-#                    d = reduce(domain, args)
-#                else:
-#                    d = domain(*args)
-#                # Fill the result where the domain is wrong
-#                try:
-#                    # Binary domain: take the last value
-#                    fill_value = ufunc_fills[func][-1]
-#                except TypeError:
-#                    # Unary domain: just use this one
-#                    fill_value = ufunc_fills[func]
-#                except KeyError:
-#                    # Domain not recognized, use fill_value instead
-#                    fill_value = self.fill_value
-#                result = result.copy()
-#                np.putmask(result, d, fill_value)
-#                # Update the mask
-#                if m is nomask:
-#                    if d is not nomask:
-#                        m = d
-#                else:
-#                    m |= d
-#            # Make sure the mask has the proper size
-#            if result.shape == () and m:
-#                return masked
-#            else:
-#                result._mask = m
-#                result._sharedmask = False
-#        #....
+#        result = obj.view(type(self))
+#        if uf is numpy.multiply:
+#            result._dimensionality = objs[0].dimensionality * objs[1].dimensionality
+#        elif uf is numpy.sqrt:
+#            result._dimensionality = objs[0].dimensionality**(0.5)
+#        elif uf is numpy.rint:
+#            result._dimensionality = objs[0].dimensionality
+#        elif uf is numpy.conjugate:
+#            result._dimensionality = objs[0].dimensionality
 #        return result
 
     @with_doc(numpy.ndarray.__add__)

@@ -2,21 +2,23 @@
 """
 from __future__ import absolute_import
 
+import weakref
+
 import numpy
 
 from .config import USE_UNICODE
 from .dimensionality import Dimensionality
 from .markup import superscript
-from .quantity import Quantity
+from .quantity import Quantity, get_conversion_factor
 from .registry import unit_registry
 from .utilities import with_doc
 
 
 __all__ = [
-    'CompoundUnit', 'Dimensionless', 'UnitAngle', 'UnitConstant',
-    'UnitCurrency', 'UnitCurrent', 'UnitInformation', 'UnitLength',
-    'UnitLuminousIntensity', 'UnitMass', 'UnitMass', 'UnitQuantity',
-    'UnitSubstance', 'UnitTemperature', 'UnitTime'
+    'CompoundUnit', 'Dimensionless', 'UnitConstant', 'UnitCurrency',
+    'UnitCurrent', 'UnitInformation', 'UnitLength', 'UnitLuminousIntensity',
+    'UnitMass', 'UnitMass', 'UnitQuantity', 'UnitSubstance', 'UnitTemperature',
+    'UnitTime', 'set_default_units'
 ]
 
 
@@ -29,7 +31,7 @@ class UnitQuantity(Quantity):
     __array_priority__ = 20
 
     def __new__(
-        cls, name, reference_quantity=None, symbol=None, u_symbol=None,
+        cls, name, definition=None, symbol=None, u_symbol=None,
         aliases=[], note=None
     ):
         try:
@@ -52,14 +54,14 @@ class UnitQuantity(Quantity):
         ret._u_symbol = u_symbol
         ret._note = note
 
-        ret._reference_quantity = reference_quantity
-
-        if reference_quantity is not None:
-            if not isinstance(reference_quantity, Quantity):
-                reference_quantity *= dimensionless
-            ret._simplified = reference_quantity.simplified
+        if definition is not None:
+            if not isinstance(definition, Quantity):
+                definition *= dimensionless
+            ret._definition = definition
+            ret._conv_ref = definition._reference
         else:
-            ret._simplified = None
+            ret._definition = None
+            ret._conv_ref = None
 
         ret._format_order = (ret._primary_order, ret._secondary_order)
         ret.__class__._secondary_order += 1
@@ -67,7 +69,7 @@ class UnitQuantity(Quantity):
         return ret
 
     def __init__(
-        self, name, reference_quantity=None, symbol=None, u_symbol=None,
+        self, name, definition=None, symbol=None, u_symbol=None,
         aliases=[], note=None
     ):
         unit_registry[name] = self
@@ -79,8 +81,62 @@ class UnitQuantity(Quantity):
     def __array_finalize__(self, obj):
         pass
 
+    @property
+    def _reference(self):
+        if self._conv_ref is None:
+            return self
+        else:
+            return self._conv_ref
+
+    @property
+    def _dimensionality(self):
+        return Dimensionality({self:1})
+
+    @property
+    def format_order(self):
+        return self._format_order
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def note(self):
+        return self._note
+
+    @property
+    def definition(self):
+        if self._definition is None:
+            return self
+        else:
+            return self._definition
+
+    @property
+    def simplified(self):
+        return self._reference.simplified
+
+    @property
+    def symbol(self):
+        if self._symbol:
+            return self._symbol
+        else:
+            return self.name
+
+    @property
+    def u_symbol(self):
+        if self._u_symbol:
+            return self._u_symbol
+        else:
+            return self.symbol
+
+    def _get_units(self):
+        return self
+    def _set_units(self, units):
+        raise AttributeError('can not modify protected units')
+    units = property(_get_units, _set_units)
+
     def __repr__(self):
-        ref = self._reference_quantity
+        ref = self._definition
         if ref:
             ref = ', %s*%s'%(str(ref.magnitude), repr(ref.dimensionality))
         else:
@@ -182,144 +238,97 @@ class UnitQuantity(Quantity):
     def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
-    @property
-    def _dimensionality(self):
-        return Dimensionality({self:1})
-
-    @property
-    def format_order(self):
-        return self._format_order
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def note(self):
-        return self._note
-
-    @property
-    def reference_quantity(self):
-        if self._reference_quantity is not None:
-            return self._reference_quantity
-        else:
-            return self
-
-    @property
-    def simplified(self):
-        if self._simplified is not None:
-            return self._simplified
-#            return self.reference_quantity.simplified
-            # if alternat unit system:
-            # return self.reference_quantity.simplified.simplified
-        else:
-            return self
-            # if alternate units:
-            # return self.rescale(alt)
-
-    @property
-    def symbol(self):
-        if self._symbol:
-            return self._symbol
-        else:
-            return self.name
-
-    @property
-    def u_symbol(self):
-        if self._u_symbol:
-            return self._u_symbol
-        else:
-            return self.symbol
-
-    def _get_units(self):
-        return self
-    def _set_units(self, units):
-        raise AttributeError('can not modify protected units')
-    units = property(_get_units, _set_units)
-
-    @classmethod
-    def set_reference_unit(cls, unit):
-        if cls.__name__ in ('UnitConstant', 'UnitQuantity', 'Dimensionless'):
-            raise ValueError(
-                'can not set alternate reference unit for type %'% cls.__name__
-            )
-        if isinstance(unit, str):
-            unit = unit_registry[unit]
-        try:
-            assert type(unit) == cls or unit is None
-        except:
-            raise TypeError('unit must be of same type or "None"')
-
-        cls._alt_reference_unit = unit
-
-    @property
-    def alt_reference_unit(self):
-        return self.__class__._alt_reference_unit
-
-
 unit_registry['UnitQuantity'] = UnitQuantity
 
 
-class UnitConstant(UnitQuantity):
+class IrreducibleUnit(UnitQuantity):
 
-    _primary_order = 0
+    _default_unit = None
 
     def __init__(
-        self, name, reference_quantity=None, symbol=None, u_symbol=None,
+        self, name, definition=None, symbol=None, u_symbol=None,
         aliases=[], note=None
     ):
-        # we dont want to register constants in the unit registry
-        return
+        super(IrreducibleUnit, self).__init__(
+            name, definition, symbol, u_symbol, aliases, note
+        )
+        cls = type(self)
+        if cls._default_unit is None:
+            cls._default_unit = self
+
+        # cached:
+        self._simplified = self._reference
+
+    @property
+    def simplified(self):
+        default_unit = type(self).get_default_unit()
+        if self.dimensionality == default_unit.dimensionality:
+            return self
+        else:
+            if self._simplified._dimensionality != default_unit.dimensionality:
+                self._simplified = self.rescale(default_unit)
+            return self._simplified
+
+    @classmethod
+    def get_default_unit(cls):
+        return cls._default_unit
+    @classmethod
+    def set_default_unit(cls, unit):
+        if unit is None:
+            return
+        if isinstance(unit, str):
+            unit = unit_registry[unit]
+        try:
+            # check that conversions are possible:
+            get_conversion_factor(cls._default_unit, unit)
+        except ValueError:
+            raise TypeError('default unit must be of same type')
+        cls._default_unit = unit
 
 
-class UnitMass(UnitQuantity):
+class UnitMass(IrreducibleUnit):
 
     _primary_order = 1
 
 
-class UnitLength(UnitQuantity):
+class UnitLength(IrreducibleUnit):
 
     _primary_order = 2
 
 
-class UnitTime(UnitQuantity):
+class UnitTime(IrreducibleUnit):
 
     _primary_order = 3
 
 
-class UnitCurrent(UnitQuantity):
+class UnitCurrent(IrreducibleUnit):
 
     _primary_order = 4
 
 
-class UnitLuminousIntensity(UnitQuantity):
+class UnitLuminousIntensity(IrreducibleUnit):
 
     _primary_order = 5
 
 
-class UnitSubstance(UnitQuantity):
+class UnitSubstance(IrreducibleUnit):
 
     _primary_order = 6
 
 
-class UnitTemperature(UnitQuantity):
+class UnitTemperature(IrreducibleUnit):
 
     _primary_order = 7
 
 
-class UnitInformation(UnitQuantity):
+class UnitInformation(IrreducibleUnit):
 
     _primary_order = 8
 
 
-class UnitAngle(UnitQuantity):
+class UnitCurrency(IrreducibleUnit):
 
     _primary_order = 9
-
-
-class UnitCurrency(UnitQuantity):
-
-    _primary_order = 10
 
 
 class CompoundUnit(UnitQuantity):
@@ -347,12 +356,12 @@ class Dimensionless(UnitQuantity):
 
     _primary_order = 100
 
-    def __init__(self, name, reference_quantity=None):
+    def __init__(self, name, definition=None):
         self._name = name
 
-        if reference_quantity is None:
-            reference_quantity = self
-        self._reference_quantity = reference_quantity
+        if definition is None:
+            definition = self
+        self._definition = definition
 
         self._format_order = (self._primary_order, self._secondary_order)
         self.__class__._secondary_order += 1
@@ -364,3 +373,63 @@ class Dimensionless(UnitQuantity):
         return Dimensionality()
 
 dimensionless = Dimensionless('dimensionless')
+
+
+class UnitConstant(UnitQuantity):
+
+    _primary_order = 0
+
+    def __init__(
+        self, name, definition=None, symbol=None, u_symbol=None,
+        aliases=[], note=None
+    ):
+        # we dont want to register constants in the unit registry
+        return
+
+
+def set_default_units(
+    system=None, currency=None, current=None, information=None, length=None,
+    luminous_intensity=None, mass=None, substance=None, temperature=None,
+    time=None
+):
+    """
+    Set the default units in which simplified quantities will be
+    expressed.
+
+    system sets the unit system, and can be "SI" or "cgs". All other
+    keyword arguments will accept either a string or a unit quantity.
+    An error will be raised if it is not possible to convert between
+    old and new defaults, so it is not possible to set "kg" as the
+    default unit for time.
+
+    If both system and individual defaults are given, the system
+    defaults will be applied first, followed by the individual ones.
+    """
+    if system is not None:
+        system = system.lower()
+        try:
+            assert system in ('si', 'cgs')
+        except AssertionError:
+            raise ValueError('system must be "SI" or "cgs", got "%s"' % system)
+        if system == 'si':
+            UnitCurrent.set_default_unit('A')
+            UnitLength.set_default_unit('m')
+            UnitMass.set_default_unit('kg')
+        elif system == 'cgs':
+            UnitLength.set_default_unit('cm')
+            UnitMass.set_default_unit('g')
+        UnitLuminousIntensity.set_default_unit('cd')
+        UnitSubstance.set_default_unit('mol')
+        UnitTemperature.set_default_unit('degK')
+        UnitTime.set_default_unit('s')
+
+    UnitCurrency.set_default_unit(currency)
+    UnitCurrent.set_default_unit(current)
+    UnitInformation.set_default_unit(information)
+    UnitLength.set_default_unit(length)
+    UnitLuminousIntensity.set_default_unit(luminous_intensity)
+    UnitMass.set_default_unit(mass)
+    UnitSubstance.set_default_unit(substance)
+    UnitTemperature.set_default_unit(temperature)
+    UnitTime.set_default_unit(time)
+

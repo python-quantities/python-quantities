@@ -5,8 +5,8 @@ from __future__ import absolute_import
 
 from ..unitquantity import UnitCurrent, UnitLuminousIntensity, UnitQuantity
 from .time import s
-from .length import m
-from .energy import J
+from .length import cm, m
+from .energy import J, erg
 from .velocity import c
 from .force import N
 from math import pi
@@ -50,7 +50,7 @@ aA = abampere = biot = UnitCurrent(
 
 esu = statcoulomb = statC = franklin = Fr = UnitQuantity(
     'statcoulomb',
-    0.1*A*m/c,
+    1 * erg**0.5 * cm**0.5,
     symbol='esu',
     aliases=['statcoulombs', 'statC', 'franklin', 'franklins', 'Fr']
 )
