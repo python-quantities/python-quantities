@@ -48,7 +48,8 @@ from distutils import version
 v = version.LooseVersion(quantities.__version__)
 
 # The short X.Y version.
-version = '.'.join([str(i) for i in v.version[:2]])
+#version = '.'.join([str(i) for i in v.version[:2]])
+version = quantities.__version__
 # The full version, including alpha/beta/rc tags.
 release = quantities.__version__
 

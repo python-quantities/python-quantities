@@ -21,7 +21,8 @@ Creating Source Releases
 Quantities is distributed as a source release for Linux and OS-X. To create a
 source release, just do::
 
-  python setup.py register sdist upload --sign
+  python setup.py register
+  python setup.py sdist upload --sign --formats=zip,gztar
 
 This will create the tgz source file and upload it to the Python Package Index.
 Uploading to PyPi requires a .pypirc file in your home directory, something
@@ -46,7 +47,7 @@ windows installer, open a DOS window, cd into the quantities source directory
 and run::
 
   python setup.py build
-  python setup.py bdist_wininst --skip-build
+  python setup.py bdist_wininst
 
 This creates the executable windows installer in the `dist/` directory.
 
@@ -58,19 +59,20 @@ When publishing a new release, the Quantities doumentation needs to be generated
 and published as well. Sphinx_, LaTeX_ (preferably `TeX-Live`_), and dvipng_ are
 required to build the documentation. Once these are installed, do::
 
-  python setup.py build_sphinx
+  cd doc
+  make html
 
 which will produce the html output and save it in build/sphinx/html. Then run::
 
-  python setup.py build_sphinx -b latex
-  cd build/sphinx/latex
+  make latex
+  cd build/latex
   make all-pdf
   cp Quantities.pdf ../html
 
 which will generate a pdf file in the latex directory. Finally, upload the html
 content to the http://packages.python.org/quantities/ webserver. To do so::
 
-  cd build/sphinx/html
+  cd build/html
   zip -r quantities *
 
 and then visit `the Quantities project page
