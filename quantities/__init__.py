@@ -1,16 +1,20 @@
 ﻿"""
 
-This is a crash-course introduction to the Quantities package. It is
-strongly suggested to import quantities to its own namespace, so units
-and constants variables are not accidentally overwritten::
+This is a crash-course introduction to the Quantities package.
+Quantities attempts to handle operations involving values that have
+both magnitude and dimensionality, the latter being described by a
+system of units, and possibly an uncertainty.
+
+It is strongly suggested to import quantities to its own namespace, so
+units and constants variables are not accidentally overwritten::
 
   >>> import quantities as pq
 
-Here pq stands for "physical quantities". There are a number of ways
-to create a quantity. The Quantity constructor can be used similar to
-numpy.array, by passing a sequence. Units can be designated using a
-string containing standard unit abbreviations or unit names. For
-example::
+Here pq stands for "physical quantities" or "python quantities". There
+are a number of ways to create a quantity. The Quantity constructor
+can be used similar to numpy.array, by passing a sequence. Units can
+be designated using a string containing standard unit abbreviations or
+unit names. For example::
 
   >>> q = pq.Quantity([1,2,3], 'J')
   >>> q = pq.Quantity([1,2,3], 'joules')
@@ -99,6 +103,14 @@ units::
   >>> qs = q2.simplfied
   >>> print qs
   430.556416668 m
+
+It is also possible to customize the units in which simplified
+quantities are expressed::
+
+  >>> pq.set_default_units('cgs')
+  >>> print pq.J.simplified
+  10000000.0 g*cm**2/s**2
+  >>> pq.set_default_units(length='m', mass='kg')
 
 There are times when you may want to treat a group of units as a
 single compound unit. For example, surface area per unit volume is a
@@ -203,11 +215,17 @@ Windows. It can be disabled at install time by running::
 When unicode is enabled, strings used to designate units should still
 conform to valid python expressions.
 
+One final note: Quantities is not a package for describing coordinate
+systems that require a point of reference, like positions on a map or
+absolute temperature scales. Proper support of coordinate systems
+would be a fairly large undertaking and is outside the scope of this
+project.
+
 """
 
 #from __future__ import absolute_import
 
-__version__ = '0.5a5'
+__version__ = '0.5b1'
 
 from quantity import Quantity
 from uncertainquantity import UncertainQuantity
