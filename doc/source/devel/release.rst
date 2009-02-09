@@ -22,8 +22,7 @@ Quantities is distributed as a source release for Linux and OS-X. To create a
 source release, just do::
 
   python setup.py register
-  python setup.py sdist --formats=zip,gztar
-  python setup.py upload --sign
+  python setup.py sdist --formats=zip,gztar upload --sign
 
 This will create the tgz source file and upload it to the Python Package Index.
 Uploading to PyPi requires a .pypirc file in your home directory, something
