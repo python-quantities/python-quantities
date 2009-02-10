@@ -42,6 +42,10 @@ quantities/constants/xray.py
 quantities/tests/__init__.py
 quantities/tests/test_quantities.py
 quantities/tests/test_umath.py
+quantities/umath/__init__.py
+quantities/umath/fromnumeric.py
+quantities/umath/ufunclike.py
+quantities/umath/umath.py
 quantities/units/__init__.py
 quantities/units/acceleration.py
 quantities/units/angle.py

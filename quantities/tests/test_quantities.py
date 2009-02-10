@@ -6,6 +6,8 @@ import os
 import numpy
 
 from nose.tools import *
+from numpy.testing import *
+from numpy.testing.utils import *
 
 import quantities as q
 
@@ -986,3 +988,6 @@ class TestQuantities(unittest.TestCase):
         self.numAssertAlmostEqual( q.unwrap(t5), t6, 8)
 
         self.numAssertAlmostEqual(q.unwrap(t5, discont = numpy.pi * q.radians ), t6, 8)
+
+if __name__ == "__main__":
+    run_module_suite()

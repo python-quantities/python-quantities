@@ -13,6 +13,20 @@ rad = radian = radians = UnitQuantity(
     symbol='rad',
     aliases=['radians']
 )
+mrad = milliradian = UnitQuantity(
+    'milliradian',
+    rad/1000,
+    symbol='mrad',
+    aliases=['milliradians']
+)
+urad = microradian = UnitQuantity(
+    'microradian',
+    mrad/1000,
+    symbol='urad',
+    u_symbol='µrad',
+    aliases=['milliradians']
+)
+
 turn = revolution = cycle = turns = circle = circles = UnitQuantity(
     'turn',
     2*pi*radian,
