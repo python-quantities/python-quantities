@@ -47,6 +47,12 @@ or equivalently::
   >>> print q
   3.280839895013123 ft
 
+Note that, with strings, units can be designated using plural 
+variants. Plural variants of the module variables are not available at
+this time, in the interest of keeping the units namespace somewhat 
+manageable. `q.units = 'feet'` will work, `q.units = pq.feet` will 
+not.  
+
 The units themselves are special objects that can not be modified in
 place::
 
