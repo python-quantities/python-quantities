@@ -33,10 +33,6 @@ from __future__ import with_statement
 import os
 import sys
 
-#try:
-#    from setuptools import setup
-#except ImportError:
-#    from numpy.distutils.core import setup
 from numpy.distutils.core import setup
 
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
