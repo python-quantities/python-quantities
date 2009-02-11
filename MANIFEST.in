@@ -1,1 +1,3 @@
-include quantities-data/NIST_codata.txt
+include quantities/constants/NIST_codata.txt
+include quantities/tests/*.py
+include quantities/umath/tests/*.py

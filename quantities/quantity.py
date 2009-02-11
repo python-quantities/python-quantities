@@ -352,7 +352,7 @@ class Quantity(numpy.ndarray):
 
     @with_doc(numpy.ndarray.__repr__)
     def __repr__(self):
-        return '%s*%s'%(
+        return '%s * %s'%(
             repr(self.magnitude), repr(self.dimensionality)
         )
 

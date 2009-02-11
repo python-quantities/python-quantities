@@ -138,7 +138,7 @@ class UnitQuantity(Quantity):
     def __repr__(self):
         ref = self._definition
         if ref:
-            ref = ', %s*%s'%(str(ref.magnitude), repr(ref.dimensionality))
+            ref = ', %s * %s'%(str(ref.magnitude), repr(ref.dimensionality))
         else:
             ref = ''
         symbol = self._symbol
