@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-02-08, 13:56:33 -->
+<!-- Saved: 2009-02-11, 08:41:32 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -13,7 +13,6 @@
   <Email></Email>
   <Sources>
     <Source>quantities/tests/test_quantities.py</Source>
-    <Source>quantities/tests/__init__.py</Source>
     <Source>quantities/units/volume.py</Source>
     <Source>quantities/units/substance.py</Source>
     <Source>quantities/units/angle.py</Source>
@@ -74,6 +73,7 @@
     <Source>quantities/umath/__init__.py</Source>
     <Source>quantities/umath/umath.py</Source>
     <Source>quantities/tests/test_umath.py</Source>
+    <Source>quantities/umath/tests/test_umath.py</Source>
   </Sources>
   <Forms>
   </Forms>

@@ -227,13 +227,36 @@ project.
 
 __version__ = '0.5b2'
 
+import quantity
 from quantity import Quantity
+
+import uncertainquantity
 from uncertainquantity import UncertainQuantity
+
+import unitquantity
 from unitquantity import *
 
 from units import *
 
 import constants
 
-#import various groups of functions
 from umath import *
+
+from numpy.testing import Tester
+test = Tester().test
+#bench = Tester().bench
+
+try:
+    import coverage
+
+    def coverage_report():
+        coverage.start()
+        test()
+        coverage.stop()
+        coverage.report(
+            [quantity, unitquantity, uncertainquantity, dimensionality, markup,
+             registry, ]
+        )
+
+except ImportError:
+    pass

@@ -1,5 +1,6 @@
 .coverage
 build
+dist
 .eric4project/project-apis.db
 .ropeproject/objectdb
 doc/source/reference/generated

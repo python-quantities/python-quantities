@@ -4,9 +4,12 @@ import tempfile
 import shutil
 import os
 import numpy
-from quantities import *
+
 import quantities as q
+
 from nose.tools import *
+from numpy.testing import *
+from numpy.testing.utils import *
 
 def num_assert_equal( a1, a2):
         """Test for equality of numarray fields a1 and a2.
@@ -43,7 +46,7 @@ def num_assert_almost_equal( a1, a2, prec = None):
 
 def test_sumproddifffuncs():
     """
-        test the sum produc and difference ufuncs
+    test the sum, product and difference ufuncs
     """
     a = [1,2,3,4] * q.J
 
@@ -64,8 +67,8 @@ def test_sumproddifffuncs():
 
     assert_raises(ValueError, q.cumprod, c)
 
-    d = [10, .1, 5, 50] * dimensionless
-    num_assert_almost_equal(q.cumprod(d), [10, 1, 5, 250] * dimensionless)
+    d = [10, .1, 5, 50] * q.dimensionless
+    num_assert_almost_equal(q.cumprod(d), [10, 1, 5, 250] * q.dimensionless)
 
     #cumsum
 
@@ -109,7 +112,7 @@ def test_sumproddifffuncs():
     num_assert_equal(q.cross(a,b), [-15, -2, 39] * q.kPa * q.m**2)
 
     #trapz
-    assert_almost_equal(trapz(y, dx = .2 *m**2), 1.21 * q.J)
+    assert_almost_equal(q.trapz(y, dx = .2 * q.m**2), 1.21 * q.J)
 
 def test_hyperbolicfunctions():
     """
@@ -155,33 +158,33 @@ def test_rounding():
     """test rounding unctions"""
     #test around
     num_assert_almost_equal(
-        q.around([.5, 1.5, 2.5, 3.5, 4.5] * J) ,
+        q.around([.5, 1.5, 2.5, 3.5, 4.5] * q.J) ,
         [0., 2., 2., 4., 4.] * q.J
     )
 
     num_assert_almost_equal(
-        q.around([1,2,3,11] * BTU, decimals=1),
+        q.around([1,2,3,11] * q.BTU, decimals=1),
         [1, 2, 3, 11] * q.J
     )
 
     num_assert_almost_equal(
-        q.around([1,2,3,11] * BTU, decimals=-1),
+        q.around([1,2,3,11] * q.BTU, decimals=-1),
         [0, 0, 0, 10] * q.J
     )
 
     # round_ and around are equivalent
     num_assert_almost_equal(
-        q.round_([.5, 1.5, 2.5, 3.5, 4.5] * J),
+        q.round_([.5, 1.5, 2.5, 3.5, 4.5] * q.J),
         [0., 2., 2., 4., 4.] * q.J
     )
 
     num_assert_almost_equal(
-        q.round_([1,2,3,11] * BTU, decimals=1),
+        q.round_([1,2,3,11] * q.BTU, decimals=1),
         [1, 2, 3, 11] * q.J
     )
 
     num_assert_almost_equal(
-        q.round_([1,2,3,11] * BTU, decimals=-1),
+        q.round_([1,2,3,11] * q.BTU, decimals=-1),
         [0, 0, 0, 10] * q.J
     )
 
@@ -204,46 +207,53 @@ def test_rounding():
     )
 
     # test floor
-    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * degC
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * q.degC
     num_assert_almost_equal(
         q.floor(a),
-        [-2., -2., -1., 0., 1., 1., 2.] * degC
+        [-2., -2., -1., 0., 1., 1., 2.] * q.degC
     )
 
     # test ceil
-    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * degC
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * q.degC
     num_assert_almost_equal(
         q.ceil(a),
-        [-1., -1., -0., 1., 2., 2., 2.] * degC)
+        [-1., -1., -0., 1., 2., 2., 2.] * q.degC)
 
 
 def test_exponents_and_logarithms():
-    a = [12, 3, 4, 5, 6, 7, -1, -10] * dimensionless
+    """
+    test exponens and logarithms ufuncs
+    """
+    a = [12, 3, 4, 5, 6, 7, -1, -10] * q.dimensionless
     b = [1.62754791e+05, 2.00855369e+01, 5.45981500e+01, 1.48413159e+02,
          4.03428793e+02, 1.09663316e+03, 3.67879441e-01,   4.53999298e-05
-        ] * dimensionless
+        ] * q.dimensionless
     num_assert_almost_equal(q.exp(a), b, prec=3)
 
     num_assert_almost_equal(a, q.log(b), prec=8)
 
-    c = [100, 10000, 5, 4, 1] * dimensionless
+    c = [100, 10000, 5, 4, 1] * q.dimensionless
 
     num_assert_almost_equal(
         q.log10(c),
-        [2., 4., 0.69897, 0.60205999, 0.] * dimensionless,
+        [2., 4., 0.69897, 0.60205999, 0.] * q.dimensionless,
         prec=8
     )
 
     num_assert_almost_equal(
         q.log2(c),
-        [6.64385619, 13.28771238, 2.32192809, 2., 0.] * dimensionless,
+        [6.64385619, 13.28771238, 2.32192809, 2., 0.] * q.dimensionless,
         prec=8
     )
 
-    e = [1e-10, -1e-10, -7e-10, 1, 0, 1e-5] * dimensionless
+    e = [1e-10, -1e-10, -7e-10, 1, 0, 1e-5] * q.dimensionless
 
     f = [1.00000000e-10, -1.00000000e-10, -7.00000000e-10,
-         1.71828183e+00, 0.00000000e+00, 1.00000500e-05] * dimensionless
+         1.71828183e+00, 0.00000000e+00, 1.00000500e-05] * q.dimensionless
     num_assert_almost_equal(q.expm1(e), f, prec=8)
 
     num_assert_almost_equal(q.log1p(f), e, prec=8)
+
+
+if __name__ == "__main__":
+    run_module_suite()
