@@ -6,6 +6,7 @@ import copy
 
 import numpy
 
+from .config import USE_UNICODE
 from .dimensionality import Dimensionality
 from .registry import unit_registry
 from .utilities import with_doc
@@ -353,14 +354,16 @@ class Quantity(numpy.ndarray):
     @with_doc(numpy.ndarray.__repr__)
     def __repr__(self):
         return '%s * %s'%(
-            repr(self.magnitude), repr(self.dimensionality)
+            repr(self.magnitude), self.dimensionality.string
         )
 
     @with_doc(numpy.ndarray.__str__)
     def __str__(self):
-        return '%s %s'%(
-            str(self.magnitude), str(self.dimensionality)
-        )
+        if USE_UNICODE:
+            dims = self.dimensionality.unicode
+        else:
+            dims = self.dimensionality.string
+        return '%s %s'%(str(self.magnitude), dims)
 
     @with_doc(numpy.ndarray.__getitem__)
     def __getitem__(self, key):

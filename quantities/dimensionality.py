@@ -18,6 +18,10 @@ class Dimensionality(dict):
     """
 
     @property
+    def ndims(self):
+        return sum(abs(i) for i in self.simplified.itervalues())
+
+    @property
     def simplified(self):
         if len(self):
             rq = 1*unit_registry['dimensionless']
@@ -144,7 +148,8 @@ class Dimensionality(dict):
         return self
 
     def __repr__(self):
-        return self.string
+        return 'Dimensionality([%s])' \
+            % ', '.join(['(%s, %s)'% (u.name, e) for u, e in self.iteritems()])
 
     def __str__(self):
         if USE_UNICODE:
@@ -154,6 +159,23 @@ class Dimensionality(dict):
 
     def __eq__(self, other):
         return hash(self) == hash(other)
+
+    def __ne__(self, other):
+        return hash(self) != hash(other)
+
+    __neq__ = __ne__
+
+    def __gt__(self, other):
+        return self.ndims > other.ndims
+
+    def __ge__(self, other):
+        return self.ndims >= other.ndims
+
+    def __lt__(self, other):
+        return self.ndims < other.ndims
+
+    def __le__(self, other):
+        return self.ndims <= other.ndims
 
     def copy(self):
         return Dimensionality(self)

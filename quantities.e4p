@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-02-11, 08:41:32 -->
+<!-- Saved: 2009-02-15, 17:28:58 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -72,8 +72,6 @@
     <Source>quantities/umath/ufunclike.py</Source>
     <Source>quantities/umath/__init__.py</Source>
     <Source>quantities/umath/umath.py</Source>
-    <Source>quantities/tests/test_umath.py</Source>
-    <Source>quantities/umath/tests/test_umath.py</Source>
   </Sources>
   <Forms>
   </Forms>

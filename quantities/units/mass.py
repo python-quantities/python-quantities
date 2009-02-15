@@ -7,7 +7,7 @@ from ..unitquantity import UnitQuantity, UnitMass
 from .length import m
 
 kg = kilogram =  UnitMass(
-    'kilograms',
+    'kilogram',
     symbol='kg',
     aliases=['kilograms']
 )

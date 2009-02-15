@@ -33,7 +33,10 @@ from __future__ import with_statement
 import os
 import sys
 
-from distutils.core import setup
+if 'develop' in sys.argv or 'nosetests' in sys.argv:
+    from setuptools import setup
+else:
+    from distutils.core import setup
 
 if os.path.exists('MANIFEST'): os.remove('MANIFEST')
 

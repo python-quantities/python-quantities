@@ -170,15 +170,19 @@ class UncertainQuantity(Quantity):
         return '%s(%s, %s, %s)'%(
             self.__class__.__name__,
             repr(self.magnitude),
-            repr(self.dimensionality),
+            self.dimensionality.string,
             repr(self.uncertainty.magnitude)
         )
 
     @with_doc(Quantity.__str__, use_header=False)
     def __str__(self):
+        if USE_UNICODE:
+            dims = self.dimensionality.unicode
+        else:
+            dims = self.dimensionality.string
         s = '%s %s\n+/-%s (1 sigma)'%(
             str(self.magnitude),
-            str(self.dimensionality),
+            dims,
             str(self.uncertainty)
         )
         if USE_UNICODE:
