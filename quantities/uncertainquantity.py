@@ -142,6 +142,8 @@ class UncertainQuantity(Quantity):
         res._uncertainty = u
         return res
 
+    __div__ = __truediv__
+
     @with_doc(Quantity.__rtruediv__, use_header=False)
     def __rtruediv__(self, other):
         temp = UncertainQuantity(
@@ -149,6 +151,8 @@ class UncertainQuantity(Quantity):
             1/self.uncertainty.magnitude, copy=False
         )
         return other * temp
+
+    __rdiv__ = __rtruediv__
 
     @with_doc(Quantity.__pow__, use_header=False)
     def __pow__(self, other):

@@ -224,6 +224,17 @@ def _d_multiply(q1, q2):
             return q2.dimensionality
 p_dict[numpy.multiply] = _d_multiply
 
+def _d_divide(q1, q2):
+    try:
+        return q1._dimensionality / q2._dimensionality
+    except AttributeError:
+        try:
+            return q1.dimensionality
+        except:
+            return q2.dimensionality**-1
+p_dict[numpy.divide] = _d_divide
+p_dict[numpy.true_divide] = _d_divide
+
 def _d_copy(q1):
     return q1.dimensionality
 p_dict[numpy.conjugate] = _d_copy

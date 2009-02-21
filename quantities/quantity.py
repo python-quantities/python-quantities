@@ -191,6 +191,7 @@ class Quantity(numpy.ndarray):
             return result
 
         uf, objs, huh = context
+#        print obj, uf, objs
         try:
             result._dimensionality = p_dict[uf](*objs)
         except KeyError:
@@ -248,92 +249,20 @@ class Quantity(numpy.ndarray):
         ret._dimensionality = dims
         return ret
 
-    @with_doc(numpy.ndarray.__mul__)
-#    @ensure_quantity
-#    @propagate_dimensionality
-    def __mul__(self, other):
-#        try:
-#            dims = self.dimensionality * other.dimensionality
-#        except AttributeError:
-#            other = numpy.asarray(other).view(Quantity)
-#            dims = self.dimensionality
-
-        ret = super(Quantity, self).__mul__(other)
-#        ret._dimensionality = dims
-        return ret
-
     @with_doc(numpy.ndarray.__imul__)
     @protect_units
-#    @ensure_quantity
     def __imul__(self, other):
-#        if getattr(other, 'dimensionality', None):
-#            try:
-#                assert not isinstance(self.base, Quantity)
-#            except AssertionError:
-#                raise ValueError('can not modify units of a view of a Quantity')
-#
-#        try:
-#            self._dimensionality *= other.dimensionality
-#        except AttributeError:
-#            other = numpy.asarray(other).view(Quantity)
-
         return super(Quantity, self).__imul__(other)
 
-    @with_doc(numpy.ndarray.__rmul__)
-    def __rmul__(self, other):
-        return super(Quantity, self).__rmul__(other)
-        return self.__mul__(other)
-
-    @with_doc(numpy.ndarray.__truediv__)
-    def __truediv__(self, other):
-        try:
-            dims = self.dimensionality / other.dimensionality
-        except AttributeError:
-            other = numpy.asarray(other).view(Quantity)
-            dims = self.dimensionality
-
-        ret = super(Quantity, self).__truediv__(other)
-        ret._dimensionality = dims
-        return ret
-
-    @with_doc(numpy.ndarray.__div__)
-    def __div__(self, other):
-        return self.__truediv__(other)
-
     @with_doc(numpy.ndarray.__itruediv__)
+    @protect_units
     def __itruediv__(self, other):
-        if getattr(other, 'dimensionality', None):
-            try:
-                assert not isinstance(self.base, Quantity)
-            except AssertionError:
-                raise ValueError('can not modify units of a view of a Quantity')
-
-        try:
-            self._dimensionality /= other.dimensionality
-        except AttributeError:
-            other = numpy.asarray(other).view(Quantity)
-
         return super(Quantity, self).__itruediv__(other)
 
     @with_doc(numpy.ndarray.__idiv__)
+    @protect_units
     def __idiv__(self, other):
-        return self.__itruediv__(other)
-
-    @with_doc(numpy.ndarray.__rtruediv__)
-    def __rtruediv__(self, other):
-        try:
-            dims = other.dimensionality / self.dimensionality
-        except AttributeError:
-            other = numpy.asarray(other).view(Quantity)
-            dims = self._dimensionality**-1
-
-        ret = super(Quantity, self).__rtruediv__(other)
-        ret._dimensionality = dims
-        return ret
-
-    @with_doc(numpy.ndarray.__rdiv__)
-    def __rdiv__(self, other):
-        return self.__rtruediv__(other)
+        return super(Quantity, self).__itruediv__(other)
 
     @with_doc(numpy.ndarray.__pow__)
     def __pow__(self, other):
