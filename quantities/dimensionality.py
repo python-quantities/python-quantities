@@ -13,7 +13,12 @@ from .registry import unit_registry
 from .utilities import memoize
 
 def assert_isinstance(obj, types):
-    assert isinstance(obj, types), "arg %r does not match %s" % (obj, types)
+    try:
+        assert isinstance(obj, types)
+    except AssertionError:
+        raise TypeError(
+            "arg %r must be of type %r, got %r" % (obj, types, type(obj))
+        )
 
 
 class Dimensionality(dict):
@@ -150,23 +155,27 @@ class Dimensionality(dict):
         return self.__itruediv__(other)
 
     def __pow__(self, other):
-        assert numpy.isscalar(other), \
-            'exponent must be a scalar, got %r' % other
+        try:
+            assert numpy.isscalar(other)
+        except AssertionError:
+            raise TypeError('exponent must be a scalar, got %r' % other)
         new = Dimensionality(self)
         for i in new:
             new[i] *= other
         return new
 
     def __ipow__(self, other):
-        assert numpy.isscalar(other), \
-            'exponent must be a scalar, got %r' % other
+        try:
+            assert numpy.isscalar(other)
+        except AssertionError:
+            raise TypeError('exponent must be a scalar, got %r' % other)
         for i in self:
             self[i] *= other
         return self
 
     def __repr__(self):
-        return 'Dimensionality([%s])' \
-            % ', '.join(['(%s, %s)'% (u.name, e) for u, e in self.iteritems()])
+        return 'Dimensionality({%s})' \
+            % ', '.join(['%s: %s'% (u.name, e) for u, e in self.iteritems()])
 
     def __str__(self):
         if USE_UNICODE:
