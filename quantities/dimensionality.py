@@ -210,3 +210,24 @@ class Dimensionality(dict):
 
     def copy(self):
         return Dimensionality(self)
+
+
+p_dict = {}
+
+def _d_multiply(q1, q2):
+    try:
+        return q1._dimensionality * q2._dimensionality
+    except AttributeError:
+        try:
+            return q1.dimensionality
+        except:
+            return q2.dimensionality
+p_dict[numpy.multiply] = _d_multiply
+
+def _d_copy(q1):
+    return q1.dimensionality
+p_dict[numpy.conjugate] = _d_copy
+
+def _d_sqrt(q1):
+    return q1._dimensionality**0.5
+p_dict[numpy.sqrt] = _d_sqrt

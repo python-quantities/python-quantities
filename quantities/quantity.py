@@ -3,11 +3,12 @@
 from __future__ import absolute_import
 
 import copy
+from functools import wraps
 
 import numpy
 
 from .config import USE_UNICODE
-from .dimensionality import Dimensionality
+from .dimensionality import Dimensionality, p_dict
 from .registry import unit_registry
 from .utilities import with_doc
 
@@ -57,6 +58,29 @@ def get_conversion_factor(from_u, to_u):
     to_u = to_u._reference
     assert from_u.dimensionality == to_u.dimensionality
     return from_u.magnitude / to_u.magnitude
+
+def ensure_quantity(f):
+    @wraps(f)
+    def g(*args):
+        args = list(args)
+        if not isinstance(args[1], type(args[0])):
+            args[1] = Quantity(args[1], copy=False)
+        elif not isinstance(args[0], type(args[1])):
+            args[0] = Quantity(args[0], copy=False)
+        return f(*args)
+    return g
+
+
+def protect_units(f):
+    @wraps(f)
+    def g(self, other, *args):
+        if getattr(other, 'dimensionality', None):
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
+        return f(self, other, *args)
+    return g
 
 
 class Quantity(numpy.ndarray):
@@ -157,27 +181,24 @@ class Quantity(numpy.ndarray):
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
 
-#    def __array_wrap__(self, obj, context):
-#        # this is experimental right now, there is probably a better
-#        # way to implement it, but for now lets identify which
-#        # ufuncs need to be addressed. Maybe a good way to do this would
-#        # be something like a dictionary mapping of ufuncs to functions
-#        # that return a proper dimensionality based on the inputs.
-##        print obj, context
-#        uf, objs, huh = context
-#
-#        result = obj.view(type(self))
-#        if uf is numpy.multiply:
-#            result._dimensionality = objs[0].dimensionality * objs[1].dimensionality
-#        elif uf is numpy.sqrt:
-#            result._dimensionality = objs[0].dimensionality**(0.5)
-#        elif uf is numpy.rint:
-#            result._dimensionality = objs[0].dimensionality
-#        elif uf is numpy.conjugate:
-#            result._dimensionality = objs[0].dimensionality
-#        return result
+    def __array_wrap__(self, obj, context=None):
+        if self.__array_priority__ >= Quantity.__array_priority__:
+            result = obj.view(type(self))
+        else:
+            # don't want a UnitQuantity
+            result = obj.view(Quantity)
+        if context is None:
+            return result
+
+        uf, objs, huh = context
+        try:
+            result._dimensionality = p_dict[uf](*objs)
+        except KeyError:
+            pass
+        return result
 
     @with_doc(numpy.ndarray.__add__)
+#    @ensure_quantity
     def __add__(self, other):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
@@ -228,34 +249,39 @@ class Quantity(numpy.ndarray):
         return ret
 
     @with_doc(numpy.ndarray.__mul__)
+#    @ensure_quantity
+#    @propagate_dimensionality
     def __mul__(self, other):
-        try:
-            dims = self.dimensionality * other.dimensionality
-        except AttributeError:
-            other = numpy.asarray(other).view(Quantity)
-            dims = self.dimensionality
+#        try:
+#            dims = self.dimensionality * other.dimensionality
+#        except AttributeError:
+#            other = numpy.asarray(other).view(Quantity)
+#            dims = self.dimensionality
 
         ret = super(Quantity, self).__mul__(other)
-        ret._dimensionality = dims
+#        ret._dimensionality = dims
         return ret
 
     @with_doc(numpy.ndarray.__imul__)
+    @protect_units
+#    @ensure_quantity
     def __imul__(self, other):
-        if getattr(other, 'dimensionality', None):
-            try:
-                assert not isinstance(self.base, Quantity)
-            except AssertionError:
-                raise ValueError('can not modify units of a view of a Quantity')
-
-        try:
-            self._dimensionality *= other.dimensionality
-        except AttributeError:
-            other = numpy.asarray(other).view(Quantity)
+#        if getattr(other, 'dimensionality', None):
+#            try:
+#                assert not isinstance(self.base, Quantity)
+#            except AssertionError:
+#                raise ValueError('can not modify units of a view of a Quantity')
+#
+#        try:
+#            self._dimensionality *= other.dimensionality
+#        except AttributeError:
+#            other = numpy.asarray(other).view(Quantity)
 
         return super(Quantity, self).__imul__(other)
 
     @with_doc(numpy.ndarray.__rmul__)
     def __rmul__(self, other):
+        return super(Quantity, self).__rmul__(other)
         return self.__mul__(other)
 
     @with_doc(numpy.ndarray.__truediv__)

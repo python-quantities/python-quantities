@@ -9,8 +9,8 @@ __all__ = ['fix']
 
 
 @with_doc(numpy.fix)
-def fix(x , y = None):
+def fix(x, out=None):
     if not isinstance(x, Quantity):
         return numpy.fix(x, out)
 
-    return Quantity(numpy.fix(x.magnitude), x.dimensionality, copy = False)
+    return Quantity(numpy.fix(x.magnitude), x.dimensionality, copy=False)
