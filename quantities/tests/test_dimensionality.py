@@ -47,20 +47,58 @@ def test_inequality():
     assert_true(joule != Joule)
     assert_equal(repr(joule), joule_repr)
 
+def test_copy():
+    temp = meter.copy()
+    assert_true(temp is not meter)
+    assert_true(isinstance(temp, Dimensionality))
+    assert_true(temp == meter)
+    temp[q.m] += 1
+    assert_false(temp == meter)
+
 def test_addition():
     assert_equal(repr(meter+meter), meter_repr)
     assert_true(meter + meter is not meter)
-    assert_equal(repr(meter), meter_repr)
     assert_raises(ValueError, operator.__add__, meter, joule)
     assert_raises(ValueError, operator.__add__, Joule, joule)
+    test_dimensionality_repr()
+
+def test_inplace_addition():
+    temp = meter.copy()
+    temp += meter
+    assert_equal(temp, meter)
+    assert_raises(ValueError, operator.__iadd__, meter, joule)
+    assert_raises(ValueError, operator.__iadd__, Joule, joule)
+    test_dimensionality_repr()
 
 def test_subtraction():
     assert_equal(repr(meter-meter), meter_repr)
     assert_true(meter - meter is not meter)
-    assert_equal(repr(meter), meter_repr)
     assert_raises(ValueError, operator.__sub__, meter, joule)
     assert_raises(ValueError, operator.__sub__, Joule, joule)
+    test_dimensionality_repr()
 
+def test_inplace_subtraction():
+    temp = meter.copy()
+    temp -= meter
+    assert_equal(temp, meter)
+    assert_raises(ValueError, operator.__isub__, meter, joule)
+    assert_raises(ValueError, operator.__isub__, Joule, joule)
+    test_dimensionality_repr()
+
+def test_multiplication():
+    assert_equal(meter*meter, Dimensionality([(q.m, 2)]))
+    assert_equal(joule*meter, Dimensionality([(q.kg, 1), (q.m, 3), (q.s, -2)]))
+    test_dimensionality_repr()
+
+def test_division():
+    assert_equal(meter/meter, Dimensionality())
+    assert_equal(joule/meter, Dimensionality([(q.kg, 1), (q.m, 1), (q.s, -2)]))
+    test_dimensionality_repr()
+
+def test_power():
+    assert_equal(meter**2, Dimensionality([(q.m, 2)]))
+    assert_equal(joule**2, Dimensionality([(q.kg, 2), (q.m, 4), (q.s, -4)]))
+    test_dimensionality_repr()
 
 def test_simplification():
     assert_equal(Joule.simplified.string, 'kg*m**2/s**2')
@@ -72,6 +110,7 @@ def test_gt():
     assert_false(meter > Joule)
     assert_false(joule > joule)
     assert_false(joule > Joule)
+    test_dimensionality_repr()
 
 def test_ge():
     assert_true(joule >= meter)
@@ -80,6 +119,25 @@ def test_ge():
     assert_false(meter >= Joule)
     assert_true(joule >= joule)
     assert_true(joule >= Joule)
+    test_dimensionality_repr()
+
+def test_lt():
+    assert_true(meter < joule)
+    assert_true(meter < Joule)
+    assert_false(joule < meter)
+    assert_false(Joule < meter)
+    assert_false(joule < joule)
+    assert_false(Joule < joule)
+    test_dimensionality_repr()
+
+def test_le():
+    assert_true(meter <= joule)
+    assert_true(meter <= Joule)
+    assert_false(joule <= meter)
+    assert_false(Joule <= meter)
+    assert_true(joule <= joule)
+    assert_true(joule <= Joule)
+    test_dimensionality_repr()
 
 
 

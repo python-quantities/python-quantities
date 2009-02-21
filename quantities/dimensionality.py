@@ -11,6 +11,9 @@ from .config import USE_UNICODE
 from .markup import format_units, format_units_unicode
 from .registry import unit_registry
 
+def assert_isinstance(obj, types):
+    assert isinstance(obj, types), "arg %r does not match %s" % (obj, types)
+
 
 class Dimensionality(dict):
 
@@ -47,6 +50,7 @@ class Dimensionality(dict):
         return res
 
     def __add__(self, other):
+        assert_isinstance(other, Dimensionality)
         try:
             assert self == other
         except AssertionError:
@@ -57,6 +61,7 @@ class Dimensionality(dict):
         return self.copy()
 
     def __iadd__(self, other):
+        assert_isinstance(other, Dimensionality)
         try:
             assert self == other
         except AssertionError:
@@ -67,6 +72,7 @@ class Dimensionality(dict):
         return self
 
     def __sub__(self, other):
+        assert_isinstance(other, Dimensionality)
         try:
             assert self == other
         except AssertionError:
@@ -77,6 +83,7 @@ class Dimensionality(dict):
         return self.copy()
 
     def __isub__(self, other):
+        assert_isinstance(other, Dimensionality)
         try:
             assert self == other
         except AssertionError:
@@ -87,6 +94,7 @@ class Dimensionality(dict):
         return self
 
     def __mul__(self, other):
+        assert_isinstance(other, Dimensionality)
         new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
@@ -98,6 +106,7 @@ class Dimensionality(dict):
         return new
 
     def __imul__(self, other):
+        assert_isinstance(other, Dimensionality)
         for unit, power in other.iteritems():
             try:
                 self[unit] += power
@@ -108,6 +117,7 @@ class Dimensionality(dict):
         return self
 
     def __truediv__(self, other):
+        assert_isinstance(other, Dimensionality)
         new = Dimensionality(self)
         for unit, power in other.iteritems():
             try:
@@ -119,9 +129,11 @@ class Dimensionality(dict):
         return new
 
     def __div__(self, other):
+        assert_isinstance(other, Dimensionality)
         return self.__truediv__(other)
 
     def __itruediv__(self, other):
+        assert_isinstance(other, Dimensionality)
         for unit, power in other.iteritems():
             try:
                 self[unit] -= power
@@ -132,17 +144,20 @@ class Dimensionality(dict):
         return self
 
     def __idiv__(self, other):
+        assert_isinstance(other, Dimensionality)
         return self.__itruediv__(other)
 
     def __pow__(self, other):
-        assert isinstance(other, (int, float))
+        assert numpy.isscalar(other), \
+            'exponent must be a scalar, got %r' % other
         new = Dimensionality(self)
         for i in new:
             new[i] *= other
         return new
 
     def __ipow__(self, other):
-        assert isinstance(other, (int, float))
+        assert numpy.isscalar(other), \
+            'exponent must be a scalar, got %r' % other
         for i in self:
             self[i] *= other
         return self

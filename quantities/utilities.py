@@ -1,3 +1,17 @@
+from functools import wraps
+
+def accepts(*types):
+    assert len(types), "no types defined"
+    def check_accepts(f):
+        @wraps(f)
+        def new_f(self, other):
+            assert isinstance(other, types), \
+                "arg %r does not match %s" % (other, types)
+            return f(self, other)
+        return new_f
+    return check_accepts
+
+
 class with_doc:
 
     """
