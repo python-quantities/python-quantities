@@ -6,7 +6,7 @@ from ..utilities import with_doc
 
 
 #__all__ = [
-#    'ceil', 'exp', 'expm1', 'floor', 'log', 'log10', 'log1p', 'log2', 'rint'
+#    'exp', 'expm1', 'log', 'log10', 'log1p', 'log2'
 #]
 
 
@@ -187,11 +187,6 @@ def log1p(x, out=None):
 
     return Quantity(numpy.log1p(x.magnitude), copy = False)
 
-rint = numpy.rint
-floor = numpy.floor
-ceil = numpy. ceil
-prod = numpy.prod
-
 @with_doc(numpy.sin)
 def sin(x, out=None):
     """
@@ -331,44 +326,6 @@ def hypot(x1, x2, out = None):
         x1.dimensionality,
         copy = False
     )
-
-@with_doc(numpy.degrees)
-def to_degrees(x, out=None):
-    """
-    Requires input in units of radians to be compatible with
-    numpy.degrees.
-
-    For more flexible conversions of angular quantities,
-    x.rescale(degrees) should be used instead.
-    """
-    if not isinstance(x, Quantity):
-        return numpy.degrees(x, out)
-
-    if x._dimensionality != radian._dimensionality:
-        raise ValueError(
-            'x must be in units of radians, got "%s"' % (str(x._dimensionality))
-        )
-
-    return Quantity(numpy.degrees(x.magnitude, out), degree, copy=False)
-
-@with_doc(numpy.radians)
-def to_radians(x, out=None):
-    """
-    Requires input in units of degrees to be compatible with
-    numpy.radians.
-
-    For more flexible conversions of angular quantities,
-    x.rescale(radians) should be used instead.
-    """
-    if not isinstance(x, Quantity):
-        return numpy.radians(x, out)
-
-    if x._dimensionality != degree._dimensionality:
-        raise ValueError(
-            'x must be in units of degrees, got "%s"' % (str(x._dimensionality))
-        )
-
-    return Quantity(numpy.radians(x.magnitude, out), radian, copy=False)
 
 @with_doc(numpy.unwrap)
 def unwrap(p, discont=numpy.pi, axis=-1):

@@ -191,32 +191,31 @@ def test_rounding():
     #test rint
     a = [-4.1, -3.6, -2.5, 0.1, 2.5, 3.1, 3.9] * q.kPa
     num_assert_almost_equal(
-        q.rint(a),
+        numpy.rint(a),
         [-4., -4., -2., 0., 2., 3., 4.] * q.kPa
     )
 
     # test fix
 
-    assert_almost_equal(q.fix(3.14 * q.degF), 3.0 * q.degF)
-
-    assert_almost_equal(q.fix(3.0 * q.degF), 3.0 * q.degF)
+    assert_almost_equal(numpy.fix(3.14 * q.degF), 3.0 * q.degF)
+    assert_almost_equal(numpy.fix(3.0 * q.degF), 3.0 * q.degF)
 
     num_assert_almost_equal(
-        q.fix([2.1, 2.9, -2.1, -2.9] * q.degF),
+        numpy.fix([2.1, 2.9, -2.1, -2.9] * q.degF),
         [2., 2., -2., -2.] * q.degF
     )
 
     # test floor
     a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * q.degC
     num_assert_almost_equal(
-        q.floor(a),
+        numpy.floor(a),
         [-2., -2., -1., 0., 1., 1., 2.] * q.degC
     )
 
     # test ceil
     a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * q.degC
     num_assert_almost_equal(
-        q.ceil(a),
+        numpy.ceil(a),
         [-1., -1., -0., 1., 2., 2., 2.] * q.degC)
 
 

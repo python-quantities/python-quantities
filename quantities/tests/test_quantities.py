@@ -966,19 +966,27 @@ class TestQuantities(unittest.TestCase):
         t5 = [3, 4, 5, 6] * q.J
         self.numAssertAlmostEqual(q.hypot([1,1,1,1] * q.J,t5) , [3.16227766,4.12310563,5.09901951,6.08276253] * q.J, 8)
 
-        #to_degrees
-        self.assertAlmostEqual( q.to_degrees(6 * q.radians), (6 * q.radians).rescale(q.degree))
-        self.assertAlmostEqual( q.to_degrees(6 * q.radians).magnitude, (6 * q.radians).rescale(q.degree).magnitude)
+        #degrees
+        self.assertAlmostEqual(
+            numpy.degrees(6 * q.radians),
+            (6 * q.radians).rescale(q.degree)
+        )
+        self.assertAlmostEqual(
+            numpy.degrees(6 * q.radians).magnitude,
+            (6 * q.radians).rescale(q.degree).magnitude
+        )
+        self.assertRaises(ValueError, numpy.degrees, t5)
 
-
-        self.assertRaises(ValueError, q.to_degrees, t5)
-
-        #to_radians
-        self.assertAlmostEqual( q.to_radians(6 * q.degree), (6 * q.degree).rescale(q.radian))
-        self.assertAlmostEqual( q.to_radians(6 * q.degree).magnitude, (6 * q.degree).rescale(q.radian).magnitude)
-
-
-        self.assertRaises(ValueError, q.to_radians, t5)
+        #radians
+        self.assertAlmostEqual(
+            numpy.radians(6 * q.degree),
+            (6 * q.degree).rescale(q.radian)
+        )
+        self.assertAlmostEqual(
+            numpy.radians(6 * q.degree).magnitude,
+            (6 * q.degree).rescale(q.radian).magnitude
+        )
+        self.assertRaises(ValueError, numpy.radians, t5)
 
         #unwrap
 

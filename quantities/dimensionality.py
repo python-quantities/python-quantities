@@ -273,11 +273,23 @@ p_dict[numpy.reciprocal] = _d_reciprocal
 
 def _d_copy(q1):
     return q1.dimensionality
-p_dict[numpy.conjugate] = _d_copy
-p_dict[numpy.floor] = _d_copy
 p_dict[numpy.ceil] = _d_copy
+p_dict[numpy.conjugate] = _d_copy
+p_dict[numpy.fix] = _d_copy
+p_dict[numpy.floor] = _d_copy
 p_dict[numpy.rint] = _d_copy
 
 def _d_sqrt(q1):
     return q1._dimensionality**0.5
 p_dict[numpy.sqrt] = _d_sqrt
+
+def _d_radians(q1):
+    assert q1.units == unit_registry['degree']
+    return unit_registry['radian'].dimensionality
+p_dict[numpy.radians] = _d_radians
+
+def _d_degrees(q1):
+    assert q1.units == unit_registry['radian']
+    return unit_registry['degree'].dimensionality
+p_dict[numpy.degrees] = _d_degrees
+

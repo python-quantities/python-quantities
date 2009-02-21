@@ -319,33 +319,51 @@ class Quantity(numpy.ndarray):
 
     @with_doc(numpy.ndarray.__lt__)
     def __lt__(self, other):
-        ss, os = prepare_compatible_units(self, other)
-        return ss.magnitude < os.magnitude
+        if isinstance(other, Quantity):
+            ss, os = prepare_compatible_units(self, other)
+            return ss.magnitude < os.magnitude
+        else:
+            return self.magnitude < other
 
     @with_doc(numpy.ndarray.__le__)
     def __le__(self, other):
-        ss, os = prepare_compatible_units(self, other)
-        return ss.magnitude <= os.magnitude
+        if isinstance(other, Quantity):
+            ss, os = prepare_compatible_units(self, other)
+            return ss.magnitude <= os.magnitude
+        else:
+            return self.magnitude <= other
 
     @with_doc(numpy.ndarray.__eq__)
     def __eq__(self, other):
-        ss, os = prepare_compatible_units(self, other)
-        return ss.magnitude == os.magnitude
+        if isinstance(other, Quantity):
+            ss, os = prepare_compatible_units(self, other)
+            return ss.magnitude == os.magnitude
+        else:
+            return self.magnitude == other
 
     @with_doc(numpy.ndarray.__ne__)
     def __ne__(self, other):
-        ss, os = prepare_compatible_units(self, other)
-        return ss.magnitude != os.magnitude
+        if isinstance(other, Quantity):
+            ss, os = prepare_compatible_units(self, other)
+            return ss.magnitude != os.magnitude
+        else:
+            return self.magnitude != other
 
     @with_doc(numpy.ndarray.__gt__)
     def __gt__(self, other):
-        ss, os = prepare_compatible_units(self, other)
-        return ss.magnitude > os.magnitude
+        if isinstance(other, Quantity):
+            ss, os = prepare_compatible_units(self, other)
+            return ss.magnitude > os.magnitude
+        else:
+            return self.magnitude > other
 
     @with_doc(numpy.ndarray.__ge__)
     def __ge__(self, other):
-        ss, os = prepare_compatible_units(self, other)
-        return ss.magnitude >= os.magnitude
+        if isinstance(other, Quantity):
+            ss, os = prepare_compatible_units(self, other)
+            return ss.magnitude >= os.magnitude
+        else:
+            return self.magnitude >= other
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
