@@ -12,6 +12,15 @@ def accepts(*types):
     return check_accepts
 
 
+def memoize(f, cache={}):
+    def g(*args, **kwargs):
+        key = (f, tuple(args), frozenset(kwargs.items()))
+        if key not in cache:
+            cache[key] = f(*args, **kwargs)
+        return cache[key]
+    return g
+
+
 class with_doc:
 
     """

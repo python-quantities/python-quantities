@@ -11,7 +11,7 @@ from .dimensionality import Dimensionality
 from .markup import superscript
 from .quantity import Quantity, get_conversion_factor
 from .registry import unit_registry
-from .utilities import with_doc
+from .utilities import memoize, with_doc
 
 
 __all__ = [
@@ -112,6 +112,7 @@ class UnitQuantity(Quantity):
             return self._definition
 
     @property
+    @memoize
     def simplified(self):
         return self._reference.simplified
 
@@ -256,18 +257,10 @@ class IrreducibleUnit(UnitQuantity):
         if cls._default_unit is None:
             cls._default_unit = self
 
-        # cached:
-        self._simplified = self._reference
-
     @property
+    @memoize
     def simplified(self):
-        default_unit = type(self).get_default_unit()
-        if self.dimensionality == default_unit.dimensionality:
-            return self
-        else:
-            if self._simplified._dimensionality != default_unit.dimensionality:
-                self._simplified = self.rescale(default_unit)
-            return self._simplified
+        return self.view(Quantity).rescale(self.get_default_unit())
 
     @classmethod
     def get_default_unit(cls):

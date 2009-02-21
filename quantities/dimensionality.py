@@ -10,6 +10,7 @@ import numpy
 from .config import USE_UNICODE
 from .markup import format_units, format_units_unicode
 from .registry import unit_registry
+from .utilities import memoize
 
 def assert_isinstance(obj, types):
     assert isinstance(obj, types), "arg %r does not match %s" % (obj, types)
@@ -25,6 +26,7 @@ class Dimensionality(dict):
         return sum(abs(i) for i in self.simplified.itervalues())
 
     @property
+    @memoize
     def simplified(self):
         if len(self):
             rq = 1*unit_registry['dimensionless']

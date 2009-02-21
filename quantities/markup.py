@@ -7,6 +7,7 @@ import operator
 import re
 
 from .config import USE_UNICODE
+
 superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
 
 def superscript(val):

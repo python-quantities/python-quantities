@@ -80,6 +80,7 @@ class Quantity(numpy.ndarray):
 
     @property
     def _reference(self):
+        """The reference quantity used to perform conversions"""
         rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.iteritems():
             rq = rq * u._reference**d
