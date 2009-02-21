@@ -67,6 +67,8 @@ class Dimensionality(dict):
             )
         return self.copy()
 
+    __radd__ = __add__
+
     def __iadd__(self, other):
         assert_isinstance(other, Dimensionality)
         try:
@@ -88,6 +90,8 @@ class Dimensionality(dict):
                 %(str(self), str(other))
             )
         return self.copy()
+
+    __rsub__ = __sub__
 
     def __isub__(self, other):
         assert_isinstance(other, Dimensionality)
@@ -234,6 +238,17 @@ def _d_divide(q1, q2):
             return q2.dimensionality**-1
 p_dict[numpy.divide] = _d_divide
 p_dict[numpy.true_divide] = _d_divide
+
+def _d_add_sub(q1, q2):
+    try:
+        return q1._dimensionality + q2._dimensionality
+    except AttributeError:
+        if hasattr(q1, 'dimensionality'):
+            return q1.dimensionality
+        elif hasattr(q2, 'dimensionality'):
+            return q2.dimensionality
+p_dict[numpy.add] = _d_add_sub
+p_dict[numpy.subtract] = _d_add_sub
 
 def _d_copy(q1):
     return q1.dimensionality

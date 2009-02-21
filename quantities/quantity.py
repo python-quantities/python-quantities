@@ -71,7 +71,7 @@ def ensure_quantity(f):
     return g
 
 
-def protect_units(f):
+def check_dimensionless(f):
     @wraps(f)
     def g(self, other, *args):
         if getattr(other, 'dimensionality', None):
@@ -79,6 +79,15 @@ def protect_units(f):
                 assert not isinstance(self.base, Quantity)
             except AssertionError:
                 raise ValueError('can not modify units of a view of a Quantity')
+        return f(self, other, *args)
+    return g
+
+def check_dimensions(f):
+    @wraps(f)
+    def g(self, other, *args):
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy=False)
+        getattr(self._dimensionality, f.__name__)(other._dimensionality)
         return f(self, other, *args)
     return g
 
@@ -199,68 +208,47 @@ class Quantity(numpy.ndarray):
         return result
 
     @with_doc(numpy.ndarray.__add__)
-#    @ensure_quantity
+    @check_dimensions
     def __add__(self, other):
-        if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
-
-        dims = self.dimensionality + other.dimensionality
-        ret = super(Quantity, self).__add__(other)
-        ret._dimensionality = dims
-        return ret
+        return super(Quantity, self).__add__(other)
 
     @with_doc(numpy.ndarray.__iadd__)
+    @check_dimensions
     def __iadd__(self, other):
-        if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
-
-        self._dimensionality += other.dimensionality
         return super(Quantity, self).__iadd__(other)
 
     @with_doc(numpy.ndarray.__radd__)
+    @check_dimensions
     def __radd__(self, other):
         return self.__add__(other)
 
     @with_doc(numpy.ndarray.__sub__)
+    @check_dimensions
     def __sub__(self, other):
-        if not isinstance(other, Quantity):
-            other = numpy.asarray(other).view(Quantity)
-
-        dims = self.dimensionality - other.dimensionality
-        ret = super(Quantity, self).__sub__(other)
-        ret._dimensionality = dims
-        return ret
+        return super(Quantity, self).__sub__(other)
 
     @with_doc(numpy.ndarray.__isub__)
+    @check_dimensions
     def __isub__(self, other):
-        if not isinstance(other, Quantity):
-            other = numpy.asarray(other).view(Quantity)
-
-        self._dimensionality -= other.dimensionality
         return super(Quantity, self).__isub__(other)
 
     @with_doc(numpy.ndarray.__rsub__)
+    @check_dimensions
     def __rsub__(self, other):
-        if not isinstance(other, Quantity):
-            other = numpy.asarray(other).view(Quantity)
-
-        dims = other.dimensionality - self.dimensionality
-        ret = super(Quantity, self).__rsub__(other)
-        ret._dimensionality = dims
-        return ret
+        return super(Quantity, self).__rsub__(other)
 
     @with_doc(numpy.ndarray.__imul__)
-    @protect_units
+    @check_dimensionless
     def __imul__(self, other):
         return super(Quantity, self).__imul__(other)
 
     @with_doc(numpy.ndarray.__itruediv__)
-    @protect_units
+    @check_dimensionless
     def __itruediv__(self, other):
         return super(Quantity, self).__itruediv__(other)
 
     @with_doc(numpy.ndarray.__idiv__)
-    @protect_units
+    @check_dimensionless
     def __idiv__(self, other):
         return super(Quantity, self).__itruediv__(other)
 
