@@ -71,7 +71,16 @@ def ensure_quantity(f):
     return g
 
 
-def check_dimensionless(f):
+def protected_addition(f):
+    @wraps(f)
+    def g(self, other, *args):
+        if not isinstance(other, Quantity):
+            other = Quantity(other, copy=False)
+        getattr(self._dimensionality, f.__name__)(other._dimensionality)
+        return f(self, other, *args)
+    return g
+
+def protected_multiplication(f):
     @wraps(f)
     def g(self, other, *args):
         if getattr(other, 'dimensionality', None):
@@ -82,12 +91,27 @@ def check_dimensionless(f):
         return f(self, other, *args)
     return g
 
-def check_dimensions(f):
+def check_uniform(f):
     @wraps(f)
     def g(self, other, *args):
-        if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
-        getattr(self._dimensionality, f.__name__)(other._dimensionality)
+        if getattr(other, 'dimensionality', None):
+            raise ValueError("exponent must be dimensionless")
+        other = numpy.asarray(other)
+        try:
+            assert other.min() == other.max()
+        except AssertionError:
+            raise ValueError('Quantities must be raised to a uniform power')
+        return f(self, other, *args)
+    return g
+
+def protected_power(f):
+    @wraps(f)
+    def g(self, other, *args):
+        if other != 1:
+            try:
+                assert not isinstance(self.base, Quantity)
+            except AssertionError:
+                raise ValueError('can not modify units of a view of a Quantity')
         return f(self, other, *args)
     return g
 
@@ -204,96 +228,64 @@ class Quantity(numpy.ndarray):
         try:
             result._dimensionality = p_dict[uf](*objs)
         except KeyError:
-            pass
+            print 'ufunc %r not implemented, please file a bug report' % uf
         return result
 
     @with_doc(numpy.ndarray.__add__)
-    @check_dimensions
+    @protected_addition
     def __add__(self, other):
         return super(Quantity, self).__add__(other)
 
     @with_doc(numpy.ndarray.__iadd__)
-    @check_dimensions
+    @protected_addition
     def __iadd__(self, other):
         return super(Quantity, self).__iadd__(other)
 
     @with_doc(numpy.ndarray.__radd__)
-    @check_dimensions
+    @protected_addition
     def __radd__(self, other):
         return self.__add__(other)
 
     @with_doc(numpy.ndarray.__sub__)
-    @check_dimensions
+    @protected_addition
     def __sub__(self, other):
         return super(Quantity, self).__sub__(other)
 
     @with_doc(numpy.ndarray.__isub__)
-    @check_dimensions
+    @protected_addition
     def __isub__(self, other):
         return super(Quantity, self).__isub__(other)
 
     @with_doc(numpy.ndarray.__rsub__)
-    @check_dimensions
+    @protected_addition
     def __rsub__(self, other):
         return super(Quantity, self).__rsub__(other)
 
     @with_doc(numpy.ndarray.__imul__)
-    @check_dimensionless
+    @protected_multiplication
     def __imul__(self, other):
         return super(Quantity, self).__imul__(other)
 
     @with_doc(numpy.ndarray.__itruediv__)
-    @check_dimensionless
+    @protected_multiplication
     def __itruediv__(self, other):
         return super(Quantity, self).__itruediv__(other)
 
     @with_doc(numpy.ndarray.__idiv__)
-    @check_dimensionless
+    @protected_multiplication
     def __idiv__(self, other):
         return super(Quantity, self).__itruediv__(other)
 
     @with_doc(numpy.ndarray.__pow__)
+    @check_uniform
     def __pow__(self, other):
-        if getattr(other, 'dimensionality', None):
-            raise ValueError("exponent must be dimensionless")
-
-        other = numpy.asarray(other)
-        try:
-            assert other.min() == other.max()
-        except AssertionError:
-            raise ValueError('Quantities must be raised to a single power')
-
-        dims = self._dimensionality**other.min()
-        ret = super(Quantity, self).__pow__(other)
-        ret._dimensionality = dims
-        return ret
+        return super(Quantity, self).__pow__(other)
 
     @with_doc(numpy.ndarray.__ipow__)
+    @check_uniform
+    @protected_power
     def __ipow__(self, other):
-        if getattr(other, 'dimensionality', None):
-            try:
-                assert not isinstance(self.base, Quantity)
-            except AssertionError:
-                raise ValueError('can not modify units of a view of a Quantity')
-
-        if getattr(other, 'dimensionality', None):
-            raise ValueError("exponent must be dimensionless")
-
-        other = numpy.asarray(other)
-        try:
-            assert other.min() == other.max()
-        except AssertionError:
-            raise ValueError('Quantities must be raised to a single power')
-
-        self._dimensionality **= other.min()
         return super(Quantity, self).__ipow__(other)
-
-    @with_doc(numpy.ndarray.__rpow__)
-    def __rpow__(self, other):
-        if self.dimensionality.simplified:
-            raise ValueError("exponent must be dimensionless")
-
-        return super(Quantity, self.simplified).__rpow__(other)
 
     @with_doc(numpy.ndarray.__repr__)
     def __repr__(self):

@@ -250,6 +250,27 @@ def _d_add_sub(q1, q2):
 p_dict[numpy.add] = _d_add_sub
 p_dict[numpy.subtract] = _d_add_sub
 
+def _d_power(q1, q2):
+    if getattr(q2, 'dimensionality', None):
+        raise ValueError("exponent must be dimensionless")
+    try:
+        q2 = numpy.array(q2)
+        p = q2.min()
+        if p != q2.max():
+            raise ValueError('Quantities must be raised to a uniform power')
+        return q1._dimensionality**p
+    except AttributeError:
+        return Dimensionality()
+p_dict[numpy.power] = _d_power
+
+def _d_square(q1):
+    return q1._dimensionality**2
+p_dict[numpy.square] = _d_square
+
+def _d_reciprocal(q1):
+    return q1._dimensionality**-1
+p_dict[numpy.reciprocal] = _d_reciprocal
+
 def _d_copy(q1):
     return q1.dimensionality
 p_dict[numpy.conjugate] = _d_copy
