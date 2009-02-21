@@ -13,6 +13,9 @@ from quantities.dimensionality import Dimensionality
 meter = Dimensionality({q.m: 1})
 meter_repr = 'Dimensionality({meter: 1})'
 meter_str = 'm'
+centimeter = Dimensionality({q.cm: 1})
+centimeter_repr = 'Dimensionality({centimeter: 1})'
+centimeter_str = 'cm'
 joule = Dimensionality({q.kg: 1, q.m: 2, q.s: -2})
 joule_repr = 'Dimensionality({kilogram: 1, meter: 2, second: -2})'
 joule_str = 'kg*m**2/s**2'
@@ -95,6 +98,7 @@ def test_inplace_subtraction():
 
 def test_multiplication():
     assert_equal(meter*meter, Dimensionality({q.m: 2}))
+    assert_equal(meter*centimeter, Dimensionality({q.m: 1, q.cm: 1}))
     assert_equal(joule*meter, Dimensionality({q.kg: 1, q.m: 3, q.s: -2}))
     assert_raises(TypeError, operator.__mul__, Joule, 0)
     assert_raises(TypeError, operator.__mul__, 0, joule)
@@ -103,6 +107,10 @@ def test_multiplication():
 def test_inplace_multiplication():
     temp = meter.copy()
     temp *= meter
+    assert_equal(temp, meter*meter)
+    temp *= centimeter
+    assert_equal(temp, meter*meter*centimeter)
+    temp *= centimeter**-1
     assert_equal(temp, meter*meter)
     assert_raises(TypeError, operator.__imul__, Joule, 0)
     assert_raises(TypeError, operator.__imul__, 0, joule)
@@ -119,15 +127,34 @@ def test_inplace_division():
     temp = meter.copy()
     temp /= meter
     assert_equal(temp, meter/meter)
+    temp /= centimeter
+    assert_equal(temp, meter/meter/centimeter)
+    temp /= centimeter**-1
+    assert_equal(temp, meter/meter)
     assert_raises(TypeError, operator.__idiv__, Joule, 0)
     assert_raises(TypeError, operator.__idiv__, 0, joule)
     test_dimensionality_repr()
 
 def test_power():
-    assert_equal(meter**2, Dimensionality({q.m: 2}))
+    assert_equal(meter**2, meter*meter)
+    assert_equal(meter**0, Dimensionality())
     assert_equal(joule**2, Dimensionality({q.kg: 2, q.m: 4, q.s: -4}))
     assert_raises(TypeError, operator.__pow__, Joule, joule)
     assert_raises(TypeError, operator.__pow__, joule, Joule)
+    test_dimensionality_repr()
+
+def test_inplace_power():
+    temp = meter.copy()
+    temp **= 2
+    assert_equal(temp, meter**2)
+    temp = joule.copy()
+    temp **= 2
+    assert_equal(temp, joule**2)
+    temp = meter.copy()
+    temp **= 0
+    assert_equal(temp, Dimensionality())
+    assert_raises(TypeError, operator.__ipow__, Joule, joule)
+    assert_raises(TypeError, operator.__ipow__, joule, Joule)
     test_dimensionality_repr()
 
 def test_simplification():

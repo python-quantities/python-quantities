@@ -47,11 +47,11 @@ or equivalently::
   >>> print q
   3.280839895013123 ft
 
-Note that, with strings, units can be designated using plural 
+Note that, with strings, units can be designated using plural
 variants. Plural variants of the module variables are not available at
-this time, in the interest of keeping the units namespace somewhat 
-manageable. `q.units = 'feet'` will work, `q.units = pq.feet` will 
-not.  
+this time, in the interest of keeping the units namespace somewhat
+manageable. `q.units = 'feet'` will work, `q.units = pq.feet` will
+not.
 
 The units themselves are special objects that can not be modified in
 place::
@@ -251,18 +251,3 @@ from umath import *
 from numpy.testing import Tester
 test = Tester().test
 #bench = Tester().bench
-
-try:
-    import coverage
-
-    def coverage_report():
-        coverage.start()
-        test()
-        coverage.stop()
-        coverage.report(
-            [quantity, unitquantity, uncertainquantity, dimensionality, markup,
-             registry, ]
-        )
-
-except ImportError:
-    pass

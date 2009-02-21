@@ -159,6 +159,8 @@ class Dimensionality(dict):
             assert numpy.isscalar(other)
         except AssertionError:
             raise TypeError('exponent must be a scalar, got %r' % other)
+        if other == 0:
+            return Dimensionality()
         new = Dimensionality(self)
         for i in new:
             new[i] *= other
@@ -169,6 +171,9 @@ class Dimensionality(dict):
             assert numpy.isscalar(other)
         except AssertionError:
             raise TypeError('exponent must be a scalar, got %r' % other)
+        if other == 0:
+            self.clear()
+            return self
         for i in self:
             self[i] *= other
         return self
