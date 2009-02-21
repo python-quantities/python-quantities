@@ -274,6 +274,9 @@ p_dict[numpy.reciprocal] = _d_reciprocal
 def _d_copy(q1):
     return q1.dimensionality
 p_dict[numpy.conjugate] = _d_copy
+p_dict[numpy.floor] = _d_copy
+p_dict[numpy.ceil] = _d_copy
+p_dict[numpy.rint] = _d_copy
 
 def _d_sqrt(q1):
     return q1._dimensionality**0.5

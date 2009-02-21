@@ -532,9 +532,6 @@ class Quantity(numpy.ndarray):
                 "Quantity must be dimensionless, try using simplified"
             )
         else:
-            return Quantity(
-                self.magnitude.cumprod(axis, dtype, out),
-                copy=False
-                )
+            return super(Quantity, self).cumprod(axis, dtype, out)
 
     # list of unsupported functions: [choose]
