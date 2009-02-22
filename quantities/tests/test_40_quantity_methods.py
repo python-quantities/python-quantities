@@ -7,7 +7,7 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-import quantities as q
+import quantities as pq
 
 
 class TestQuantities(unittest.TestCase):
@@ -46,67 +46,67 @@ class TestQuantities(unittest.TestCase):
 
     def test_numpy_functions(self):
         # tolist
-        k = [[1, 2, 3, 10], [1, 2, 3, 4]] * q.BTU
+        k = [[1, 2, 3, 10], [1, 2, 3, 4]] * pq.BTU
 
         self.assertTrue(
             k.tolist() == \
-                [[1.0*q.Btu, 2.0*q.Btu, 3.0*q.Btu, 10.0*q.Btu],
-                 [1.0*q.Btu, 2.0*q.Btu, 3.0*q.Btu,  4.0*q.Btu]]
+                [[1.0*pq.Btu, 2.0*pq.Btu, 3.0*pq.Btu, 10.0*pq.Btu],
+                 [1.0*pq.Btu, 2.0*pq.Btu, 3.0*pq.Btu,  4.0*pq.Btu]]
         )
 
         # sum
-        temp1 = [100, -100, 20.00003, 1.5e-4] * q.BTU
-        self.assertEqual(temp1.sum(), 20.00018 * q.BTU)
+        temp1 = [100, -100, 20.00003, 1.5e-4] * pq.BTU
+        self.assertEqual(temp1.sum(), 20.00018 * pq.BTU)
 
         # fill
-        u = [[-100, 5, 6], [1, 2, 3]] * q.m
-        u.fill(6 * q.m)
-        self.numAssertEqual(u,[[6, 6, 6], [6, 6, 6]] * q.m)
+        u = [[-100, 5, 6], [1, 2, 3]] * pq.m
+        u.fill(6 * pq.m)
+        self.numAssertEqual(u,[[6, 6, 6], [6, 6, 6]] * pq.m)
         # incompatible units:
         self.assertRaises(ValueError, u.fill, [[-100, 5, 6], [1, 2, 3]])
 
         # reshape
-        y = [[1, 3, 4, 5], [1, 2, 3, 6]] * q.inch
+        y = [[1, 3, 4, 5], [1, 2, 3, 6]] * pq.inch
         self.numAssertEqual(
             y.reshape([1,8]),
-            [[1.0, 3, 4, 5, 1, 2, 3, 6]] * q.inch
+            [[1.0, 3, 4, 5, 1, 2, 3, 6]] * pq.inch
         )
 
         # transpose
         self.numAssertEqual(
             y.transpose(),
-            [[1, 1], [3, 2], [4, 3], [5, 6]] * q.inch
+            [[1, 1], [3, 2], [4, 3], [5, 6]] * pq.inch
         )
 
         # flatten
         self.numAssertEqual(
             y.flatten(),
-            [1, 3, 4, 5, 1, 2, 3, 6] * q.inch
+            [1, 3, 4, 5, 1, 2, 3, 6] * pq.inch
         )
 
         # ravel
         self.numAssertEqual(
             y.ravel(),
-            [1, 3, 4, 5, 1, 2, 3, 6] * q.inch
+            [1, 3, 4, 5, 1, 2, 3, 6] * pq.inch
         )
 
         # squeeze
         self.numAssertEqual(
             y.reshape([1,8]).squeeze(),
-            [1, 3, 4, 5, 1, 2, 3, 6] * q.inch
+            [1, 3, 4, 5, 1, 2, 3, 6] * pq.inch
         )
 
         # take
         self.numAssertEqual(
             temp1.take([2, 0, 3]),
-            [20.00003, 100, 1.5e-4] * q.BTU
+            [20.00003, 100, 1.5e-4] * pq.BTU
         )
 
         # put
         # make up something similar to y
-        z = [[1, 3, 10, 5], [1, 2, 3, 12]] * q.inch
+        z = [[1, 3, 10, 5], [1, 2, 3, 12]] * pq.inch
         # put replace the numbers so it is identical to y
-        z.put([2, 7], [4, 6] * q.inch)
+        z.put([2, 7], [4, 6] * pq.inch)
         # make sure they are equal
         self.numAssertEqual(z, y)
 
@@ -115,7 +115,7 @@ class TestQuantities(unittest.TestCase):
         self.assertRaises(
             ValueError,
             z.put,
-            [2, 7], [4, 6] * q.ft
+            [2, 7], [4, 6] * pq.ft
         )
         self.assertRaises(
             TypeError,
@@ -125,28 +125,28 @@ class TestQuantities(unittest.TestCase):
 
         # repeat
         z = [1, 1, 1, 3, 3, 3, 4, 4, 4, 5, 5, 5, 1, 1, 1, 2, 2, 2, 3, 3, 3, \
-             6, 6, 6] * q.inch
+             6, 6, 6] * pq.inch
         self.numAssertEqual(y.repeat(3), z)
 
         # sort
-        m = [4, 5, 2, 3, 1, 6] * q.radian
+        m = [4, 5, 2, 3, 1, 6] * pq.radian
         m.sort()
-        self.numAssertEqual(m, [1, 2, 3, 4, 5, 6] * q.radian)
+        self.numAssertEqual(m, [1, 2, 3, 4, 5, 6] * pq.radian)
 
         # argsort
-        m = [1, 4, 5, 6, 2, 9] * q.MeV
+        m = [1, 4, 5, 6, 2, 9] * pq.MeV
         self.numAssertEqual(m.argsort(), np.array([0, 4, 1, 2, 3, 5]))
 
         # diagonal
-        t = [[1, 2, 3], [1, 2, 3], [1, 2, 3]] * q.kPa
-        self.numAssertEqual(t.diagonal(offset=1), [2, 3] * q.kPa)
+        t = [[1, 2, 3], [1, 2, 3], [1, 2, 3]] * pq.kPa
+        self.numAssertEqual(t.diagonal(offset=1), [2, 3] * pq.kPa)
 
         # compress
-        self.numAssertEqual(z.compress(z > 5 * q.inch), [6, 6, 6] * q.inch)
+        self.numAssertEqual(z.compress(z > 5 * pq.inch), [6, 6, 6] * pq.inch)
 
         # searchsorted
         m.sort()
-        self.numAssertEqual(m.searchsorted([5.5, 9.5] * q.MeV),
+        self.numAssertEqual(m.searchsorted([5.5, 9.5] * pq.MeV),
                             np.array([4,6]))
 
         def searchsortedError():
@@ -156,65 +156,65 @@ class TestQuantities(unittest.TestCase):
         self.assertRaises(ValueError, searchsortedError)
 
         # nonzero
-        j = [1, 0, 5, 6, 0, 9] * q.MeV
+        j = [1, 0, 5, 6, 0, 9] * pq.MeV
         self.numAssertEqual(j.nonzero()[0], np.array([0, 2, 3, 5]))
 
         # max
-        self.assertEqual(j.max(), 9 * q.MeV)
+        self.assertEqual(j.max(), 9 * pq.MeV)
 
         # argmax
         self.assertEqual(j.argmax(), 5)
 
         # min
-        self.assertEqual(j.min(), 0 * q.MeV)
+        self.assertEqual(j.min(), 0 * pq.MeV)
 
         # argmin
         self.assertEqual(m.argmin(), 0)
 
         # ptp
-        self.assertEqual(m.ptp(), 8 * q.MeV)
+        self.assertEqual(m.ptp(), 8 * pq.MeV)
 
         # clip
         self.numAssertEqual(
-            j.clip(max=5*q.MeV),
-            [1, 0, 5, 5, 0, 5] * q.MeV
+            j.clip(max=5*pq.MeV),
+            [1, 0, 5, 5, 0, 5] * pq.MeV
         )
         self.numAssertEqual(
-            j.clip(min=1*q.MeV),
-            [1, 1, 5, 6, 1, 9] * q.MeV
+            j.clip(min=1*pq.MeV),
+            [1, 1, 5, 6, 1, 9] * pq.MeV
         )
         self.numAssertEqual(
-            j.clip(min=1*q.MeV, max=5*q.MeV),
-            [1, 1, 5, 5, 1, 5] * q.MeV
+            j.clip(min=1*pq.MeV, max=5*pq.MeV),
+            [1, 1, 5, 5, 1, 5] * pq.MeV
         )
         self.assertRaises(ValueError, j.clip)
         self.assertRaises(ValueError, j.clip, 1)
 
         # round
-        p = [1, 3.00001, 3, .6, 1000] * q.J
-        self.numAssertEqual(p.round(0), [1, 3., 3, 1, 1000] * q.J)
-        self.numAssertEqual(p.round(-1), [0, 0, 0, 0, 1000] * q.J)
-        self.numAssertEqual(p.round(3), [1, 3., 3, .6, 1000] * q.J)
+        p = [1, 3.00001, 3, .6, 1000] * pq.J
+        self.numAssertEqual(p.round(0), [1, 3., 3, 1, 1000] * pq.J)
+        self.numAssertEqual(p.round(-1), [0, 0, 0, 0, 1000] * pq.J)
+        self.numAssertEqual(p.round(3), [1, 3., 3, .6, 1000] * pq.J)
 
         # trace
-        d = [[1., 2., 3., 4.], [1., 2., 3., 4.],[1., 2., 3., 4.]]*q.A
-        self.numAssertEqual(d.trace(), (1+2+3) * q.A)
+        d = [[1., 2., 3., 4.], [1., 2., 3., 4.],[1., 2., 3., 4.]]*pq.A
+        self.numAssertEqual(d.trace(), (1+2+3) * pq.A)
 
         # cumsum
         self.numAssertEqual(
             p.cumsum(),
-            [1, 4.00001, 7.00001, 1 + 3.00001 + 3 + .6, 1007.60001] * q.J
+            [1, 4.00001, 7.00001, 1 + 3.00001 + 3 + .6, 1007.60001] * pq.J
         )
 
         # mean
-        self.assertEqual(p.mean(), 201.520002 * q.J)
+        self.assertEqual(p.mean(), 201.520002 * pq.J)
 
         # var
         self.assertAlmostEqual(
             p.var(),
             ((1 - 201.520002)**2 + (3.00001 -201.520002)**2 + \
                 (3- 201.520002)**2 + (.6 - 201.520002) **2 + \
-                (1000-201.520002)**2) / 5 * q.J**2
+                (1000-201.520002)**2) / 5 * pq.J**2
         )
 
         # std
@@ -222,21 +222,21 @@ class TestQuantities(unittest.TestCase):
             p.std(),
             np.sqrt(((1 - 201.520002)**2 + (3.00001 -201.520002)**2 + \
                 (3- 201.520002) **2 + (.6 - 201.520002) **2 + \
-                (1000-201.520002)**2) / 5) * q.J
+                (1000-201.520002)**2) / 5) * pq.J
             )
 
         # prod
-        o = [1, 3, 2] * q.kPa
-        self.assertEqual(o.prod(), 6 * q.kPa**3)
+        o = [1, 3, 2] * pq.kPa
+        self.assertEqual(o.prod(), 6 * pq.kPa**3)
 
         # cumprod
         self.assertRaises(ValueError, o.cumprod)
 
-        f = [1, 2, 3] * q.dimensionless
-        self.numAssertEqual(f.cumprod(), [1,2,6] * q.dimensionless)
+        f = [1, 2, 3] * pq.dimensionless
+        self.numAssertEqual(f.cumprod(), [1,2,6] * pq.dimensionless)
 
         #test conj and conjugate()
-        w1 = [1 - 5j, 3 , 6 + 1j] * q.MeV
+        w1 = [1 - 5j, 3 , 6 + 1j] * pq.MeV
         self.numAssertEqual(
             w1.conj().magnitude,
             np.array([1-5j, 3, 6+1j]).conj()

@@ -7,24 +7,24 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-import quantities as q
+import quantities as pq
 
 
 def test_uncertainquantity_creation():
-    a = q.UncertainQuantity(1, q.m)
+    a = pq.UncertainQuantity(1, pq.m)
     assert_equal(str(a), '1.0 m\n±0.0 m (1σ)')
-    a = q.UncertainQuantity([1, 1, 1], q.m)
+    a = pq.UncertainQuantity([1, 1, 1], pq.m)
     assert_equal(str(a), '[ 1.  1.  1.] m\n±[ 0.  0.  0.] m (1σ)')
-    a = q.UncertainQuantity(a)
+    a = pq.UncertainQuantity(a)
     assert_equal(str(a), '[ 1.  1.  1.] m\n±[ 0.  0.  0.] m (1σ)')
-    a = q.UncertainQuantity([1, 1, 1], q.m, [.1, .1, .1])
+    a = pq.UncertainQuantity([1, 1, 1], pq.m, [.1, .1, .1])
     assert_equal(str(a), '[ 1.  1.  1.] m\n±[ 0.1  0.1  0.1] m (1σ)')
-    assert_raises(ValueError, q.UncertainQuantity, [1, 1, 1], q.m, 1)
-    assert_raises(ValueError, q.UncertainQuantity, [1, 1, 1], q.m, [1, 1])
+    assert_raises(ValueError, pq.UncertainQuantity, [1, 1, 1], pq.m, 1)
+    assert_raises(ValueError, pq.UncertainQuantity, [1, 1, 1], pq.m, [1, 1])
 
 def test_uncertainquantity_rescale():
-    a = q.UncertainQuantity([1, 1, 1], q.m, [.1, .1, .1])
-    b = a.rescale(q.ft)
+    a = pq.UncertainQuantity([1, 1, 1], pq.m, [.1, .1, .1])
+    b = a.rescale(pq.ft)
     assert_equal(
         str(b),
         '[ 3.2808399  3.2808399  3.2808399] ft'
@@ -32,14 +32,14 @@ def test_uncertainquantity_rescale():
     )
 
 def test_uncertainquantity_simplified():
-    a = 1000*q.constants.electron_volt
+    a = 1000*pq.constants.electron_volt
     assert_equal(
         str(a.simplified),
         '1.602176487e-16 kg·m²/s²\n±4e-24 kg·m²/s² (1σ)'
     )
 
 def test_uncertainquantity_set_uncertainty():
-    a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
+    a = pq.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a),
         '[ 1.  2.] m\n±[ 0.1  0.2] m (1σ)'
@@ -54,7 +54,7 @@ def test_uncertainquantity_set_uncertainty():
     assert_raises(ValueError, set_u, a, 1)
 
 def test_uncertainquantity_multiply():
-    a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
+    a = pq.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a*a),
         '[ 1.  4.] m²\n±[ 0.14142136  0.56568542] m² (1σ)'
@@ -65,7 +65,7 @@ def test_uncertainquantity_multiply():
     )
 
 def test_uncertainquantity_divide():
-    a = q.UncertainQuantity([1, 2], 'm', [.1, .2])
+    a = pq.UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
         str(a/a),
         '[ 1.  1.] dimensionless\n±[ 0.14142136  0.14142136] '

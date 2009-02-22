@@ -7,5 +7,5 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-import quantities as q
+import quantities as pq
 

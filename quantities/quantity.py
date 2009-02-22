@@ -94,17 +94,11 @@ def protected_power(f):
 def wrap_comparison(f):
     @wraps(f)
     def g(self, other):
-        _cmp = f.__name__
         if isinstance(other, Quantity):
-            try:
-                assert self.dimensionality.simplified == \
-                    other.dimensionality.simplified
-            except AssertionError:
-                return np.zeros(self.shape, '?')
-            om = other.rescale(self.dimensionality).magnitude
-            return getattr(self.magnitude, _cmp)(om)
-        else:
-            return getattr(self.magnitude, _cmp)(other)
+            if other._dimensionality != self._dimensionality:
+                other = other.rescale(self._dimensionality)
+            other = other.magnitude
+        return f(self, other)
     return g
 
 
@@ -297,32 +291,40 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__lt__)
     @wrap_comparison
     def __lt__(self, other):
-        pass
+        return self.magnitude < other
 
     @with_doc(np.ndarray.__le__)
     @wrap_comparison
     def __le__(self, other):
-        pass
+        return self.magnitude <= other
 
     @with_doc(np.ndarray.__eq__)
-    @wrap_comparison
     def __eq__(self, other):
-        pass
+        if isinstance(other, Quantity):
+            try:
+                other = other.rescale(self._dimensionality).magnitude
+            except ValueError:
+                return np.zeros(self.shape, '?')
+        return self.magnitude == other
 
     @with_doc(np.ndarray.__ne__)
-    @wrap_comparison
     def __ne__(self, other):
-        pass
-
-    @with_doc(np.ndarray.__gt__)
-    @wrap_comparison
-    def __gt__(self, other):
-        pass
+        if isinstance(other, Quantity):
+            try:
+                other = other.rescale(self._dimensionality).magnitude
+            except ValueError:
+                return np.ones(self.shape, '?')
+        return self.magnitude != other
 
     @with_doc(np.ndarray.__ge__)
     @wrap_comparison
     def __ge__(self, other):
-        pass
+        return self.magnitude >= other
+
+    @with_doc(np.ndarray.__gt__)
+    @wrap_comparison
+    def __gt__(self, other):
+        return self.magnitude > other
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
