@@ -8,6 +8,7 @@ from numpy.testing.utils import *
 
 import numpy as np
 import quantities as pq
+from quantities.utilities import assert_array_equal, assert_array_almost_equal
 
 
 class TestQuantities(unittest.TestCase):

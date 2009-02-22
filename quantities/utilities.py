@@ -53,7 +53,7 @@ class with_doc:
 
 ## testing utilities, borrowed from the numpy project
 
-def assert_quantity_compare(
+def assert_array_compare(
     comparison, x, y, err_msg='', verbose=True, header=''
 ):
     from numpy.core import asarray, isnan, any
@@ -114,13 +114,13 @@ def assert_quantity_compare(
                             names=('x', 'y'))
         raise ValueError(msg)
 
-def assert_quantity_equal(x, y, err_msg='', verbose=True):
+def assert_array_equal(x, y, err_msg='', verbose=True):
     assert_array_compare(operator.__eq__, x, y, err_msg=err_msg,
-                         verbose=verbose, header='Quantities are not equal')
+                         verbose=verbose, header='Values are not equal')
 
-def assert_quantity_almost_equal(x, y, decimal=6, err_msg='', verbose=True):
+def assert_array_almost_equal(x, y, decimal=6, err_msg='', verbose=True):
     from numpy.core import around
     def compare(x, y):
         return around(abs(x-y),decimal) <= 10.0**(-decimal)
     assert_array_compare(compare, x, y, err_msg=err_msg, verbose=verbose,
-                         header='Quantities are not almost equal')
+                         header='Values are not almost equal')
