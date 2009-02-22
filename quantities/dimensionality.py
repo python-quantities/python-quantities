@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 import operator
 
-import numpy
+import numpy as np
 
 from .config import USE_UNICODE
 from .markup import format_units, format_units_unicode
@@ -160,7 +160,7 @@ class Dimensionality(dict):
 
     def __pow__(self, other):
         try:
-            assert numpy.isscalar(other)
+            assert np.isscalar(other)
         except AssertionError:
             raise TypeError('exponent must be a scalar, got %r' % other)
         if other == 0:
@@ -172,7 +172,7 @@ class Dimensionality(dict):
 
     def __ipow__(self, other):
         try:
-            assert numpy.isscalar(other)
+            assert np.isscalar(other)
         except AssertionError:
             raise TypeError('exponent must be a scalar, got %r' % other)
         if other == 0:
@@ -226,7 +226,7 @@ def _d_multiply(q1, q2):
             return q1.dimensionality
         except:
             return q2.dimensionality
-p_dict[numpy.multiply] = _d_multiply
+p_dict[np.multiply] = _d_multiply
 
 def _d_divide(q1, q2):
     try:
@@ -236,8 +236,8 @@ def _d_divide(q1, q2):
             return q1.dimensionality
         except:
             return q2.dimensionality**-1
-p_dict[numpy.divide] = _d_divide
-p_dict[numpy.true_divide] = _d_divide
+p_dict[np.divide] = _d_divide
+p_dict[np.true_divide] = _d_divide
 
 def _d_add_sub(q1, q2):
     try:
@@ -247,49 +247,59 @@ def _d_add_sub(q1, q2):
             return q1.dimensionality
         elif hasattr(q2, 'dimensionality'):
             return q2.dimensionality
-p_dict[numpy.add] = _d_add_sub
-p_dict[numpy.subtract] = _d_add_sub
+p_dict[np.add] = _d_add_sub
+p_dict[np.subtract] = _d_add_sub
 
 def _d_power(q1, q2):
     if getattr(q2, 'dimensionality', None):
         raise ValueError("exponent must be dimensionless")
     try:
-        q2 = numpy.array(q2)
+        q2 = np.array(q2)
         p = q2.min()
         if p != q2.max():
             raise ValueError('Quantities must be raised to a uniform power')
         return q1._dimensionality**p
     except AttributeError:
         return Dimensionality()
-p_dict[numpy.power] = _d_power
+p_dict[np.power] = _d_power
 
 def _d_square(q1):
     return q1._dimensionality**2
-p_dict[numpy.square] = _d_square
+p_dict[np.square] = _d_square
 
 def _d_reciprocal(q1):
     return q1._dimensionality**-1
-p_dict[numpy.reciprocal] = _d_reciprocal
+p_dict[np.reciprocal] = _d_reciprocal
 
 def _d_copy(q1):
     return q1.dimensionality
-p_dict[numpy.ceil] = _d_copy
-p_dict[numpy.conjugate] = _d_copy
-p_dict[numpy.fix] = _d_copy
-p_dict[numpy.floor] = _d_copy
-p_dict[numpy.rint] = _d_copy
+p_dict[np.ceil] = _d_copy
+p_dict[np.conjugate] = _d_copy
+p_dict[np.fix] = _d_copy
+p_dict[np.floor] = _d_copy
+p_dict[np.rint] = _d_copy
 
 def _d_sqrt(q1):
     return q1._dimensionality**0.5
-p_dict[numpy.sqrt] = _d_sqrt
+p_dict[np.sqrt] = _d_sqrt
 
 def _d_radians(q1):
-    assert q1.units == unit_registry['degree']
+    try:
+        assert q1.units == unit_registry['degree']
+    except AssertionError:
+        raise ValueError(
+            'expected units of degrees, got "%s"' % q1._dimensionality
+        )
     return unit_registry['radian'].dimensionality
-p_dict[numpy.radians] = _d_radians
+p_dict[np.radians] = _d_radians
 
 def _d_degrees(q1):
-    assert q1.units == unit_registry['radian']
+    try:
+        assert q1.units == unit_registry['radian']
+    except AssertionError:
+        raise ValueError(
+            'expected units of radians, got "%s"' % q1._dimensionality
+        )
     return unit_registry['degree'].dimensionality
-p_dict[numpy.degrees] = _d_degrees
+p_dict[np.degrees] = _d_degrees
 

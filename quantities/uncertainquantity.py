@@ -3,7 +3,7 @@
 """
 from __future__ import absolute_import
 
-import numpy
+import numpy as np
 
 from .config import USE_UNICODE
 from .quantity import Quantity
@@ -79,7 +79,7 @@ class UncertainQuantity(Quantity):
             obj,
             'uncertainty',
             Quantity(
-                numpy.zeros(self.shape, self.dtype),
+                np.zeros(self.shape, self.dtype),
                 self._dimensionality,
                 copy=False
             )
@@ -117,7 +117,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = numpy.array(other, copy=False, subok=True)
+            other = np.array(other, copy=False, subok=True)
             u = (self.uncertainty**2*other**2)**0.5
 
         res._uncertainty = u
@@ -136,7 +136,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = numpy.array(other, copy=False)
+            other = np.array(other, copy=False)
             u = (self.uncertainty**2/other**2)**0.5
 
         res._uncertainty = u

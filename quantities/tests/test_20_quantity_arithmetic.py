@@ -1,5 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 
+import operator as op
 import unittest
 
 from nose.tools import *
@@ -20,9 +21,7 @@ def test_scalar_equality():
     assert_false(2*q.J == q.J)
     assert_false(q.J == 2*q.kg*q.m**2/q.s**2)
 
-    def eq(q1, q2):
-        return q1 == q2
-    assert_raises(ValueError, eq, q.J, q.kg)
+    assert_false(q.J == q.kg)
 
 def test_scalar_inequality():
     assert_true(q.J != q.erg)

@@ -1,7 +1,9 @@
 ﻿from __future__ import absolute_import
 
-import numpy
-from ..quantities import Quantity, dimensionless, radian, degree
+import numpy as np
+
+from ..quantity import Quantity
+from ..units import dimensionless, radian, degree
 from ..utilities import with_doc
 
 
@@ -10,26 +12,26 @@ from ..utilities import with_doc
 #]
 
 
-@with_doc(numpy.prod)
+@with_doc(np.prod)
 def prod(a, axis=None, dtype=None, out=None):
     return a.prod(axis, dtype, out)
 
-@with_doc(numpy.sum)
+@with_doc(np.sum)
 def sum(a, axis=None, dtype=None, out=None):
     return a.sum(axis, dtype, out)
 
-@with_doc(numpy.nansum)
+@with_doc(np.nansum)
 def nansum(a, axis=None):
     if not isinstance(a, Quantity):
-        return numpy.nansum(a, axis)
+        return np.nansum(a, axis)
 
     return Quantity(
-        numpy.nansum(a.magnitude, axis),
+        np.nansum(a.magnitude, axis),
         a.dimensionality,
         copy=False
     )
 
-@with_doc(numpy.cumprod)
+@with_doc(np.cumprod)
 def cumprod(a, axis=None, dtype=None, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
@@ -37,27 +39,27 @@ def cumprod(a, axis=None, dtype=None, out=None):
     """
     return a.cumprod(axis, dtype, out)
 
-@with_doc(numpy.cumsum)
+@with_doc(np.cumsum)
 def cumsum(a,axis=None, dtype=None, out=None):
     return a.cumsum(axis, dtype, out)
 
-diff = numpy.diff
+diff = np.diff
 
-@with_doc(numpy.ediff1d)
+@with_doc(np.ediff1d)
 def ediff1d(ary, to_end=None, to_begin=None):
     if not isinstance(ary, Quantity):
-        return numpy.ediff1d(ary, to_end, to_begin)
+        return np.ediff1d(ary, to_end, to_begin)
 
     return Quantity(
-        numpy.ediff1d(ary.magnitude, to_end, to_begin),
+        np.ediff1d(ary.magnitude, to_end, to_begin),
         ary.dimensionality,
         copy=False
     )
 
-@with_doc(numpy.gradient)
+@with_doc(np.gradient)
 def gradient(f, *varargs):
     # if no sample distances are specified, use dimensionless 1
-    # this mimicks the behavior of numpy.gradient, but perhaps we should
+    # this mimicks the behavior of np.gradient, but perhaps we should
     # remove this default behavior
     # removed for now::
     #
@@ -66,7 +68,7 @@ def gradient(f, *varargs):
 
     varargsQuantities = [Quantity(i, copy=False) for i in varargs]
     varargsMag = tuple([i.magnitude for i in varargsQuantities])
-    ret = numpy.gradient(f.magnitude, *varargsMag)
+    ret = np.gradient(f.magnitude, *varargsMag)
 
     if len(varargs) == 1:
         # if there was only one sample distance provided,
@@ -78,10 +80,10 @@ def gradient(f, *varargs):
         return tuple([ Quantity(i, f.units/j.units)
                       for i,j  in zip( ret, varargsQuantities)])
 
-@with_doc(numpy.cross)
+@with_doc(np.cross)
 def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
     if not (isinstance(a, Quantity) and isinstance(b, Quantity)):
-        return numpy.cross(a, b, axisa, axisb, axisc, axis)
+        return np.cross(a, b, axisa, axisb, axisc, axis)
 
     if not isinstance(a, Quantity):
         a = Quantity(a, dimensionless, copy=False)
@@ -89,12 +91,12 @@ def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
         b = Quantity(b, dimensionless, copy=False)
 
     return Quantity(
-        numpy.cross(a, b, axisa, axisb, axisc, axis),
+        np.cross(a, b, axisa, axisb, axisc, axis),
         a._dimensionality*b._dimensionality,
         copy=False
     )
 
-@with_doc(numpy.trapz)
+@with_doc(np.trapz)
 def trapz(y, x=None, dx=1.0, axis=-1):
     # this function has a weird input structure, so it is tricky to wrap it
     # perhaps there is a simpler way to do this
@@ -103,7 +105,7 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         and not isinstance(x, Quantity)
         and not isinstance(dx, Quantity)
     ):
-        return numpy.trapz(y, x, dx, axis)
+        return np.trapz(y, x, dx, axis)
 
     if not isinstance(y, Quantity):
         y = Quantity(y, copy = False)
@@ -113,81 +115,81 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         dx = Quantity(dx, copy = False)
 
     if x is None:
-        ret = numpy.trapz(y.magnitude , x, dx.magnitude, axis)
+        ret = np.trapz(y.magnitude , x, dx.magnitude, axis)
         return Quantity ( ret, y.units * dx.units)
     else:
-        ret = numpy.trapz(y.magnitude , x.magnitude, dx.magnitude, axis)
+        ret = np.trapz(y.magnitude , x.magnitude, dx.magnitude, axis)
         return Quantity ( ret, y.units * x.units)
 
-@with_doc(numpy.exp)
+@with_doc(np.exp)
 def exp(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.exp(x, out)
+        return np.exp(x, out)
     x = x.rescale(dimensionless)
 
-    return Quantity(numpy.exp(x.magnitude), copy = False)
+    return Quantity(np.exp(x.magnitude), copy = False)
 
-@with_doc(numpy.expm1)
+@with_doc(np.expm1)
 def expm1(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.expm1(x, out)
+        return np.expm1(x, out)
     x = x.rescale(dimensionless)
 
-    return Quantity(numpy.expm1(x.magnitude), copy = False)
+    return Quantity(np.expm1(x.magnitude), copy = False)
 
-@with_doc(numpy.log)
+@with_doc(np.log)
 def log(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.log(x, out)
+        return np.log(x, out)
     x = x.rescale(dimensionless)
 
-    return Quantity(numpy.log(x.magnitude), copy = False)
+    return Quantity(np.log(x.magnitude), copy = False)
 
-@with_doc(numpy.log10)
+@with_doc(np.log10)
 def log10(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.log10(x, out)
+        return np.log10(x, out)
     x = x.rescale(dimensionless)
 
-    return Quantity(numpy.log10(x.magnitude), copy = False)
+    return Quantity(np.log10(x.magnitude), copy = False)
 
-@with_doc(numpy.log2)
+@with_doc(np.log2)
 def log2(x, y=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.log2(x, y)
+        return np.log2(x, y)
     x = x.rescale(dimensionless)
 
-    return Quantity(numpy.log2(x.magnitude), copy = False)
+    return Quantity(np.log2(x.magnitude), copy = False)
 
-@with_doc(numpy.log1p)
+@with_doc(np.log1p)
 def log1p(x, out=None):
     if not isinstance(x, Quantity):
-        return numpy.log1p(x, out)
+        return np.log1p(x, out)
     x = x.rescale(dimensionless)
 
-    return Quantity(numpy.log1p(x.magnitude), copy = False)
+    return Quantity(np.log1p(x.magnitude), copy = False)
 
-@with_doc(numpy.sin)
+@with_doc(np.sin)
 def sin(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to radians.
@@ -195,12 +197,12 @@ def sin(x, out=None):
     Returns a dimensionless quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.sin(x, out)
+        return np.sin(x, out)
 
-    return Quantity(numpy.sin(x.rescale(radian).magnitude, out),
+    return Quantity(np.sin(x.rescale(radian).magnitude, out),
                     copy=False)
 
-@with_doc(numpy.arcsin)
+@with_doc(np.arcsin)
 def arcsin(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
@@ -209,15 +211,15 @@ def arcsin(x, out=None):
     Returns a quantity in units of radians.
     """
     if not isinstance(x, Quantity):
-        return numpy.arcsin(x, out)
+        return np.arcsin(x, out)
 
     return Quantity(
-        numpy.arcsin(x.rescale(dimensionless).magnitude, out),
+        np.arcsin(x.rescale(dimensionless).magnitude, out),
         radian,
         copy=False
     )
 
-@with_doc(numpy.cos)
+@with_doc(np.cos)
 def cos(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to radians.
@@ -225,11 +227,11 @@ def cos(x, out=None):
     Returns a dimensionless quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.cos(x, out)
+        return np.cos(x, out)
 
-    return Quantity(numpy.cos(x.rescale(radian).magnitude), copy=False)
+    return Quantity(np.cos(x.rescale(radian).magnitude), copy=False)
 
-@with_doc(numpy.arccos)
+@with_doc(np.arccos)
 def arccos(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
@@ -238,15 +240,15 @@ def arccos(x, out=None):
     Returns a quantity in units of radians.
     """
     if not isinstance(x, Quantity):
-        return numpy.arccos(x, out)
+        return np.arccos(x, out)
 
     return Quantity(
-        numpy.arccos(x.rescale(dimensionless).magnitude, out),
+        np.arccos(x.rescale(dimensionless).magnitude, out),
         radian,
         copy=False
     )
 
-@with_doc(numpy.tan)
+@with_doc(np.tan)
 def tan(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to radians.
@@ -254,11 +256,11 @@ def tan(x, out=None):
     Returns a dimensionless quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.tan(x, out)
+        return np.tan(x, out)
 
-    return Quantity(numpy.tan(x.rescale(radian).magnitude), copy=False)
+    return Quantity(np.tan(x.rescale(radian).magnitude), copy=False)
 
-@with_doc(numpy.arctan)
+@with_doc(np.arctan)
 def arctan(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
@@ -267,15 +269,15 @@ def arctan(x, out=None):
     Returns a quantity in units of radians.
     """
     if not isinstance(x, Quantity):
-        return numpy.arctan(x, out)
+        return np.arctan(x, out)
 
     return Quantity(
-        numpy.arctan(x.rescale(dimensionless).magnitude, out),
+        np.arctan(x.rescale(dimensionless).magnitude, out),
         radian,
         copy=False
     )
 
-@with_doc(numpy.arctan2)
+@with_doc(np.arctan2)
 def arctan2(x1, x2, out=None):
     """
     Raises a ValueError if inputs do not have identical units.
@@ -283,7 +285,7 @@ def arctan2(x1, x2, out=None):
     Returns a quantity in units of radians.
     """
     if not (isinstance(x1, Quantity) and isinstance(x2, Quantity)):
-        return numpy.arctan2(x1, x2, out)
+        return np.arctan2(x1, x2, out)
 
     if not isinstance(x1, Quantity):
         x1 = Quantity(x1, dimensionless, copy=False)
@@ -297,18 +299,18 @@ def arctan2(x1, x2, out=None):
         )
 
     return Quantity(
-        numpy.arctan2(x1.magnitude, x2.magnitude, out),
+        np.arctan2(x1.magnitude, x2.magnitude, out),
         radian,
         copy=False
     )
 
-@with_doc(numpy.hypot)
+@with_doc(np.hypot)
 def hypot(x1, x2, out = None):
     """
     Raises a ValueError if inputs do not have identical units.
     """
     if not (isinstance(x1, Quantity) and isinstance(x2, Quantity)):
-        return numpy.hypot(x1, x2, out)
+        return np.hypot(x1, x2, out)
 
     if not isinstance(x1, Quantity):
         x1 = Quantity(x1, dimensionless, copy=False)
@@ -322,15 +324,15 @@ def hypot(x1, x2, out = None):
         )
 
     return Quantity(
-        numpy.hypot(x1.magnitude, x2.magnitude, out),
+        np.hypot(x1.magnitude, x2.magnitude, out),
         x1.dimensionality,
         copy = False
     )
 
-@with_doc(numpy.unwrap)
-def unwrap(p, discont=numpy.pi, axis=-1):
+@with_doc(np.unwrap)
+def unwrap(p, discont=np.pi, axis=-1):
     if not (isinstance(p, Quantity) and isinstance(discont, Quantity)):
-        return numpy.unwrap(p, discont, axis)
+        return np.unwrap(p, discont, axis)
 
     if not isinstance(p, Quantity):
         p = Quantity(p, copy=False)
@@ -340,96 +342,96 @@ def unwrap(p, discont=numpy.pi, axis=-1):
     discont = discont.rescale(p.units)
 
     return Quantity(
-        numpy.unwrap(p.magnitude, discont.magnitude, axis),
+        np.unwrap(p.magnitude, discont.magnitude, axis),
         p.units
     )
 
-@with_doc(numpy.sinh)
+@with_doc(np.sinh)
 def sinh(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.sinh(x, out)
+        return np.sinh(x, out)
 
     return Quantity(
-        numpy.sinh(x.rescale(dimensionless).magnitude, out),
+        np.sinh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
 
-@with_doc(numpy.cosh)
+@with_doc(np.cosh)
 def cosh(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.cosh(x, out)
+        return np.cosh(x, out)
 
     return Quantity(
-        numpy.cosh(x.rescale(dimensionless).magnitude, out),
+        np.cosh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
 
-@with_doc(numpy.tanh)
+@with_doc(np.tanh)
 def tanh(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.tanh(x, out)
+        return np.tanh(x, out)
 
     return Quantity(
-        numpy.tanh(x.rescale(dimensionless).magnitude, out),
+        np.tanh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
 
-@with_doc(numpy.arcsinh)
+@with_doc(np.arcsinh)
 def arcsinh(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.arcsinh(x, out)
+        return np.arcsinh(x, out)
 
     return Quantity(
-        numpy.arcsinh(x.rescale(dimensionless).magnitude, out),
+        np.arcsinh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
 
-@with_doc(numpy.arccosh)
+@with_doc(np.arccosh)
 def arccosh(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.arccosh(x, out)
+        return np.arccosh(x, out)
 
     return Quantity(
-        numpy.arccosh(x.rescale(dimensionless).magnitude, out),
+        np.arccosh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )
 
-@with_doc(numpy.arctanh)
+@with_doc(np.arctanh)
 def arctanh(x, out=None):
     """
     Raises a ValueError if input cannot be rescaled to a dimensionless
     quantity.
     """
     if not isinstance(x, Quantity):
-        return numpy.arctanh(x, out)
+        return np.arctanh(x, out)
 
     return Quantity(
-        numpy.arctanh(x.rescale(dimensionless).magnitude, out),
+        np.arctanh(x.rescale(dimensionless).magnitude, out),
         dimensionless,
         copy=False
     )

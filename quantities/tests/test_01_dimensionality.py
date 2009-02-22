@@ -6,21 +6,21 @@ import os
 from nose.tools import *
 from numpy.testing import *
 
-import quantities as q
+import quantities as pq
 from quantities.dimensionality import Dimensionality
 
 
-meter = Dimensionality({q.m: 1})
+meter = Dimensionality({pq.m: 1})
 meter_repr = 'Dimensionality({meter: 1})'
 meter_str = 'm'
-centimeter = Dimensionality({q.cm: 1})
+centimeter = Dimensionality({pq.cm: 1})
 centimeter_repr = 'Dimensionality({centimeter: 1})'
 centimeter_str = 'cm'
-joule = Dimensionality({q.kg: 1, q.m: 2, q.s: -2})
+joule = Dimensionality({pq.kg: 1, pq.m: 2, pq.s: -2})
 joule_repr = 'Dimensionality({kilogram: 1, meter: 2, second: -2})'
 joule_str = 'kg*m**2/s**2'
 joule_uni = 'kg·m²/s²'
-Joule = Dimensionality({q.J: 1})
+Joule = Dimensionality({pq.J: 1})
 Joule_repr = 'Dimensionality({joule: 1})'
 Joule_str = 'J'
 
@@ -55,7 +55,7 @@ def test_copy():
     assert_true(temp is not meter)
     assert_true(isinstance(temp, Dimensionality))
     assert_true(temp == meter)
-    temp[q.m] += 1
+    temp[pq.m] += 1
     assert_false(temp == meter)
 
 def test_addition():
@@ -97,9 +97,9 @@ def test_inplace_subtraction():
     test_dimensionality_repr()
 
 def test_multiplication():
-    assert_equal(meter*meter, Dimensionality({q.m: 2}))
-    assert_equal(meter*centimeter, Dimensionality({q.m: 1, q.cm: 1}))
-    assert_equal(joule*meter, Dimensionality({q.kg: 1, q.m: 3, q.s: -2}))
+    assert_equal(meter*meter, Dimensionality({pq.m: 2}))
+    assert_equal(meter*centimeter, Dimensionality({pq.m: 1, pq.cm: 1}))
+    assert_equal(joule*meter, Dimensionality({pq.kg: 1, pq.m: 3, pq.s: -2}))
     assert_raises(TypeError, operator.__mul__, Joule, 0)
     assert_raises(TypeError, operator.__mul__, 0, joule)
     test_dimensionality_repr()
@@ -118,7 +118,7 @@ def test_inplace_multiplication():
 
 def test_division():
     assert_equal(meter/meter, Dimensionality())
-    assert_equal(joule/meter, Dimensionality({q.kg: 1, q.m: 1, q.s: -2}))
+    assert_equal(joule/meter, Dimensionality({pq.kg: 1, pq.m: 1, pq.s: -2}))
     assert_raises(TypeError, operator.__div__, Joule, 0)
     assert_raises(TypeError, operator.__div__, 0, joule)
     test_dimensionality_repr()
@@ -138,7 +138,7 @@ def test_inplace_division():
 def test_power():
     assert_equal(meter**2, meter*meter)
     assert_equal(meter**0, Dimensionality())
-    assert_equal(joule**2, Dimensionality({q.kg: 2, q.m: 4, q.s: -4}))
+    assert_equal(joule**2, Dimensionality({pq.kg: 2, pq.m: 4, pq.s: -4}))
     assert_raises(TypeError, operator.__pow__, Joule, joule)
     assert_raises(TypeError, operator.__pow__, joule, Joule)
     test_dimensionality_repr()
