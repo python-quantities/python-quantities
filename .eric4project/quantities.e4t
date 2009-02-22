@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
 <!-- eric4 tasks file for project quantities -->
-<!-- Saved: 2009-02-20, 20:45:01 -->
+<!-- Saved: 2009-02-21, 21:46:44 -->
 <Tasks version="4.2">
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: move to constants</Summary>
@@ -24,16 +24,16 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: use a regexp:</Summary>
     <Description></Description>
-    <Created>2009-02-15, 16:07:34</Created>
+    <Created>2009-02-21, 07:49:45</Created>
     <Resource>
       <Filename>quantities/markup.py</Filename>
-      <Linenumber>13</Linenumber>
+      <Linenumber>14</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-02-15, 16:27:23</Created>
+    <Created>2009-02-21, 14:44:04</Created>
     <Resource>
       <Filename>quantities/uncertainquantity.py</Filename>
       <Linenumber>15</Linenumber>
@@ -42,19 +42,19 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-02-15, 16:27:45</Created>
+    <Created>2009-02-21, 21:41:26</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
-      <Linenumber>64</Linenumber>
+      <Linenumber>116</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: do we want this kind of magic?</Summary>
     <Description></Description>
-    <Created>2009-02-15, 16:27:45</Created>
+    <Created>2009-02-21, 21:41:26</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
-      <Linenumber>381</Linenumber>
+      <Linenumber>295</Linenumber>
     </Resource>
   </Task>
 </Tasks>
