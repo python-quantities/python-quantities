@@ -74,11 +74,11 @@ long_desc = "Quantities is designed to handle arithmetic and conversions of \
 physical quantities, which have a magnitude, dimensionality specified by \
 various units, and possibly an uncertainty. Quantities is based on the popular \
 numpy library. It is undergoing active development, and while the current \
-features and API are fairly stable, test coverage is far from complete and the \
+features and API are fairly stable, test coverage is not complete and the \
 package is not ready for production use."
 
 classifiers = [
-    'Development Status :: 3 - Alpha',
+    'Development Status :: 4 - Beta',
     'Environment :: Console',
     'Intended Audience :: Developers',
     'Intended Audience :: Education',
@@ -98,7 +98,7 @@ for line in file('quantities/__init__.py').readlines():
         break
 
 package_data = {
-    'quantities':['tests/*', 'umath/tests/*', 'constants/NIST_codata.txt']
+    'quantities':['tests/*', 'constants/NIST_codata.txt']
 }
 
 setup(
