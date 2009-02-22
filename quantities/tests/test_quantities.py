@@ -892,9 +892,14 @@ class TestQuantities(unittest.TestCase):
 
         #test conj and conjugate()
         w1 = [1 - 5j, 3 , 6 + 1j] * q.MeV
-        self.numAssertEqual(w1.conj(), [1+5j, 3, 6-1j]* q.MeV)
-        self.numAssertEqual(w1.conjugate(), [1+5j, 3, 6-1j]* q.MeV)
-
+        self.numAssertEqual(
+            w1.conj().magnitude,
+            numpy.array([1-5j, 3, 6+1j]).conj()
+        )
+        self.numAssertEqual(
+            w1.conjugate().magnitude,
+            numpy.array([1-5j, 3, 6+1j]).conjugate()
+        )
 
     def test_numpy_trig_functions(self):
 

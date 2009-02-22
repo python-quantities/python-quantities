@@ -13,18 +13,6 @@ from .registry import unit_registry
 from .utilities import with_doc
 
 
-def prepare_compatible_units(s, o):
-    if not isinstance(o, Quantity):
-        o = Quantity(o, copy=False)
-    try:
-        assert s.dimensionality.simplified == o.dimensionality.simplified
-        return s._reference, o._reference
-    except AssertionError:
-        raise ValueError(
-            'can not compare quantities with units of %s and %s'\
-            %(s.units, o.units)
-        )
-
 def validate_unit_quantity(value):
     try:
         assert isinstance(value, Quantity)
@@ -58,18 +46,6 @@ def get_conversion_factor(from_u, to_u):
     to_u = to_u._reference
     assert from_u.dimensionality == to_u.dimensionality
     return from_u.magnitude / to_u.magnitude
-
-def ensure_quantity(f):
-    @wraps(f)
-    def g(*args):
-        args = list(args)
-        if not isinstance(args[1], type(args[0])):
-            args[1] = Quantity(args[1], copy=False)
-        elif not isinstance(args[0], type(args[1])):
-            args[0] = Quantity(args[0], copy=False)
-        return f(*args)
-    return g
-
 
 def protected_addition(f):
     @wraps(f)
@@ -113,6 +89,25 @@ def protected_power(f):
             except AssertionError:
                 raise ValueError('can not modify units of a view of a Quantity')
         return f(self, other, *args)
+    return g
+
+def wrap_comparison(f):
+    @wraps(f)
+    def g(self, other):
+        _cmp = f.__name__
+        if isinstance(other, Quantity):
+            try:
+                assert self.dimensionality.simplified == \
+                    other.dimensionality.simplified
+            except AssertionError:
+                raise ValueError(
+                    'can not compare quantities with units of %s and %s'\
+                    %(self.units, other.units)
+                )
+            om = other.rescale(self.dimensionality).magnitude
+            return getattr(self.magnitude, _cmp)(om)
+        else:
+            return getattr(self.magnitude, _cmp)(other)
     return g
 
 
@@ -207,7 +202,10 @@ class Quantity(numpy.ndarray):
         # scalar quantities get converted to plain numbers, so we fix it
         # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
-            ret = type(self)(ret, self._dimensionality)
+            if self.__array_priority__ >= Quantity.__array_priority__:
+                ret = type(self)(ret, self._dimensionality)
+            else:
+                ret = Quantity(ret, self._dimensionality)
 
         return ret
 
@@ -298,52 +296,34 @@ class Quantity(numpy.ndarray):
         self.magnitude[key] = value.rescale(self._dimensionality).magnitude
 
     @with_doc(numpy.ndarray.__lt__)
+    @wrap_comparison
     def __lt__(self, other):
-        if isinstance(other, Quantity):
-            ss, os = prepare_compatible_units(self, other)
-            return ss.magnitude < os.magnitude
-        else:
-            return self.magnitude < other
+        pass
 
     @with_doc(numpy.ndarray.__le__)
+    @wrap_comparison
     def __le__(self, other):
-        if isinstance(other, Quantity):
-            ss, os = prepare_compatible_units(self, other)
-            return ss.magnitude <= os.magnitude
-        else:
-            return self.magnitude <= other
+        pass
 
     @with_doc(numpy.ndarray.__eq__)
+    @wrap_comparison
     def __eq__(self, other):
-        if isinstance(other, Quantity):
-            ss, os = prepare_compatible_units(self, other)
-            return ss.magnitude == os.magnitude
-        else:
-            return self.magnitude == other
+        pass
 
     @with_doc(numpy.ndarray.__ne__)
+    @wrap_comparison
     def __ne__(self, other):
-        if isinstance(other, Quantity):
-            ss, os = prepare_compatible_units(self, other)
-            return ss.magnitude != os.magnitude
-        else:
-            return self.magnitude != other
+        pass
 
     @with_doc(numpy.ndarray.__gt__)
+    @wrap_comparison
     def __gt__(self, other):
-        if isinstance(other, Quantity):
-            ss, os = prepare_compatible_units(self, other)
-            return ss.magnitude > os.magnitude
-        else:
-            return self.magnitude > other
+        pass
 
     @with_doc(numpy.ndarray.__ge__)
+    @wrap_comparison
     def __ge__(self, other):
-        if isinstance(other, Quantity):
-            ss, os = prepare_compatible_units(self, other)
-            return ss.magnitude >= os.magnitude
-        else:
-            return self.magnitude >= other
+        pass
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
