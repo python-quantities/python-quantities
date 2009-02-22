@@ -231,35 +231,15 @@ class Quantity(numpy.ndarray):
             print 'ufunc %r not implemented, please file a bug report' % uf
         return result
 
-    @with_doc(numpy.ndarray.__add__)
-    @protected_addition
-    def __add__(self, other):
-        return super(Quantity, self).__add__(other)
-
     @with_doc(numpy.ndarray.__iadd__)
     @protected_addition
     def __iadd__(self, other):
         return super(Quantity, self).__iadd__(other)
 
-    @with_doc(numpy.ndarray.__radd__)
-    @protected_addition
-    def __radd__(self, other):
-        return self.__add__(other)
-
-    @with_doc(numpy.ndarray.__sub__)
-    @protected_addition
-    def __sub__(self, other):
-        return super(Quantity, self).__sub__(other)
-
     @with_doc(numpy.ndarray.__isub__)
     @protected_addition
     def __isub__(self, other):
         return super(Quantity, self).__isub__(other)
-
-    @with_doc(numpy.ndarray.__rsub__)
-    @protected_addition
-    def __rsub__(self, other):
-        return super(Quantity, self).__rsub__(other)
 
     @with_doc(numpy.ndarray.__imul__)
     @protected_multiplication
