@@ -244,9 +244,15 @@ def _d_add_sub(q1, q2):
         return q1._dimensionality + q2._dimensionality
     except AttributeError:
         if hasattr(q1, 'dimensionality'):
-            return q1.dimensionality
+            if np.asarray(q2).any():
+                return q1._dimensionality + Dimensionality()
+            else:
+                return q1.dimensionality
         elif hasattr(q2, 'dimensionality'):
-            return q2.dimensionality
+            if np.asarray(q1).any():
+                Dimensionality + q2._dimensionality
+            else:
+                return q2.dimensionality
 p_dict[np.add] = _d_add_sub
 p_dict[np.subtract] = _d_add_sub
 
@@ -273,10 +279,12 @@ p_dict[np.reciprocal] = _d_reciprocal
 
 def _d_copy(q1):
     return q1.dimensionality
+p_dict[np.absolute] = _d_copy
 p_dict[np.ceil] = _d_copy
 p_dict[np.conjugate] = _d_copy
 p_dict[np.fix] = _d_copy
 p_dict[np.floor] = _d_copy
+p_dict[np.negative] = _d_copy
 p_dict[np.rint] = _d_copy
 
 def _d_sqrt(q1):

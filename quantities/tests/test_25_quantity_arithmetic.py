@@ -1,9 +1,7 @@
 ﻿# -*- coding: utf-8 -*-
 
 import operator as op
-import unittest
 
-from nose.tools import *
 from numpy.testing import *
 from numpy.testing.utils import *
 
@@ -12,324 +10,318 @@ import quantities as pq
 from quantities.utilities import assert_array_equal, assert_array_almost_equal
 
 
-class TestQuantities(unittest.TestCase):
+def test_multiplication():
+    assert_array_equal(
+        2 * pq.eV,
+        2*pq.eV
+    )
+    assert_array_equal(
+        2 * -pq.eV,
+        -2*pq.eV
+    )
+    assert_array_equal(
+        2 * 5*pq.eV,
+        10*pq.eV
+    )
+    assert_array_equal(
+        5*pq.eV * 2,
+        10*pq.eV
+    )
+    assert_array_equal(
+        2 * ([1, 2, 3]*pq.rem),
+        [2, 4, 6]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3]*pq.rem * 2,
+        [2, 4, 6]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3] * ([1, 2, 3]*pq.hp),
+        [1, 4, 9]*pq.hp
+    )
 
-    def numAssertEqual(self, a1, a2):
-        """Test for equality of numarray fields a1 and a2.
-        """
-        self.assertEqual(a1.shape, a2.shape)
-        self.assertEqual(a1.dtype, a2.dtype)
-        self.assertTrue((a1 == a2).all())
+#    assert_array_equal(
+#        [1, 2, 3]*pq.m * [1, 2, 3]*pq.hp,
+#        pq.Quantity([1, 4, 9], 'm*hp')
+#    )
+#    assert_array_equal(
+#        [1, 2, 3]*pq.m * [1, 2, 3]*pq.m,
+#        pq.Quantity([1, 4, 9], 'm**2')
+#    )
+#    assert_array_equal(
+#        [1, 2, 3]*pq.m * [1, 2, 3]*pq.m**-1,
+#        pq.Quantity([1, 4, 9], '')
+#    )
 
-    def numAssertAlmostEqual(self, a1, a2, prec = None):
-        """Test for approximately equality of numarray fields a1 and a2.
-        """
-        self.assertEqual(a1.shape, a2.shape)
-        self.assertEqual(a1.dtype, a2.dtype)
+# this returns an array instead of a quantity:
+#def test_mul_with_list():
+#    assert_array_equal(
+#        pq.m * [1, 2, 3],
+#        pq.Quantity([1, 4, 9], 'm*hp')
+#    )
 
-        if prec == None:
-            if a1.dtype == 'Float64' or a1.dtype == 'Complex64':
-                prec = 15
-            else:
-                prec = 7
-        # the complex part of this does not function correctly and will throw
-        # errors that need to be fixed if it is to be used
-        if np.iscomplex(a1).all():
-            af1, af2 = a1.flat.real, a2.flat.real
-            for ind in xrange(af1.nelements()):
-                self.assertAlmostEqual(af1[ind], af2[ind], prec)
-            af1, af2 = a1.flat.imag, a2.flat.imag
-            for ind in xrange(af1.nelements()):
-                self.assertAlmostEqual(af1[ind], af2[ind], prec)
-        else:
-            af1, af2 = a1.flat, a2.flat
-            for x1 , x2 in zip(af1, af2):
-                self.assertAlmostEqual(x1, x2, prec)
-
-    def test_equality(self):
-        test1 = 1.5 * pq.km
-        test2 = 1.5 * pq.km
-
-        self.assertEqual(test1, test2)
-
-        # test less than and greater than
-        self.assertTrue(1.5 * pq.km > 2.5 * pq.cm)
-        self.assertTrue(1.5 * pq.km >= 2.5 * pq.cm)
-        self.assertTrue(not (1.5 * pq.km < 2.5 * pq.cm))
-        self.assertTrue(not (1.5 * pq.km <= 2.5 * pq.cm))
-
-        self.assertTrue(
-            1.5 * pq.km != 1.5 * pq.cm,
-            "unequal quantities are not-not-equal"
-        )
-
-    def test_addition(self):
-        # arbitrary test of addition
-        self.assertAlmostEqual((5.2 * pq.eV) + (300.2 * pq.eV), 305.4 * pq.eV, 5)
-
-        # test of addition using different units
-        self.assertAlmostEqual(
-            (5 * pq.hp + 7.456999e2 * pq.W.rescale(pq.hp)),
-            (6 * pq.hp)
-        )
-
-        def add_bad_units():
-            """just a function that raises an incompatible units error"""
-            return (1 * pq.kPa) + (5 * pq.lb)
-
-        self.assertRaises(ValueError, add_bad_units)
-
-        # add a scalar and an array
-        arr = np.array([1,2,3,4,5])
-        temp1 = arr * pq.rem
-        temp2 = 5.5 * pq.rem
-
-        self.assertEqual(
-            str(temp1 + temp2),
-            "[  6.5   7.5   8.5   9.5  10.5] rem"
-        )
-        self.assertTrue(((arr+5.5) * pq.rem == temp1 + temp2).all())
-
-        # with different units
-        temp4 = 1e-2 * pq.sievert
-        self.numAssertAlmostEqual(
-            temp1 + temp4.rescale(pq.rem),
-            temp1 + 1 * pq.rem
-        )
-
-        # add two arrays
-        temp3 = np.array([5.5, 6.5, 5.5, 5.5, 5.5]) * pq.rem
-
-        self.assertEqual(
-            str(temp1 + temp3),
-            "[  6.5   8.5   8.5   9.5  10.5] rem"
-        )
-        # two arrays with different units
-        temp5 = np.array([5.5, 6.5, 5.5, 5.5, 5.5]) * 1e-2 * pq.sievert
-
-        self.assertEqual(
-            str(temp1 + temp5.rescale(pq.rem)),
-            "[  6.5   8.5   8.5   9.5  10.5] rem"
-        )
-
-        # in-place addition
-        temp1 = 1*pq.m
-        temp2 = 1*pq.m
-        temp1+=temp1
-        self.assertEqual(str(temp1), str(temp2+temp2))
-
-        temp1 = [1, 2, 3, 4]*pq.m
-        temp2 = [1, 2, 3, 4]*pq.m
-        temp1+=temp1
-        self.assertEqual(str(temp1), str(temp2+temp2))
-
-        def iadd(q1, q2):
-            q1 -= q2
-        self.assertRaises(ValueError, iadd, 1*pq.m, 1)
-
-    def test_substraction(self):
-        # arbitrary test of subtraction
-        self.assertAlmostEqual((5.2 * pq.eV) - (300.2 * pq.eV), -295.0 * pq.eV)
-
-        # the formatting should be the same
-        self.assertEqual(
-            str((5.2 * pq.J) - (300.2 * pq.J)),
-            str(-295.0 * pq.J)
-        )
-
-        # test of subtraction using different units
-        self.assertAlmostEqual(
-            (5 * pq.hp - 7.456999e2 * pq.W.rescale(pq.hp)),
-            (4 * pq.hp)
-        )
-
-        def subtract_bad_units():
-            """just a function that raises an incompatible units error"""
-            return (1 * pq.kPa) - (5 * pq.lb)
-
-        self.assertRaises(ValueError, subtract_bad_units)
-
-        # subtract a scalar and an array
-        arr = np.array([1,2,3,4,5])
-        temp1 = arr * pq.rem
-        temp2 = 5.5 * pq.rem
-
-        self.assertEqual(str(temp1 - temp2), "[-4.5 -3.5 -2.5 -1.5 -0.5] rem")
-        self.numAssertEqual((arr-5.5) * pq.rem, temp1 - temp2)
-
-        # with different units
-        temp4 = 1e-2 * pq.sievert
-        self.numAssertAlmostEqual(temp1 - temp4.rescale(pq.rem), temp1 - pq.rem)
-
-        #subtract two arrays
-        temp3 = np.array([5.5, 6.5, 5.5, 5.5, 5.5]) * pq.rem
-
-        self.assertEqual(str(temp1 - temp3), "[-4.5 -4.5 -2.5 -1.5 -0.5] rem")
-        #two arrays with different units
-        temp5 = np.array([5.5, 6.5, 5.5, 5.5, 5.5]) * 1e-2 * pq.sievert
-
-        self.assertEqual(
-            str(temp1 - temp5.rescale(pq.rem)),
-            "[-4.5 -4.5 -2.5 -1.5 -0.5] rem"
-        )
-
-        # in-place
-        temp1 = 1*pq.m
-        temp2 = 1*pq.m
-        temp1-=temp1
-        self.assertEqual(str(temp1), str(temp2-temp2))
-
-        temp1 = [1, 2, 3, 4]*pq.m
-        temp2 = [1, 2, 3, 4]*pq.m
-        temp1-=temp1
-        self.assertEqual(str(temp1), str(temp2-temp2))
-
-        def isub(q1, q2):
-            q1 -= q2
-        self.assertRaises(ValueError, isub, temp1, 1)
-
-    def test_multiplication(self):
-        #arbitrary test of multiplication
-        self.assertAlmostEqual(
-            (10.3 * pq.kPa) * (10 * pq.inch),
-            103.0 * pq.kPa*pq.inch
-        )
-
-        self.assertAlmostEqual((5.2 * pq.J) * (300.2 * pq.J), 1561.04 * pq.J**2)
-
-        # the formatting should be the same
-        self.assertEqual(
-            str((10.3 * pq.kPa) * (10 * pq.inch)),
-            str( 103.0 * pq.kPa*pq.inch)
-        )
-        self.assertEqual(
-            str((5.2 * pq.J) * (300.2 * pq.J)),
-            str(1561.04 * pq.J**2)
-        )
-
-        # does multiplication work with arrays?
-        # multiply an array with a scalar
-        temp1  = np.array ([3,4,5,6,7]) * pq.J
-        temp2 = .5 * pq.s**-1
-
-        self.assertEqual(
-            str(temp1 * temp2),
-            "[ 1.5  2.   2.5  3.   3.5] J/s"
-        )
-
-        # multiply an array with an array
-        temp3 = np.array ([4,4,5,6,7]) * pq.s**-1
-        self.assertEqual(
-            str(temp1 * temp3),
-            "[ 12.  16.  25.  36.  49.] J/s"
-        )
-
-        # in-place
-#        temp1 = 1*m
-#        temp2 = 1*m
-#        temp1 *= temp1
-#        self.assertEqual(str(temp1), str(temp2*temp2))
+#def test_in_place_multiplication():
+#    x = 1*pq.m
+#    x += pq.m
+#    assert_array_equal(x, pq.m+pq.m)
 #
-#        temp1 = [1, 2, 3, 4]*m
-#        temp2 = [1, 2, 3, 4]*m
-#        temp1 *= temp1
-#        self.assertEqual(str(temp1), str(temp2*temp2))
+#    x = 1*pq.m
+#    x += -pq.m
+#    assert_array_equal(x, 0*pq.m)
+#
+#    x = [1, 2, 3, 4]*pq.m
+#    x += pq.m
+#    assert_array_equal(x, [2, 3, 4, 5]*pq.m)
+#
+#    x = [1, 2, 3, 4]*pq.m
+#    x += x
+#    assert_array_equal(x, [2, 4, 6, 8]*pq.m)
+#
+#    x = [1, 2, 3, 4]*pq.m
+#    x[:2] += pq.m
+#    assert_array_equal(x, [2, 3, 3, 4]*pq.m)
+#
+#    x = [1, 2, 3, 4]*pq.m
+#    x[:2] += -pq.m
+#    assert_array_equal(x, [0, 1, 3, 4]*pq.m)
+#
+#    x = [1, 2, 3, 4]*pq.m
+#    x[:2] += [1, 2]*pq.m
+#    assert_array_equal(x, [2, 4, 3, 4]*pq.m)
+#
+#    x = [1, 2, 3, 4]*pq.m
+#    x[::2] += [1, 2]*pq.m
+#    assert_array_equal(x, [2, 2, 5, 4]*pq.m)
+#
+#    assert_raises(ValueError, op.iadd, 1*pq.m, 1)
+#    assert_raises(ValueError, op.iadd, 1*pq.m, pq.J)
+#    assert_raises(ValueError, op.iadd, 1*pq.m, 5*pq.J)
+#    assert_raises(ValueError, op.iadd, [1, 2, 3]*pq.m, 1)
+#    assert_raises(ValueError, op.iadd, [1, 2, 3]*pq.m, pq.J)
+#    assert_raises(ValueError, op.iadd, [1, 2, 3]*pq.m, 5*pq.J)
 
-    def test_division(self):
-        #arbitrary test of division
-        self.assertAlmostEqual(
-            (10.3 * pq.kPa) / (1 * pq.inch),
-            10.3 * pq.kPa/pq.inch
-        )
+def test_addition():
+    assert_array_equal(
+        pq.eV + pq.eV,
+        2*pq.eV
+    )
+    assert_array_equal(
+        pq.eV + -pq.eV,
+        0*pq.eV
+    )
+    assert_array_equal(
+        pq.eV + 5*pq.eV,
+        6*pq.eV
+    )
+    assert_array_equal(
+        5*pq.eV + pq.eV,
+        6*pq.eV
+    )
+    assert_array_equal(
+        5*pq.eV + 6*pq.eV,
+        11*pq.eV
+    )
+    assert_array_equal(
+        pq.rem + [1, 2, 3]*pq.rem,
+        [2, 3, 4]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3]*pq.rem + pq.rem,
+        [2, 3, 4]*pq.rem
+    )
+    assert_array_equal(
+        5*pq.rem + [1, 2, 3]*pq.rem,
+        [6, 7, 8]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3]*pq.rem + 5*pq.rem,
+        [6, 7, 8]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3]*pq.hp + [1, 2, 3]*pq.hp,
+        [2, 4, 6]*pq.hp
+    )
 
-        self.assertAlmostEqual(
-            (5.2 * pq.eV) / (400.0 * pq.eV),
-            0.013*pq.dimensionless
-        )
-        self.assertAlmostEqual(
-            (5.2 * pq.eV) / (400.0 * pq.eV),
-            0.013
-        )
+    assert_raises(ValueError, op.add, pq.kPa, pq.lb)
+    assert_raises(ValueError, op.add, pq.kPa, 10)
+    assert_raises(ValueError, op.add, 1*pq.kPa, 5*pq.lb)
+    assert_raises(ValueError, op.add, 1*pq.kPa, pq.lb)
+    assert_raises(ValueError, op.add, 1*pq.kPa, 5)
+    assert_raises(ValueError, op.add, [1, 2, 3]*pq.kPa, [1, 2, 3]*pq.lb)
+    assert_raises(ValueError, op.add, [1, 2, 3]*pq.kPa, 5*pq.lb)
+    assert_raises(ValueError, op.add, [1, 2, 3]*pq.kPa, pq.lb)
+    assert_raises(ValueError, op.add, [1, 2, 3]*pq.kPa, 5)
 
-        # the formatting should be the same
-        self.assertEqual(
-            str((5.2 * pq.J) / (400.0 * pq.J)),
-            str(pq.Quantity(.013))
-        )
+def test_in_place_addition():
+    x = 1*pq.m
+    x += pq.m
+    assert_array_equal(x, pq.m+pq.m)
 
-        # divide an array with a scalar
-        temp1  = np.array ([3,4,5,6,7]) * pq.J
-        temp2 = .5 * pq.s**-1
+    x = 1*pq.m
+    x += -pq.m
+    assert_array_equal(x, 0*pq.m)
 
-        self.assertEqual(
-            str(temp1 / temp2),
-            "[  6.   8.  10.  12.  14.] s·J"
-        )
+    x = [1, 2, 3, 4]*pq.m
+    x += pq.m
+    assert_array_equal(x, [2, 3, 4, 5]*pq.m)
 
-        # divide an array with an array
-        temp3 = np.array([4,4,5,6,7]) * pq.s**-1
-        self.assertEqual(
-            str(temp1 / temp3),
-            "[ 0.75  1.    1.    1.    1.  ] s·J"
-        )
+    x = [1, 2, 3, 4]*pq.m
+    x += x
+    assert_array_equal(x, [2, 4, 6, 8]*pq.m)
 
-        # in-place
-#        temp1 = 1*m
-#        temp2 = 1*m
-#        temp1 /= temp1
-#        self.assertEqual(str(temp1), str(temp2/temp2))
+    x = [1, 2, 3, 4]*pq.m
+    x[:2] += pq.m
+    assert_array_equal(x, [2, 3, 3, 4]*pq.m)
 
-#        temp1 = [1, 2, 3, 4]*m
-#        temp2 = [1, 2, 3, 4]*m
-#        temp1 /= temp1
-#        self.assertEqual(str(temp1), str(temp2/temp2))
+    x = [1, 2, 3, 4]*pq.m
+    x[:2] += -pq.m
+    assert_array_equal(x, [0, 1, 3, 4]*pq.m)
 
-    def test_powering(self):
-        # test raising a quantity to a power
-        self.assertAlmostEqual((5.5 * pq.cm)**5, (5.5**5) * (pq.cm**5))
-        self.assertEqual(str((5.5 * pq.cm)**5), str((5.5**5) * (pq.cm**5)))
+    x = [1, 2, 3, 4]*pq.m
+    x[:2] += [1, 2]*pq.m
+    assert_array_equal(x, [2, 4, 3, 4]*pq.m)
 
-        # must also work with compound units
-        self.assertAlmostEqual((5.5 * pq.J)**5, (5.5**5) * (pq.J**5))
-        self.assertEqual(str((5.5 * pq.J)**5), str((5.5**5) * (pq.J**5)))
+    x = [1, 2, 3, 4]*pq.m
+    x[::2] += [1, 2]*pq.m
+    assert_array_equal(x, [2, 2, 5, 4]*pq.m)
 
-        # does powering work with arrays?
-        temp = np.array([1, 2, 3, 4, 5]) * pq.kg
-        temp2 = (np.array([1, 8, 27, 64, 125]) **2) * pq.kg**6
+    assert_raises(ValueError, op.iadd, 1*pq.m, 1)
+    assert_raises(ValueError, op.iadd, 1*pq.m, pq.J)
+    assert_raises(ValueError, op.iadd, 1*pq.m, 5*pq.J)
+    assert_raises(ValueError, op.iadd, [1, 2, 3]*pq.m, 1)
+    assert_raises(ValueError, op.iadd, [1, 2, 3]*pq.m, pq.J)
+    assert_raises(ValueError, op.iadd, [1, 2, 3]*pq.m, 5*pq.J)
 
-        self.assertEqual(
-            str(temp**3),
-            "[   1.    8.   27.   64.  125.] kg³"
-        )
-        self.assertEqual(str(temp**6), str(temp2))
+def test_subtraction():
+    assert_array_equal(
+        pq.eV - pq.eV,
+        0*pq.eV
+    )
+    assert_array_equal(
+        5*pq.eV - pq.eV,
+        4*pq.eV
+    )
+    assert_array_equal(
+        pq.eV - 4*pq.eV,
+        -3*pq.eV
+    )
+    assert_array_equal(
+        pq.rem - [1, 2, 3]*pq.rem,
+        [0, -1, -2]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3]*pq.rem - pq.rem,
+        [0, 1, 2]*pq.rem
+    )
+    assert_array_equal(
+        5*pq.rem - [1, 2, 3]*pq.rem,
+        [4, 3, 2]*pq.rem
+    )
+    assert_array_equal(
+        [1, 2, 3]*pq.rem - 5*pq.rem,
+        [-4, -3, -2]*pq.rem
+    )
+    assert_array_equal(
+        [3, 3, 3]*pq.hp - [1, 2, 3]*pq.hp,
+        [2, 1, 0]*pq.hp
+    )
 
-        def q_pow_r(q1, q2):
-            return q1 ** q2
+    assert_raises(ValueError, op.sub, pq.kPa, pq.lb)
+    assert_raises(ValueError, op.sub, pq.kPa, 10)
+    assert_raises(ValueError, op.sub, 1*pq.kPa, 5*pq.lb)
+    assert_raises(ValueError, op.sub, 1*pq.kPa, pq.lb)
+    assert_raises(ValueError, op.sub, 1*pq.kPa, 5)
+    assert_raises(ValueError, op.sub, [1, 2, 3]*pq.kPa, [1, 2, 3]*pq.lb)
+    assert_raises(ValueError, op.sub, [1, 2, 3]*pq.kPa, 5*pq.lb)
+    assert_raises(ValueError, op.sub, [1, 2, 3]*pq.kPa, pq.lb)
+    assert_raises(ValueError, op.sub, [1, 2, 3]*pq.kPa, 5)
 
-        self.assertRaises(ValueError, q_pow_r, 10.0 * pq.m, 10 * pq.J)
-        self.assertRaises(ValueError, q_pow_r, 10.0 * pq.m, np.array([1, 2, 3]))
+def test_in_place_subtraction():
+    x = 1*pq.m
+    x -= pq.m
+    assert_array_equal(x, 0*pq.m)
 
-        self.assertEqual( (10 * pq.J) ** (2 * pq.J/pq.J) , 100 * pq.J**2 )
+    x = 1*pq.m
+    x -= -pq.m
+    assert_array_equal(x, 2*pq.m)
 
-        # test rpow here
-        self.assertRaises(ValueError, q_pow_r, 10.0, 10 * pq.J)
+    x = [1, 2, 3, 4]*pq.m
+    x -= pq.m
+    assert_array_equal(x, [0, 1, 2, 3]*pq.m)
 
-        self.assertEqual(10**(2*pq.J/pq.J), 100)
+    x = [1, 2, 3, 4]*pq.m
+    x -= [1, 1, 1, 1]*pq.m
+    assert_array_equal(x, [0, 1, 2, 3]*pq.m)
 
-        # in-place
+    x = [1, 2, 3, 4]*pq.m
+    x[:2] -= pq.m
+    assert_array_equal(x, [0, 1, 3, 4]*pq.m)
+
+    x = [1, 2, 3, 4]*pq.m
+    x[:2] -= -pq.m
+    assert_array_equal(x, [2, 3, 3, 4]*pq.m)
+
+    x = [1, 2, 3, 4]*pq.m
+    x[:2] -= [1, 2]*pq.m
+    assert_array_equal(x, [0, 0, 3, 4]*pq.m)
+
+    x = [1, 2, 3, 4]*pq.m
+    x[::2] -= [1, 2]*pq.m
+    assert_array_equal(x, [0, 2, 1, 4]*pq.m)
+
+    assert_raises(ValueError, op.isub, 1*pq.m, 1)
+    assert_raises(ValueError, op.isub, 1*pq.m, pq.J)
+    assert_raises(ValueError, op.isub, 1*pq.m, 5*pq.J)
+    assert_raises(ValueError, op.isub, [1, 2, 3]*pq.m, 1)
+    assert_raises(ValueError, op.isub, [1, 2, 3]*pq.m, pq.J)
+    assert_raises(ValueError, op.isub, [1, 2, 3]*pq.m, 5*pq.J)
+
+def test_powering():
+    # test raising a quantity to a power
+    assert_array_almost_equal((5.5 * pq.cm)**5, (5.5**5) * (pq.cm**5))
+    assert_array_equal(str((5.5 * pq.cm)**5), str((5.5**5) * (pq.cm**5)))
+
+    # must also work with compound units
+    assert_array_almost_equal((5.5 * pq.J)**5, (5.5**5) * (pq.J**5))
+    assert_array_equal(str((5.5 * pq.J)**5), str((5.5**5) * (pq.J**5)))
+
+    # does powering work with arrays?
+    temp = np.array([1, 2, 3, 4, 5]) * pq.kg
+    temp2 = (np.array([1, 8, 27, 64, 125]) **2) * pq.kg**6
+
+    assert_array_equal(
+        str(temp**3),
+        "[   1.    8.   27.   64.  125.] kg³"
+    )
+    assert_array_equal(str(temp**6), str(temp2))
+
+    def q_pow_r(q1, q2):
+        return q1 ** q2
+
+    assert_raises(ValueError, q_pow_r, 10.0 * pq.m, 10 * pq.J)
+    assert_raises(ValueError, q_pow_r, 10.0 * pq.m, np.array([1, 2, 3]))
+
+    assert_array_equal( (10 * pq.J) ** (2 * pq.J/pq.J) , 100 * pq.J**2 )
+
+    # test rpow here
+    assert_raises(ValueError, q_pow_r, 10.0, 10 * pq.J)
+
+    assert_array_equal(10**(2*pq.J/pq.J), 100)
+
+    # in-place
 #        temp1 = 1*m
 #        temp2 = 1*m
 #        temp1 **= 2
-#        self.assertEqual(str(temp1), str(temp2*temp2))
+#        assert_array_equal(str(temp1), str(temp2*temp2))
 #
 #        temp1 = [1, 2, 3, 4]*m
 #        temp2 = [1, 2, 3, 4]*m
 #        temp1 **= 2
-#        self.assertEqual(str(temp1), str(temp2*temp2))
+#        assert_array_equal(str(temp1), str(temp2*temp2))
 
-        def ipow(q1, q2):
-            q1 -= q2
-        self.assertRaises(ValueError, ipow, 1*pq.m, [1, 2])
+    def ipow(q1, q2):
+        q1 -= q2
+    assert_raises(ValueError, ipow, 1*pq.m, [1, 2])
 
 
 if __name__ == "__main__":
