@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-02-22, 12:44:13 -->
+<!-- Saved: 2009-02-22, 16:12:18 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -77,8 +77,9 @@
     <Source>quantities/tests/test_01_dimensionality.py</Source>
     <Source>quantities/tests/test_40_quantity_methods.py</Source>
     <Source>quantities/tests/test_30_quantity_conversion.py</Source>
-    <Source>quantities/tests/test_20_quantity_arithmetic.py</Source>
     <Source>quantities/tests/test_50_umath.py</Source>
+    <Source>quantities/tests/test_20_quantity_comparison.py</Source>
+    <Source>quantities/tests/test_25_quantity_arithmetic.py</Source>
   </Sources>
   <Forms>
   </Forms>
