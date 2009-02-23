@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
 <!-- eric4 tasks file for project quantities -->
-<!-- Saved: 2009-02-22, 12:43:39 -->
+<!-- Saved: 2009-02-22, 22:36:51 -->
 <Tasks version="4.2">
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: move to constants</Summary>
@@ -33,7 +33,7 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-02-21, 14:44:04</Created>
+    <Created>2009-02-22, 13:41:45</Created>
     <Resource>
       <Filename>quantities/uncertainquantity.py</Filename>
       <Linenumber>15</Linenumber>
@@ -42,19 +42,19 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-02-21, 21:41:26</Created>
+    <Created>2009-02-22, 21:55:42</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
-      <Linenumber>116</Linenumber>
+      <Linenumber>107</Linenumber>
     </Resource>
   </Task>
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: do we want this kind of magic?</Summary>
     <Description></Description>
-    <Created>2009-02-21, 21:41:26</Created>
+    <Created>2009-02-22, 21:55:42</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
-      <Linenumber>295</Linenumber>
+      <Linenumber>288</Linenumber>
     </Resource>
   </Task>
 </Tasks>
