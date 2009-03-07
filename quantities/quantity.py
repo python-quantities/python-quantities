@@ -174,7 +174,7 @@ class Quantity(np.ndarray):
         """
         to_dims = validate_dimensionality(units)
         if self.dimensionality == to_dims:
-            return self.astype(None)
+            return self.astype(self.dtype)
         to_u = Quantity(1.0, to_dims)
         from_u = Quantity(1.0, self.dimensionality)
         try:
