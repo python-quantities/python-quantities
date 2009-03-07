@@ -4,49 +4,101 @@ import operator as op
 from functools import partial
 
 from numpy.testing import *
-from numpy.testing.utils import *
+from numpy.testing import *
+from numpy.testing.decorators import knownfailureif as fails_if
 
 import numpy as np
 import quantities as pq
 from quantities.utilities import (
     assert_quantity_equal, assert_quantity_almost_equal
 )
-# TODO: remove this mask once bug numpy bugs 826 and 1026 are fixed
-assert_quantity_equal = assert_array_equal
+
 
 def rand(dtype, *args):
     try:
-        return dtype(10*np.random.rand(*args)+10j*np.random.rand(*args))
+        return dtype(
+            10*np.random.rand(*args)+10j*np.random.rand(*args),
+        )
     except TypeError:
         return dtype(10*np.random.rand(*args))
 
-def check(f, v1, v2, name, dt1, dt2):
-    f = partial(f, v1, v2)
-    f.description = '_'.join([name, dt1.__name__, dt2.__name__])
-    return (f, )
+def check(f, *args, **kwargs):
+    new = partial(f, *args)
+    new.__name__ = f.__name__
+    new.__module__ = f.__module__
+    new.func_code = f.func_code
+
+    try:
+        new = kwargs['fails_if'](new)
+    except IndexError:
+        pass
+    desc = [f.__name__]
+    for arg in args:
+        try:
+            desc.append(arg[0].dtype.name)
+        except AttributeError:
+            desc.append(arg[0].__class__.__name__)
+        except (IndexError, TypeError):
+            try:
+                desc.append(arg.dtype.name)
+            except AttributeError:
+                pass
+        c = arg.__class__.__name__
+        if c != desc[-1]:
+            desc.append(c)
+
+    new.description = '_'.join(desc)
+    return (new, )
 
 
 class iter_dtypes(object):
 
     def __init__(self):
         self._i = 1
+        self._typeDict = np.typeDict.copy()
+        self._typeDict[17] = int
+        self._typeDict[18] = long
+        self._typeDict[19] = float
+        self._typeDict[20] = complex
 
     def __iter__(self):
         return self
 
     def next(self):
-        if self._i > 16:
+        if self._i > 20:
             raise StopIteration
 
         i = self._i
         self._i += 1
-        return np.typeDict[i]
+        return self._typeDict[i]
 
+def get_dtypes():
+    return list(iter_dtypes())
+
+
+class iter_types(object):
+
+    def __init__(self, dtype):
+        self._index = -1
+        self._dtype = dtype
+
+    def __iter__(self):
+        return self
+
+    def next(self):
+        self._index += 1
+        if self._index > 2:
+            raise StopIteration
+        if self._index > 0 and self._dtype in (int, long, float, complex):
+            raise StopIteration
+        if self._index == 0:
+            return rand(self._dtype)
+        if self._index == 1:
+            return rand(self._dtype, 5).tolist()
+        if self._index == 2:
+            return rand(self._dtype, 5)
 
 def check_mul(m1, m2):
-    assert_quantity_equal(m1*pq.m, pq.Quantity(m1, 'm'))
-    assert_quantity_equal(pq.m*m1, pq.Quantity(m1, 'm'))
-    assert_quantity_equal(m2*pq.m, pq.Quantity(m2, 'm'))
     assert_quantity_equal(pq.m*m2, pq.Quantity(m2, 'm'))
 
     q1 = pq.Quantity(m1, 'm')
@@ -54,36 +106,40 @@ def check_mul(m1, m2):
     a1 = np.asarray(m1)
     a2 = np.asarray(m2)
     assert_quantity_equal(q1*m2, pq.Quantity(a1*a2, 'm'))
-    assert_quantity_equal(m2*q1, pq.Quantity(a2*a1, 'm'))
-    assert_quantity_equal(m1*q2, pq.Quantity(a1*a2, 's'))
-    assert_quantity_equal(q2*m1, pq.Quantity(a2*a1, 's'))
     assert_quantity_equal(q1*q2, pq.Quantity(a1*a2, 'm*s'))
-    assert_quantity_equal(q2*q1, pq.Quantity(a2*a1, 'm*s'))
+
+def check_rmul(m1, m2):
+    assert_quantity_equal(m1*pq.m, pq.Quantity(m1, 'm'))
+
+    q2 = pq.Quantity(m2, 's')
+    a1 = np.asarray(m1)
+    a2 = np.asarray(m2)
+    assert_quantity_equal(m1*q2, pq.Quantity(a1*a2, 's'))
 
 def test_mul():
-    for i in iter_dtypes():
-        for j in iter_dtypes():
-            yield check(
-                check_mul, rand(i), rand(j), 'test_ss_mul', i, j
-            )
-            yield check(
-                check_mul, rand(i), list(rand(j, 5)), 'test_ss_mul', i, j
-            )
-            yield check(
-                check_mul, rand(i), rand(j, 5), 'test_sa_mul', i, j
-            )
-            yield check(
-                check_mul, list(rand(i, 5)), list(rand(i, 5)),
-                'test_ii_mul', i, j
-            )
-            yield check(
-                check_mul, list(rand(i, 5)), rand(j, 5), 'test_ia_mul', i, j
-            )
-            yield check(
-                check_mul, rand(i, 5), rand(j, 5), 'test_aa_mul', i, j
-            )
-
-
+    dtypes = get_dtypes()
+    while dtypes:
+        i = dtypes[0]
+        for j in dtypes:
+            for x in iter_types(i):
+                for y in iter_types(j):
+                    yield check(
+                        check_mul, x, y,
+                        fails_if=fails_if(
+                            isinstance(y, (list, tuple))
+                        )
+                    )
+                    yield check(
+                        check_rmul, x, y,
+                        fails_if=fails_if(
+                            i >= j or
+                            i in (
+                                np.int64, np.uint64, np.float64, np.float128,
+                                np.complex128, np.complex256
+                            )
+                        )
+                    )
+        dtypes.pop(0)
 
 
 #def test_negative():
