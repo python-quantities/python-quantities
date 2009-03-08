@@ -132,7 +132,7 @@ def test_mul():
                     yield check(
                         check_rmul, x, y,
                         fails_if=fails_if(
-                            i >= j or
+                            (i >= j and not np.iterable(y)) or
                             i in (
                                 np.int64, np.uint64, np.float64, np.float128,
                                 np.complex128, np.complex256
