@@ -30,7 +30,7 @@ def check(f, *args, **kwargs):
 
     try:
         new = kwargs['fails_if'](new)
-    except IndexError:
+    except KeyError:
         pass
     desc = [f.__name__]
     for arg in args:
@@ -123,22 +123,8 @@ def test_mul():
         for j in dtypes:
             for x in iter_types(i):
                 for y in iter_types(j):
-                    yield check(
-                        check_mul, x, y,
-                        fails_if=fails_if(
-                            isinstance(y, (list, tuple))
-                        )
-                    )
-                    yield check(
-                        check_rmul, x, y,
-                        fails_if=fails_if(
-                            (i >= j and not np.iterable(y)) or
-                            i in (
-                                np.int64, np.uint64, np.float64, np.float128,
-                                np.complex128, np.complex256
-                            )
-                        )
-                    )
+                    yield check(check_mul, x, y)
+                    yield check(check_rmul, x, y)
         dtypes.pop(0)
 
 

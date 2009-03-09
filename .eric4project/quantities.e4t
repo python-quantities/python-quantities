@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Tasks SYSTEM "Tasks-4.2.dtd">
 <!-- eric4 tasks file for project quantities -->
-<!-- Saved: 2009-03-07, 12:32:17 -->
+<!-- Saved: 2009-03-08, 23:06:08 -->
 <Tasks version="4.2">
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: move to constants</Summary>
@@ -40,24 +40,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="False" bugfix="False">
-    <Summary>TODO: what is an appropriate value?</Summary>
-    <Description></Description>
-    <Created>2009-03-07, 11:47:08</Created>
-    <Resource>
-      <Filename>quantities/quantity.py</Filename>
-      <Linenumber>107</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="False" bugfix="False">
-    <Summary>TODO: do we want this kind of magic?</Summary>
-    <Description></Description>
-    <Created>2009-03-07, 11:47:08</Created>
-    <Resource>
-      <Filename>quantities/quantity.py</Filename>
-      <Linenumber>288</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: uncomment once np.fix behaves itself</Summary>
     <Description></Description>
     <Created>2009-03-07, 12:30:36</Created>
@@ -67,12 +49,21 @@
     </Resource>
   </Task>
   <Task priority="1" completed="False" bugfix="False">
-    <Summary>TODO: remove this mask once bug numpy bugs 826 and 1026 are fixed</Summary>
+    <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-03-07, 12:31:39</Created>
+    <Created>2009-03-07, 16:48:14</Created>
     <Resource>
-      <Filename>quantities/tests/test_25_quantity_arithmetic.py</Filename>
-      <Linenumber>14</Linenumber>
+      <Filename>quantities/quantity.py</Filename>
+      <Linenumber>107</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="False" bugfix="False">
+    <Summary>TODO: do we want this kind of magic?</Summary>
+    <Description></Description>
+    <Created>2009-03-07, 16:48:14</Created>
+    <Resource>
+      <Filename>quantities/quantity.py</Filename>
+      <Linenumber>288</Linenumber>
     </Resource>
   </Task>
 </Tasks>
