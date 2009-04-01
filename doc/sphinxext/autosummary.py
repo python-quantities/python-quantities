@@ -56,7 +56,7 @@ from docutils.parsers.rst import directives
 from docutils.statemachine import ViewList
 from docutils import nodes
 
-import sphinx.addnodes, sphinx.roles, sphinx.builder
+import sphinx.addnodes, sphinx.roles
 from sphinx.util import patfilter
 
 from docscrape_sphinx import get_doc_object

@@ -23,7 +23,7 @@ sys.path.append(os.path.abspath('../sphinxext'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.pngmath', 'sphinx.ext.autodoc', 'only_directives', 
+extensions = ['sphinx.ext.pngmath', 'sphinx.ext.autodoc', 
               'ipython_console_highlighting', 'plot_directive', 'numpydoc',
               'docscrape', 'docscrape_sphinx', 'autosummary']
 
@@ -59,6 +59,13 @@ release = quantities.__version__
 # Else, today_fmt is used as the format for a strftime call.
 today_fmt = '%B %d, %Y'
 
+# List of directories, relative to source directory, that shouldn't be searched
+# for source files.
+exclude_trees = ['_build']
+
+# The reST default role (used for this markup: `text`) to use for all documents.
+#default_role = None
+
 # List of documents that shouldn't be included in the build.
 #unused_docs = []
 
@@ -74,7 +81,10 @@ today_fmt = '%B %d, %Y'
 #show_authors = False
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'friendly'
+pygments_style = 'sphinx'
+
+# A list of ignored prefixes for module index sorting.
+#modindex_common_prefix = []
 
 
 # Options for HTML output
@@ -83,7 +93,31 @@ pygments_style = 'friendly'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = 'sphinxdoc.css'
+html_theme = 'sphinxdoc'
+
+# Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+#html_theme_options = {}
+
+# Add any paths that contain custom themes here, relative to this directory.
+#html_theme_path = []
+
+# The name for this set of Sphinx documents.  If None, it defaults to
+# "<project> v<release> documentation".
+#html_title = None
+
+# A shorter title for the navigation bar.  Default is the same as html_title.
+#html_short_title = None
+
+# The name of an image file (relative to this directory) to place at the top
+# of the sidebar.
+#html_logo = None
+
+# The name of an image file (within the static path) to use as favicon of the
+# docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
+# pixels large.
+#html_favicon = None
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -104,6 +138,18 @@ html_sidebars = {'index': 'indexsidebar.html'}
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 html_additional_pages = {'index': 'index.html'}
+
+# If false, no module index is generated.
+#html_use_modindex = True
+
+# If false, no index is generated.
+#html_use_index = True
+
+# If true, the index is split into individual pages for each letter.
+#html_split_index = False
+
+# If true, links to the reST sources are added to the pages.
+#html_show_sourcelink = True
 
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.
@@ -133,7 +179,7 @@ latex_documents = [
 #latex_logo = '_static/sphinx.png'
 
 # Additional stuff for the LaTeX preamble.
-latex_elements = {'fontpkg': '\\usepackage{pslatex}'}
+latex_preamble = {'fontpkg': '\\usepackage{pslatex}'}
 
 # Documents to append as an appendix to all manuals.
 latex_appendices = []

@@ -101,8 +101,7 @@ build/generate-stamp: $(wildcard source/reference/*.rst)
 	touch build/generate-stamp
 
 html: generate
-	mkdir -p build/html build/doctrees
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) build/html
+	$(SPHINXBUILD) -t html -b html $(ALLSPHINXOPTS) build/html
 	$(PYTHON) postprocess.py html build/html/*.html
 	@echo
 	@echo "Build finished. The HTML pages are in build/html."
@@ -129,8 +128,7 @@ htmlhelp-build: htmlhelp build/htmlhelp/numpy.chm
 	-hhc.exe $^
 
 latex: generate
-	mkdir -p build/latex build/doctrees
-	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) build/latex
+	$(SPHINXBUILD) -t latex -b latex $(ALLSPHINXOPTS) build/latex
 	$(PYTHON) postprocess.py tex build/latex/*.tex
 	perl -pi -e 's/\t(latex.*|pdflatex) (.*)/\t-$$1 -interaction batchmode $$2/' build/latex/Makefile
 	@echo

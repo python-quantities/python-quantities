@@ -259,7 +259,7 @@ import jinja
 TEMPLATE = """
 {{source_code}}
 
-.. htmlonly::
+.. only:: html
 
    {% if source_code %}
        (`Source code <{{source_link}}>`__)
