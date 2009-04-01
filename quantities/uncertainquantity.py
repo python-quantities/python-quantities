@@ -198,6 +198,6 @@ class UncertainQuantity(Quantity):
         return UncertainQuantity(
             self.magnitude.sum(axis, dtype, out),
             self.dimensionality,
-            (sum(self.uncertainty.magnitude**2, axis, dtype, out))**0.5,
+            (sum(self.uncertainty.magnitude**2, axis))**0.5,
             copy=False
         )
