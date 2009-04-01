@@ -20,11 +20,11 @@ class UncertainQuantity(Quantity):
         # _uncertainty initialized to be dimensionless by __array_finalize__:
         ret._uncertainty._dimensionality = ret._dimensionality
 
-        if uncertainty is None and isinstance(data, UncertainQuantity):
+        if uncertainty is not None:
+            ret.uncertainty = uncertainty
+        elif isinstance(data, UncertainQuantity):
             if copy or self._dimensionality != uncertainty._dimensionality:
                 uncertainty = data.uncertainty.rescale(ret.units)
-            ret.uncertainty = uncertainty
-        elif uncertainty:
             ret.uncertainty = uncertainty
 
         return ret
@@ -192,3 +192,12 @@ class UncertainQuantity(Quantity):
         if USE_UNICODE:
             return s.replace('+/-', '±').replace(' sigma', 'σ')
         return s
+
+    @with_doc(numpy.ndarray.sum)
+    def sum(self, axis=None, dtype=None, out=None):
+        return UncertainQuantity(
+            self.magnitude.sum(axis, dtype, out),
+            self.dimensionality,
+            (sum(self.uncertainty.magnitude**2, axis, dtype, out))**0.5,
+            copy=False
+        )
