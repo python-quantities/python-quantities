@@ -30,15 +30,6 @@
     </Resource>
   </Task>
   <Task priority="1" completed="False" bugfix="False">
-    <Summary>TODO: what is an appropriate value?</Summary>
-    <Description></Description>
-    <Created>2009-02-22, 13:41:45</Created>
-    <Resource>
-      <Filename>quantities/uncertainquantity.py</Filename>
-      <Linenumber>15</Linenumber>
-    </Resource>
-  </Task>
-  <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: uncomment once np.fix behaves itself</Summary>
     <Description></Description>
     <Created>2009-03-07, 12:30:36</Created>
@@ -63,6 +54,15 @@
     <Resource>
       <Filename>quantities/quantity.py</Filename>
       <Linenumber>288</Linenumber>
+    </Resource>
+  </Task>
+  <Task priority="1" completed="False" bugfix="False">
+    <Summary>TODO: what is an appropriate value?</Summary>
+    <Description></Description>
+    <Created>2009-04-01, 14:44:18</Created>
+    <Resource>
+      <Filename>quantities/uncertainquantity.py</Filename>
+      <Linenumber>15</Linenumber>
     </Resource>
   </Task>
 </Tasks>

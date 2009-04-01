@@ -193,11 +193,11 @@ class UncertainQuantity(Quantity):
             return s.replace('+/-', '±').replace(' sigma', 'σ')
         return s
 
-    @with_doc(numpy.ndarray.sum)
+    @with_doc(np.ndarray.sum)
     def sum(self, axis=None, dtype=None, out=None):
         return UncertainQuantity(
             self.magnitude.sum(axis, dtype, out),
             self.dimensionality,
-            (sum(self.uncertainty.magnitude**2, axis))**0.5,
+            (np.sum(self.uncertainty.magnitude**2, axis))**0.5,
             copy=False
         )
