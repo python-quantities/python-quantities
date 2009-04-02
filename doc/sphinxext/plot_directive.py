@@ -74,6 +74,13 @@ TODO
 
 import sys, os, glob, shutil, imp, warnings, cStringIO, re, textwrap
 
+import warnings
+warnings.warn("A plot_directive module is also available under "
+              "matplotlib.sphinxext; expect this numpydoc.plot_directive "
+              "module to be deprecated after relevant features have been "
+              "integrated there.",
+              FutureWarning, stacklevel=2)
+
 def setup(app):
     setup.app = app
     setup.config = app.config
