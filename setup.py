@@ -120,5 +120,5 @@ setup(
         'quantities.umath'
     ],
     package_data = package_data,
-    requires = ['numpy (>=1.2)'],
+    requires = ['numpy (>=1.3)'],
 )

@@ -9,11 +9,11 @@ Prerequisites
 Quantities has a few dependencies:
 
 * Python_ (version 2.5 or later)
-* NumPy_ (version 1.1 or later)
+* NumPy_ (version 1.3 or later)
 
-The following are also recommended:
+The following are also suggested:
 
-* setuptools_ (version 0.6c8 or later, for developers and unit tests)
+* setuptools_ (version 0.6c8 or later, for developers)
 * nose_ (for unit tests)
 * coverage_ (for unit tests)
 
