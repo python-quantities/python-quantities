@@ -13,19 +13,29 @@
 
 import sys, os
 
-# If your extensions are in another directory, add it here. If the directory
-# is relative to the documentation root, use os.path.abspath to make it
-# absolute, like shown here.
-sys.path.append(os.path.abspath('../sphinxext'))
+# Check Sphinx version
+import sphinx
+if sphinx.__version__ < "0.5":
+    raise RuntimeError("Sphinx 0.5.dev or newer required")
 
 # General configuration
 # ---------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.pngmath', 'sphinx.ext.autodoc', 
-              'ipython_console_highlighting', 'plot_directive', 'numpydoc',
-              'docscrape', 'docscrape_sphinx', 'autosummary']
+
+sys.path.append(os.path.abspath('../sphinxext'))
+
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.pngmath', 'numpydoc',
+              'sphinx.ext.intersphinx', 'sphinx.ext.coverage',
+              'only_directives']
+
+if sphinx.__version__ >= "0.7":
+    extensions.append('sphinx.ext.autosummary')
+    import glob
+    autosummary_generate = glob.glob("reference/*.rst")
+else:
+    extensions.append('autosummary')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
