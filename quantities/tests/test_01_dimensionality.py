@@ -141,6 +141,7 @@ def test_power():
     assert_equal(joule**2, Dimensionality({pq.kg: 2, pq.m: 4, pq.s: -4}))
     assert_raises(TypeError, operator.__pow__, Joule, joule)
     assert_raises(TypeError, operator.__pow__, joule, Joule)
+    assert_equal(meter**-1 == meter**-2, False)
     test_dimensionality_repr()
 
 def test_inplace_power():

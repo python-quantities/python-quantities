@@ -53,6 +53,9 @@ class Dimensionality(dict):
         res = hash(unit_registry['dimensionless'])
         for key in sorted(self.keys(), key=operator.attrgetter('format_order')):
             val = self[key]
+            if val < 0:
+                # can you believe that hash(-1)==hash(-2)?
+                val -= 1
             res ^= hash((key, val))
         return res
 
