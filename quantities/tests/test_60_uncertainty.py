@@ -73,6 +73,11 @@ def test_uncertainquantity_divide():
         'dimensionless (1σ)'
     )
     assert_equal(
+        str(a/pq.m),
+        '[ 1.  2.] dimensionless\n±[ 0.1  0.2] '
+        'dimensionless (1σ)'
+    )
+    assert_equal(
         str(a/2),
         '[ 0.5  1. ] m\n±[ 0.05  0.1 ] m (1σ)'
     )
