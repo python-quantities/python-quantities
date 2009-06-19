@@ -106,7 +106,7 @@ units::
   >>> q2 = q/(5*pq.ft)**2
   >>> print q2
   40 m**3/ft**2
-  >>> qs = q2.simplfied
+  >>> qs = q2.simplified
   >>> print qs
   430.556416668 m
 
