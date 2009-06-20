@@ -27,14 +27,16 @@ oz = ounce = avoirdupois_ounce = UnitMass(
     'ounce',
     28.349523125*g,
     symbol='oz',
-    aliases=['ounces','avoirdupois_ounce', 'avoirdupois_ounces']
-) # exact
+    aliases=['ounces','avoirdupois_ounce', 'avoirdupois_ounces'],
+    doc='exact'
+)
 lb = pound = avoirdupois_pound = UnitMass(
     'pound',
     0.45359237*kg,
     symbol='lb',
-    aliases=['pounds', 'avoirdupois_pound', 'avoirdupois_pounds']
-) # exact
+    aliases=['pounds', 'avoirdupois_pound', 'avoirdupois_pounds'],
+    doc='exact'
+)
 
 carat = UnitMass(
     'carat',
@@ -99,7 +101,7 @@ u = amu = atomic_mass_unit = UnitMass(
     1.660538782e-27*kg,
     symbol='u',
     aliases=['amu'],
-    note='relative uncertainty = 5e-8'
+    doc='relative uncertainty = 5e-8'
 )
 scruple = UnitMass(
     'scruple',

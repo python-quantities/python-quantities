@@ -32,7 +32,7 @@ class UnitQuantity(Quantity):
 
     def __new__(
         cls, name, definition=None, symbol=None, u_symbol=None,
-        aliases=[], note=None
+        aliases=[], doc=None
     ):
         try:
             assert isinstance(name, str)
@@ -52,7 +52,8 @@ class UnitQuantity(Quantity):
         ret._name = name
         ret._symbol = symbol
         ret._u_symbol = u_symbol
-        ret._note = note
+        if doc is not None:
+            ret.__doc__ = doc
 
         if definition is not None:
             if not isinstance(definition, Quantity):
@@ -70,7 +71,7 @@ class UnitQuantity(Quantity):
 
     def __init__(
         self, name, definition=None, symbol=None, u_symbol=None,
-        aliases=[], note=None
+        aliases=[], doc=None
     ):
         unit_registry[name] = self
         if symbol:
@@ -99,10 +100,6 @@ class UnitQuantity(Quantity):
     @property
     def name(self):
         return self._name
-
-    @property
-    def note(self):
-        return self._note
 
     @property
     def definition(self):
@@ -163,8 +160,6 @@ class UnitQuantity(Quantity):
         else:
             s = '1 %s'%self.name
 
-#        if self.note:
-#            return s+'\nnote: %s'%self.note
         return s
 
     @with_doc(Quantity.__add__, use_header=False)
@@ -248,10 +243,10 @@ class IrreducibleUnit(UnitQuantity):
 
     def __init__(
         self, name, definition=None, symbol=None, u_symbol=None,
-        aliases=[], note=None
+        aliases=[], doc=None
     ):
         super(IrreducibleUnit, self).__init__(
-            name, definition, symbol, u_symbol, aliases, note
+            name, definition, symbol, u_symbol, aliases, doc
         )
         cls = type(self)
         if cls._default_unit is None:
@@ -374,7 +369,7 @@ class UnitConstant(UnitQuantity):
 
     def __init__(
         self, name, definition=None, symbol=None, u_symbol=None,
-        aliases=[], note=None
+        aliases=[], doc=None
     ):
         # we dont want to register constants in the unit registry
         return

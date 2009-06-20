@@ -97,7 +97,7 @@ pc = parsec = UnitLength(
     3.08568025e16*m,
     symbol='pc',
     aliases=['parsecs'],
-    note='approximate'
+    doc='approximate'
 )
 ly = light_year = UnitLength(
     'light_year',
@@ -110,7 +110,15 @@ au = astronomical_unit = UnitLength(
     149597870691*m,
     symbol='au',
     aliases=['astronomical_units'],
-    note='uncertainty ± 30 m'
+    doc='''
+    An astronomical unit (abbreviated as AU, au, a.u., or sometimes ua) is a
+    unit of length roughly equal to the mean distance between the Earth and
+    the Sun. It is approximately 150 million kilometres (93 million miles).
+
+    uncertainty ± 30 m
+
+    http://en.wikipedia.org/wiki/Astronomical_unit
+    '''
 )
 
 nmi = nautical_mile = UnitLength(

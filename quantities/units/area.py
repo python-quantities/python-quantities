@@ -22,7 +22,7 @@ cmil = circular_mil = UnitQuantity(
     5.067075e-10*m**2,
     symbol='cmil',
     aliases=['circular_mils'],
-    note='conversions approximate, area of a circle with diameter=1 mil'
+    doc='conversions approximate, area of a circle with diameter=1 mil'
 )
 D = darcy = UnitQuantity(
     'darcy',
@@ -43,8 +43,9 @@ ha = hectare = UnitQuantity(
 acre = international_acre = UnitQuantity(
     'acre',
     4046.8564224*m**2,
-    aliases=['acres', 'international_acre', 'international_acres']
-) # exact: http://en.wikipedia.org/wiki/Acre
+    aliases=['acres', 'international_acre', 'international_acres'],
+    doc="exact. http://en.wikipedia.org/wiki/Acre"
+)
 US_survey_acre = UnitQuantity(
     'US_survey_acre',
     160*rod**2,

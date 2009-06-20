@@ -106,11 +106,13 @@ mmHg = mm_Hg = millimeter_Hg = millimeter_Hg_0C = UnitQuantity(
     mm*mercury,
     symbol='mmHg',
     aliases=['mmHg', 'millimeter_Hg'],
-    note='''
-    "the pressure exerted at the base of a column of fluid exactly 1 mm high,
+    doc="""
+    The pressure exerted at the base of a column of fluid exactly 1 mm high,
     when the density of the fluid is exactly 13.5951 g/cm^3, at a place where
-    the acceleration of gravity is exactly 9.80665 m/s^2"
-    http://en.wikipedia.org/wiki/Conventional_millimeter_of_mercury'''
+    the acceleration of gravity is exactly 9.80665 m/s^2.
+
+    http://en.wikipedia.org/wiki/Conventional_millimeter_of_mercury
+    """
 )
 cmHg = cm_Hg = centimeter_Hg = UnitQuantity(
     'cmHg',

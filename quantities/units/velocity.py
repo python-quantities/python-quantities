@@ -10,7 +10,8 @@ from .time import s, h
 c = speed_of_light = UnitQuantity(
     'speed_of_light',
     299792458*m/s,
-    symbol='c'
+    symbol='c',
+    doc='exact'
 )
 kt = knot = knot_international = international_knot = UnitQuantity(
     'nautical_miles_per_hour',

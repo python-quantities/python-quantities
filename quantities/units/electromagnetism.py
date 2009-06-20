@@ -142,7 +142,7 @@ e = elementary_charge = UnitQuantity(
     'elementary_charge',
     1.602176487e-19*C,
     symbol='e',
-    note='relative uncertainty = 6.64e-8'
+    doc='relative uncertainty = 6.64e-8'
 )
 chemical_faraday = UnitQuantity(
     'chemical_faraday',

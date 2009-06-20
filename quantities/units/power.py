@@ -46,16 +46,18 @@ boiler_horsepower = UnitQuantity(
 )
 metric_horsepower = UnitQuantity(
     'metric_horsepower',
-    0.73549875*kW
-) # exact
+    0.73549875*kW,
+    doc='exact'
+)
 electric_horsepower = UnitQuantity(
     'electric_horsepower',
     746*W
 )
 water_horsepower = UnitQuantity(
     'water_horsepower',
-    746.043*W
-) # exact
+    746.043*W,
+    doc='exact'
+)
 
 refrigeration_ton = ton_of_refrigeration = UnitQuantity(
     'refrigeration_ton',

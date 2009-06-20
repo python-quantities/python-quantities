@@ -12,7 +12,8 @@ g_0 = g_n = gravity = standard_gravity = gee = force = free_fall = \
     'standard_gravity',
     9.806650*m/s**2,
     symbol='g',
-    u_symbol='g₀'
-) # exact
+    u_symbol='g₀',
+    doc='exact'
+)
 
 del m, s, UnitQuantity

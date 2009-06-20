@@ -26,7 +26,7 @@ rd = rutherford = UnitQuantity(
     1e6*Bq,
     symbol='Rd',
     aliases=['rutherfords'],
-    note='this unit is obsolete, in favor of 1e6 Bq'
+    doc='this unit is obsolete, in favor of 1e6 Bq'
 )
 Gy = gray = Sv = sievert = UnitQuantity(
     'gray',
@@ -42,8 +42,12 @@ rem = UnitQuantity(
 rads = UnitQuantity(
     'rads',
     1e-2*gray,
-    aliases=['rads']
-) # rad is commonly used symbol for radian, rads unit of radiation is deprecated
+    aliases=['rads'],
+    doc='''
+    rad is commonly used symbol for radian. 
+    rads unit of radiation is deprecated.
+    '''
+)
 R = roentgen = UnitQuantity(
     'roentgen',
     2.58e-4*coulomb/kg,

@@ -103,16 +103,18 @@ floz = fluid_ounce = US_fluid_ounce = US_liquid_ounce = UnitQuantity(
 
 Imperial_bushel = UnitQuantity(
     'Imperial_bushel',
-    36.36872*liter
-) # exact
+    36.36872*liter,
+    doc='exact'
+)
 UK_liquid_gallon = Canadian_liquid_gallon = UK_liquid_gallon = UnitQuantity(
     'UK_liquid_gallon',
     4.54609*liter,
     aliases=[
         'UK_liquid_gallons', 'Canadian_liquid_gallon',
         'Canadian_liquid_gallons', 'UK_liquid_gallon'
-    ]
-) # exact
+    ],
+    doc='exact'
+)
 UK_liquid_quart = UnitQuantity(
     'UK_liquid_quart',
     UK_liquid_gallon/4,

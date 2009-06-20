@@ -51,8 +51,9 @@ attosecond = UnitTime(
 jiffy = UnitTime(
     'jiffy',
     s/100,
-    aliases=['jiffies']
-) # no kidding?
+    aliases=['jiffies'],
+    doc='no kidding, a jiffy is 1/100 of a second.'
+)
 
 min = minute = UnitTime(
     'minute',
@@ -86,8 +87,9 @@ yr = year = tropical_year = a = UnitTime(
     'year',
     31556925.9747*s,
     symbol='yr',
-    aliases=['a', 'years', 'tropical_year', 'tropical_years']
-) # a for anno
+    aliases=['a', 'years', 'tropical_year', 'tropical_years'],
+    doc='a is an acceptable alias for year, short for anno'
+)
 month = UnitTime(
     'month',
     yr/12,
@@ -102,8 +104,13 @@ shake = UnitTime(
 sidereal_day = UnitTime(
     'sidereal_day',
     day/1.00273790935079524,
-    aliases=['sidereal_days']
-) # approximate, see http://en.wikipedia.org/wiki/Sidereal_time
+    aliases=['sidereal_days'],
+    doc='''
+    approximate.
+
+    http://en.wikipedia.org/wiki/Sidereal_time
+    '''
+)
 sidereal_hour = UnitTime(
     'sidereal_hour',
     sidereal_day/24,
@@ -122,13 +129,15 @@ sidereal_second = UnitTime(
 sidereal_year = UnitTime(
     'sidereal_year',
     366.25636042*sidereal_day,
-    aliases=['sidereal_years']
-) # http://en.wikipedia.org/wiki/Sidereal_year
+    aliases=['sidereal_years'],
+    doc='http://en.wikipedia.org/wiki/Sidereal_year'
+)
 sidereal_month = UnitTime(
     'sidereal_month',
     27.321661*day,
-    aliases=['sidereal_months']
-) # http://en.wikipedia.org/wiki/Month#Sidereal_month
+    aliases=['sidereal_months'],
+    doc='http://en.wikipedia.org/wiki/Month#Sidereal_month'
+)
 
 tropical_month = UnitTime(
     'tropical_month',
@@ -138,8 +147,13 @@ tropical_month = UnitTime(
 synodic_month = lunar_month = UnitTime(
     'synodic_month',
     29.530589*day,
-    aliases=['synodic_months', 'lunar_month', 'lunar_months']
-) # long-term average, http://en.wikipedia.org/wiki/Month#Synodic_month
+    aliases=['synodic_months', 'lunar_month', 'lunar_months'],
+    doc='''
+    long-term average. 
+
+    http://en.wikipedia.org/wiki/Month#Synodic_month
+    '''
+)
 common_year = UnitTime(
     'common_year',
     365*day,

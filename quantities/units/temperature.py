@@ -23,14 +23,20 @@ degC = celsius = Celsius = UnitTemperature(
     K,
     symbol='degC',
     u_symbol='°C',
-    aliases=['degC', 'celsius']
+    aliases=['degC', 'celsius'],
+    doc='''
+    Unicode has special compatibility characters for ℃, but its use is
+    discouraged by the unicode consortium.
+    '''
 )
 degF = fahrenheit = Fahrenheit = UnitTemperature(
     'Fahrenheit',
     degR,
     symbol='degF',
     u_symbol='°F',
-    aliases=['degF', 'fahrenheit']
+    aliases=['degF', 'fahrenheit'],
+    doc='''
+    Unicode has special compatibility characters for ℉, but its use is
+    discouraged by the unicode consortium.
+    '''
 )
-# Unicode has special compatibility characters for ℃ ℉, but their use is
-# discouraged by the unicode consortium.

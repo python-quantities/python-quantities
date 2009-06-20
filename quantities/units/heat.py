@@ -13,7 +13,7 @@ from .time import h
 RSI = UnitQuantity(
     'RSI',
     K*m**2/W,
-    note='R-value in SI'
+    doc='R-value in SI'
 )
 
 clo = clos = UnitQuantity(
@@ -25,7 +25,7 @@ clo = clos = UnitQuantity(
 R_value = UnitQuantity(
     'R_value',
     ft**2*degF*h/BTU,
-    note='American customary units'
+    doc='American customary units'
 )
 
 

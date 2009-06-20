@@ -100,7 +100,7 @@ E_h = hartree = hartree_energy = UnitQuantity(
     4.35974394e-18*J,
     symbol='E_h',
     aliases=['hartrees', 'hartree_energy', 'Hartree_energy'],
-    note='relative uncertainty = 2.1e-6'
+    doc='relative uncertainty = 2.1e-6'
 )
 
 del UnitQuantity, dyne, N, cm, m, s, h
