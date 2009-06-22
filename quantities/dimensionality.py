@@ -314,3 +314,9 @@ def _d_degrees(q1):
     return unit_registry['degree'].dimensionality
 p_dict[np.degrees] = _d_degrees
 
+def _d_dimensionless(q1):
+    if getattr(q1, 'dimensionality', None):
+        raise ValueError("quantity must be dimensionless")
+    return Dimensionality()
+p_dict[np.log] = _d_dimensionless
+p_dict[np.exp] = _d_dimensionless
