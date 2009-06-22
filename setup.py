@@ -74,7 +74,7 @@ long_desc = "Quantities is designed to handle arithmetic and conversions of \
 physical quantities, which have a magnitude, dimensionality specified by \
 various units, and possibly an uncertainty. Quantities is based on the popular \
 numpy library. It is undergoing active development, and while the current \
-features and API are fairly stable, test coverage is not complete and the \
+features and API are fairly stable, test coverage is incomplete and the \
 package is not ready for production use."
 
 classifiers = [
