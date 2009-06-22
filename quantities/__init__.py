@@ -231,7 +231,7 @@ project.
 
 #from __future__ import absolute_import
 
-__version__ = '0.5b5'
+__version__ = '0.5b6'
 
 import quantity
 from quantity import Quantity
