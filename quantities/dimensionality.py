@@ -221,7 +221,7 @@ class Dimensionality(dict):
 
 p_dict = {}
 
-def _d_multiply(q1, q2):
+def _d_multiply(q1, q2, out=None):
     try:
         return q1._dimensionality * q2._dimensionality
     except AttributeError:
@@ -231,7 +231,7 @@ def _d_multiply(q1, q2):
             return q2.dimensionality
 p_dict[np.multiply] = _d_multiply
 
-def _d_divide(q1, q2):
+def _d_divide(q1, q2, out=None):
     try:
         return q1._dimensionality / q2._dimensionality
     except AttributeError:
@@ -242,7 +242,7 @@ def _d_divide(q1, q2):
 p_dict[np.divide] = _d_divide
 p_dict[np.true_divide] = _d_divide
 
-def _d_add_sub(q1, q2):
+def _d_add_sub(q1, q2, out=None):
     try:
         return q1._dimensionality + q2._dimensionality
     except AttributeError:
@@ -253,13 +253,13 @@ def _d_add_sub(q1, q2):
                 return q1.dimensionality
         elif hasattr(q2, 'dimensionality'):
             if np.asarray(q1).any():
-                Dimensionality + q2._dimensionality
+                return Dimensionality() + q2._dimensionality
             else:
                 return q2.dimensionality
 p_dict[np.add] = _d_add_sub
 p_dict[np.subtract] = _d_add_sub
 
-def _d_power(q1, q2):
+def _d_power(q1, q2, out=None):
     if getattr(q2, 'dimensionality', None):
         raise ValueError("exponent must be dimensionless")
     try:
@@ -272,15 +272,15 @@ def _d_power(q1, q2):
         return Dimensionality()
 p_dict[np.power] = _d_power
 
-def _d_square(q1):
+def _d_square(q1, out=None):
     return q1._dimensionality**2
 p_dict[np.square] = _d_square
 
-def _d_reciprocal(q1):
+def _d_reciprocal(q1, out=None):
     return q1._dimensionality**-1
 p_dict[np.reciprocal] = _d_reciprocal
 
-def _d_copy(q1):
+def _d_copy(q1, out=None):
     return q1.dimensionality
 p_dict[np.absolute] = _d_copy
 p_dict[np.ceil] = _d_copy
@@ -290,11 +290,11 @@ p_dict[np.floor] = _d_copy
 p_dict[np.negative] = _d_copy
 p_dict[np.rint] = _d_copy
 
-def _d_sqrt(q1):
+def _d_sqrt(q1, out=None):
     return q1._dimensionality**0.5
 p_dict[np.sqrt] = _d_sqrt
 
-def _d_radians(q1):
+def _d_radians(q1, out=None):
     try:
         assert q1.units == unit_registry['degree']
     except AssertionError:
@@ -304,7 +304,7 @@ def _d_radians(q1):
     return unit_registry['radian'].dimensionality
 p_dict[np.radians] = _d_radians
 
-def _d_degrees(q1):
+def _d_degrees(q1, out=None):
     try:
         assert q1.units == unit_registry['radian']
     except AssertionError:
@@ -314,7 +314,7 @@ def _d_degrees(q1):
     return unit_registry['degree'].dimensionality
 p_dict[np.degrees] = _d_degrees
 
-def _d_dimensionless(q1):
+def _d_dimensionless(q1, out=None):
     if getattr(q1, 'dimensionality', None):
         raise ValueError("quantity must be dimensionless")
     return Dimensionality()
