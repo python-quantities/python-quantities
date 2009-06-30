@@ -289,6 +289,7 @@ p_dict[np.fix] = _d_copy
 p_dict[np.floor] = _d_copy
 p_dict[np.negative] = _d_copy
 p_dict[np.rint] = _d_copy
+p_dict[np.ones_like] = _d_copy
 
 def _d_sqrt(q1, out=None):
     return q1._dimensionality**0.5
