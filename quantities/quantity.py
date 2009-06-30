@@ -219,7 +219,9 @@ class Quantity(np.ndarray):
         try:
             result._dimensionality = p_dict[uf](*objs)
         except KeyError:
-            print 'ufunc %r not implemented, please file a bug report' % uf
+            print 'ufunc %r not supported by quantities' % uf
+            print 'please file a bug report by visiting'
+            print 'https://bugs.launchpad.net/python-quantities'
         return result
 
     @with_doc(np.ndarray.__iadd__)
