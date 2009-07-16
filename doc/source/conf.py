@@ -1,41 +1,30 @@
 # -*- coding: utf-8 -*-
-#
-# Quantities documentation build configuration file, created by
-# sphinx-quickstart on Fri May  2 12:33:25 2008.
-#
-# This file is execfile()d with the current directory set to its containing dir.
-#
-# The contents of this file are pickled, so don't put values in the namespace
-# that aren't pickleable (module imports are okay, they're removed automatically).
-#
-# All configuration values have a default value; values that are commented out
-# serve to show the default value.
 
-import sys, os
+import sys, os, re
 
 # Check Sphinx version
 import sphinx
 if sphinx.__version__ < "0.5":
     raise RuntimeError("Sphinx 0.5.dev or newer required")
 
-# General configuration
-# ---------------------
+# -----------------------------------------------------------------------------   
+# General configuration                                                           
+# ----------------------------------------------------------------------------- 
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 
-sys.path.append(os.path.abspath('../sphinxext'))
+sys.path.insert(0, os.path.abspath('../sphinxext'))
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.pngmath', 'numpydoc',
-              'sphinx.ext.intersphinx', 'sphinx.ext.coverage',
-              'only_directives']
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.pngmath', 'numpydoc',                       
+              'sphinx.ext.intersphinx', 'sphinx.ext.coverage',                              
+              'plot_directive']
 
 if sphinx.__version__ >= "0.7":
     extensions.append('sphinx.ext.autosummary')
-    import glob
-    autosummary_generate = glob.glob("reference/*.rst")
 else:
     extensions.append('autosummary')
+    extensions.append('only_directives')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -69,18 +58,18 @@ release = quantities.__version__
 # Else, today_fmt is used as the format for a strftime call.
 today_fmt = '%B %d, %Y'
 
-# List of directories, relative to source directory, that shouldn't be searched
-# for source files.
-exclude_trees = ['_build']
-
-# The reST default role (used for this markup: `text`) to use for all documents.
-#default_role = None
-
-# List of documents that shouldn't be included in the build.
+# List of documents that shouldn't be included in the build.                                
 #unused_docs = []
 
+# The reST default role (used for this markup: `text`) to use for all documents.
+default_role = 'autolink'
+
+# List of directories, relative to source directories, that shouldn't be searched           
+# for source files.                                                                         
+exclude_dirs = [] 
+
 # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+add_function_parentheses = False
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -93,12 +82,10 @@ exclude_trees = ['_build']
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
 
-# A list of ignored prefixes for module index sorting.
-#modindex_common_prefix = []
 
-
-# Options for HTML output
-# -----------------------
+# -----------------------------------------------------------------------------             
+# HTML output                                                                               
+# -----------------------------------------------------------------------------
 
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
@@ -169,8 +156,9 @@ html_use_opensearch = 'False'
 htmlhelp_basename = 'Quantitiesdoc'
 
 
-# Options for LaTeX output
-# ------------------------
+# -----------------------------------------------------------------------------             
+# LaTeX output                                                                              
+# -----------------------------------------------------------------------------
 
 # The paper size ('letter' or 'a4').
 latex_paper_size = 'letter'
@@ -199,8 +187,74 @@ latex_use_modindex = True
 
 latex_use_parts = True
 
-#############################################################
-# numpy extensions
 
-# Edit links
-numpydoc_edit_link = '`Edit </numpy/docs/%(full_name)s/>`__'
+# -----------------------------------------------------------------------------             
+# Intersphinx configuration                                                                 
+# -----------------------------------------------------------------------------             
+intersphinx_mapping = {'http://docs.python.org/dev': None}
+
+
+# -----------------------------------------------------------------------------             
+# Numpy extensions                                                                          
+# -----------------------------------------------------------------------------             
+                                                                                            
+# If we want to do a phantom import from an XML file for all autodocs                       
+phantom_import_file = 'dump.xml'                                                            
+                                                                                            
+# Make numpydoc to generate plots for example sections
+numpydoc_use_plots = True
+
+# -----------------------------------------------------------------------------
+# Autosummary
+# -----------------------------------------------------------------------------
+
+if sphinx.__version__ >= "0.7":
+    import glob
+    autosummary_generate = glob.glob("reference/*.rst")
+
+# -----------------------------------------------------------------------------
+# Coverage checker
+# -----------------------------------------------------------------------------
+coverage_ignore_modules = r"""
+    """.split()
+coverage_ignore_functions = r"""
+    test($|_) (some|all)true bitwise_not cumproduct pkgload
+    generic\.
+    """.split()
+coverage_ignore_classes = r"""
+    """.split()
+
+coverage_c_path = []
+coverage_c_regexes = {}
+coverage_ignore_c_items = {}
+
+
+# -----------------------------------------------------------------------------
+# Plots
+# -----------------------------------------------------------------------------
+plot_pre_code = """
+import numpy as np
+np.random.seed(0)
+"""
+plot_include_source = True
+plot_formats = [('png', 100), 'pdf']
+
+import math
+phi = (math.sqrt(5) + 1)/2
+
+import matplotlib
+matplotlib.rcParams.update({
+    'font.size': 8,
+    'axes.titlesize': 8,
+    'axes.labelsize': 8,
+    'xtick.labelsize': 8,
+    'ytick.labelsize': 8,
+    'legend.fontsize': 8,
+    'figure.figsize': (3*phi, 3),
+    'figure.subplot.bottom': 0.2,
+    'figure.subplot.left': 0.2,
+    'figure.subplot.right': 0.9,
+    'figure.subplot.top': 0.85,
+    'figure.subplot.wspace': 0.4,
+    'text.usetex': False,
+})

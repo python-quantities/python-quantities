@@ -104,19 +104,6 @@ mind:
 
     \int_{-\infty}^{\infty}\frac{e^{i\phi}}{1+x^2\frac{e^{i\phi}}{1+x^2}}
 
-* Interactive IPython sessions can be illustrated in the documentation using
-  the following directive::
-
-    .. sourcecode:: ipython
-
-      In [69]: lines = plot([1,2,3])
-
-  which would yield:
-
-  .. sourcecode:: ipython
-
-    In [69]: lines = plot([1,2,3])
-
 * Footnotes [#]_ can be added using ``[#]_``, followed later by::
 
     .. rubric:: Footnotes

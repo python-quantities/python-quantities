@@ -22,46 +22,48 @@ import inspect
 
 def mangle_docstrings(app, what, name, obj, options, lines,
                       reference_offset=[0]):
+
     if what == 'module':
         # Strip top title
-        title_re = re.compile(r'^\s*[#*=]{4,}\n[a-z0-9 -]+\n[#*=]{4,}\s*',
+        title_re = re.compile(ur'^\s*[#*=]{4,}\n[a-z0-9 -]+\n[#*=]{4,}\s*',
                               re.I|re.S)
-        lines[:] = title_re.sub('', "\n".join(lines)).split("\n")
+        lines[:] = title_re.sub(u'', u"\n".join(lines)).split(u"\n")
     else:
-        doc = get_doc_object(obj, what, "\n".join(lines))
-        lines[:] = str(doc).split("\n")
+        doc = get_doc_object(obj, what, u"\n".join(lines))
+        doc.use_plots = app.config.numpydoc_use_plots
+        lines[:] = unicode(doc).split(u"\n")
 
     if app.config.numpydoc_edit_link and hasattr(obj, '__name__') and \
            obj.__name__:
         if hasattr(obj, '__module__'):
-            v = dict(full_name="%s.%s" % (obj.__module__, obj.__name__))
+            v = dict(full_name=u"%s.%s" % (obj.__module__, obj.__name__))
         else:
             v = dict(full_name=obj.__name__)
-        lines += ['', '.. only:: html', '']
-        lines += ['    %s' % x for x in
+        lines += [u'', u'.. only:: html', '']
+        lines += [u'    %s' % x for x in
                   (app.config.numpydoc_edit_link % v).split("\n")]
 
     # replace reference numbers so that there are no duplicates
     references = []
-    for l in lines:
-        l = l.strip()
-        if l.startswith('.. ['):
-            try:
-                references.append(int(l[len('.. ['):l.index(']')]))
-            except ValueError:
-                print "WARNING: invalid reference in %s docstring" % name
+    for line in lines:
+        line = line.strip()
+        m = re.match(ur'^.. \[([a-z0-9_.-])\]', line, re.I)
+        if m:
+            references.append(m.group(1))
 
-    # Start renaming from the biggest number, otherwise we may
-    # overwrite references.
-    references.sort()
+    # start renaming from the longest string, to avoid overwriting parts
+    references.sort(key=lambda x: -len(x))
     if references:
         for i, line in enumerate(lines):
             for r in references:
-                new_r = reference_offset[0] + r
-                lines[i] = lines[i].replace('[%d]_' % r,
-                                            '[%d]_' % new_r)
-                lines[i] = lines[i].replace('.. [%d]' % r,
-                                            '.. [%d]' % new_r)
+                if re.match(ur'^\d+$', r):
+                    new_r = u"R%d" % (reference_offset[0] + int(r))
+                else:
+                    new_r = u"%s%d" % (r, reference_offset[0])
+                lines[i] = lines[i].replace(u'[%s]_' % r,
+                                            u'[%s]_' % new_r)
+                lines[i] = lines[i].replace(u'.. [%s]' % r,
+                                            u'.. [%s]' % new_r)
 
     reference_offset[0] += len(references)
 
@@ -76,8 +78,8 @@ def mangle_signature(app, what, name, obj, options, sig, retann):
 
     doc = SphinxDocString(pydoc.getdoc(obj))
     if doc['Signature']:
-        sig = re.sub("^[^(]*", "", doc['Signature'])
-        return sig, ''
+        sig = re.sub(u"^[^(]*", u"", doc['Signature'])
+        return sig, u''
 
 def initialize(app):
     try:
@@ -92,6 +94,7 @@ def setup(app, get_doc_object_=get_doc_object):
     app.connect('autodoc-process-docstring', mangle_docstrings)
     app.connect('builder-inited', initialize)
     app.add_config_value('numpydoc_edit_link', None, True)
+    app.add_config_value('numpydoc_use_plots', None, False)
 
 #------------------------------------------------------------------------------
 # Monkeypatch sphinx.ext.autodoc to accept argspecless autodocs (Sphinx < 0.5)
