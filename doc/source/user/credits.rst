@@ -24,3 +24,6 @@ John Salvatier
   added support for the Quantity iterator, contributed to support for 
   simplified representations of units, comparison operators, and 
   contributed unit tests.
+
+Tony Yu
+  contributed several bug fixes and contributed to the documentation.

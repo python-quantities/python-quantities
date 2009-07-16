@@ -9,5 +9,6 @@ User's Guide
 
    installation.rst
    tutorial.rst
+   issues.rst
    license.rst
    credits.rst
