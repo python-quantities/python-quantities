@@ -1,0 +1,6 @@
+@import "sphinxdoc.css";
+
+div.attention p.admonition-title {
+    color: black;
+    background-color: #FFF305;
+}

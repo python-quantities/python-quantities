@@ -221,12 +221,19 @@ Windows. It can be disabled at install time by running::
 When unicode is enabled, strings used to designate units should still
 conform to valid python expressions.
 
-One final note: Quantities is not a package for describing coordinate
-systems that require a point of reference, like positions on a map or
-absolute temperature scales. Proper support of coordinate systems
-would be a fairly large undertaking and is outside the scope of this
-project.
-
+.. attention::
+   Quantities is not a package for describing coordinate systems that require a
+   point of reference, like positions on a map. In particular, Quantities does
+   not support absolute temperature scales. Instead, temperatures are assumed to
+   be temperature *differences*. For example:
+   
+   >>> T = 20 * pq.degC
+   >>> print T.rescale('K')
+   20.0 K
+   
+   Proper support of coordinate systems would be a fairly large undertaking and
+   is outside the scope of this project.
+   
 """
 
 #from __future__ import absolute_import

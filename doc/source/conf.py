@@ -91,6 +91,7 @@ pygments_style = 'sphinx'
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
 html_theme = 'sphinxdoc'
+html_style = 'quantities.css'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
