@@ -148,7 +148,7 @@ class UncertainQuantity(Quantity):
     def __rtruediv__(self, other):
         temp = UncertainQuantity(
             1/self.magnitude, self.dimensionality**-1,
-            1/self.uncertainty.magnitude, copy=False
+            self.relative_uncertainty/self.magnitude, copy=False
         )
         return other * temp
 

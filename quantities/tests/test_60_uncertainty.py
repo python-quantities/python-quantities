@@ -81,3 +81,7 @@ def test_uncertainquantity_divide():
         str(a/2),
         '[ 0.5  1. ] m\n±[ 0.05  0.1 ] m (1σ)'
     )
+    assert_equal(
+        str(1/a),
+        '[ 1.   0.5] 1/m\n±[ 0.1   0.05] 1/m (1σ)'
+    )
