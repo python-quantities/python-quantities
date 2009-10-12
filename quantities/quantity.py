@@ -204,7 +204,7 @@ class Quantity(np.ndarray):
     def __array_finalize__(self, obj):
         self._dimensionality = getattr(obj, 'dimensionality', Dimensionality())
 
-    def __array_wrap__(self, obj, context=None):
+    def __array_prepare__(self, obj, context=None):
         if self.__array_priority__ >= Quantity.__array_priority__:
             result = obj.view(type(self))
         else:
@@ -224,6 +224,13 @@ class Quantity(np.ndarray):
             print 'please file a bug report by visiting'
             print 'https://bugs.launchpad.net/python-quantities'
         return result
+
+    def __array_wrap__(self, obj, context=None):
+        if not isinstance(obj, Quantity):
+            print obj, type(obj)
+            # backwards compatibility with numpy-1.3
+            obj = self.__array_prepare__(obj, context)
+        return obj
 
     @with_doc(np.ndarray.__add__)
     @scale_other_units
