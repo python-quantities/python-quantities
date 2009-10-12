@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Project SYSTEM "Project-4.6.dtd">
 <!-- eric4 project file for project quantities -->
-<!-- Saved: 2009-02-22, 16:12:18 -->
+<!-- Saved: 2009-10-12, 14:36:49 -->
 <!-- Copyright (C) 2009 ,  -->
 <Project version="4.6">
   <Language>en</Language>
@@ -80,6 +80,8 @@
     <Source>quantities/tests/test_50_umath.py</Source>
     <Source>quantities/tests/test_20_quantity_comparison.py</Source>
     <Source>quantities/tests/test_25_quantity_arithmetic.py</Source>
+    <Source>quantities/tests/__init__.py</Source>
+    <Source>quantities/tests/test_50_persistence.py</Source>
   </Sources>
   <Forms>
   </Forms>

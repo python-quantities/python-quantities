@@ -7,7 +7,7 @@ from functools import wraps
 
 import numpy as np
 
-from .config import USE_UNICODE
+from . import markup
 from .dimensionality import Dimensionality, p_dict
 from .registry import unit_registry
 from .utilities import with_doc
@@ -268,7 +268,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.__str__)
     def __str__(self):
-        if USE_UNICODE:
+        if markup.config.use_unicode:
             dims = self.dimensionality.unicode
         else:
             dims = self.dimensionality.string

@@ -3,10 +3,31 @@
 """
 from __future__ import absolute_import
 
+import copy
 import operator
 import re
+import threading
+import user
 
-from .config import USE_UNICODE
+
+class _Config(object):
+
+    @property
+    def lock(self):
+        return self._lock
+
+    def _get_use_unicode(self):
+        with self.lock:
+            return copy.copy(self._use_unciode)
+    def _set_use_unicode(self, val):
+        self._use_unciode = bool(val)
+    use_unicode = property(_get_use_unicode, _set_use_unicode)
+
+    def __init__(self):
+        self._lock = threading.RLock()
+        self._use_unciode = getattr(user, 'quantities_unicode', False)
+
+config = _Config()
 
 superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
 
@@ -37,7 +58,7 @@ def format_units(udict):
     ]
     for key in keys:
         d = udict[key]
-        if USE_UNICODE:
+        if config.use_unicode:
             u = key.u_symbol
         else:
             u = key.symbol

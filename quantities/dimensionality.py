@@ -7,8 +7,7 @@ import operator
 
 import numpy as np
 
-from .config import USE_UNICODE
-from .markup import format_units, format_units_unicode
+from . import markup
 from .registry import unit_registry
 from .utilities import memoize
 
@@ -43,11 +42,11 @@ class Dimensionality(dict):
 
     @property
     def string(self):
-        return format_units(self)
+        return markup.format_units(self)
 
     @property
     def unicode(self):
-        return format_units_unicode(self)
+        return markup.format_units_unicode(self)
 
     def __hash__(self):
         res = hash(unit_registry['dimensionless'])
@@ -190,7 +189,7 @@ class Dimensionality(dict):
             % ', '.join(['%s: %s'% (u.name, e) for u, e in self.iteritems()])
 
     def __str__(self):
-        if USE_UNICODE:
+        if markup.config.use_unicode:
             return self.unicode
         else:
             return self.string

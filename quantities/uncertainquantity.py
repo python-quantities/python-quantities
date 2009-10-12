@@ -5,7 +5,7 @@ from __future__ import absolute_import
 
 import numpy as np
 
-from .config import USE_UNICODE
+from . import markup
 from .quantity import Quantity
 from .registry import unit_registry
 from .utilities import with_doc
@@ -180,7 +180,7 @@ class UncertainQuantity(Quantity):
 
     @with_doc(Quantity.__str__, use_header=False)
     def __str__(self):
-        if USE_UNICODE:
+        if markup.config.use_unicode:
             dims = self.dimensionality.unicode
         else:
             dims = self.dimensionality.string
@@ -189,7 +189,7 @@ class UncertainQuantity(Quantity):
             dims,
             str(self.uncertainty)
         )
-        if USE_UNICODE:
+        if markup.config.use_unicode:
             return s.replace('+/-', '±').replace(' sigma', 'σ')
         return s
 

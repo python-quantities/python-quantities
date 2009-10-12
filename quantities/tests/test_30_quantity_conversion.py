@@ -11,10 +11,31 @@ import quantities as pq
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
 
-
 def test_quantity_creation():
     assert_raises(LookupError, pq.Quantity, 1, 'nonsense')
     assert_equal(str(pq.Quantity(1, '')), '1 dimensionless')
+
+def test_compound_reduction():
+
+    pc_per_cc = pq.CompoundUnit("pc/cm**3")
+    temp = pc_per_cc * pq.CompoundUnit('m/m**3')
+    assert_equal(str(temp), "1.0 (pc/cm**3)*(m/m**3)")
+
+    temp = temp.simplified
+    temp = temp.rescale(pq.pc**-4)
+    assert_equal(str(temp), "2.79740021556e+88 1/pc**4")
+
+    temp = temp.rescale(pq.m**-4)
+    assert_equal(str(temp), "3.08568025e+22 1/m**4")
+    assert_equal(str(1/temp), "3.24077648681e-23 m**4")
+    assert_equal(str(temp**-1), "3.24077648681e-23 m**4")
+
+    # does this handle regular units correctly?
+    temp1 = 3.14159 * pq.m
+
+    assert_quantity_almost_equal(temp1, temp1.simplified)
+
+    assert_equal(str(temp1), str(temp1.simplified))
 
 class TestQuantities(unittest.TestCase):
 
@@ -79,11 +100,11 @@ class TestQuantities(unittest.TestCase):
         joule = pq.kg*pq.m**2/pq.s**2
         pc_per_cc = pq.CompoundUnit("pc/cm**3")
         area_per_volume = pq.CompoundUnit("m**2/m**3")
-        self.assertEqual(str(joule/pq.m), "1.0 kg·m/s²", str(joule/pq.m))
-        self.assertEqual(str(joule*pq.m), "1.0 kg·m³/s²", str(joule*pq.m))
+        self.assertEqual(str(joule/pq.m), "1.0 kg*m/s**2", str(joule/pq.m))
+        self.assertEqual(str(joule*pq.m), "1.0 kg*m**3/s**2", str(joule*pq.m))
         self.assertEqual(
             str(pq.J*pc_per_cc),
-            "1.0 J·(pc/cm³)",
+            "1.0 J*(pc/cm**3)",
             str(pq.J*pc_per_cc)
         )
         temp = pc_per_cc / area_per_volume
@@ -106,29 +127,6 @@ class TestQuantities(unittest.TestCase):
             10,
             pq.J/pq.BTU.rescale(pq.J)
         )
-
-    def test_compound_reduction(self):
-        pc_per_cc = pq.CompoundUnit("pc/cm**3")
-        temp = pc_per_cc * pq.CompoundUnit('m/m**3')
-        self.assertEqual(str(temp), "1.0 (pc/cm³)·(m/m³)", str(temp))
-        temp = temp.simplified
-        temp = temp.rescale(pq.pc**-4)
-        self.assertEqual(str(temp), "2.79740021556e+88 1/pc⁴", str(temp))
-        temp = temp.rescale(pq.m**-4)
-        self.assertEqual(str(temp), "3.08568025e+22 1/m⁴", str(temp))
-        self.assertEqual(str(1/temp), "3.24077648681e-23 m⁴", str(1/temp))
-        self.assertEqual(
-            str(temp**-1),
-            "3.24077648681e-23 m⁴",
-            str(temp**-1)
-        )
-
-        # does this handle regular units correctly?
-        temp1 = 3.14159 * pq.m
-
-        self.assertAlmostEqual(temp1, temp1.simplified)
-
-        self.assertEqual(str(temp1), str(temp1.simplified))
 
     def test_equality(self):
         test1 = 1.5 * pq.km

@@ -1,5 +1,12 @@
+
+from functools import wraps
+
 from nose.tools import assert_equal
 from numpy.testing import assert_array_equal, assert_array_almost_equal
+
+from .. import markup
+
+markup.config.use_unicode = False
 
 
 def assert_quantity_equal(x, y, err_msg='', verbose=True):

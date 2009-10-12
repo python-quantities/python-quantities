@@ -6,9 +6,9 @@ import weakref
 
 import numpy
 
-from .config import USE_UNICODE
+
 from .dimensionality import Dimensionality
-from .markup import superscript
+from . import markup
 from .quantity import Quantity, get_conversion_factor
 from .registry import unit_registry
 from .utilities import memoize, with_doc
@@ -146,7 +146,7 @@ class UnitQuantity(Quantity):
             ref = ''
         symbol = self._symbol
         symbol = ', %s'%(repr(symbol)) if symbol else ''
-        if USE_UNICODE:
+        if markup.config.use_unicode:
             u_symbol = self._u_symbol
             u_symbol = ', %s'%(repr(u_symbol)) if u_symbol else ''
         else:
@@ -158,7 +158,7 @@ class UnitQuantity(Quantity):
     @with_doc(Quantity.__str__, use_header=False)
     def __str__(self):
         if self.u_symbol != self.name:
-            if USE_UNICODE:
+            if markup.config.use_unicode:
                 s = '1 %s (%s)'%(self.u_symbol, self.name)
             else:
                 s = '1 %s (%s)'%(self.symbol, self.name)
@@ -367,8 +367,8 @@ class CompoundUnit(UnitQuantity):
 
     @property
     def name(self):
-        if USE_UNICODE:
-            return '(%s)'%(superscript(self._name))
+        if markup.config.use_unicode:
+            return '(%s)'%(markup.superscript(self._name))
         else:
             return '(%s)'%self._name
 

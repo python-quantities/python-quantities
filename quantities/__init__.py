@@ -213,27 +213,32 @@ Physical constants are sort of similar to compound units, for example:
 
 Although it is not illustrated in this guide, unicode symbols can be
 used to provide a more compact representation of the units. This
-feature is enabled by default on Linux and Mac, and disabled on
-Windows. It can be disabled at install time by running::
+feature is disabled by default. It can be enabled by setting the
+following in your ~/.pythonrc.py::
 
-  $ python setup.py install --no-unicode
+  quantities_unicode = True
 
-When unicode is enabled, strings used to designate units should still
-conform to valid python expressions.
+or you can change this setting on the fly by doing::
+
+  from quantities import markup
+  markup.config.use_unicode = True # or False
+
+Even when unicode is enabled, when you pass strings to designate
+units, they should still conform to valid python expressions.
 
 .. attention::
    Quantities is not a package for describing coordinate systems that require a
    point of reference, like positions on a map. In particular, Quantities does
    not support absolute temperature scales. Instead, temperatures are assumed to
    be temperature *differences*. For example:
-   
+
    >>> T = 20 * pq.degC
    >>> print T.rescale('K')
    20.0 K
-   
+
    Proper support of coordinate systems would be a fairly large undertaking and
    is outside the scope of this project.
-   
+
 """
 
 #from __future__ import absolute_import
