@@ -516,3 +516,41 @@ class Quantity(np.ndarray):
             return super(Quantity, self).cumprod(axis, dtype, out)
 
     # list of unsupported functions: [choose]
+
+    def __getstate__(self):
+        """
+        Return the internal state of the quantity, for pickling
+        purposes.
+
+        """
+        cf = 'CF'[self.flags.fnc]
+        state = (1,
+                 self.shape,
+                 self.dtype,
+                 self.flags.fnc,
+                 self.tostring(cf),
+                 self._dimensionality.string,
+                 )
+        return state
+
+    def __setstate__(self, state):
+        (ver, shp, typ, isf, raw, units) = state
+        np.ndarray.__setstate__(self, (shp, typ, isf, raw))
+        self._dimensionality = validate_dimensionality(units)
+
+    def __reduce__(self):
+        """Return a 3-tuple for pickling a MaskedArray.
+
+        """
+        return (_reconstruct_quantity,
+                (self.__class__, np.ndarray, (0, ), 'b', ),
+                self.__getstate__())
+
+
+def _reconstruct_quantity(subtype, baseclass, baseshape, basetype,):
+    """Internal function that builds a new MaskedArray from the
+    information stored in a pickle.
+
+    """
+    _data = np.ndarray.__new__(baseclass, baseshape, basetype)
+    return subtype.__new__(subtype, _data, dtype=basetype,)
