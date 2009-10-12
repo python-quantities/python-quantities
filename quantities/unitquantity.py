@@ -64,6 +64,8 @@ class UnitQuantity(Quantity):
             ret._definition = None
             ret._conv_ref = None
 
+        ret._aliases = aliases
+
         ret._format_order = (ret._primary_order, ret._secondary_order)
         ret.__class__._secondary_order += 1
 
@@ -81,6 +83,9 @@ class UnitQuantity(Quantity):
 
     def __array_finalize__(self, obj):
         pass
+
+    def __hash__(self):
+        return hash((type(self), self._name))
 
     @property
     def _reference(self):
@@ -234,6 +239,36 @@ class UnitQuantity(Quantity):
     def __ipow__(self, other):
         raise TypeError('can not modify protected units')
 
+    def __getstate__(self):
+        """
+        Return the internal state of the quantity, for pickling
+        purposes.
+
+        """
+        state = (1, self._format_order)
+        return state
+
+    def __setstate__(self, state):
+        ver, fo = state
+        self._format_order = fo
+
+    def __reduce__(self):
+        """
+        Return a tuple for pickling a UnitQuantity.
+        """
+        return (
+            type(self),
+            (
+                self._name,
+                self._definition,
+                self._symbol,
+                self._u_symbol,
+                self._aliases,
+                self.__doc__
+            ),
+            self.__getstate__()
+        )
+
 unit_registry['UnitQuantity'] = UnitQuantity
 
 
@@ -337,6 +372,18 @@ class CompoundUnit(UnitQuantity):
         else:
             return '(%s)'%self._name
 
+    def __reduce__(self):
+        """
+        Return a tuple for pickling a UnitQuantity.
+        """
+        return (
+            type(self),
+            (
+                self._name,
+            ),
+            self.__getstate__()
+        )
+
 unit_registry['CompoundUnit'] = CompoundUnit
 
 
@@ -355,6 +402,18 @@ class Dimensionless(UnitQuantity):
         self.__class__._secondary_order += 1
 
         unit_registry[name] = self
+
+    def __reduce__(self):
+        """
+        Return a tuple for pickling a UnitQuantity.
+        """
+        return (
+            type(self),
+            (
+                self._name,
+            ),
+            self.__getstate__()
+        )
 
     @property
     def _dimensionality(self):

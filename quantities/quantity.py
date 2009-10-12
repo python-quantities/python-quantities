@@ -529,18 +529,18 @@ class Quantity(np.ndarray):
                  self.dtype,
                  self.flags.fnc,
                  self.tostring(cf),
-                 self._dimensionality.string,
+                 self._dimensionality,
                  )
         return state
 
     def __setstate__(self, state):
         (ver, shp, typ, isf, raw, units) = state
         np.ndarray.__setstate__(self, (shp, typ, isf, raw))
-        self._dimensionality = validate_dimensionality(units)
+        self._dimensionality = units
 
     def __reduce__(self):
-        """Return a 3-tuple for pickling a MaskedArray.
-
+        """
+        Return a tuple for pickling a Quantity.
         """
         return (_reconstruct_quantity,
                 (self.__class__, np.ndarray, (0, ), 'b', ),

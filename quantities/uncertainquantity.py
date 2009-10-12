@@ -201,3 +201,19 @@ class UncertainQuantity(Quantity):
             (np.sum(self.uncertainty.magnitude**2, axis))**0.5,
             copy=False
         )
+
+    def __getstate__(self):
+        """
+        Return the internal state of the quantity, for pickling
+        purposes.
+
+        """
+        state = list(super(UncertainQuantity, self).__getstate__())
+        state.append(self._uncertainty)
+        return tuple(state)
+
+    def __setstate__(self, state):
+        (ver, shp, typ, isf, raw, units, sigma) = state
+        np.ndarray.__setstate__(self, (shp, typ, isf, raw))
+        self._dimensionality = units
+        self._uncertainty = sigma

@@ -12,12 +12,29 @@ import quantities as pq
 from . import assert_quantity_equal, assert_quantity_almost_equal
 
 
-def test_quantitiy_persistance():
-    a = 20*pq.m
-    temp = pickle.dumps(a)
-    b = pickle.loads(temp)
-    assert_array_equal(a, b)
+def test_unitquantitiy_persistance():
+    x = pq.m
+    y = pickle.loads(pickle.dumps(x))
+    assert_array_equal(x, y)
 
+    x = pq.CompoundUnit("pc/cm**3")
+    y = pickle.loads(pickle.dumps(x))
+    assert_array_equal(x, y)
+
+def test_quantitiy_persistance():
+    x = 20*pq.m
+    y = pickle.loads(pickle.dumps(x))
+    assert_array_equal(x, y)
+
+def test_uncertainquantitiy_persistance():
+    x = pq.UncertainQuantity(20, 'm', 0.2)
+    y = pickle.loads(pickle.dumps(x))
+    assert_array_equal(x, y)
+
+def test_unitconstant_persistance():
+    x = pq.constants.m_e
+    y = pickle.loads(pickle.dumps(x))
+    assert_array_equal(x, y)
 
 
 if __name__ == "__main__":
