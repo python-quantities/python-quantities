@@ -9,9 +9,8 @@ from numpy.testing.decorators import knownfailureif as fails_if
 
 import numpy as np
 import quantities as pq
-from quantities.utilities import (
-    assert_quantity_equal, assert_quantity_almost_equal
-)
+
+from . import assert_quantity_equal, assert_quantity_almost_equal
 
 
 def rand(dtype, *args):

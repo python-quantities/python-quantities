@@ -1,9 +1,4 @@
 from functools import wraps
-import operator
-
-from nose.tools import assert_equal
-import numpy as np
-from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 
 def memoize(f, cache={}):
@@ -51,18 +46,3 @@ class with_doc:
             new_method.__doc__ = original_doc
 
         return new_method
-
-
-def assert_quantity_equal(x, y, err_msg='', verbose=True):
-    assert_array_equal(x, y, err_msg, verbose)
-    try:
-        assert_equal(x._dimensionality, y._dimensionality)
-    except AttributeError:
-        raise AssertionError(
-            'Quantities are not equal:\nx: %s\ny: %s'
-            % (str(x), str(y))
-        )
-
-def assert_quantity_almost_equal(x, y, decimal=6, err_msg='', verbose=True):
-    assert_array_almost_equal(x, y, decimal, err_msg, verbose)
-    assert_equal(x._dimensionality, y._dimensionality)
