@@ -47,12 +47,13 @@ def get_conversion_factor(from_u, to_u):
     assert from_u.dimensionality == to_u.dimensionality
     return from_u.magnitude / to_u.magnitude
 
-def protected_addition(f):
+def scale_other_units(f):
     @wraps(f)
     def g(self, other, *args):
         if not isinstance(other, Quantity):
             other = Quantity(other, copy=False)
-        getattr(self._dimensionality, f.__name__)(other._dimensionality)
+        if other._dimensionality != self._dimensionality:
+            other = other.rescale(self.units)
         return f(self, other, *args)
     return g
 
@@ -224,13 +225,33 @@ class Quantity(np.ndarray):
             print 'https://bugs.launchpad.net/python-quantities'
         return result
 
+    @with_doc(np.ndarray.__add__)
+    @scale_other_units
+    def __add__(self, other):
+        return super(Quantity, self).__add__(other)
+
+    @with_doc(np.ndarray.__radd__)
+    @scale_other_units
+    def __radd__(self, other):
+        return super(Quantity, self).__radd__(other)
+
     @with_doc(np.ndarray.__iadd__)
-    @protected_addition
+    @scale_other_units
     def __iadd__(self, other):
         return super(Quantity, self).__iadd__(other)
 
+    @with_doc(np.ndarray.__sub__)
+    @scale_other_units
+    def __sub__(self, other):
+        return super(Quantity, self).__sub__(other)
+
+    @with_doc(np.ndarray.__rsub__)
+    @scale_other_units
+    def __rsub__(self, other):
+        return super(Quantity, self).__rsub__(other)
+
     @with_doc(np.ndarray.__isub__)
-    @protected_addition
+    @scale_other_units
     def __isub__(self, other):
         return super(Quantity, self).__isub__(other)
 

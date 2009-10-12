@@ -126,6 +126,9 @@ def test_mul():
                     yield check(check_rmul, x, y)
         dtypes.pop(0)
 
+def test_mixed_addition():
+    assert_quantity_almost_equal(1*pq.ft + 1*pq.m, 4.280839895 * pq.ft)
+    assert_quantity_almost_equal(pq.ft + pq.m, 4.280839895 * pq.ft)
 
 #def test_negative():
 #    assert_array_equal(

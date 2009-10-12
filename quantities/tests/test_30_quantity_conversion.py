@@ -15,6 +15,15 @@ def test_quantity_creation():
     assert_raises(LookupError, pq.Quantity, 1, 'nonsense')
     assert_equal(str(pq.Quantity(1, '')), '1 dimensionless')
 
+def test_unit_conversion():
+    x = pq.Quantity(10., 'm')
+    x.units = pq.ft
+    assert_quantity_almost_equal(x, 32.80839895 * pq.ft)
+
+    x = 10 * pq.m
+    x.units = pq.ft
+    assert_quantity_almost_equal(x, 32.80839895 * pq.ft)
+
 def test_compound_reduction():
 
     pc_per_cc = pq.CompoundUnit("pc/cm**3")

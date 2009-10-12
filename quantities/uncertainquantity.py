@@ -6,7 +6,7 @@ from __future__ import absolute_import
 import numpy as np
 
 from . import markup
-from .quantity import Quantity
+from .quantity import Quantity, scale_other_units
 from .registry import unit_registry
 from .utilities import with_doc
 
@@ -86,22 +86,26 @@ class UncertainQuantity(Quantity):
         )
 
     @with_doc(Quantity.__add__, use_header=False)
+    @scale_other_units
     def __add__(self, other):
         res = super(UncertainQuantity, self).__add__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
     @with_doc(Quantity.__radd__, use_header=False)
+    @scale_other_units
     def __radd__(self, other):
         return self.__add__(other)
 
     @with_doc(Quantity.__sub__, use_header=False)
+    @scale_other_units
     def __sub__(self, other):
         res = super(UncertainQuantity, self).__sub__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
     @with_doc(Quantity.__rsub__, use_header=False)
+    @scale_other_units
     def __rsub__(self, other):
         if not isinstance(other, UncertainQuantity):
             other = UncertainQuantity(other, copy=False)
