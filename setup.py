@@ -81,10 +81,7 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 
-for line in file('quantities/__init__.py').readlines():
-    if line[:11] == '__version__':
-        exec(line)
-        break
+execfile('quantities/version.py')
 
 package_data = {
     'quantities':['tests/*', 'constants/NIST_codata.txt']
