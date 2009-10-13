@@ -4,7 +4,7 @@
     :Release: |version|
     :Date: |today|
 
-    Download `PDF <./Quantities.pdf>`_
+   .. Download `PDF <./Quantities.pdf>`_
 
 .. _contents:
 
