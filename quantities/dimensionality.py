@@ -240,6 +240,7 @@ def _d_divide(q1, q2, out=None):
             return q2.dimensionality**-1
 p_dict[np.divide] = _d_divide
 p_dict[np.true_divide] = _d_divide
+p_dict[np.remainder] = _d_divide
 
 def _d_add_sub(q1, q2, out=None):
     try:
