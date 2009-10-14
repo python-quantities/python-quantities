@@ -227,7 +227,6 @@ class Quantity(np.ndarray):
 
     def __array_wrap__(self, obj, context=None):
         if not isinstance(obj, Quantity):
-            print obj, type(obj)
             # backwards compatibility with numpy-1.3
             obj = self.__array_prepare__(obj, context)
         return obj
