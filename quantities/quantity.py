@@ -261,6 +261,16 @@ class Quantity(np.ndarray):
     def __isub__(self, other):
         return super(Quantity, self).__isub__(other)
 
+    @with_doc(np.ndarray.__mod__)
+    @scale_other_units
+    def __mod__(self, other):
+        return super(Quantity, self).__mod__(other)
+
+    @with_doc(np.ndarray.__imod__)
+    @scale_other_units
+    def __imod__(self, other):
+        return super(Quantity, self).__imod__(other)
+
     @with_doc(np.ndarray.__imul__)
     @protected_multiplication
     def __imul__(self, other):

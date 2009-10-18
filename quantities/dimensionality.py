@@ -240,24 +240,41 @@ def _d_divide(q1, q2, out=None):
             return q2.dimensionality**-1
 p_dict[np.divide] = _d_divide
 p_dict[np.true_divide] = _d_divide
-p_dict[np.remainder] = _d_divide
 
-def _d_add_sub(q1, q2, out=None):
+def _d_check_uniform(q1, q2, out=None):
     try:
-        return q1._dimensionality + q2._dimensionality
+        assert q1._dimensionality == q2._dimensionality
+        return q1.dimensionality
+    except AssertionError:
+        raise ValueError(
+            'quantities must have identical units, got "%s" and "%s"' %
+            (q1.units, q2.units)
+        )
     except AttributeError:
-        if hasattr(q1, 'dimensionality'):
-            if np.asarray(q2).any():
-                return q1._dimensionality + Dimensionality()
-            else:
-                return q1.dimensionality
-        elif hasattr(q2, 'dimensionality'):
-            if np.asarray(q1).any():
-                return Dimensionality() + q2._dimensionality
-            else:
-                return q2.dimensionality
-p_dict[np.add] = _d_add_sub
-p_dict[np.subtract] = _d_add_sub
+        try:
+            if hasattr(q1, 'dimensionality'):
+                # q2 was not a quantity
+                if not q1._dimensionality or not np.asarray(q2).any():
+                    return q1.dimensionality
+                else:
+                    raise ValueError
+            elif hasattr(q2, 'dimensionality'):
+                # q1 was not a quantity
+                if not q2._dimensionality or not np.asarray(q1).any():
+                    return q2.dimensionality
+                else:
+                    raise ValueError
+        except ValueError:
+            raise ValueError(
+                'quantities must have identical units, got "%s" and "%s"' %
+                (q1.units, q2.units)
+            )
+
+p_dict[np.add] = _d_check_uniform
+p_dict[np.subtract] = _d_check_uniform
+p_dict[np.mod] = _d_check_uniform
+p_dict[np.fmod] = _d_check_uniform
+p_dict[np.remainder] = _d_check_uniform
 
 def _d_power(q1, q2, out=None):
     if getattr(q2, 'dimensionality', None):

@@ -50,7 +50,7 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: what is an appropriate value?</Summary>
     <Description></Description>
-    <Created>2009-10-12, 18:58:05</Created>
+    <Created>2009-10-18, 08:14:58</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
       <Linenumber>108</Linenumber>
@@ -59,10 +59,10 @@
   <Task priority="1" completed="False" bugfix="False">
     <Summary>TODO: do we want this kind of magic?</Summary>
     <Description></Description>
-    <Created>2009-10-12, 18:58:05</Created>
+    <Created>2009-10-18, 08:14:58</Created>
     <Resource>
       <Filename>quantities/quantity.py</Filename>
-      <Linenumber>318</Linenumber>
+      <Linenumber>327</Linenumber>
     </Resource>
   </Task>
 </Tasks>

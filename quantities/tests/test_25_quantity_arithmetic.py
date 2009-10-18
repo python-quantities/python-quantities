@@ -6,6 +6,7 @@ from functools import partial
 from numpy.testing import *
 from numpy.testing import *
 from numpy.testing.decorators import knownfailureif as fails_if
+from numpy.testing.decorators import skipif as skip_if
 
 import numpy as np
 import quantities as pq
@@ -129,6 +130,56 @@ def test_mul():
 def test_mixed_addition():
     assert_quantity_almost_equal(1*pq.ft + 1*pq.m, 4.280839895 * pq.ft)
     assert_quantity_almost_equal(pq.ft + pq.m, 4.280839895 * pq.ft)
+    assert_quantity_almost_equal(op.iadd(1*pq.ft, 1*pq.m), 4.280839895 * pq.ft)
+    assert_raises(ValueError, lambda: 10*pq.J + 3*pq.m)
+    assert_raises(ValueError, lambda: op.iadd(10*pq.J, 3*pq.m))
+
+def test_mod():
+    assert_quantity_almost_equal(10*pq.m % (3*pq.m), 1*pq.m)
+    assert_quantity_almost_equal(
+        10*pq.m % (3*pq.m).rescale('ft'),
+        10*pq.m % (3*pq.m)
+    )
+    assert_raises(ValueError, lambda: 10*pq.J % (3*pq.m))
+
+def test_imod():
+    x = 10*pq.m
+    x %= 3*pq.m
+    assert_quantity_almost_equal(x, 1*pq.m)
+
+    x = 10*pq.m
+    x %= (3*pq.m).rescale('ft')
+    assert_quantity_almost_equal(x, 10*pq.m % (3*pq.m))
+
+    assert_raises(ValueError, lambda: op.imod(10*pq.J, 3*pq.m))
+
+def test_fmod():
+    assert_quantity_almost_equal(np.fmod(10*pq.m, (3*pq.m)), 1*pq.m)
+    assert_raises(ValueError, np.fmod, 10*pq.J, 3*pq.m)
+@skip_if(
+    True,
+    'known failure, needs __input_prepare__ in numpy'
+)
+def test_fmod_future():
+    # requires __input_prepare__ in numpy:
+    assert_quantity_almost_equal(
+        np.fmod(10*pq.m, (3*pq.m).rescale('ft')),
+        10*pq.m % (3*pq.m)
+    )
+
+def test_remainder():
+    assert_quantity_almost_equal(np.remainder(10*pq.m, (3*pq.m)), 1*pq.m)
+    assert_raises(ValueError, np.remainder, 10*pq.J, 3*pq.m)
+@skip_if(
+    True,
+    'known failure, needs __input_prepare__ in numpy'
+)
+def test_remainder_future():
+    # requires __input_prepare__ in numpy:
+    assert_quantity_almost_equal(
+        np.remainder(10*pq.m, (3*pq.m).rescale('ft')),
+        10*pq.m % (3*pq.m)
+    )
 
 #def test_negative():
 #    assert_array_equal(
