@@ -13,21 +13,6 @@
 #
 #-
 
-"""
-    setup script for the quantities package
-
-    options:
-
-    * Unicode
-
-      Units are presented using unicode by default, but this can be problematic
-      on some platforms like windows. Unicode can be disabled, and units
-      presented as simple ASCII text by passing the "--no-unicode" flag to the
-      setup script::
-
-        python setup.py build --no-unicode
-"""
-
 from __future__ import with_statement
 
 import os
@@ -59,12 +44,18 @@ with file('quantities/constants/_codata.py', 'w') as f:
 
 desc = 'Support for physical quantities based on the popular numpy library'
 
-long_desc = "Quantities is designed to handle arithmetic and conversions of \
-physical quantities, which have a magnitude, dimensionality specified by \
-various units, and possibly an uncertainty. Quantities is based on the popular \
-numpy library. It is actively developed, and while the current \
-features and API are stable, test coverage is incomplete and the \
-package is not ready for production use."
+long_desc = """
+Quantities is designed to handle arithmetic and conversions of
+physical quantities, which have a magnitude, dimensionality specified
+by various units, and possibly an uncertainty. Quantities builds on
+the popular numpy library and to support quantities. Quantities is
+designed to work with numpy's standard ufuncs, many of which are
+already supported.
+
+Quantities is actively developed, and while the current features and
+API are stable, test coverage is incomplete and the package is not
+ready for production use.
+"""
 
 classifiers = [
     'Development Status :: 4 - Beta',
