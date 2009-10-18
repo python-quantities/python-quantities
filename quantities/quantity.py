@@ -50,8 +50,9 @@ def get_conversion_factor(from_u, to_u):
 def scale_other_units(f):
     @wraps(f)
     def g(self, other, *args):
+        other = np.asanyarray(other)
         if not isinstance(other, Quantity):
-            other = Quantity(other, copy=False)
+            other = other.view(type=Quantity)
         if other._dimensionality != self._dimensionality:
             other = other.rescale(self.units)
         return f(self, other, *args)

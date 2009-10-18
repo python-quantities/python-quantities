@@ -173,7 +173,10 @@ class UnitQuantity(Quantity):
 
     @with_doc(Quantity.__radd__, use_header=False)
     def __radd__(self, other):
-        return self.view(Quantity).__radd__(other)
+        try:
+            return self.rescale(other.units).__radd__(other)
+        except AttributeError:
+            return self.view(Quantity).__radd__(other)
 
     @with_doc(Quantity.__sub__, use_header=False)
     def __sub__(self, other):
@@ -181,7 +184,21 @@ class UnitQuantity(Quantity):
 
     @with_doc(Quantity.__rsub__, use_header=False)
     def __rsub__(self, other):
-        return self.view(Quantity).__rsub__(other)
+        try:
+            return self.rescale(other.units).__rsub__(other)
+        except AttributeError:
+            return self.view(Quantity).__rsub__(other)
+
+    @with_doc(Quantity.__mod__, use_header=False)
+    def __mod__(self, other):
+        return self.view(Quantity).__mod__(other)
+
+    @with_doc(Quantity.__rsub__, use_header=False)
+    def __rmod__(self, other):
+        try:
+            return self.rescale(other.units).__rmod__(other)
+        except AttributeError:
+            return self.view(Quantity).__rmod__(other)
 
     @with_doc(Quantity.__mul__, use_header=False)
     def __mul__(self, other):
