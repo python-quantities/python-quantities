@@ -14,4 +14,4 @@ Conversion
 .. autosummary::
    :toctree: generated/
 
-.. Quantity.astype
+   Quantity.astype

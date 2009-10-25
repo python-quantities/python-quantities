@@ -45,16 +45,15 @@ with file('quantities/constants/_codata.py', 'w') as f:
 desc = 'Support for physical quantities based on the popular numpy library'
 
 long_desc = """
-Quantities is designed to handle arithmetic and conversions of
-physical quantities, which have a magnitude, dimensionality specified
-by various units, and possibly an uncertainty. Quantities builds on
-the popular numpy library and to support quantities. Quantities is
-designed to work with numpy's standard ufuncs, many of which are
+Quantities is designed to handle arithmetic and conversions of physical
+quantities, which have a magnitude, dimensionality specified by various units,
+and possibly an uncertainty. Quantities builds on the popular numpy library
+and is designed to work with numpy's standard ufuncs, many of which are
 already supported.
 
-Quantities is actively developed, and while the current features and
-API are stable, test coverage is incomplete and the package is not
-ready for production use.
+Quantities is actively developed, and while the current features and API are
+stable, test coverage is incomplete and the package is not ready for
+production use.
 """
 
 classifiers = [
