@@ -18,7 +18,10 @@ from __future__ import with_statement
 import os
 import sys
 
-if 'develop' in sys.argv or 'nosetests' in sys.argv:
+if (
+    'develop' in sys.argv or 'nosetests' in sys.argv
+    or 'build_sphinx' in sys.argv
+):
     from setuptools import setup
 else:
     from distutils.core import setup

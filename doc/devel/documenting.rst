@@ -8,15 +8,16 @@ Getting started
 ===============
 
 The documentation for Quantities is generated from ReStructured Text
-using the Sphinx_ documentation generation tool. Sphinx-0.5 or later
-is required. You can obtain the development version of Sphinx from the hg
-repository by doing::
+using the Sphinx_ documentation generation tool and the numpydoc_
+Sphinx extension. Sphinx-0.6.3 or later is required. You can obtain
+Sphinx and numpydoc from the `Python Package Index`_ or
+by doing::
 
-  hg clone http://bitbucket.org/birkenfeld/sphinx sphinx
-  cd sphinx
-  python setup.py install
+  easy_install sphinx
 
 .. _Sphinx: http://sphinx.pocoo.org/
+.. _numpydoc: http://pypi.python.org/pypi/numpydoc
+.. _`Python Package Index`: http://pypi.python.org/pypi
 
 The documentation sources are found in the :file:`doc/` directory in the trunk.
 The output produced by Sphinx can be configured by editing the :file:`conf.py`
@@ -35,8 +36,8 @@ and the html will be produced in `build/sphinx/html`. To build the pdf file::
 Organization of Quantities' documentation
 ==========================================
 
-The actual ReStructured Text files are kept in :file:`doc/source`. The main
-entry point is :file:`doc/source/contents.rst`, which pulls in the
+The actual ReStructured Text files are kept in :file:`doc`. The main
+entry point is :file:`doc/index.rst`, which pulls in the
 :file:`index.rst` file for the user guide, developers guide, api reference,
 and the glossary. The documentation suite is built as a single document in
 order to make the most effective use of cross referencing, we want to make
@@ -47,7 +48,7 @@ file name (the .rst extension is not necessary) in the table of contents.
 It is also possible to include other documents through the use of an include
 statement, such as::
 
-  .. include:: ../../TODO
+  .. include:: ../TODO
 
 .. _formatting-quantities-docs:
 
