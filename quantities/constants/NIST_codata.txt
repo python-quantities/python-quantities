@@ -27,8 +27,8 @@ atomic mass unit-inverse meter relationship            7.513 006 671 e14     0.0
 atomic mass unit-joule relationship                    1.492 417 830 e-10    0.000 000 074 e-10    J
 atomic mass unit-kelvin relationship                   1.080 9527 e13        0.000 0019 e13        K
 atomic mass unit-kilogram relationship                 1.660 538 782 e-27    0.000 000 083 e-27    kg
-atomic unit of 1st hyperpolarizablity                  3.206 361 533 e-53    0.000 000 081 e-53    C^3 m^3 J^-2
-atomic unit of 2nd hyperpolarizablity                  6.235 380 95 e-65     0.000 000 31 e-65     C^4 m^4 J^-3
+atomic unit of 1st hyperpolarizability                  3.206 361 533 e-53    0.000 000 081 e-53    C^3 m^3 J^-2
+atomic unit of 2nd hyperpolarizability                  6.235 380 95 e-65     0.000 000 31 e-65     C^4 m^4 J^-3
 atomic unit of action                                  1.054 571 628 e-34    0.000 000 053 e-34    J s
 atomic unit of charge                                  1.602 176 487 e-19    0.000 000 040 e-19    C
 atomic unit of charge density                          1.081 202 300 e12     0.000 000 027 e12     C m^-3
@@ -36,7 +36,7 @@ atomic unit of current                                 6.623 617 63 e-3      0.0
 atomic unit of electric dipole mom.                    8.478 352 81 e-30     0.000 000 21 e-30     C m
 atomic unit of electric field                          5.142 206 32 e11      0.000 000 13 e11      V m^-1
 atomic unit of electric field gradient                 9.717 361 66 e21      0.000 000 24 e21      V m^-2
-atomic unit of electric polarizablity                  1.648 777 2536 e-41   0.000 000 0034 e-41   C^2 m^2 J^-1
+atomic unit of electric polarizability                  1.648 777 2536 e-41   0.000 000 0034 e-41   C^2 m^2 J^-1
 atomic unit of electric potential                      27.211 383 86         0.000 000 68          V
 atomic unit of electric quadrupole mom.                4.486 551 07 e-40     0.000 000 11 e-40     C m^2
 atomic unit of energy                                  4.359 743 94 e-18     0.000 000 22 e-18     J

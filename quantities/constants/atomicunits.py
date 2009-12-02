@@ -13,15 +13,15 @@ amu = atomic_mass_constant = UnitConstant(
     symbol='m_u',
     u_symbol='mᵤ'
 )
-atomic_unit_of_1st_hyperpolarizablity = UnitConstant(
-    'atomic_unit_of_1st_hyperpolarizablity',
-    _cd('atomic unit of 1st hyperpolarizablity'),
+atomic_unit_of_1st_hyperpolarizability = UnitConstant(
+    'atomic_unit_of_1st_hyperpolarizability',
+    _cd('atomic unit of 1st hyperpolarizability'),
     symbol='(e**3*a_0**3/E_h**2)',
     u_symbol='(e³·a₀³/E_h²)'
 )
-atomic_unit_of_2nd_hyperpolarizablity = UnitConstant(
-    'atomic_unit_of_2nd_hyperpolarizablity',
-    _cd('atomic unit of 2nd hyperpolarizablity'),
+atomic_unit_of_2nd_hyperpolarizability = UnitConstant(
+    'atomic_unit_of_2nd_hyperpolarizability',
+    _cd('atomic unit of 2nd hyperpolarizability'),
     symbol='(e**4*a_0**4/E_h**3)',
     u_symbol='(e⁴·a₀⁴/E_h³)'
 )
@@ -66,9 +66,9 @@ atomic_unit_of_electric_field_gradient = UnitConstant(
     symbol='(E_h/(e*a_0**2))',
     u_symbol='(E_h/(e·a₀²))'
 )
-atomic_unit_of_electric_polarizablity = UnitConstant(
-    'atomic_unit_of_electric_polarizablity',
-    _cd('atomic unit of electric polarizablity'),
+atomic_unit_of_electric_polarizability = UnitConstant(
+    'atomic_unit_of_electric_polarizability',
+    _cd('atomic unit of electric polarizability'),
     symbol='(e**2*a_0**2/E_h)',
     u_symbol='(e²·a₀²/E_h)'
 )
