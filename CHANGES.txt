@@ -1,0 +1,33 @@
+=======
+CHANGES
+=======
+
+-----
+0.7.0
+-----
+
+A critical problem was identified, caused by a conflict between farad
+and Faraday identified in quantities <0.7. F is commonly used as a
+symbol for both the farad and Faraday's constant. This is problematic
+for quanitities, which registers its units so they can be accessed
+using a string corresponding to the unit name or symbol. In this
+case, the Faraday constant was registered after the farad, so any
+quantity that was expressed in terms of farads would be incorrectly
+simplified using the Faraday constant. This problem has been fixed
+and the registry has been improved to prevent overwriting previously
+registered names or symbols. F is now reserved for the farad.
+
+Addition and subtraction of quantities with different but compatible
+units is now supported. Additionally, changes have been made in the
+forthcoming numpy-1.4.0 to extend this compatibility to other ufuncs
+as well.
+
+Numpydoc, an external package developed to extend Sphinx for the
+numpy documentation project, is now required to build quantities'
+documentation. 
+
+Bugs fixed
+**********
+
+* #495181 epsilon_0 simplifies incorrectly
+* #490323 bad spelling for polarizabilities
