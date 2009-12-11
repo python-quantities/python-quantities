@@ -63,7 +63,7 @@ Gbar = gigabar = UnitQuantity(
     'gigabar',
     1000*Mbar,
     symbol='Gbar',
-    aliases=['Gbar']
+    aliases=['gigabars']
 )
 atm = atmosphere = standard_atmosphere = UnitQuantity(
     'standard_atmosphere',
@@ -96,7 +96,7 @@ barye = barie = barad = barad = barrie = baryd = UnitQuantity(
     0.1*N/m**2,
     symbol='Ba',
     aliases=[
-        'barie', 'baries', 'baryes', 'barad', 'barad', 'barrie', 'baryd',
+        'barie', 'baries', 'baryes', 'barad', 'barads', 'barrie', 'baryd',
         'baryed'
     ]
 )
@@ -105,7 +105,7 @@ mmHg = mm_Hg = millimeter_Hg = millimeter_Hg_0C = UnitQuantity(
     'millimeter_Hg',
     mm*mercury,
     symbol='mmHg',
-    aliases=['mmHg', 'millimeter_Hg'],
+    aliases=['mm_Hg', 'millimeter_Hg_0C'],
     doc="""
     The pressure exerted at the base of a column of fluid exactly 1 mm high,
     when the density of the fluid is exactly 13.5951 g/cm^3, at a place where

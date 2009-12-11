@@ -109,11 +109,19 @@ scruple = UnitMass(
     u_symbol='℈',
     aliases=['scruples']
 )
+dr = dram = UnitMass(
+    'dram',
+    oz/16,
+    symbol='dr',
+    aliases=['drams'],
+    doc='avoirdupois dram'
+)
 drachm = apdram = UnitMass(
     'drachm',
     60*gr,
-    u_symbol='ʒ',
-    aliases=['dram', 'drams', 'drachms', 'apdrams']
+    u_symbol='  ',
+    aliases=['drachms', 'apdram', 'apdrams'],
+    doc='also known as the apothecary dram'
 )
 
 bag = UnitMass(

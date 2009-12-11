@@ -34,7 +34,7 @@ um = micrometer = micrometre = micron = UnitLength(
     symbol='um',
     u_symbol='µm',
     aliases=[
-        'um', 'micron', 'microns', 'micrometers', 'micrometre', 'micrometres'
+        'micron', 'microns', 'micrometers', 'micrometre', 'micrometres'
     ]
 )
 nm = nanometer = nanometre = UnitLength(
@@ -52,7 +52,6 @@ pm = picometer = picometre = UnitLength(
 angstrom = UnitLength(
     'angstrom',
     nm/10,
-    symbol='A',
     u_symbol='Å',
     aliases=['angstroms']
 )
@@ -130,8 +129,9 @@ nmi = nautical_mile = UnitLength(
 pt = printers_point = point = UnitLength(
     'printers_point',
     127*mm/360,
-    symbol='pt',
-    aliases=['printers_points', 'point', 'points']
+    symbol='point',
+    aliases=['printers_points', 'points'],
+    doc='pt is reserved for pint'
 )
 pica = UnitLength(
     'pica',

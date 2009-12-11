@@ -378,6 +378,10 @@ class CompoundUnit(UnitQuantity):
     def __new__(cls, name):
         return UnitQuantity.__new__(cls, name, unit_registry[name])
 
+    def __init__(self, name):
+        # do not register
+        return
+
     @with_doc(UnitQuantity.__add__, use_header=False)
     def __repr__(self):
         return '1 %s'%self.name

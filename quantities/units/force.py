@@ -37,7 +37,7 @@ ozf = force_ounce = ounce_force = UnitQuantity(
     'ounce_force',
     ounce*g_0,
     symbol='ozf',
-    aliases=['ozf']
+    aliases=['force_ounce']
 )
 lbf = force_pound = pound_force = UnitQuantity(
     'pound_force',

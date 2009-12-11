@@ -31,7 +31,7 @@ kW = kilowatt = UnitQuantity(
 MW = megawatt = UnitQuantity(
     'megawatt',
     1000*kW,
-    symbol='mW',
+    symbol='MW',
     aliases=['megawatts']
 )
 hp = horsepower = UK_horsepower = British_horsepower = UnitQuantity(

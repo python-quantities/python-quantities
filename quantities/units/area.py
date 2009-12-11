@@ -8,7 +8,6 @@ from .length import m, rod
 are = ares = UnitQuantity(
     'are',
     100*m**2,
-    symbol='a',
     aliases=['ares']
 )
 b = barn = UnitQuantity(
@@ -38,7 +37,7 @@ ha = hectare = UnitQuantity(
     'hectare',
     10000*m**2,
     symbol='ha',
-    aliases=['hectare']
+    aliases=['hectares']
 )
 acre = international_acre = UnitQuantity(
     'acre',

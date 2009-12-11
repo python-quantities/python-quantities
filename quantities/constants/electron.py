@@ -17,7 +17,7 @@ elementary_charge_over_h = UnitConstant(
     _cd('elementary charge over h'),
     symbol='e/h'
 )
-F = Faraday_constant = UnitConstant(
+Faraday_constant = UnitConstant(
     'Faraday_constant',
     _cd('Faraday constant'),
     symbol='F'

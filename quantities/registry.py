@@ -27,6 +27,15 @@ class UnitRegistry:
 
         def __setitem__(self, string, val):
             assert isinstance(string, str)
+            try:
+                assert string not in self.__context
+            except AssertionError:
+                if val == self.__context[string]:
+                    return
+                raise KeyError(
+                    '%s has already been registered for %s' 
+                    % (string, self.__context[string])
+                )
             self.__context[string] = val
 
     __regex = re.compile(r'([A-Za-z])\.([A-Za-z])')

@@ -24,7 +24,7 @@ urad = microradian = UnitQuantity(
     mrad/1000,
     symbol='urad',
     u_symbol='µrad',
-    aliases=['milliradians']
+    aliases=['microradians']
 )
 
 turn = revolution = cycle = turns = circle = circles = UnitQuantity(
@@ -48,7 +48,7 @@ arcminute = arcmin = arc_minute = angular_minute = UnitQuantity(
     symbol='arcmin',
     u_symbol='′',
     aliases=[
-        'arcmin', 'arcmins', 'arcminutes', 'arc_minute', 'arc_minutes',
+        'arcmins', 'arcminutes', 'arc_minute', 'arc_minutes',
         'angular_minute', 'angular_minutes'
     ]
 )
@@ -58,7 +58,7 @@ arcsecond = arcsec = arc_second = angular_second = UnitQuantity(
     symbol='arcsec',
     u_symbol='″',
     aliases=[
-        'arcsec', 'arcsecs', 'arcseconds', 'arc_second', 'arc_second',
+        'arcsecs', 'arcseconds', 'arc_second', 'arc_seconds',
         'angular_second', 'angular_seconds'
     ]
 )

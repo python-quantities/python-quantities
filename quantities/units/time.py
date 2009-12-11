@@ -22,7 +22,7 @@ us = microsecond = UnitTime(
     ms/1000,
     symbol='us',
     u_symbol='µs',
-    aliases=['us', 'microseconds']
+    aliases=['microseconds']
 )
 ns = nanosecond = UnitTime(
     'nanosecond',

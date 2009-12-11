@@ -34,7 +34,7 @@ gross_register_ton = register_ton = UnitQuantity(
     'gross_register_ton',
     100*foot**3,
     symbol='GRT',
-    aliases=['gross_register_ton', 'register_ton', 'register_tons']
+    aliases=['gross_register_tons', 'register_ton', 'register_tons']
 )
 
 acre_foot = UnitQuantity(
@@ -80,7 +80,9 @@ pt = pint = liquid_pint = US_liquid_pint = UnitQuantity(
     'US_liquid_pint',
     US_liquid_quart/2,
     symbol='pt',
-    aliases=['pint', 'pints', 'liquid_pint', 'liquid_pints', 'US_liquid_pints']
+    aliases=[
+        'pint', 'pints', 'liquid_pint', 'liquid_pints', 'US_liquid_pints'
+    ],
 )
 cup = US_liquid_cup = UnitQuantity(
     'cup',
@@ -106,12 +108,12 @@ Imperial_bushel = UnitQuantity(
     36.36872*liter,
     doc='exact'
 )
-UK_liquid_gallon = Canadian_liquid_gallon = UK_liquid_gallon = UnitQuantity(
+UK_liquid_gallon = Canadian_liquid_gallon = UnitQuantity(
     'UK_liquid_gallon',
     4.54609*liter,
     aliases=[
         'UK_liquid_gallons', 'Canadian_liquid_gallon',
-        'Canadian_liquid_gallons', 'UK_liquid_gallon'
+        'Canadian_liquid_gallons'
     ],
     doc='exact'
 )
@@ -166,15 +168,11 @@ pk = peck = UnitQuantity(
     aliases=['pecks']
 )
 
-fldr = UnitQuantity(
-    'fldr',
-    floz/8
-)
-dr = dram = UnitQuantity(
-    'dram',
-    floz/16,
-    symbol='dr',
-    aliases=['drams']
+fldr = fluid_dram = fluidram = UnitQuantity(
+    'fluid_dram',
+    floz/8,
+    symbol='fldr',
+    aliases=['fluid_drams', 'fluidram', 'fluidrams']
 )
 
 firkin = UnitQuantity(

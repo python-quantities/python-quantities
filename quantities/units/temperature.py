@@ -16,14 +16,14 @@ degR = rankine = Rankine = UnitTemperature(
     K/1.8,
     symbol='degR',
     u_symbol='°R',
-    aliases=['degR', 'rankine']
+    aliases=['rankine']
 )
 degC = celsius = Celsius = UnitTemperature(
     'Celsius',
     K,
     symbol='degC',
     u_symbol='°C',
-    aliases=['degC', 'celsius'],
+    aliases=['celsius'],
     doc='''
     Unicode has special compatibility characters for ℃, but its use is
     discouraged by the unicode consortium.
@@ -34,7 +34,7 @@ degF = fahrenheit = Fahrenheit = UnitTemperature(
     degR,
     symbol='degF',
     u_symbol='°F',
-    aliases=['degF', 'fahrenheit'],
+    aliases=['fahrenheit'],
     doc='''
     Unicode has special compatibility characters for ℉, but its use is
     discouraged by the unicode consortium.

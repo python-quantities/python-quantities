@@ -28,7 +28,7 @@ uA = microampere = UnitCurrent(
     mA/1000,
     symbol='uA',
     u_symbol='µA',
-    aliases=['uA', 'microamp', 'microamps', 'microamperes'])
+    aliases=['microamp', 'microamps', 'microamperes'])
 nA = nanoamp = nanoampere = UnitCurrent(
     'nanoampere',
     uA/1000,
@@ -155,8 +155,8 @@ physical_faraday = UnitQuantity(
 faraday = C12_faraday = UnitQuantity(
     'faraday',
     96485.3399*C,
-    symbol='F',
-    aliases=['faradays']
+    aliases=['faradays'],
+    doc='The symbol F is reserved for the farad'
 )
 gamma = UnitQuantity(
     'gamma',
@@ -189,7 +189,7 @@ stathenry = statH = stH = UnitQuantity(
     'stathenry',
     8.987554e11*H,
     symbol='stH',
-    aliases=['statH', 'stH']
+    aliases=['statH']
 )
 statmho = statS = stS = UnitQuantity(
     'statmho',
@@ -206,7 +206,7 @@ statvolt = statV = stV = UnitQuantity(
     'statvolt',
     2.997925e2*V,
     symbol='stV',
-    aliases=['statvolts', 'statV', 'stV']
+    aliases=['statvolts', 'statV']
 )
 unit_pole = UnitQuantity(
     'unit_pole',
@@ -215,7 +215,7 @@ unit_pole = UnitQuantity(
 vacuum_permeability = mu_0 = magnetic_constant = UnitQuantity(
     'magnetic_constant',
     4*pi*10**-7*N/A**2,
-    symbol='epsilon_0',
+    symbol='mu_0',
     u_symbol='μ₀',
     aliases=['vacuum_permeability']
 )
