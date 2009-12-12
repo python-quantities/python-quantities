@@ -17,9 +17,12 @@ from __future__ import with_statement
 
 from ConfigParser import ConfigParser
 
-from distribute_setup import use_setuptools
-use_setuptools()
-from setuptools import Command, setup
+try:
+    from setuptools import Command, setup
+except ImportError:
+    from distribute_setup import use_setuptools
+    use_setuptools()
+    from setuptools import Command, setup
 
 class constants(Command):
 
@@ -79,10 +82,10 @@ setup(
     },
     description = cfg.get('metadata', 'description'),
     download_url = cfg.get('metadata', 'download_url'),
-    keywords = ['quantities', 'physical quantities', 'units'],
-    license = 'BSD',
+    keywords = cfg.get('metadata', 'keywords').split('\n'),
+    license = cfg.get('metadata', 'license'),
     long_description = cfg.get('metadata', 'long_description'),
-    name = "quantities",
+    name = cfg.get('metadata', 'name'),
     packages = [
         'quantities',
         'quantities.constants',
