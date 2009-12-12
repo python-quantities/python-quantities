@@ -1,4 +1,4 @@
-﻿"""
+"""
 
 This is a crash-course introduction to the Quantities package.
 Quantities attempts to handle operations involving values that have
