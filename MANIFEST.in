@@ -1,2 +1,2 @@
-include quantities/constants/NIST_codata.txt
-include quantities/tests/*.py
+include distribute_setup.py
+include CHANGES.txt

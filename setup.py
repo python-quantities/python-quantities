@@ -16,13 +16,10 @@
 from __future__ import with_statement
 
 from ConfigParser import ConfigParser
-import os
-import sys
 
 from distribute_setup import use_setuptools
 use_setuptools()
 from setuptools import Command, setup
-from setuptools.command.sdist import sdist as _sdist
 
 class constants(Command):
 
@@ -56,27 +53,22 @@ class constants(Command):
                 d = "{'value': %s, 'precision': %s, 'units': '%s'}"%(val, prec, unit)
                 f.write("physical_constants['%s'] = %s\n"%(name, d))
 
-class sdist(_sdist):
-
-    def run(self):
-        with open('quantities/version.py') as f:
-            for line in f:
-                if line.startswith('__version__'):
-                    exec(line)
-        cfg = ConfigParser()
-        cfg.read('setup.cfg')
-        if __version__ != cfg.get('metadata', 'version'):
-            with open('setup.cfg') as f:
-                lines = f.readlines()
-            with open('setup.cfg', 'w') as f:
-                for line in lines:
-                    if line.startswith('version'):
-                        line = 'version = %s\n' % __version__
-                f.write(line)
-        _sdist.run(self)
 
 cfg = ConfigParser()
 cfg.read('setup.cfg')
+
+with open('quantities/version.py') as f:
+    for line in f:
+        if line.startswith('__version__'):
+            exec(line)
+if __version__ != cfg.get('metadata', 'version'):
+    with open('setup.cfg') as f:
+        lines = f.readlines()
+    with open('setup.cfg', 'w') as f:
+        for line in lines:
+            if line.startswith('version'):
+                line = 'version = %s\n' % __version__
+            f.write(line)
 
 setup(
     author = cfg.get('metadata', 'author'),
@@ -84,7 +76,6 @@ setup(
     classifiers = cfg.get('metadata', 'classifiers').split('\n'),
     cmdclass = {
         'constants' : constants,
-        'sdist' : sdist,
     },
     description = cfg.get('metadata', 'description'),
     download_url = cfg.get('metadata', 'download_url'),
@@ -92,18 +83,17 @@ setup(
     license = 'BSD',
     long_description = cfg.get('metadata', 'long_description'),
     name = "quantities",
-    package_data = {
-        'quantities':['tests/*', 'constants/NIST_codata.txt']
-    },
     packages = [
         'quantities',
-        'quantities.units',
         'quantities.constants',
-        'quantities.umath'
+        'quantities.tests',
+        'quantities.umath',
+        'quantities.units',
     ],
     platforms = cfg.get('metadata', 'platforms'),
     requires = cfg.get('metadata', 'requires').split('\n'),
     test_suite = 'nose.collector',
     url = cfg.get('metadata', 'url'),
     version = cfg.get('metadata', 'version'),
+    zip_safe = cfg.getboolean('metadata', 'zip_safe'),
 )
