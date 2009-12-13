@@ -67,7 +67,8 @@ quantity, rescaled to the new units::
   >>> print q2
   4.13221487605 US_survey_acre
 
-but will fail if the requested units fails a dimensional analysis::
+but rescaling will fail if the requested units fails a dimensional
+analysis::
 
   >>> q = 10 * pq.joule
   >>> q2 = q.rescale(pq.watt)
@@ -128,8 +129,8 @@ recognize::
   >>> print q
   1.0 1/m
 
-Here's some tricks for working with these compound units, which can be
-preserved::
+Here are some tricks for working with these compound units, which
+can be preserved::
 
   >>> q = 1 * pq.CompoundUnit("m**2/m**3")
   >>> print q
