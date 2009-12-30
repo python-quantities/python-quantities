@@ -86,10 +86,12 @@ pt = pint = liquid_pint = US_liquid_pint = UnitQuantity(
 )
 cup = US_liquid_cup = UnitQuantity(
     'cup',
-    US_liquid_pint/2)
+    US_liquid_pint/2,
+    aliases=['cups', 'US_liquid_cup', 'US_liquid_cups']
+)
 gill = US_liquid_gill = UnitQuantity(
     'US_liquid_gill',
-    US_liquid_pint/2,
+    US_liquid_cup/2,
     symbol='gill',
     aliases=['gills', 'US_liquid_gills']
 )

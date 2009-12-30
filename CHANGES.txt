@@ -3,6 +3,15 @@ CHANGES
 =======
 
 -----
+0.7.1
+-----
+
+Bugs fixed
+**********
+
+* #501563 incorrect conversion ratio for gills/pints
+
+-----
 0.7.0
 -----
 
