@@ -46,6 +46,21 @@ def test_compound_reduction():
 
     assert_equal(str(temp1), str(temp1.simplified))
 
+def test_default_units():
+    pq.set_default_units(length='mm')
+    assert_equal(pq.m.simplified.magnitude, 1000)
+    assert_equal(pq.m.simplified.units, pq.mm)
+    x = 1*pq.m
+    y = x.simplified
+    assert_equal(y.magnitude, 1000)
+    assert_equal(y.units, pq.mm)
+    pq.set_default_units(length='m')
+    assert_equal(pq.m.simplified.magnitude, 1)
+    assert_equal(pq.m.simplified.units, pq.m)
+    z = y.simplified
+    assert_equal(z.magnitude, 1)
+    assert_equal(z.units, pq.m)
+
 class TestQuantities(unittest.TestCase):
 
     def numAssertEqual(self, a1, a2):

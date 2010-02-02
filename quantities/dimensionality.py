@@ -30,7 +30,6 @@ class Dimensionality(dict):
         return sum(abs(i) for i in self.simplified.itervalues())
 
     @property
-    @memoize
     def simplified(self):
         if len(self):
             rq = 1*unit_registry['dimensionless']

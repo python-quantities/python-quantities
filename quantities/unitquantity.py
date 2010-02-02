@@ -1,4 +1,4 @@
-﻿"""
+"""
 """
 from __future__ import absolute_import
 
@@ -114,7 +114,6 @@ class UnitQuantity(Quantity):
             return self._definition
 
     @property
-    @memoize
     def simplified(self):
         return self._reference.simplified
 
@@ -305,7 +304,6 @@ class IrreducibleUnit(UnitQuantity):
             cls._default_unit = self
 
     @property
-    @memoize
     def simplified(self):
         return self.view(Quantity).rescale(self.get_default_unit())
 
