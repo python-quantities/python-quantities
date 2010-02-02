@@ -7,7 +7,7 @@ def memoize(f, cache={}):
         key = (f, tuple(args), frozenset(kwargs.items()))
         if key not in cache:
             cache[key] = f(*args, **kwargs)
-        return cache[key]
+        return cache[key].copy()
     return g
 
 

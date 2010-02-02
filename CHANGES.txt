@@ -10,6 +10,7 @@ Bugs fixed
 **********
 
 * #501563 incorrect conversion ratio for gills/pints
+* #515314 don't memoize simplified, fixes set_default_units
 
 -----
 0.7.0
