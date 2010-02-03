@@ -3,6 +3,36 @@ CHANGES
 =======
 
 -----
+0.8.0
+-----
+
+In the interest of reproducing the same physical result regardless of
+the units used, several numpy ufuncs now require dimensionless
+operands:
+
+* np.ceil
+* np.floor
+* np.fix
+* np.rint
+
+This change is commensurate with the behavior of np.mod, np.fmod,
+and np.floor_division, which require the dimensionalities of the
+operands to be equal (both quantities can be expressed with the same
+units). The motivation for this behavior and the changes listed above
+is that the operations on quantities should yield the same physical
+result regardless of the units used at any point in the process. For
+example, before quantities-0.8.0::
+
+    foo = floor(3.3*pq.m)
+    # foo = 3.0*pq.m
+    bar = floor(3300.0*pq.mm)
+    # bar = 3300.0*pq.mm
+    fubar = foo != bar
+
+This example indicates that floor (and friends) should only be defined
+for pure numbers and dimensionless quantities. 
+
+-----
 0.7.1
 -----
 

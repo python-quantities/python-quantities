@@ -157,11 +157,12 @@ def test_rounding():
     )
 
     #test rint
-    a = [-4.1, -3.6, -2.5, 0.1, 2.5, 3.1, 3.9] * pq.kPa
+    a = [-4.1, -3.6, -2.5, 0.1, 2.5, 3.1, 3.9] * pq.dimensionless
     assert_array_almost_equal(
         np.rint(a),
-        [-4., -4., -2., 0., 2., 3., 4.] * pq.kPa
+        [-4., -4., -2., 0., 2., 3., 4.]
     )
+    assert_raises(ValueError, np.rint, 3.3*pq.m)
 
     # test fix
 # TODO: uncomment once np.fix behaves itself
@@ -173,17 +174,20 @@ def test_rounding():
 #    )
 
     # test floor
-    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.degC
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.dimensionless
     assert_array_almost_equal(
         np.floor(a),
-        [-2., -2., -1., 0., 1., 1., 2.] * pq.degC
+        [-2., -2., -1., 0., 1., 1., 2.] * pq.dimensionless
     )
+    assert_raises(ValueError, np.floor, 3.3*pq.m)
 
     # test ceil
-    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.degC
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.dimensionless
     assert_array_almost_equal(
         np.ceil(a),
-        [-1., -1., -0., 1., 2., 2., 2.] * pq.degC)
+        [-1., -1., -0., 1., 2., 2., 2.] * pq.dimensionless
+    )
+    assert_raises(ValueError, np.ceil, 3.3*pq.m)
 
 
 def test_exponents_and_logarithms():
