@@ -26,8 +26,11 @@ def validate_unit_quantity(value):
     return value
 
 def validate_dimensionality(value):
-    if isinstance(value, str):
-        return unit_registry[value].dimensionality
+    if isinstance(value, (str, unicode)):
+        try:
+            return unit_registry[value].dimensionality
+        except (KeyError, UnicodeDecodeError):
+            return unit_registry[str(value)].dimensionality
     elif isinstance(value, Quantity):
         validate_unit_quantity(value)
         return value.dimensionality
