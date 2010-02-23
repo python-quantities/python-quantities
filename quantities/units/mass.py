@@ -37,6 +37,12 @@ lb = pound = avoirdupois_pound = UnitMass(
     aliases=['pounds', 'avoirdupois_pound', 'avoirdupois_pounds'],
     doc='exact'
 )
+st = stone = UnitMass(
+    'stone',
+    14*lb,
+    symbol='st',
+    doc='As defined in the UK, 1 stone = 14 avoirdupois pounds'
+)
 
 carat = UnitMass(
     'carat',
