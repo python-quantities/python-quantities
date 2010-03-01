@@ -32,10 +32,6 @@ example, before quantities-0.8.0::
 This example indicates that floor (and friends) should only be defined
 for pure numbers and dimensionless quantities. 
 
------
-0.7.1
------
-
 Bugs fixed
 **********
 
@@ -43,6 +39,7 @@ Bugs fixed
 * #515314 don't memoize simplified, fixes set_default_units
 * #526008 add definition of stone, used in UK to measure mass
 * #525991 support specifying units using unicode
+* #529266 fix conversion to gallons
 
 -----
 0.7.0

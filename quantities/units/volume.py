@@ -58,7 +58,11 @@ US_dry_gallon = UnitQuantity(
 )
 gallon = liquid_gallon = US_liquid_gallon = UnitQuantity(
     'US_liquid_gallon',
-    231*inch**3
+    231*inch**3,
+    aliases=[
+        'gallon', 'gallons', 'liquid_gallon', 'liquid_gallons',
+        'US_liquid_gallons'
+    ],
 )
 dry_quart = US_dry_quart = UnitQuantity(
     'US_dry_quart',
