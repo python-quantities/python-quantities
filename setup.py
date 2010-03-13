@@ -24,6 +24,8 @@ except ImportError:
     use_setuptools()
     from setuptools import Command, setup
 
+import quantities as pq
+
 class constants(Command):
 
     description = "Convert the NIST databas of constants"
@@ -84,13 +86,12 @@ setup(
     download_url = cfg.get('metadata', 'download_url'),
     keywords = cfg.get('metadata', 'keywords').split('\n'),
     license = cfg.get('metadata', 'license'),
-    long_description = cfg.get('metadata', 'long_description'),
+    long_description = pq.__doc__,
     name = cfg.get('metadata', 'name'),
     packages = [
         'quantities',
         'quantities.constants',
         'quantities.tests',
-        'quantities.umath',
         'quantities.units',
     ],
     platforms = cfg.get('metadata', 'platforms'),

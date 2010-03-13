@@ -1,0 +1,3 @@
+*.pyc
+quantities.egg-info
+build

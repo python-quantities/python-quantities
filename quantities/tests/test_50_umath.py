@@ -123,36 +123,36 @@ def test_hyperbolicfunctions():
     )
 
 def test_rounding():
-    """test rounding unctions"""
+    """test rounding functions"""
     #test around
     assert_array_almost_equal(
-        pq.around([.5, 1.5, 2.5, 3.5, 4.5] * pq.J) ,
+        np.around([.5, 1.5, 2.5, 3.5, 4.5] * pq.J) ,
         [0., 2., 2., 4., 4.] * pq.J
     )
 
     assert_array_almost_equal(
-        pq.around([1,2,3,11] * pq.J, decimals=1),
+        np.around([1,2,3,11] * pq.J, decimals=1),
         [1, 2, 3, 11] * pq.J
     )
 
     assert_array_almost_equal(
-        pq.around([1,2,3,11] * pq.J, decimals=-1),
+        np.around([1,2,3,11] * pq.J, decimals=-1),
         [0, 0, 0, 10] * pq.J
     )
 
     # round_ and around are equivalent
     assert_array_almost_equal(
-        pq.round_([.5, 1.5, 2.5, 3.5, 4.5] * pq.J),
+        np.round_([.5, 1.5, 2.5, 3.5, 4.5] * pq.J),
         [0., 2., 2., 4., 4.] * pq.J
     )
 
     assert_array_almost_equal(
-        pq.round_([1,2,3,11] * pq.J, decimals=1),
+        np.round_([1,2,3,11] * pq.J, decimals=1),
         [1, 2, 3, 11] * pq.J
     )
 
     assert_array_almost_equal(
-        pq.round_([1,2,3,11] * pq.J, decimals=-1),
+        np.round_([1,2,3,11] * pq.J, decimals=-1),
         [0, 0, 0, 10] * pq.J
     )
 

@@ -26,5 +26,3 @@ production use.
 
    user/index.rst
    devel/index.rst
-   reference/index.rst
-   glossary.rst

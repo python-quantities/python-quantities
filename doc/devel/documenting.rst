@@ -37,10 +37,10 @@ Organization of Quantities' documentation
 ==========================================
 
 The actual ReStructured Text files are kept in :file:`doc`. The main
-entry point is :file:`doc/index.rst`, which pulls in the
-:file:`index.rst` file for the user guide, developers guide, api reference,
-and the glossary. The documentation suite is built as a single document in
-order to make the most effective use of cross referencing, we want to make
+entry point is :file:`doc/index.rst`, which pulls in the 
+:file:`index.rst` file for the user guide and the developers guide.
+The documentation suite is built as a single document in order to
+make the most effective use of cross referencing, we want to make
 navigating the Quantities documentation as easy as possible.
 
 Additional files can be added to the various guides by including their base
@@ -169,9 +169,6 @@ mind:
 
      A bit about :ref:`referring-to-quantities-docs`:
         One more
-
-* Please keep the :ref:`glossary` in mind when writing documentation. You can
-  create a references to a term in the glossary with the ``:term:`` role.
 
 * The autodoc extension will handle index entries for the API, but additional
   entries in the index_ need to be explicitly added.

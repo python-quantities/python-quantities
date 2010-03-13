@@ -13,27 +13,6 @@ operations are not yet fully functioning.
     >>> import quantities as pq
 
 
-Addition and subtraction
-========================
-
-The addition (or subtraction) of quantities with different (but compatible)
-units raises an error.
-
-    >>> a = 1 * pq.m
-    >>> b = 100 * pq.cm
-    >>> a + b
-    Traceback (most recent call last):
-        ...
-    ValueError: can not add units of m and cm
-
-You can get around this error by making sure all quantities have the same
-units.
-
-    >>> b.units = pq.m
-    >>> print a + b
-    2.0 m
-
-
 Temperature conversion
 ======================
 

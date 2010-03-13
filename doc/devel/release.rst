@@ -2,19 +2,6 @@
 Releases
 ********
 
-Before creating a release, the version number needs to be updated in
-`quantities/__init__.py`. Then Quantities needs to be installed either with::
-
-  python setup.py install
-
-or::
-
-  python setup.py develop
-
-in order proceed with building the release, so the package version numbers will
-be advertised correctly for the installers and the documentation.
-
-
 Creating Source Releases
 ========================
 
@@ -47,7 +34,7 @@ windows installer, open a DOS window, cd into the quantities source directory
 and run::
 
   python setup.py build
-  python setup.py bdist_wininst
+  python setup.py bdist_msi
 
 This creates the executable windows installer in the `dist/` directory.
 

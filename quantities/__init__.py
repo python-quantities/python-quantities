@@ -1,37 +1,39 @@
 """
-
-This is a crash-course introduction to the Quantities package.
-Quantities attempts to handle operations involving values that have
-both magnitude and dimensionality, the latter being described by a
-system of units, and possibly an uncertainty.
+Quantities is designed to handle arithmetic and conversions of
+physical quantities, which have a magnitude, dimensionality specified
+by various units, and possibly an uncertainty. Quantities is designed
+to work with numpy's standard ufuncs, many of which are already
+supported. The package is actively developed, and while the current
+features and API are stable, test coverage is incomplete and so the
+package is not suggested for production use.
 
 It is strongly suggested to import quantities to its own namespace, so
 units and constants variables are not accidentally overwritten::
 
   >>> import quantities as pq
 
-Here pq stands for "physical quantities" or "python quantities". There
-are a number of ways to create a quantity. The Quantity constructor
-can be used similar to numpy.array, by passing a sequence. Units can
-be designated using a string containing standard unit abbreviations or
-unit names. For example::
-
-  >>> q = pq.Quantity([1,2,3], 'J')
-  >>> q = pq.Quantity([1,2,3], 'joules')
-
-Units are also available as variables, and can be passed to Quantity::
-
-  >>> q = pq.Quantity([1,2,3], pq.J)
-
-In practice though, it is usually more convenient to think of
-quantities as a combination of a magnitude and units. These two
-quantities are equivalent::
+Here pq stands for "physical quantities" or "python quantities".
+There are a number of ways to create a quantity. In practice, it is
+convenient to think of quantities as a combination of a magnitude and
+units. These two quantities are equivalent::
 
   >>> import numpy as np
   >>> q = np.array([1,2,3]) * pq.J
   >>> q = [1,2,3] * pq.J
   >>> print q
   [ 1.  2.  3.] J
+
+The Quantity constructor can also be used to create quantities,
+similar to numpy.array. Units can be designated using a string
+containing standard unit abbreviations or unit names. For example::
+
+  >>> q = pq.Quantity([1,2,3], 'J')
+  >>> q = pq.Quantity([1,2,3], 'joules')
+
+Units are also available as variables, and can be passed to
+Quantity::
+
+  >>> q = pq.Quantity([1,2,3], pq.J)
 
 You can modify a quantity's units in place::
 
