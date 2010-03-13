@@ -8,41 +8,41 @@ Prerequisites
 
 Quantities has a few dependencies:
 
-* Python_ (version 2.5 or later)
-* NumPy_ (version 1.3 or later)
+* Python_ (>=2.5)
+* NumPy_ (>=1.3)
 
-The following are also suggested:
+in order to run the test suite, you will need:
 
-* setuptools_ (version 0.6c8 or later, for developers)
-* nose_ (for unit tests)
-* coverage_ (for unit tests)
+* nose_
+
+The following are also suggested for anyone contributing to
+quantities:
+
+* distribute_ (>=0.6.10) or setuptools_ (=>0.6c11)
+* coverage_
 
 Source Code Installation
 ========================
 
-To install Quantities, download the Quantites sourcecode from PyPi_ and
-run "python setup.py install" in the quantities source directory.
+To install Quantities, download the Quantites sourcecode from PyPi_
+and run "python setup.py install" in the quantities source directory.
 
-Development Branch
-==================
+Development
+===========
 
-You can follow and contribute to Quantities' development by obtaining a
-bzr version control branch. Just install bzr and type::
+You can follow and contribute to Quantities' development using git::
 
-  bzr branch lp:python-quantities
+  git clone git@github.com:darrendale/python-quantities.git
 
-and then periodically bring your branch up to date::
-
-  bzr pull
-
-Bugs, feature requests, and questions can be directed to the launchpad_
+Bugs, feature requests, and questions can be directed to the github_
 website.
 
 
 .. _Python: http://www.python.org/
+.. _distribute: http://pypi.python.org/pypi/distribute
 .. _setuptools: http://peak.telecommunity.com/DevCenter/setuptools
 .. _NumPy: http://www.scipy.org
 .. _nose: http://somethingaboutorange.com/mrl/projects/nose
 .. _coverage: http://nedbatchelder.com/code/modules/rees-coverage.html
 .. _PyPi: http://pypi.python.org/pypi/quantities
-.. _launchpad: https://launchpad.net/python-quantities
+.. _github: http://github.com/python-quantities/python-quantities
