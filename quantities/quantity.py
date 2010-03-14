@@ -325,11 +325,10 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.__setitem__)
     def __setitem__(self, key, value):
-        if not isinstance(value, Quantity):
-            value = Quantity(value)
-
-        # TODO: do we want this kind of magic?
-        self.magnitude[key] = value.rescale(self._dimensionality).magnitude
+        if isinstance(value, Quantity):
+            if self._dimensionality != value._dimensionality:
+                value = value.rescale(self._dimensionality)
+        self.magnitude[key] = value
 
     @with_doc(np.ndarray.__lt__)
     @wrap_comparison
@@ -401,14 +400,12 @@ class Quantity(np.ndarray):
         )
 
     @with_doc(np.ndarray.fill)
-    def fill(self, scalar):
-        if not isinstance (scalar, Quantity):
-            scalar = Quantity(scalar, copy=False)
-
-        if scalar._dimensionality == self._dimensionality:
-            self.magnitude.fill(scalar.magnitude)
-        else:
-            raise ValueError("scalar must have the same units as self")
+    def fill(self, value):
+        self.magnitude.fill(value)
+        try:
+            self._dimensionality = value.dimensionality
+        except AttributeError:
+            pass
 
     @with_doc(np.ndarray.put)
     def put(self, indicies, values, mode='raise'):

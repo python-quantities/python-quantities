@@ -5,6 +5,7 @@ import unittest
 from nose.tools import *
 from numpy.testing import *
 from numpy.testing.utils import *
+from numpy.testing.decorators import skipif as skip_if
 
 import numpy as np
 import quantities as pq
@@ -157,37 +158,34 @@ def test_rounding():
     )
 
     #test rint
-    a = [-4.1, -3.6, -2.5, 0.1, 2.5, 3.1, 3.9] * pq.dimensionless
+    a = [-4.1, -3.6, -2.5, 0.1, 2.5, 3.1, 3.9] * pq.m
     assert_array_almost_equal(
         np.rint(a),
-        [-4., -4., -2., 0., 2., 3., 4.]
+        [-4., -4., -2., 0., 2., 3., 4.]*pq.m
     )
-    assert_raises(ValueError, np.rint, 3.3*pq.m)
-
-    # test fix
-# TODO: uncomment once np.fix behaves itself
-#    assert_array_equal(np.fix(3.14 * pq.degF), 3.0 * pq.degF)
-#    assert_array_equal(np.fix(3.0 * pq.degF), 3.0 * pq.degF)
-#    assert_array_equal(
-#        np.fix([2.1, 2.9, -2.1, -2.9] * pq.degF),
-#        [2., 2., -2., -2.] * pq.degF
-#    )
 
     # test floor
-    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.dimensionless
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.m
     assert_array_almost_equal(
         np.floor(a),
-        [-2., -2., -1., 0., 1., 1., 2.] * pq.dimensionless
+        [-2., -2., -1., 0., 1., 1., 2.] * pq.m
     )
-    assert_raises(ValueError, np.floor, 3.3*pq.m)
 
     # test ceil
-    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.dimensionless
+    a = [-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0] * pq.m
     assert_array_almost_equal(
         np.ceil(a),
-        [-1., -1., -0., 1., 2., 2., 2.] * pq.dimensionless
+        [-1., -1., -0., 1., 2., 2., 2.] * pq.m
     )
-    assert_raises(ValueError, np.ceil, 3.3*pq.m)
+
+@skip_if(np.__version__[:3] < '1.4')
+def test_fix():
+    assert_array_equal(np.fix(3.14 * pq.degF), 3.0 * pq.degF)
+    assert_array_equal(np.fix(3.0 * pq.degF), 3.0 * pq.degF)
+    assert_array_equal(
+        np.fix([2.1, 2.9, -2.1, -2.9] * pq.degF),
+        [2., 2., -2., -2.] * pq.degF
+    )
 
 
 def test_exponents_and_logarithms():

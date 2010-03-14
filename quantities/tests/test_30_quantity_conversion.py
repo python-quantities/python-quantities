@@ -208,9 +208,6 @@ class TestQuantities(unittest.TestCase):
         test(2 *pq.lb)
 
         self.assertRaises(ValueError, test, 60 * pq.inch * pq.J)
-        # even in the case when the quantity has no units
-        # (maybe this could go away)
-        self.assertRaises(ValueError, test, 60)
 
         #test set item using slicing
         tempArray2 = [100, .2, -1, -5, -6] * pq.mA

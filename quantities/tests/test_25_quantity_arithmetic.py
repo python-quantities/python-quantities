@@ -158,30 +158,10 @@ def test_imod():
 def test_fmod():
     assert_quantity_almost_equal(np.fmod(10*pq.m, (3*pq.m)), 1*pq.m)
     assert_raises(ValueError, np.fmod, 10*pq.J, 3*pq.m)
-@skip_if(
-    True,
-    'known failure, needs __input_prepare__ in numpy'
-)
-def test_fmod_future():
-    # requires __input_prepare__ in numpy:
-    assert_quantity_almost_equal(
-        np.fmod(10*pq.m, (3*pq.m).rescale('ft')),
-        10*pq.m % (3*pq.m)
-    )
 
 def test_remainder():
     assert_quantity_almost_equal(np.remainder(10*pq.m, (3*pq.m)), 1*pq.m)
     assert_raises(ValueError, np.remainder, 10*pq.J, 3*pq.m)
-@skip_if(
-    True,
-    'known failure, needs __input_prepare__ in numpy'
-)
-def test_remainder_future():
-    # requires __input_prepare__ in numpy:
-    assert_quantity_almost_equal(
-        np.remainder(10*pq.m, (3*pq.m).rescale('ft')),
-        10*pq.m % (3*pq.m)
-    )
 
 def test_negative():
     assert_quantity_equal(

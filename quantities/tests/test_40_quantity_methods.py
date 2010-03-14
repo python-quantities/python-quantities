@@ -62,10 +62,8 @@ class TestQuantities(unittest.TestCase):
 
         # fill
         u = [[-100, 5, 6], [1, 2, 3]] * pq.m
-        u.fill(6 * pq.m)
-        self.numAssertEqual(u,[[6, 6, 6], [6, 6, 6]] * pq.m)
-        # incompatible units:
-        self.assertRaises(ValueError, u.fill, [[-100, 5, 6], [1, 2, 3]])
+        u.fill(6 * pq.ft)
+        self.numAssertEqual(u,[[6, 6, 6], [6, 6, 6]] * pq.ft)
 
         # reshape
         y = [[1, 3, 4, 5], [1, 2, 3, 6]] * pq.inch
