@@ -275,6 +275,7 @@ p_dict[np.mod] = _d_check_uniform
 p_dict[np.fmod] = _d_check_uniform
 p_dict[np.remainder] = _d_check_uniform
 p_dict[np.floor_divide] = _d_check_uniform
+p_dict[np.arctan2] = _d_check_uniform
 
 def _d_power(q1, q2, out=None):
     if getattr(q2, 'dimensionality', None):
@@ -338,3 +339,29 @@ def _d_dimensionless(q1, out=None):
     return Dimensionality()
 p_dict[np.log] = _d_dimensionless
 p_dict[np.exp] = _d_dimensionless
+
+def _d_trig(q1, out=None):
+    try:
+        assert q1.units == unit_registry['radian']
+    except AssertionError:
+        raise ValueError(
+            'expected units of radians, got "%s"' % q1._dimensionality
+        )
+    return Dimensionality()
+p_dict[np.sin] = _d_trig
+p_dict[np.sinh] = _d_trig
+p_dict[np.cos] = _d_trig
+p_dict[np.cosh] = _d_trig
+p_dict[np.tan] = _d_trig
+p_dict[np.tanh] = _d_trig
+
+def _d_arctrig(q1, out=None):
+    if getattr(q1, 'dimensionality', None):
+        raise ValueError("quantity must be dimensionless")
+    return unit_registry['radian'].dimensionality
+p_dict[np.arcsin] = _d_arctrig
+p_dict[np.arcsinh] = _d_arctrig
+p_dict[np.arccos] = _d_arctrig
+p_dict[np.arccosh] = _d_arctrig
+p_dict[np.arctan] = _d_arctrig
+p_dict[np.arctanh] = _d_arctrig
