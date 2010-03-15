@@ -1,3 +1,4 @@
 *.pyc
 quantities.egg-info
 build
+dist
