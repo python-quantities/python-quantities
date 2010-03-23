@@ -82,6 +82,25 @@ V = volt = UnitQuantity(
     symbol='V',
     aliases=['volts']
 )
+kV = kilovolt = UnitQuantity(
+    'kilovolt',
+    1000*V,
+    symbol='kV',
+    aliases=['kilovolts']
+)
+mV = millivolt = UnitQuantity(
+    'millivolt',
+    V/1000,
+    symbol='mV',
+    aliases=['millivolts']
+)
+uV = microvolt = UnitQuantity(
+    'microvolt',
+    V/1e6,
+    symbol='uV',
+    u_symbol='μV',
+    aliases=['microvolts']
+)
 F = farad = UnitQuantity(
     'farad',
     C/V,
