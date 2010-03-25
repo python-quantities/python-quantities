@@ -3,6 +3,7 @@
 """
 from __future__ import absolute_import
 
+import sys
 import operator
 
 import numpy as np
@@ -140,9 +141,10 @@ class Dimensionality(dict):
                 new[unit] = -power
         return new
 
-    def __div__(self, other):
-        assert_isinstance(other, Dimensionality)
-        return self.__truediv__(other)
+    if sys.version_info[0] < 3:
+        def __div__(self, other):
+            assert_isinstance(other, Dimensionality)
+            return self.__truediv__(other)
 
     def __itruediv__(self, other):
         assert_isinstance(other, Dimensionality)
@@ -155,9 +157,10 @@ class Dimensionality(dict):
                 self[unit] = -power
         return self
 
-    def __idiv__(self, other):
-        assert_isinstance(other, Dimensionality)
-        return self.__itruediv__(other)
+    if sys.version_info[0] < 3:
+        def __idiv__(self, other):
+            assert_isinstance(other, Dimensionality)
+            return self.__itruediv__(other)
 
     def __pow__(self, other):
         try:

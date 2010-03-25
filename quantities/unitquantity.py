@@ -2,10 +2,10 @@
 """
 from __future__ import absolute_import
 
+import sys
 import weakref
 
 import numpy
-
 
 from .dimensionality import Dimensionality
 from . import markup
@@ -215,13 +215,14 @@ class UnitQuantity(Quantity):
     def __rtruediv__(self, other):
         return self.view(Quantity).__rtruediv__(other)
 
-    @with_doc(Quantity.__div__, use_header=False)
-    def __div__(self, other):
-        return self.view(Quantity).__div__(other)
+    if sys.version_info[0] < 3:
+        @with_doc(Quantity.__div__, use_header=False)
+        def __div__(self, other):
+            return self.view(Quantity).__div__(other)
 
-    @with_doc(Quantity.__rdiv__, use_header=False)
-    def __rdiv__(self, other):
-        return self.view(Quantity).__rdiv__(other)
+        @with_doc(Quantity.__rdiv__, use_header=False)
+        def __rdiv__(self, other):
+            return self.view(Quantity).__rdiv__(other)
 
     @with_doc(Quantity.__pow__, use_header=False)
     def __pow__(self, other):
@@ -247,9 +248,10 @@ class UnitQuantity(Quantity):
     def __itruediv__(self, other):
         raise TypeError('can not modify protected units')
 
-    @with_doc(Quantity.__idiv__, use_header=False)
-    def __idiv__(self, other):
-        raise TypeError('can not modify protected units')
+    if sys.version_info[0] < 3:
+        @with_doc(Quantity.__idiv__, use_header=False)
+        def __idiv__(self, other):
+            raise TypeError('can not modify protected units')
 
     @with_doc(Quantity.__ipow__, use_header=False)
     def __ipow__(self, other):

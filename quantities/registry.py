@@ -44,6 +44,9 @@ class UnitRegistry:
     def __getattr__(self, attr):
         return getattr(self.__registry, attr)
 
+    def __setitem__(self, label, value):
+        self.__registry.__setitem__(label, value)
+
     def __getitem__(self, label):
         """Parses a string description of a unit e.g., 'g/cc'"""
 

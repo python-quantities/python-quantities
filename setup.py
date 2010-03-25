@@ -15,7 +15,13 @@
 
 from __future__ import with_statement
 
-from ConfigParser import ConfigParser
+import os
+import sys
+
+try:
+    from ConfigParser import ConfigParser
+except ImportError:
+    from configparser import ConfigParser
 
 try:
     from setuptools import Command, setup
@@ -23,8 +29,6 @@ except ImportError:
     from distribute_setup import use_setuptools
     use_setuptools()
     from setuptools import Command, setup
-
-import quantities as pq
 
 class constants(Command):
 
@@ -75,29 +79,53 @@ if __version__ != cfg.get('metadata', 'version'):
                 line = 'version = %s\n' % __version__
             f.write(line)
 
-setup(
-    author = cfg.get('metadata', 'author'),
-    author_email = cfg.get('metadata', 'author_email'),
-    classifiers = cfg.get('metadata', 'classifiers').split('\n'),
-    cmdclass = {
-        'constants' : constants,
-    },
-    description = cfg.get('metadata', 'description'),
-    download_url = cfg.get('metadata', 'download_url'),
-    keywords = cfg.get('metadata', 'keywords').split('\n'),
-    license = cfg.get('metadata', 'license'),
-    long_description = pq.__doc__,
-    name = cfg.get('metadata', 'name'),
-    packages = [
-        'quantities',
-        'quantities.constants',
-        'quantities.tests',
-        'quantities.units',
-    ],
-    platforms = cfg.get('metadata', 'platforms'),
-    requires = cfg.get('metadata', 'requires').split('\n'),
-    test_suite = 'nose.collector',
-    url = cfg.get('metadata', 'url'),
-    version = cfg.get('metadata', 'version'),
-    zip_safe = cfg.getboolean('metadata', 'zip_safe'),
-)
+# Perform 2to3 if needed
+local_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+src_path = local_path
+
+if sys.version_info[0] == 3:
+    src_path = os.path.join(local_path, 'build', 'py3k')
+#    sys.path.insert(0, os.path.join(local_path, 'tools'))
+    import py3tool
+    print("Converting to Python3 via 2to3...")
+    py3tool.sync_2to3('quantities', os.path.join(src_path, 'quantities'))
+
+#    site_cfg = os.path.join(local_path, 'site.cfg')
+#    if os.path.isfile(site_cfg):
+#        shutil.copy(site_cfg, src_path)
+
+try:
+    # Run build
+    old_path = os.getcwd()
+    os.chdir(src_path)
+    sys.path.insert(0, src_path)
+    
+    setup(
+        author = cfg.get('metadata', 'author'),
+        author_email = cfg.get('metadata', 'author_email'),
+        classifiers = cfg.get('metadata', 'classifiers').split('\n'),
+        cmdclass = {
+            'constants' : constants,
+        },
+        description = cfg.get('metadata', 'description'),
+        download_url = cfg.get('metadata', 'download_url'),
+        keywords = cfg.get('metadata', 'keywords').split('\n'),
+        license = cfg.get('metadata', 'license'),
+        long_description = cfg.get('metadata', 'long_description'),
+        name = cfg.get('metadata', 'name'),
+        packages = [
+            'quantities',
+            'quantities.constants',
+            'quantities.tests',
+            'quantities.units',
+        ],
+        platforms = cfg.get('metadata', 'platforms'),
+        requires = cfg.get('metadata', 'requires').split('\n'),
+        test_suite = 'nose.collector',
+        url = cfg.get('metadata', 'url'),
+        version = cfg.get('metadata', 'version'),
+        zip_safe = cfg.getboolean('metadata', 'zip_safe'),
+    )
+finally:
+    del sys.path[0]
+    os.chdir(old_path)

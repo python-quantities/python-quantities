@@ -1,71 +1,73 @@
 """
 """
 
-import prefixes
-from prefixes import *
+from __future__ import absolute_import
 
-import acceleration
-from acceleration import *
+from . import prefixes
+from .prefixes import *
 
-import angle
-from angle import *
+from . import acceleration
+from .acceleration import *
 
-import area
-from area import *
+from . import angle
+from .angle import *
 
-import compound
-from compound import *
+from . import area
+from .area import *
 
-import dimensionless
-from dimensionless import *
+from . import compound
+from .compound import *
 
-import electromagnetism
-from electromagnetism import *
+from . import dimensionless
+from .dimensionless import *
 
-import energy
-from energy import *
+from . import electromagnetism
+from .electromagnetism import *
 
-import force
-from force import *
+from . import energy
+from .energy import *
 
-import frequency
-from frequency import *
+from . import force
+from .force import *
 
-import heat
-from heat import *
+from . import frequency
+from .frequency import *
 
-import information
-from information import *
+from . import heat
+from .heat import *
 
-import length
-from length import *
+from . import information
+from .information import *
 
-import mass
-from mass import *
+from . import length
+from .length import *
 
-import power
-from power import *
+from . import mass
+from .mass import *
 
-import pressure
-from pressure import *
+from . import power
+from .power import *
 
-import radiation
-from radiation import *
+from . import pressure
+from .pressure import *
 
-import substance
-from substance import *
+from . import radiation
+from .radiation import *
 
-import temperature
-from temperature import *
+from . import substance
+from .substance import *
 
-import time
-from time import *
+from . import temperature
+from .temperature import *
 
-import velocity
-from velocity import *
+from . import time
+from .time import *
 
-import viscosity
-from viscosity import *
+from . import velocity
+from .velocity import *
 
-import volume
-from volume import *
+from . import viscosity
+from .viscosity import *
+
+from . import volume
+from .volume import *

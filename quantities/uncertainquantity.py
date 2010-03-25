@@ -3,6 +3,8 @@
 """
 from __future__ import absolute_import
 
+import sys
+
 import numpy as np
 
 from . import markup
@@ -146,8 +148,6 @@ class UncertainQuantity(Quantity):
         res._uncertainty = u
         return res
 
-    __div__ = __truediv__
-
     @with_doc(Quantity.__rtruediv__, use_header=False)
     def __rtruediv__(self, other):
         temp = UncertainQuantity(
@@ -156,7 +156,9 @@ class UncertainQuantity(Quantity):
         )
         return other * temp
 
-    __rdiv__ = __rtruediv__
+    if sys.version_info[0] < 3:
+        __div__ = __truediv__
+        __rdiv__ = __rtruediv__
 
     @with_doc(Quantity.__pow__, use_header=False)
     def __pow__(self, other):

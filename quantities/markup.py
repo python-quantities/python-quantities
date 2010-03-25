@@ -7,7 +7,10 @@ import copy
 import operator
 import re
 import threading
-import user
+try:
+    import user
+except ImportError:
+    user = None
 
 
 class _Config(object):
@@ -18,14 +21,14 @@ class _Config(object):
 
     def _get_use_unicode(self):
         with self.lock:
-            return copy.copy(self._use_unciode)
+            return copy.copy(self._use_unicode)
     def _set_use_unicode(self, val):
-        self._use_unciode = bool(val)
+        self._use_unicode = bool(val)
     use_unicode = property(_get_use_unicode, _set_use_unicode)
 
     def __init__(self):
         self._lock = threading.RLock()
-        self._use_unciode = getattr(user, 'quantities_unicode', False)
+        self._use_unicode = getattr(user, 'quantities_unicode', False)
 
 config = _Config()
 

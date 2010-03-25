@@ -244,24 +244,24 @@ units, they should still conform to valid python expressions.
 
 """
 
-#from __future__ import absolute_import
+from __future__ import absolute_import
 
-from version import __version__
+from .version import __version__
 
-import quantity
-from quantity import Quantity
+from . import quantity
+from .quantity import Quantity
 
-import uncertainquantity
-from uncertainquantity import UncertainQuantity
+from . import uncertainquantity
+from .uncertainquantity import UncertainQuantity
 
-import unitquantity
-from unitquantity import *
+from . import unitquantity
+from .unitquantity import *
 
-from units import *
+from .units import *
 
-import constants
+from . import constants
 
-from umath import *
+from .umath import *
 
 from numpy.testing import Tester
 test = Tester().test

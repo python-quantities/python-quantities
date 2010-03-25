@@ -4,6 +4,7 @@ from __future__ import absolute_import
 
 import copy
 from functools import wraps
+import sys
 
 import numpy as np
 
@@ -66,6 +67,10 @@ def protected_multiplication(f):
     def g(self, other, *args):
         if getattr(other, 'dimensionality', None):
             try:
+#                print(self)
+#                print(type(self))
+#                print(self.base)
+#                print(type(self.base))
                 assert not isinstance(self.base, Quantity)
             except AssertionError:
                 raise ValueError('can not modify units of a view of a Quantity')
@@ -243,6 +248,7 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__radd__)
     @scale_other_units
     def __radd__(self, other):
+        return np.add(other, self)
         return super(Quantity, self).__radd__(other)
 
     @with_doc(np.ndarray.__iadd__)
@@ -258,6 +264,7 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__rsub__)
     @scale_other_units
     def __rsub__(self, other):
+        return np.subtract(other, self)
         return super(Quantity, self).__rsub__(other)
 
     @with_doc(np.ndarray.__isub__)
@@ -280,15 +287,30 @@ class Quantity(np.ndarray):
     def __imul__(self, other):
         return super(Quantity, self).__imul__(other)
 
+    @with_doc(np.ndarray.__rmul__)
+    def __rmul__(self, other):
+        return np.multiply(other, self)
+        return super(Quantity, self).__rmul__(other)
+
     @with_doc(np.ndarray.__itruediv__)
     @protected_multiplication
     def __itruediv__(self, other):
         return super(Quantity, self).__itruediv__(other)
 
-    @with_doc(np.ndarray.__idiv__)
-    @protected_multiplication
-    def __idiv__(self, other):
-        return super(Quantity, self).__itruediv__(other)
+    @with_doc(np.ndarray.__rtruediv__)
+    def __rtruediv__(self, other):
+        return np.true_divide(other, self)
+        return super(Quantity, self).__rtruediv__(other)
+
+    if sys.version_info[0] < 3:
+        @with_doc(np.ndarray.__idiv__)
+        @protected_multiplication
+        def __idiv__(self, other):
+            return super(Quantity, self).__itruediv__(other)
+
+        @with_doc(np.ndarray.__rdiv__)
+        def __rdiv__(self, other):
+            return np.divide(other, self)
 
     @with_doc(np.ndarray.__pow__)
     @check_uniform
