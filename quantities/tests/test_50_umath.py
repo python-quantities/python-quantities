@@ -8,7 +8,8 @@ from numpy.testing.utils import *
 from numpy.testing.decorators import skipif as skip_if
 
 import numpy as np
-import quantities as pq
+from .. import units as pq
+from .. import umath as qmath
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
 
@@ -21,34 +22,34 @@ def test_sumproddifffuncs():
 
     #prod
 
-    assert_array_almost_equal(pq.prod(a), 24 * pq.J**4)
+    assert_array_almost_equal(qmath.prod(a), 24 * pq.J**4)
 
     #sum
 
-    assert_almost_equal(pq.sum(a), 10 * pq.J)
+    assert_almost_equal(qmath.sum(a), 10 * pq.J)
 
     #nansum
 
     c = [1,2,3, np.NaN] * pq.kPa
-    assert_almost_equal(pq.nansum( c), 6 * pq.kPa)
+    assert_almost_equal(qmath.nansum( c), 6 * pq.kPa)
 
     #cumprod
 
-    assert_raises(ValueError, pq.cumprod, c)
+    assert_raises(ValueError, qmath.cumprod, c)
 
     d = [10, .1, 5, 50] * pq.dimensionless
-    assert_array_almost_equal(pq.cumprod(d), [10, 1, 5, 250] * pq.dimensionless)
+    assert_array_almost_equal(qmath.cumprod(d), [10, 1, 5, 250] * pq.dimensionless)
 
     #cumsum
 
-    assert_array_almost_equal(pq.cumsum(a), [1, 3, 6, 10] * pq.J)
+    assert_array_almost_equal(qmath.cumsum(a), [1, 3, 6, 10] * pq.J)
 
     assert_array_almost_equal(
-        pq.diff([100, 105, 106, 1008] * pq.BTU, 1),
+        qmath.diff([100, 105, 106, 1008] * pq.BTU, 1),
         [5, 1, 902] * pq.BTU
     )
     assert_array_almost_equal(
-        pq.diff([100, 105, 106, 1008] * pq.BTU, 2),
+        qmath.diff([100, 105, 106, 1008] * pq.BTU, 2),
         [-4, 901] * pq.BTU
     )
 
@@ -57,10 +58,10 @@ def test_sumproddifffuncs():
     y = [1, 1.1 , 1.2, 1.3, 1.3 , 1.3] * pq.J / (pq.m**2)
     z = [.1, .1, .1, 0,0] * pq.J / (pq.m**2)
 
-    assert_array_almost_equal(pq.ediff1d(y), z)
+    assert_array_almost_equal(qmath.ediff1d(y), z)
 
     #gradient
-    l = pq.gradient([[1,1],[3,4]] * pq.J , 1 * pq.m)
+    l = qmath.gradient([[1,1],[3,4]] * pq.J , 1 * pq.m)
 
     assert_array_almost_equal(
         l[0],
@@ -77,49 +78,49 @@ def test_sumproddifffuncs():
     a = [3,-3, 1] * pq.kPa
     b = [4, 9, 2] * pq.m**2
 
-    c = pq.cross(a,b)
-    assert_array_equal(pq.cross(a,b), [-15, -2, 39] * pq.kPa * pq.m**2)
+    c = qmath.cross(a,b)
+    assert_array_equal(qmath.cross(a,b), [-15, -2, 39] * pq.kPa * pq.m**2)
 
     #trapz
-    assert_almost_equal(pq.trapz(y, dx = .2 * pq.m**2), 1.21 * pq.J)
+    assert_almost_equal(qmath.trapz(y, dx = .2 * pq.m**2), 1.21 * pq.J)
 
 def test_hyperbolicfunctions():
     """
     test the hyperbolic ufuncs
     """
-    a = [1, 2, 3, 4, 6] * pq.radian
+    a = [1, 2, 3, 4, 6] * qmath.radian
 
     assert_array_almost_equal(
-        pq.sinh(a),
+        np.sinh(a),
         np.sinh(np.array([1, 2, 3, 4, 6])) * pq.dimensionless
     )
 
     b = [1, 2, 3, 4, 6] * pq.dimensionless
 
     assert_array_almost_equal(
-        pq.arcsinh(b),
+        np.arcsinh(b),
         np.arcsinh(np.array([1, 2, 3, 4, 6])) * pq.dimensionless
     )
 
 
     assert_array_almost_equal(
-        pq.cosh(a),
+        np.cosh(a),
         np.cosh(np.array([1, 2, 3, 4, 6])) * pq.dimensionless
     )
 
     assert_array_almost_equal(
-        pq.arccosh(b),
+        np.arccosh(b),
         np.arccosh(np.array([1, 2, 3, 4, 6])) * pq.dimensionless
     )
 
     assert_array_almost_equal(
-        pq.tanh(a),
+        np.tanh(a),
         np.tanh(np.array([1, 2, 3, 4, 6])) * pq.dimensionless
     )
 
     c = [.01, .5, .6, .8, .99] * pq.dimensionless
     assert_array_almost_equal(
-        pq.arctanh(c),
+        np.arctanh(c),
         np.arctanh(np.array([.01, .5, .6, .8, .99])) * pq.dimensionless
     )
 
@@ -196,20 +197,20 @@ def test_exponents_and_logarithms():
     b = [1.62754791e+05, 2.00855369e+01, 5.45981500e+01, 1.48413159e+02,
          4.03428793e+02, 1.09663316e+03, 3.67879441e-01,   4.53999298e-05
         ] * pq.dimensionless
-    assert_array_almost_equal(pq.exp(a), b, 3)
+    assert_array_almost_equal(np.exp(a), b, 3)
 
-    assert_array_almost_equal(a, pq.log(b), 8)
+    assert_array_almost_equal(a, np.log(b), 8)
 
     c = [100, 10000, 5, 4, 1] * pq.dimensionless
 
     assert_array_almost_equal(
-        pq.log10(c),
+        np.log10(c),
         [2., 4., 0.69897, 0.60205999, 0.] * pq.dimensionless,
         8
     )
 
     assert_array_almost_equal(
-        pq.log2(c),
+        np.log2(c),
         [6.64385619, 13.28771238, 2.32192809, 2., 0.] * pq.dimensionless,
         8
     )
@@ -218,9 +219,9 @@ def test_exponents_and_logarithms():
 
     f = [1.00000000e-10, -1.00000000e-10, -7.00000000e-10,
          1.71828183e+00, 0.00000000e+00, 1.00000500e-05] * pq.dimensionless
-    assert_array_almost_equal(pq.expm1(e), f, 8)
+    assert_array_almost_equal(np.expm1(e), f, 8)
 
-    assert_array_almost_equal(pq.log1p(f), e, 8)
+    assert_array_almost_equal(np.log1p(f), e, 8)
 
 
 class TestQuantities(unittest.TestCase):
@@ -261,72 +262,66 @@ class TestQuantities(unittest.TestCase):
     def test_numpy_trig_functions(self):
 
         #exp
-        self.assertAlmostEqual(pq.exp(1.2 * pq.dimensionless), 3.32011692)
+        self.assertAlmostEqual(np.exp(1.2 * pq.dimensionless), 3.32011692)
 
-        t1 = [1,1.5,2.0] * pq.radian
-        self.numAssertAlmostEqual(pq.exp(t1), [2.71828183, 4.48168907, 7.3890561] * pq.dimensionless, 8)
+        t1 = [1,1.5,2.0] * pq.dimensionless
+        self.numAssertAlmostEqual(np.exp(t1), [2.71828183, 4.48168907, 7.3890561] * pq.dimensionless, 8)
 
         # sin
-
-        self.assertAlmostEqual(pq.sin( 5 * pq.radian), -0.958924275 * pq.dimensionless)
+        self.assertAlmostEqual(np.sin( 5 * pq.radian), -0.958924275 * pq.dimensionless)
         t2 = [1,2,3,4] * pq.radian
-        self.numAssertAlmostEqual(pq.sin(t2) , [0.841470985, 0.909297427, 0.141120008, -0.756802495] * pq.dimensionless, 8)
+        self.numAssertAlmostEqual(np.sin(t2) , [0.841470985, 0.909297427, 0.141120008, -0.756802495] * pq.dimensionless, 8)
 
         # arcsin
-        self.assertAlmostEqual(pq.arcsin( -0.958924275 * pq.dimensionless),  -1.28318531 * pq.radian)
+        self.assertAlmostEqual(np.arcsin( -0.958924275 * pq.dimensionless),  -1.28318531 * pq.radian)
         t3 = [0.841470985, 0.909297427, 0.141120008, -0.756802495] * pq.dimensionless
-        self.numAssertAlmostEqual(pq.arcsin(t3) , [1,1.14159265,0.141592654,-0.858407346] * pq.radian, 8)
+        self.numAssertAlmostEqual(np.arcsin(t3) , [1,1.14159265,0.141592654,-0.858407346] * pq.radian, 8)
 
 
         # cos
-
-        self.assertAlmostEqual(pq.cos( 5 * pq.radian),
+        self.assertAlmostEqual(np.cos( 5 * pq.radian),
                                 0.283662185 * pq.dimensionless)
         t2 = [1,2,3,4] * pq.radian
-        self.numAssertAlmostEqual(pq.cos(t2) , [0.540302306, -0.416146837,
+        self.numAssertAlmostEqual(np.cos(t2) , [0.540302306, -0.416146837,
                                                 -0.989992497, -0.653643621]
                                                  * pq.dimensionless, 8)
 
         # arccos
-        self.assertAlmostEqual(pq.arccos( 0.283662185 * pq.dimensionless),
+        self.assertAlmostEqual(np.arccos( 0.283662185 * pq.dimensionless),
                                1.28318531 * pq.radian)
         t3 = [0.540302306, -0.416146837,
               -0.989992497, -0.653643621] * pq.dimensionless
-        self.numAssertAlmostEqual(pq.arccos(t3) ,
+        self.numAssertAlmostEqual(np.arccos(t3) ,
                                    [1,2,3,2.28318531] * pq.radian, 8)
 
         # tan
-
-        self.assertAlmostEqual(pq.tan( 5 * pq.radian),
+        self.assertAlmostEqual(np.tan( 5 * pq.radian),
                                -3.38051501 * pq.dimensionless)
         t2 = [1,2,3,4] * pq.radian
-        self.numAssertAlmostEqual(pq.tan(t2) ,
+        self.numAssertAlmostEqual(np.tan(t2) ,
                                   [1.55740772, -2.18503986,
                                    -0.142546543, 1.15782128] * pq.dimensionless, 8)
 
         # arctan
-        self.assertAlmostEqual(pq.arctan( 0.283662185 * pq.dimensionless),
+        self.assertAlmostEqual(np.arctan( 0.283662185 * pq.dimensionless),
                                  0.276401407 * pq.radian)
         t3 = [1.55740772, -2.18503986, -0.142546543, 1.15782128] * pq.dimensionless
-        self.numAssertAlmostEqual(pq.arctan(t3) ,
+        self.numAssertAlmostEqual(np.arctan(t3) ,
                                    [1,-1.14159265,-0.141592654,0.858407346] * pq.radian, 8)
+
         #arctan2
-
-
-        self.assertAlmostEqual(pq.arctan2(1 * pq.dimensionless,
+        self.assertAlmostEqual(np.arctan2(1 * pq.dimensionless,
                                           0.283662185 * pq.dimensionless),
                                            1.2943949196743 * pq.radian)
         t4 = [1.55740772, -2.18503986, -0.142546543, 1.15782128] * pq.dimensionless
-        self.numAssertAlmostEqual(pq.arctan2([1,1,1,1] * pq.dimensionless ,t3) ,
+        self.numAssertAlmostEqual(np.arctan2([1,1,1,1] * pq.dimensionless ,t3) ,
                                 [0.57079632815379,2.7123889798199,
                                  1.7123889803119,0.71238898138855] * pq.radian, 8)
 
-
         #hypot
-
-        self.assertAlmostEqual(pq.hypot(3 * pq.m, 4 * pq.m),  5 * pq.m)
+        self.assertAlmostEqual(qmath.hypot(3 * pq.m, 4 * pq.m),  5 * pq.m)
         t5 = [3, 4, 5, 6] * pq.J
-        self.numAssertAlmostEqual(pq.hypot([1,1,1,1] * pq.J,t5) , [3.16227766,4.12310563,5.09901951,6.08276253] * pq.J, 8)
+        self.numAssertAlmostEqual(qmath.hypot([1,1,1,1] * pq.J,t5) , [3.16227766,4.12310563,5.09901951,6.08276253] * pq.J, 8)
 
         #degrees
         self.assertAlmostEqual(
@@ -351,14 +346,10 @@ class TestQuantities(unittest.TestCase):
         self.assertRaises(ValueError, np.radians, t5)
 
         #unwrap
-
         t5 = [5, 10, 20, 30, 40] * pq.radians
         t6 = [5., 3.71681469, 1.15044408, -1.41592654, -3.98229715] * pq.radians
-
-        self.numAssertAlmostEqual( pq.unwrap(t5), t6, 8)
-
-        self.numAssertAlmostEqual(pq.unwrap(t5, discont = np.pi * pq.radians ), t6, 8)
-
+        self.numAssertAlmostEqual(qmath.unwrap(t5), t6, 8)
+        self.numAssertAlmostEqual(qmath.unwrap(t5, discont = np.pi * pq.radians ), t6, 8)
 
 
 if __name__ == "__main__":

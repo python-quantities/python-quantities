@@ -6,8 +6,8 @@ import os
 from nose.tools import *
 from numpy.testing import *
 
-import quantities as pq
-from quantities.dimensionality import Dimensionality
+from .. import units as pq
+from ..dimensionality import Dimensionality
 
 
 meter = Dimensionality({pq.m: 1})

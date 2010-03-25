@@ -7,16 +7,17 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-import quantities as pq
+from .. import units as pq
+from ..quantity import Quantity
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
 
 def test_quantity_creation():
-    assert_raises(LookupError, pq.Quantity, 1, 'nonsense')
-    assert_equal(str(pq.Quantity(1, '')), '1 dimensionless')
+    assert_raises(LookupError, Quantity, 1, 'nonsense')
+    assert_equal(str(Quantity(1, '')), '1 dimensionless')
 
 def test_unit_conversion():
-    x = pq.Quantity(10., 'm')
+    x = Quantity(10., 'm')
     x.units = pq.ft
     assert_quantity_almost_equal(x, 32.80839895 * pq.ft)
 
@@ -106,22 +107,22 @@ class TestQuantities(unittest.TestCase):
     def test_creation(self):
         self.numAssertEqual(
             [100, -1.02, 30] * pq.cm**2,
-            pq.Quantity(np.array([100, -1.02, 30]),
+            Quantity(np.array([100, -1.02, 30]),
             pq.cm**2)
         )
         self.assertEqual(
             str([100, -1.02, 30] * pq.cm**2),
-            str(pq.Quantity(np.array([100, -1.02, 30]), pq.cm**2))
+            str(Quantity(np.array([100, -1.02, 30]), pq.cm**2))
         )
 
         self.assertEqual(
             -10.1 * pq.ohm,
-            pq.Quantity(-10.1, pq.ohm)
+            Quantity(-10.1, pq.ohm)
         )
 
         self.assertEqual(
             str(-10.1 * pq.ohm),
-            str(pq.Quantity(-10.1, pq.ohm))
+            str(Quantity(-10.1, pq.ohm))
         )
 
     def test_unit_aggregation(self):
@@ -174,7 +175,7 @@ class TestQuantities(unittest.TestCase):
         )
 
     def test_getitem(self):
-        tempArray1 = pq.Quantity(np.array([1.5, 2.5 , 3, 5]), pq.J)
+        tempArray1 = Quantity(np.array([1.5, 2.5 , 3, 5]), pq.J)
         temp = 2.5 * pq.J
         # check to see if quantities brought back from an array are good
         self.assertEqual(tempArray1[1], temp )
@@ -198,7 +199,7 @@ class TestQuantities(unittest.TestCase):
         self.numAssertEqual(tempArray2[1:3], tempArray4)
 
     def test_setitem (self):
-        temp = pq.Quantity([0,2,5,7.6], pq.lb)
+        temp = Quantity([0,2,5,7.6], pq.lb)
 
         # needs to check for incompatible units
         def test(value):
@@ -224,8 +225,8 @@ class TestQuantities(unittest.TestCase):
         self.numAssertEqual(tempArray4, tempArray2)
 
         # check and see that dimensionless numbers work correctly
-        tempArray5 = pq.Quantity([.2, -3, -5, -9,10])
-        tempArray6 = pq.Quantity([.2, -3, 0, 0,11])
+        tempArray5 = Quantity([.2, -3, -5, -9,10])
+        tempArray6 = Quantity([.2, -3, 0, 0,11])
 
         tempArray5[4] = 1 + tempArray5[4]
         tempArray5[2:4] = np.zeros(2)

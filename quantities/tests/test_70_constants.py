@@ -7,7 +7,7 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-import quantities as pq
+from .. import constants
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
 

@@ -71,3 +71,5 @@ from .viscosity import *
 
 from . import volume
 from .volume import *
+
+from ..unitquantity import set_default_units

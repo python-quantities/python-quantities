@@ -9,7 +9,8 @@ from numpy.testing.decorators import knownfailureif as fails_if
 from numpy.testing.decorators import skipif as skip_if
 
 import numpy as np
-import quantities as pq
+from .. import units as pq
+from ..quantity import Quantity
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
 
@@ -99,22 +100,22 @@ class iter_types(object):
             return rand(self._dtype, 5)
 
 def check_mul(m1, m2):
-    assert_quantity_equal(pq.m*m2, pq.Quantity(m2, 'm'))
+    assert_quantity_equal(pq.m*m2, Quantity(m2, 'm'))
 
-    q1 = pq.Quantity(m1, 'm')
-    q2 = pq.Quantity(m2, 's')
+    q1 = Quantity(m1, 'm')
+    q2 = Quantity(m2, 's')
     a1 = np.asarray(m1)
     a2 = np.asarray(m2)
-    assert_quantity_equal(q1*m2, pq.Quantity(a1*a2, 'm'))
-    assert_quantity_equal(q1*q2, pq.Quantity(a1*a2, 'm*s'))
+    assert_quantity_equal(q1*m2, Quantity(a1*a2, 'm'))
+    assert_quantity_equal(q1*q2, Quantity(a1*a2, 'm*s'))
 
 def check_rmul(m1, m2):
-    assert_quantity_equal(m1*pq.m, pq.Quantity(m1, 'm'))
+    assert_quantity_equal(m1*pq.m, Quantity(m1, 'm'))
 
-    q2 = pq.Quantity(m2, 's')
+    q2 = Quantity(m2, 's')
     a1 = np.asarray(m1)
     a2 = np.asarray(m2)
-    assert_quantity_equal(m1*q2, pq.Quantity(a1*a2, 's'))
+    assert_quantity_equal(m1*q2, Quantity(a1*a2, 's'))
 
 def test_mul():
     dtypes = get_dtypes()
@@ -166,15 +167,15 @@ def test_remainder():
 def test_negative():
     assert_quantity_equal(
         -pq.m,
-        pq.Quantity(-1, 'm')
+        Quantity(-1, 'm')
     )
     assert_quantity_equal(
-        -pq.Quantity(5, 'm'),
-        pq.Quantity(-5, 'm')
+        -Quantity(5, 'm'),
+        Quantity(-5, 'm')
     )
     assert_quantity_equal(
-        -pq.Quantity(-5.0, 'm'),
-        pq.Quantity(5.0, 'm')
+        -Quantity(-5.0, 'm'),
+        Quantity(5.0, 'm')
     )
 
 def test_addition():

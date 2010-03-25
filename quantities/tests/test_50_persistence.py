@@ -7,7 +7,9 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-import quantities as pq
+from .. import units as pq
+from ..uncertainquantity import UncertainQuantity
+from .. import constants
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
 
@@ -27,12 +29,12 @@ def test_quantitiy_persistance():
     assert_array_equal(x, y)
 
 def test_uncertainquantitiy_persistance():
-    x = pq.UncertainQuantity(20, 'm', 0.2)
+    x = UncertainQuantity(20, 'm', 0.2)
     y = pickle.loads(pickle.dumps(x))
     assert_array_equal(x, y)
 
 def test_unitconstant_persistance():
-    x = pq.constants.m_e
+    x = constants.m_e
     y = pickle.loads(pickle.dumps(x))
     assert_array_equal(x, y)
 
