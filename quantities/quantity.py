@@ -323,6 +323,9 @@ class Quantity(np.ndarray):
     def __ipow__(self, other):
         return super(Quantity, self).__ipow__(other)
 
+    def __round__(self, decimals=0):
+        return np.around(self, decimals)
+
     @with_doc(np.ndarray.__repr__)
     def __repr__(self):
         return '%s * %s'%(

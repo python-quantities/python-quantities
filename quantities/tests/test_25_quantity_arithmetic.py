@@ -15,11 +15,11 @@ from . import assert_quantity_equal, assert_quantity_almost_equal
 
 
 def rand(dtype, *args):
-    try:
+    if dtype in (np.complex64, np.complex128, np.complex256):
         return dtype(
             10*np.random.rand(*args)+10j*np.random.rand(*args),
         )
-    except TypeError:
+    else:
         return dtype(10*np.random.rand(*args))
 
 def check(f, *args, **kwargs):

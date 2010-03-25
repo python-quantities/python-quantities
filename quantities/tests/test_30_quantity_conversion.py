@@ -146,14 +146,14 @@ class TestQuantities(unittest.TestCase):
         self.assertAlmostEqual(
             pq.m/pq.ft.rescale(pq.m),
             3.280839895,
-            10,
-            pq.m/pq.ft.rescale(pq.m)
+            places=10,
+            msg=pq.m/pq.ft.rescale(pq.m)
         )
         self.assertAlmostEqual(
             pq.J/pq.BTU.rescale(pq.J),
             0.00094781712,
-            10,
-            pq.J/pq.BTU.rescale(pq.J)
+            places=10,
+            msg=pq.J/pq.BTU.rescale(pq.J)
         )
 
     def test_equality(self):

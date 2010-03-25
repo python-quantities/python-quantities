@@ -248,14 +248,14 @@ class TestQuantities(unittest.TestCase):
         if np.iscomplex(a1).all():
             af1, af2 = a1.flat.real, a2.flat.real
             for ind in xrange(af1.nelements()):
-                self.assertAlmostEqual(af1[ind], af2[ind], prec)
+                self.assertAlmostEqual(af1[ind], af2[ind], places=prec)
             af1, af2 = a1.flat.imag, a2.flat.imag
             for ind in xrange(af1.nelements()):
-                self.assertAlmostEqual(af1[ind], af2[ind], prec)
+                self.assertAlmostEqual(af1[ind], af2[ind], places=prec)
         else:
             af1, af2 = a1.flat, a2.flat
             for x1 , x2 in zip(af1, af2):
-                self.assertAlmostEqual(x1, x2, prec)
+                self.assertAlmostEqual(x1, x2, places=prec)
 
 
     def test_numpy_trig_functions(self):

@@ -16,6 +16,5 @@ def test_units_protected():
     assert_raises(TypeError, inplace, 'add', pq.m, pq.m)
     assert_raises(TypeError, inplace, 'sub', pq.m, pq.m)
     assert_raises(TypeError, inplace, 'mul', pq.m, pq.m)
-    assert_raises(TypeError, inplace, 'div', pq.m, pq.m)
     assert_raises(TypeError, inplace, 'truediv', pq.m, pq.m)
     assert_raises(TypeError, inplace, 'pow', pq.m, 2)
