@@ -179,7 +179,7 @@ def test_rounding():
         [-1., -1., -0., 1., 2., 2., 2.] * pq.m
     )
 
-@skip_if(np.__version__[:3] < '1.4.1')
+@skip_if(np.__version__[:5] < '1.4.1')
 def test_fix():
     assert_array_equal(np.fix(3.14 * pq.degF), 3.0 * pq.degF)
     assert_array_equal(np.fix(3.0 * pq.degF), 3.0 * pq.degF)
