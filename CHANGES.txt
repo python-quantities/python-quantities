@@ -17,6 +17,11 @@ with incompatible units, and will overwrite the previous units.
 The log and exp functions have been removed. Quantities will work
 with numpy's version of these functions.
 
+Quantities development has migrated from bzr/launchpad to
+git/github. Please report problems to 
+http://github.com/python-quantities/python-quantities or visit the
+mailing list at http://groups.google.com/group/python-quantities
+
 Bugs fixed
 **********
 

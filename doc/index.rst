@@ -19,7 +19,7 @@ already supported.
 
 Quantities is actively developed, and while the current features and API are
 stable, test coverage is incomplete and the package is not ready for
-production use.
+production use. Python-2.6.0 or later is required.
 
 .. toctree::
    :maxdepth: 2
