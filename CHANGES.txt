@@ -6,12 +6,16 @@ CHANGES
 0.8.0
 -----
 
+Quantities now requires Python-2.6 or later. Python-3 is supported. 
+
 The fill method, and __setitem__ methods will now accept scalar
 values in addition to quantities. If a scalar is passed, an
 assumption is made that the change should only be applied to the
 quantity's magnitude. The fill method will also accept a quantity
 with incompatible units, and will overwrite the previous units.
 
+The log and exp functions have been removed. Quantities will work
+with numpy's version of these functions.
 
 Bugs fixed
 **********
