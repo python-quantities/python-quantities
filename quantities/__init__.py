@@ -263,6 +263,4 @@ from . import constants
 
 from .umath import *
 
-from numpy.testing import Tester
-test = Tester().test
-#bench = Tester().bench
+from .tests import test

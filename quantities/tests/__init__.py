@@ -3,12 +3,26 @@ from functools import wraps
 
 from nose.tools import assert_equal
 import numpy as np
-from numpy.testing import assert_array_equal, assert_array_almost_equal
+from numpy.testing import Tester, assert_array_equal, assert_array_almost_equal
 
 from .. import markup
 
-markup.config.use_unicode = False
+USE_UNICODE = False
+def setup():
+    global USE_UNICODE
+    USE_UNICODE = markup.config.use_unicode
+    markup.config.use_unicode = False
 
+def teardown():
+    markup.config.use_unicode = USE_UNICODE
+
+class QuantityTester(Tester):
+    def test(self, *args, **kwargs):
+        argv = kwargs.get('extra_argv', [])
+        argv.append('--exe')
+        kwargs['extra_argv'] = argv
+        return Tester.test(self, *args, **kwargs)
+test = QuantityTester().test
 
 def assert_quantity_equal(x, y, err_msg='', verbose=True):
     try:
