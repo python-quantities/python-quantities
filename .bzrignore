@@ -1,7 +1,0 @@
-.coverage
-build
-dist
-.eric4project/project-apis.db
-.ropeproject/objectdb
-doc/reference/generated
-doc/_build/*
