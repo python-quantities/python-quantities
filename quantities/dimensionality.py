@@ -341,7 +341,13 @@ def _d_dimensionless(q1, out=None):
         raise ValueError("quantity must be dimensionless")
     return Dimensionality()
 p_dict[np.log] = _d_dimensionless
+p_dict[np.log10] = _d_dimensionless
+p_dict[np.log2] = _d_dimensionless
+p_dict[np.log1p] = _d_dimensionless
 p_dict[np.exp] = _d_dimensionless
+p_dict[np.expm1] = _d_dimensionless
+p_dict[np.logaddexp] = _d_dimensionless
+p_dict[np.logaddexp2] = _d_dimensionless
 
 def _d_trig(q1, out=None):
     try:
