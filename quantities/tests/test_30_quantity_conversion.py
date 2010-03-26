@@ -7,7 +7,7 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-from .. import units as pq
+from .. import units
 from ..quantity import Quantity
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
@@ -18,53 +18,53 @@ def test_quantity_creation():
 
 def test_unit_conversion():
     x = Quantity(10., 'm')
-    x.units = pq.ft
-    assert_quantity_almost_equal(x, 32.80839895 * pq.ft)
+    x.units = units.ft
+    assert_quantity_almost_equal(x, 32.80839895 * units.ft)
 
-    x = 10 * pq.m
-    x.units = pq.ft
-    assert_quantity_almost_equal(x, 32.80839895 * pq.ft)
+    x = 10 * units.m
+    x.units = units.ft
+    assert_quantity_almost_equal(x, 32.80839895 * units.ft)
 
-    x = 10 * pq.m
+    x = 10 * units.m
     x.units = u'ft'
-    assert_quantity_almost_equal(x, 32.80839895 * pq.ft)
+    assert_quantity_almost_equal(x, 32.80839895 * units.ft)
 
 def test_compound_reduction():
 
-    pc_per_cc = pq.CompoundUnit("pc/cm**3")
-    temp = pc_per_cc * pq.CompoundUnit('m/m**3')
+    pc_per_cc = units.CompoundUnit("pc/cm**3")
+    temp = pc_per_cc * units.CompoundUnit('m/m**3')
     assert_equal(str(temp), "1.0 (pc/cm**3)*(m/m**3)")
 
     temp = temp.simplified
-    temp = temp.rescale(pq.pc**-4)
+    temp = temp.rescale(units.pc**-4)
     assert_equal(str(temp), "2.79740021556e+88 1/pc**4")
 
-    temp = temp.rescale(pq.m**-4)
+    temp = temp.rescale(units.m**-4)
     assert_equal(str(temp), "3.08568025e+22 1/m**4")
     assert_equal(str(1/temp), "3.24077648681e-23 m**4")
     assert_equal(str(temp**-1), "3.24077648681e-23 m**4")
 
     # does this handle regular units correctly?
-    temp1 = 3.14159 * pq.m
+    temp1 = 3.14159 * units.m
 
     assert_quantity_almost_equal(temp1, temp1.simplified)
 
     assert_equal(str(temp1), str(temp1.simplified))
 
 def test_default_units():
-    pq.set_default_units(length='mm')
-    assert_equal(pq.m.simplified.magnitude, 1000)
-    assert_equal(pq.m.simplified.units, pq.mm)
-    x = 1*pq.m
+    units.set_default_units(length='mm')
+    assert_equal(units.m.simplified.magnitude, 1000)
+    assert_equal(units.m.simplified.units, units.mm)
+    x = 1*units.m
     y = x.simplified
     assert_equal(y.magnitude, 1000)
-    assert_equal(y.units, pq.mm)
-    pq.set_default_units(length='m')
-    assert_equal(pq.m.simplified.magnitude, 1)
-    assert_equal(pq.m.simplified.units, pq.m)
+    assert_equal(y.units, units.mm)
+    units.set_default_units(length='m')
+    assert_equal(units.m.simplified.magnitude, 1)
+    assert_equal(units.m.simplified.units, units.m)
     z = y.simplified
     assert_equal(z.magnitude, 1)
-    assert_equal(z.units, pq.m)
+    assert_equal(z.units, units.m)
 
 class TestQuantities(unittest.TestCase):
 
@@ -101,40 +101,40 @@ class TestQuantities(unittest.TestCase):
                 self.assertAlmostEqual(x1, x2, prec)
 
     def test_simple(self):
-        self.assertEqual(str(pq.m), "1 m (meter)", str(pq.m))
-        self.assertEqual(str(pq.J), "1 J (joule)", str(pq.J))
+        self.assertEqual(str(units.m), "1 m (meter)", str(units.m))
+        self.assertEqual(str(units.J), "1 J (joule)", str(units.J))
 
     def test_creation(self):
         self.numAssertEqual(
-            [100, -1.02, 30] * pq.cm**2,
+            [100, -1.02, 30] * units.cm**2,
             Quantity(np.array([100, -1.02, 30]),
-            pq.cm**2)
+            units.cm**2)
         )
         self.assertEqual(
-            str([100, -1.02, 30] * pq.cm**2),
-            str(Quantity(np.array([100, -1.02, 30]), pq.cm**2))
-        )
-
-        self.assertEqual(
-            -10.1 * pq.ohm,
-            Quantity(-10.1, pq.ohm)
+            str([100, -1.02, 30] * units.cm**2),
+            str(Quantity(np.array([100, -1.02, 30]), units.cm**2))
         )
 
         self.assertEqual(
-            str(-10.1 * pq.ohm),
-            str(Quantity(-10.1, pq.ohm))
+            -10.1 * units.ohm,
+            Quantity(-10.1, units.ohm)
+        )
+
+        self.assertEqual(
+            str(-10.1 * units.ohm),
+            str(Quantity(-10.1, units.ohm))
         )
 
     def test_unit_aggregation(self):
-        joule = pq.kg*pq.m**2/pq.s**2
-        pc_per_cc = pq.CompoundUnit("pc/cm**3")
-        area_per_volume = pq.CompoundUnit("m**2/m**3")
-        self.assertEqual(str(joule/pq.m), "1.0 kg*m/s**2", str(joule/pq.m))
-        self.assertEqual(str(joule*pq.m), "1.0 kg*m**3/s**2", str(joule*pq.m))
+        joule = units.kg*units.m**2/units.s**2
+        pc_per_cc = units.CompoundUnit("pc/cm**3")
+        area_per_volume = units.CompoundUnit("m**2/m**3")
+        self.assertEqual(str(joule/units.m), "1.0 kg*m/s**2", str(joule/units.m))
+        self.assertEqual(str(joule*units.m), "1.0 kg*m**3/s**2", str(joule*units.m))
         self.assertEqual(
-            str(pq.J*pc_per_cc),
+            str(units.J*pc_per_cc),
             "1.0 J*(pc/cm**3)",
-            str(pq.J*pc_per_cc)
+            str(units.J*pc_per_cc)
         )
         temp = pc_per_cc / area_per_volume
         self.assertEqual(
@@ -145,38 +145,38 @@ class TestQuantities(unittest.TestCase):
 
     def test_ratios(self):
         self.assertAlmostEqual(
-            pq.m/pq.ft.rescale(pq.m),
+            units.m/units.ft.rescale(units.m),
             3.280839895,
             places=10,
-            msg=pq.m/pq.ft.rescale(pq.m)
+            msg=units.m/units.ft.rescale(units.m)
         )
         self.assertAlmostEqual(
-            pq.J/pq.BTU.rescale(pq.J),
+            units.J/units.BTU.rescale(units.J),
             0.00094781712,
             places=10,
-            msg=pq.J/pq.BTU.rescale(pq.J)
+            msg=units.J/units.BTU.rescale(units.J)
         )
 
     def test_equality(self):
-        test1 = 1.5 * pq.km
-        test2 = 1.5 * pq.km
+        test1 = 1.5 * units.km
+        test2 = 1.5 * units.km
 
         self.assertEqual(test1, test2)
 
         # test less than and greater than
-        self.assertTrue(1.5 * pq.km > 2.5 * pq.cm)
-        self.assertTrue(1.5 * pq.km >= 2.5 * pq.cm)
-        self.assertTrue(not (1.5 * pq.km < 2.5 * pq.cm))
-        self.assertTrue(not (1.5 * pq.km <= 2.5 * pq.cm))
+        self.assertTrue(1.5 * units.km > 2.5 * units.cm)
+        self.assertTrue(1.5 * units.km >= 2.5 * units.cm)
+        self.assertTrue(not (1.5 * units.km < 2.5 * units.cm))
+        self.assertTrue(not (1.5 * units.km <= 2.5 * units.cm))
 
         self.assertTrue(
-            1.5 * pq.km != 1.5 * pq.cm,
+            1.5 * units.km != 1.5 * units.cm,
             "unequal quantities are not-not-equal"
         )
 
     def test_getitem(self):
-        tempArray1 = Quantity(np.array([1.5, 2.5 , 3, 5]), pq.J)
-        temp = 2.5 * pq.J
+        tempArray1 = Quantity(np.array([1.5, 2.5 , 3, 5]), units.J)
+        temp = 2.5 * units.J
         # check to see if quantities brought back from an array are good
         self.assertEqual(tempArray1[1], temp )
         # check the formatting
@@ -189,9 +189,9 @@ class TestQuantities(unittest.TestCase):
         self.assertRaises(IndexError, tempfunc, 10)
 
         # test get item using slicing
-        tempArray2 = [100, .2, -1, -5, -6] * pq.mA
-        tempArray3 = [100, .2, -1, -5] * pq.mA
-        tempArray4 = [.2, -1 ] * pq.mA
+        tempArray2 = [100, .2, -1, -5, -6] * units.mA
+        tempArray3 = [100, .2, -1, -5] * units.mA
+        tempArray4 = [.2, -1 ] * units.mA
 
         self.numAssertEqual(tempArray2[:], tempArray2)
 
@@ -199,29 +199,29 @@ class TestQuantities(unittest.TestCase):
         self.numAssertEqual(tempArray2[1:3], tempArray4)
 
     def test_setitem (self):
-        temp = Quantity([0,2,5,7.6], pq.lb)
+        temp = Quantity([0,2,5,7.6], units.lb)
 
         # needs to check for incompatible units
         def test(value):
             temp[2] = value
 
         # make sure normal assignment works correctly
-        test(2 *pq.lb)
+        test(2 *units.lb)
 
-        self.assertRaises(ValueError, test, 60 * pq.inch * pq.J)
+        self.assertRaises(ValueError, test, 60 * units.inch * units.J)
 
         #test set item using slicing
-        tempArray2 = [100, .2, -1, -5, -6] * pq.mA
-        tempArray3 = [100, .2, 0, 0, -6] * pq.mA
-        tempArray4 = [100,  1,  1,  1,  1] * pq.mA
+        tempArray2 = [100, .2, -1, -5, -6] * units.mA
+        tempArray3 = [100, .2, 0, 0, -6] * units.mA
+        tempArray4 = [100,  1,  1,  1,  1] * units.mA
 
-        tempArray4[1:] = [.2, -1, -5, -6] * pq.mA
+        tempArray4[1:] = [.2, -1, -5, -6] * units.mA
         self.numAssertEqual(tempArray4, tempArray2)
 
-        tempArray3[2:4] = [-1, -5] * pq.mA
+        tempArray3[2:4] = [-1, -5] * units.mA
         self.numAssertEqual(tempArray3, tempArray2)
 
-        tempArray4[:] = [100, .2, -1, -5, -6] * pq.mA
+        tempArray4[:] = [100, .2, -1, -5, -6] * units.mA
         self.numAssertEqual(tempArray4, tempArray2)
 
         # check and see that dimensionless numbers work correctly
@@ -237,17 +237,13 @@ class TestQuantities(unittest.TestCase):
         def tempfunc(value):
             temp[10] = value
 
-        self.assertRaises(IndexError, tempfunc, 5 * pq.lb)
+        self.assertRaises(IndexError, tempfunc, 5 * units.lb)
 
     def test_iterator(self):
         f = np.array([100, 200, 1, 60, -80])
-        x = f * pq.kPa
+        x = f * units.kPa
 
         # make sure the iterator objects have the correct units
         for i in x:
             # currently fails
-            self.assertEqual(i.units, pq.kPa.units)
-
-
-if __name__ == "__main__":
-    run_module_suite()
+            self.assertEqual(i.units, units.kPa.units)

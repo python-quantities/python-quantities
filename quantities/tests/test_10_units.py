@@ -4,7 +4,7 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-from .. import units as pq
+from .. import units
 
 
 def test_units_protected():
@@ -12,9 +12,9 @@ def test_units_protected():
         u.units = v
     def inplace(op, u, val):
         getattr(u, '__i%s__'%op)(val)
-    assert_raises(AttributeError, setunits, pq.m, pq.ft)
-    assert_raises(TypeError, inplace, 'add', pq.m, pq.m)
-    assert_raises(TypeError, inplace, 'sub', pq.m, pq.m)
-    assert_raises(TypeError, inplace, 'mul', pq.m, pq.m)
-    assert_raises(TypeError, inplace, 'truediv', pq.m, pq.m)
-    assert_raises(TypeError, inplace, 'pow', pq.m, 2)
+    assert_raises(AttributeError, setunits, units.m, units.ft)
+    assert_raises(TypeError, inplace, 'add', units.m, units.m)
+    assert_raises(TypeError, inplace, 'sub', units.m, units.m)
+    assert_raises(TypeError, inplace, 'mul', units.m, units.m)
+    assert_raises(TypeError, inplace, 'truediv', units.m, units.m)
+    assert_raises(TypeError, inplace, 'pow', units.m, 2)

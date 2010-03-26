@@ -7,7 +7,7 @@ from numpy.testing import *
 from numpy.testing.utils import *
 
 import numpy as np
-from .. import units as pq
+from .. import units
 from .. import constants
 from ..uncertainquantity import UncertainQuantity
 
@@ -15,20 +15,20 @@ from . import assert_quantity_equal, assert_quantity_almost_equal
 
 
 def test_uncertainquantity_creation():
-    a = UncertainQuantity(1, pq.m)
+    a = UncertainQuantity(1, units.m)
     assert_equal(str(a), '1.0 m\n+/-0.0 m (1 sigma)')
-    a = UncertainQuantity([1, 1, 1], pq.m)
+    a = UncertainQuantity([1, 1, 1], units.m)
     assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.  0.  0.] m (1 sigma)')
     a = UncertainQuantity(a)
     assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.  0.  0.] m (1 sigma)')
-    a = UncertainQuantity([1, 1, 1], pq.m, [.1, .1, .1])
+    a = UncertainQuantity([1, 1, 1], units.m, [.1, .1, .1])
     assert_equal(str(a), '[ 1.  1.  1.] m\n+/-[ 0.1  0.1  0.1] m (1 sigma)')
-    assert_raises(ValueError, UncertainQuantity, [1, 1, 1], pq.m, 1)
-    assert_raises(ValueError, UncertainQuantity, [1, 1, 1], pq.m, [1, 1])
+    assert_raises(ValueError, UncertainQuantity, [1, 1, 1], units.m, 1)
+    assert_raises(ValueError, UncertainQuantity, [1, 1, 1], units.m, [1, 1])
 
 def test_uncertainquantity_rescale():
-    a = UncertainQuantity([1, 1, 1], pq.m, [.1, .1, .1])
-    b = a.rescale(pq.ft)
+    a = UncertainQuantity([1, 1, 1], units.m, [.1, .1, .1])
+    b = a.rescale(units.ft)
     assert_equal(
         str(b),
         '[ 3.2808399  3.2808399  3.2808399] ft'
@@ -76,7 +76,7 @@ def test_uncertainquantity_divide():
         'dimensionless (1 sigma)'
     )
     assert_equal(
-        str(a/pq.m),
+        str(a/units.m),
         '[ 1.  2.] dimensionless\n+/-[ 0.1  0.2] '
         'dimensionless (1 sigma)'
     )
