@@ -8,7 +8,7 @@ Prerequisites
 
 Quantities has a few dependencies:
 
-* Python_ (>=2.5)
+* Python_ (>=2.6)
 * NumPy_ (>=1.3)
 
 in order to run the test suite, you will need:
