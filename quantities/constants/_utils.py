@@ -7,7 +7,7 @@ from quantities.uncertainquantity import UncertainQuantity
 
 def _cd(name):
     entry = physical_constants[name]
-    if entry['precision']:
+    if False: #entry['precision']:
         return UncertainQuantity(
             entry['value'], entry['units'], entry['precision']
         )
