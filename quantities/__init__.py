@@ -248,6 +248,8 @@ from __future__ import absolute_import
 
 from .version import __version__
 
+from .registry import unit_registry
+
 from . import quantity
 from .quantity import Quantity
 
