@@ -215,24 +215,24 @@ class Quantity(np.ndarray):
 
     def __array_prepare__(self, obj, context=None):
         if self.__array_priority__ >= Quantity.__array_priority__:
-            result = obj.view(type(self))
+            res = obj if isinstance(obj, type(self)) else obj.view(type(self))
         else:
             # don't want a UnitQuantity
-            result = obj.view(Quantity)
+            res = obj.view(Quantity)
         if context is None:
-            return result
+            return res
 
         uf, objs, huh = context
         if uf.__name__.startswith('is'):
             return obj
 #        print self, obj, result, uf, objs
         try:
-            result._dimensionality = p_dict[uf](*objs)
+            res._dimensionality = p_dict[uf](*objs)
         except KeyError:
             print 'ufunc %r not supported by quantities' % uf
             print 'please file a bug report by visiting'
             print 'https://bugs.launchpad.net/python-quantities'
-        return result
+        return res
 
     def __array_wrap__(self, obj, context=None):
         if not isinstance(obj, Quantity):
