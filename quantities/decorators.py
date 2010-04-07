@@ -13,7 +13,21 @@ from .quantity import Quantity
 from .registry import unit_registry
 
 
-def require_units(*q_args, **q_kwargs):
+def rescale_units(*q_args, **q_kwargs):
+    """
+    a decorator that will rescale the input to the specified units
+    or raise an error. For example, a method with signature::
+
+      @rescale_units(None, 'eV', 'm', c='K', d='dimensionless')
+      def foo(self, a, b, c=1, d=1)
+
+    will skip rescaling the input units for self, because "None" was
+    specified. d will not be skipped, but be rescaled to be
+    dimensionless. It is important to specify "None" for the self
+    argument passed to methods (there is not a clean way to determine
+    if the wrapped item is a function or a method). 
+
+    """
     q_args = list(q_args)
     for i, q in enumerate(q_args):
         if isinstance(q, str):
@@ -25,11 +39,9 @@ def require_units(*q_args, **q_kwargs):
 
     @decorator
     def wrapped(f, *args, **kwargs):
-        argspec = inspect.getargspec(f)[0]
-        skip_self = True if (argspec and argspec[0] == 'self') else False
         try:
+            args = list(args)
             for i, (v, q) in enumerate(zip(args, wrapped.args)):
-                if i == 0 and skip_self: continue
                 if q is None: continue
                 if v.units != q.units:
                     args[i] = v.rescale(q.units)
