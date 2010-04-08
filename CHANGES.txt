@@ -3,10 +3,22 @@ CHANGES
 =======
 
 -----
+0.9.0
+-----
+
+Numpy-1.4.0 or later is also required, in order to properly handle
+units during in-place arithmetic.
+
+Physical constants are now instances of Quantity, rather than
+UncertainQuantity. Development on UncertainQuantity is not as
+advanced, so hopefully this change will make the constants package
+more robust.
+
+-----
 0.8.0
 -----
 
-Quantities now requires Python-2.6 or later. Python-3 is supported. 
+Quantities now requires Python-2.6 or later. Python-3 is supported.
 
 The fill method, and __setitem__ methods will now accept scalar
 values in addition to quantities. If a scalar is passed, an
