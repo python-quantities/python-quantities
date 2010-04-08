@@ -10,7 +10,7 @@ import numpy as np
 from . import markup
 from .quantity import Quantity, scale_other_units
 from .registry import unit_registry
-from .utilities import with_doc
+from .decorators import with_doc
 
 class UncertainQuantity(Quantity):
 

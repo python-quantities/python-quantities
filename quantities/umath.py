@@ -4,7 +4,7 @@ import numpy as np
 
 from .quantity import Quantity
 from .units import dimensionless, radian, degree
-from .utilities import with_doc
+from .decorators import with_doc
 
 
 #__all__ = [

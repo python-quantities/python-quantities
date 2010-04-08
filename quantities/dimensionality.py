@@ -10,7 +10,7 @@ import numpy as np
 
 from . import markup
 from .registry import unit_registry
-from .utilities import memoize
+from .decorators import memoize
 
 def assert_isinstance(obj, types):
     try:

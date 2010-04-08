@@ -11,7 +11,7 @@ from .dimensionality import Dimensionality
 from . import markup
 from .quantity import Quantity, get_conversion_factor
 from .registry import unit_registry
-from .utilities import memoize, with_doc
+from .decorators import memoize, with_doc
 
 
 __all__ = [

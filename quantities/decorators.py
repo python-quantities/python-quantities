@@ -7,10 +7,54 @@ import re
 import string
 import sys
 import warnings
-from functools import partial
+from functools import partial, wraps
 
-from .quantity import Quantity
 
+def memoize(f, cache={}):
+    @wraps(f)
+    def g(*args, **kwargs):
+        key = (f, tuple(args), frozenset(kwargs.items()))
+        if key not in cache:
+            cache[key] = f(*args, **kwargs)
+        return cache[key].copy()
+    return g
+
+
+class with_doc:
+
+    """
+    This decorator combines the docstrings of the provided and decorated objects
+    to produce the final docstring for the decorated object.
+    """
+
+    def __init__(self, method, use_header=True):
+        self.method = method
+        if use_header:
+            self.header = \
+    """
+
+    Notes
+    -----
+    """
+        else:
+            self.header = ''
+
+    def __call__(self, new_method):
+        new_doc = new_method.__doc__
+        original_doc = self.method.__doc__
+        header = self.header
+
+        if original_doc and new_doc:
+            new_method.__doc__ = """
+    %s
+    %s
+    %s
+        """ % (original_doc, header, new_doc)
+
+        elif original_doc:
+            new_method.__doc__ = original_doc
+
+        return new_method
 
 def quantitizer(base_function,
                 handler_function = lambda *args, **kwargs: 1.0):
@@ -28,6 +72,9 @@ def quantitizer(base_function,
             and works with physical quantities. It will have almost the same
             __name__ and almost the same __doc__.
     """
+
+    from .quantity import Quantity
+
     # define a function which will wrap the base function so that it works
     # with Quantities
     def wrapped_function(*args , **kwargs):
