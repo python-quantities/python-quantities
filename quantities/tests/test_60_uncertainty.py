@@ -35,13 +35,6 @@ def test_uncertainquantity_rescale():
         '\n+/-[ 0.32808399  0.32808399  0.32808399] ft (1 sigma)'
     )
 
-def test_uncertainquantity_simplified():
-    a = 1000*constants.electron_volt
-    assert_equal(
-        str(a.simplified),
-        '1.602176487e-16 kg*m**2/s**2\n+/-4e-24 kg*m**2/s**2 (1 sigma)'
-    )
-
 def test_uncertainquantity_set_uncertainty():
     a = UncertainQuantity([1, 2], 'm', [.1, .2])
     assert_equal(
