@@ -225,7 +225,7 @@ class Quantity(np.ndarray):
         uf, objs, huh = context
         if uf.__name__.startswith('is'):
             return obj
-#        print self, obj, result, uf, objs
+        #print self, obj, res, uf, objs
         try:
             res._dimensionality = p_dict[uf](*objs)
         except KeyError:
