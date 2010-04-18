@@ -14,6 +14,11 @@ UncertainQuantity. Development on UncertainQuantity is not as
 advanced, so hopefully this change will make the constants package
 more robust.
 
+Bugs fixed
+**********
+
+* #1 use revolution/min instead of 1/min as definition of rpm 
+
 -----
 0.8.0
 -----

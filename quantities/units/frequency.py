@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 
 from ..unitquantity import UnitQuantity
+from .angle import revolution
 from .time import s, min
 from .dimensionless import count
 
@@ -29,7 +30,7 @@ GHz = gigahertz = UnitQuantity(
 )
 rpm = revolutions_per_minute = UnitQuantity(
     'revolutions_per_minute',
-    min**-1,
+    revolution/min,
     symbol='rpm'
 )
 cps = UnitQuantity(
