@@ -265,4 +265,7 @@ from . import constants
 
 from .umath import *
 
-from .tests import test
+try:
+    from .tests import test
+except ImportError:
+    pass
