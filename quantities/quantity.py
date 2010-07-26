@@ -340,19 +340,6 @@ class Quantity(np.ndarray):
             dims = self.dimensionality.string
         return '%s %s'%(str(self.magnitude), dims)
 
-    def __float__(self):
-        return self.simplified.magnitude.__float__()
-
-    def __int__(self):
-        return self.simplified.magnitude.__int__()
-
-    if sys.version_info[0] < 3:
-        def __long__(self):
-            return self.simplified.magnitude.__long__()
-
-    def __complex__(self):
-        return self.simplified.magnitude.__complex__()
-
     @with_doc(np.ndarray.__getitem__)
     def __getitem__(self, key):
         if isinstance(key, int):
