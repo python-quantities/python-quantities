@@ -48,12 +48,6 @@ attosecond = UnitTime(
     symbol='as',
     aliases=['attoseconds']
 ) # as is a keyword in python2.6
-jiffy = UnitTime(
-    'jiffy',
-    s/100,
-    aliases=['jiffies'],
-    doc='no kidding, a jiffy is 1/100 of a second.'
-)
 
 min = minute = UnitTime(
     'minute',
