@@ -10,7 +10,7 @@ m = meter = metre = UnitLength(
     symbol='m',
     aliases=['meters', 'metre', 'metres']
 )
-km = kilometer = kilomtre = UnitLength(
+km = kilometer = kilometre = UnitLength(
     'kilometer',
     1000*m,
     symbol='km',
