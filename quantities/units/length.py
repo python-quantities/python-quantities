@@ -57,7 +57,7 @@ angstrom = UnitLength(
 )
 fm = femtometer = femtometre = fermi = UnitLength(
     'femtometer',
-    nm/1000,
+    pm/1000,
     symbol='fm',
     aliases=['femtometers', 'femtometre', 'femtometres', 'fermi', 'fermis']
 )
