@@ -21,6 +21,7 @@ Bugs fixed
 * #2 silently fail to import test runner if nose is not installed
 * #4 remove the "jiffy", as there are conflicting definitions
   depending on (or even within a) discipline.
+* #5 fix the definition of femtometer
 
 -----
 0.8.0
