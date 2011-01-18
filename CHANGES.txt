@@ -3,6 +3,15 @@ CHANGES
 =======
 
 -----
+0.10.0
+-----
+
+The dalton has been added as an alias for the unified atomic mass
+unit, in response to the 2005 IUPAP report recognizing that both
+terms should be officially recognized. Da is recognized as the
+symbol for the dalton.
+
+-----
 0.9.0
 -----
 

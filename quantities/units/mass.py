@@ -102,11 +102,11 @@ troy_pound = appound = apothecary_pound = UnitMass(
         'apothecary_pounds'
     ]
 )
-u = amu = atomic_mass_unit = UnitMass(
+u = amu = atomic_mass_unit = dalton = Da = UnitMass(
     'atomic_mass_unit',
     1.660538782e-27*kg,
     symbol='u',
-    aliases=['amu'],
+    aliases=['amu', 'Da', 'dalton'],
     doc='relative uncertainty = 5e-8'
 )
 scruple = UnitMass(
