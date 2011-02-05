@@ -19,12 +19,13 @@ class _Config(object):
     def lock(self):
         return self._lock
 
-    def _get_use_unicode(self):
+    @property
+    def use_unicode(self):
         with self.lock:
             return copy.copy(self._use_unicode)
-    def _set_use_unicode(self, val):
+    @use_unicode.setter
+    def use_unicode(self, val):
         self._use_unicode = bool(val)
-    use_unicode = property(_get_use_unicode, _set_use_unicode)
 
     def __init__(self):
         self._lock = threading.RLock()

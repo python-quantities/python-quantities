@@ -148,9 +148,11 @@ class Quantity(np.ndarray):
             rq = rq * u.simplified**d
         return rq * self.magnitude
 
-    def _get_units(self):
-        return Quantity(1.0, self.dimensionality)
-    def _set_units(self, units):
+    @property
+    def units(self):
+        return Quantity(1.0, (self.dimensionality))
+    @units.setter
+    def units(self, units):
         try:
             assert not isinstance(self.base, Quantity)
         except AssertionError:
@@ -174,7 +176,6 @@ class Quantity(np.ndarray):
         mag = self.magnitude
         mag *= cf
         self._dimensionality = to_u.dimensionality
-    units = property(_get_units, _set_units)
 
     def rescale(self, units):
         """

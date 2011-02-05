@@ -31,10 +31,10 @@ class UncertainQuantity(Quantity):
 
         return ret
 
-    def _set_units(self, units):
+    @Quantity.units.setter
+    def units(self, units):
         super(UncertainQuantity, self)._set_units(units)
         self.uncertainty.units = self._dimensionality
-    units = property(Quantity._get_units, _set_units)
 
     @property
     def _reference(self):
@@ -48,9 +48,11 @@ class UncertainQuantity(Quantity):
         ret.uncertainty = self.uncertainty.simplified
         return ret
 
-    def get_uncertainty(self):
+    @property
+    def uncertainty(self):
         return self._uncertainty
-    def set_uncertainty(self, uncertainty):
+    @uncertainty.setter
+    def uncertainty(self, uncertainty):
         if not isinstance(uncertainty, Quantity):
             uncertainty = Quantity(
                 uncertainty, self._dimensionality, copy=False
@@ -62,7 +64,6 @@ class UncertainQuantity(Quantity):
         if uncertainty._dimensionality != self._dimensionality:
             uncertainty = uncertainty.rescale(self._dimensionality)
         self._uncertainty = uncertainty
-    uncertainty = property(get_uncertainty, set_uncertainty)
 
     @property
     def relative_uncertainty(self):

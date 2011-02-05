@@ -131,11 +131,12 @@ class UnitQuantity(Quantity):
         else:
             return self.symbol
 
-    def _get_units(self):
+    @property
+    def units(self):
         return self
-    def _set_units(self, units):
+    @units.setter
+    def units(self, units):
         raise AttributeError('can not modify protected units')
-    units = property(_get_units, _set_units)
 
     def __repr__(self):
         ref = self._definition
