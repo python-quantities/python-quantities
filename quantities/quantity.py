@@ -13,6 +13,8 @@ from .dimensionality import Dimensionality, p_dict
 from .registry import unit_registry
 from .decorators import with_doc
 
+if sys.version.startswith('3'):
+    unicode = str
 
 def validate_unit_quantity(value):
     try:
@@ -67,10 +69,6 @@ def protected_multiplication(f):
     def g(self, other, *args):
         if getattr(other, 'dimensionality', None):
             try:
-#                print(self)
-#                print(type(self))
-#                print(self.base)
-#                print(type(self.base))
                 assert not isinstance(self.base, Quantity)
             except AssertionError:
                 raise ValueError('can not modify units of a view of a Quantity')
@@ -135,7 +133,7 @@ class Quantity(np.ndarray):
     def _reference(self):
         """The reference quantity used to perform conversions"""
         rq = 1*unit_registry['dimensionless']
-        for u, d in self.dimensionality.iteritems():
+        for u, d in self.dimensionality.items():
             rq = rq * u._reference**d
         return rq * self.magnitude
 
@@ -146,7 +144,7 @@ class Quantity(np.ndarray):
     @property
     def simplified(self):
         rq = 1*unit_registry['dimensionless']
-        for u, d in self.dimensionality.iteritems():
+        for u, d in self.dimensionality.items():
             rq = rq * u.simplified**d
         return rq * self.magnitude
 
@@ -229,9 +227,11 @@ class Quantity(np.ndarray):
         try:
             res._dimensionality = p_dict[uf](*objs)
         except KeyError:
-            print 'ufunc %r not supported by quantities' % uf
-            print 'please file a bug report by visiting'
-            print 'https://bugs.launchpad.net/python-quantities'
+            raise ValueError(
+                """ufunc %r not supported by quantities
+                please file a bug report at https://github.com/python-quantities
+                """
+                )
         return res
 
     def __array_wrap__(self, obj, context=None):

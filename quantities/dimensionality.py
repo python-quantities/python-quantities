@@ -28,13 +28,13 @@ class Dimensionality(dict):
 
     @property
     def ndims(self):
-        return sum(abs(i) for i in self.simplified.itervalues())
+        return sum(abs(i) for i in self.simplified.values())
 
     @property
     def simplified(self):
         if len(self):
             rq = 1*unit_registry['dimensionless']
-            for u, d in self.iteritems():
+            for u, d in self.items():
                 rq = rq * u.simplified**d
             return rq.dimensionality
         else:
@@ -109,7 +109,7 @@ class Dimensionality(dict):
     def __mul__(self, other):
         assert_isinstance(other, Dimensionality)
         new = Dimensionality(self)
-        for unit, power in other.iteritems():
+        for unit, power in other.items():
             try:
                 new[unit] += power
                 if new[unit] == 0:
@@ -120,7 +120,7 @@ class Dimensionality(dict):
 
     def __imul__(self, other):
         assert_isinstance(other, Dimensionality)
-        for unit, power in other.iteritems():
+        for unit, power in other.items():
             try:
                 self[unit] += power
                 if self[unit] == 0:
@@ -132,7 +132,7 @@ class Dimensionality(dict):
     def __truediv__(self, other):
         assert_isinstance(other, Dimensionality)
         new = Dimensionality(self)
-        for unit, power in other.iteritems():
+        for unit, power in other.items():
             try:
                 new[unit] -= power
                 if new[unit] == 0:
@@ -148,7 +148,7 @@ class Dimensionality(dict):
 
     def __itruediv__(self, other):
         assert_isinstance(other, Dimensionality)
-        for unit, power in other.iteritems():
+        for unit, power in other.items():
             try:
                 self[unit] -= power
                 if self[unit] == 0:
@@ -188,7 +188,7 @@ class Dimensionality(dict):
 
     def __repr__(self):
         return 'Dimensionality({%s})' \
-            % ', '.join(['%s: %s'% (u.name, e) for u, e in self.iteritems()])
+            % ', '.join(['%s: %s'% (u.name, e) for u, e in self.items()])
 
     def __str__(self):
         if markup.config.use_unicode:

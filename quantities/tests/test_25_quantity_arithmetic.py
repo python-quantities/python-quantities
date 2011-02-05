@@ -2,6 +2,7 @@
 
 import operator as op
 from functools import partial
+import sys
 
 from numpy.testing import *
 from numpy.testing import *
@@ -13,6 +14,9 @@ from .. import units
 from ..quantity import Quantity
 
 from . import assert_quantity_equal, assert_quantity_almost_equal
+
+if sys.version.startswith('3'):
+    long = int
 
 
 def rand(dtype, *args):
@@ -27,7 +31,7 @@ def check(f, *args, **kwargs):
     new = partial(f, *args)
     new.__name__ = f.__name__
     new.__module__ = f.__module__
-    new.func_code = f.func_code
+#    new.func_code = f.func_code
 
     try:
         new = kwargs['fails_if'](new)
@@ -65,13 +69,16 @@ class iter_dtypes(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         if self._i > 20:
             raise StopIteration
 
         i = self._i
         self._i += 1
         return self._typeDict[i]
+
+    def next(self):
+        return self.__next__()
 
 def get_dtypes():
     return list(iter_dtypes())
@@ -86,7 +93,7 @@ class iter_types(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         self._index += 1
         if self._index > 2:
             raise StopIteration
@@ -98,6 +105,10 @@ class iter_types(object):
             return rand(self._dtype, 5).tolist()
         if self._index == 2:
             return rand(self._dtype, 5)
+
+    def next(self):
+        return self.__next__()
+
 
 def check_mul(m1, m2):
     assert_quantity_equal(units.m*m2, Quantity(m2, 'm'))
