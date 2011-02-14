@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from unittest import expectedFailure, skipIf
-
 import numpy as np
 
 from .. import units as pq
@@ -43,7 +41,7 @@ class TestUmath(TestCase):
             l = np.gradient([[1,1],[3,4]] * pq.J, 1 * pq.m)
             self.assertQuantityEqual(l[0], [[2., 3.], [2., 3.]] * pq.J/pq.m)
             self.assertQuantityEqual(l[1], [[0., 0.], [1., 1.]] * pq.J/pq.m)
-        except ValueError, e:
+        except ValueError as e:
             raise self.failureException(e)
 
     def test_cross(self):
@@ -157,7 +155,7 @@ class TestUmath(TestCase):
                 np.fix([2.1, 2.9, -2.1, -2.9] * pq.degF),
                 [2., 2., -2., -2.] * pq.degF
                 )
-        except ValueError, e:
+        except ValueError as e:
             raise self.failureException(e)
 
     def test_exp(self):
