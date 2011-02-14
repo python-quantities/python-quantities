@@ -6,9 +6,16 @@ else:
 
 import numpy as np
 
-from quantities import Quantity
+from ..quantity import Quantity
+from ..units import set_default_units
 
 class TestCase(unittest.TestCase):
+
+    def setUp(self):
+        set_default_units('SI')
+
+    def tearDown(self):
+        set_default_units('SI')
 
     def assertQuantityEqual(self, q1, q2, msg=None, delta=None):
         """
