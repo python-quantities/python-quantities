@@ -119,6 +119,8 @@ class Quantity(np.ndarray):
         if isinstance(data, cls):
             if units:
                 data = data.rescale(units)
+            if isinstance(data, unit_registry['UnitQuantity']):
+                return 1*data
             return np.array(data, dtype=dtype, copy=copy, subok=True)
 
         ret = np.array(data, dtype=dtype, copy=copy).view(cls)
@@ -343,17 +345,18 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.__getitem__)
     def __getitem__(self, key):
-        if isinstance(key, int):
-            # This might be resolved by issue # 826
-            return Quantity(self.magnitude[key], self._dimensionality)
+        ret = super(Quantity, self).__getitem__(key)
+        if isinstance(ret, Quantity):
+            return ret
         else:
-            return super(Quantity, self).__getitem__(key)
+            return Quantity(ret, self._dimensionality)
 
     @with_doc(np.ndarray.__setitem__)
     def __setitem__(self, key, value):
-        if isinstance(value, Quantity):
-            if self._dimensionality != value._dimensionality:
-                value = value.rescale(self._dimensionality)
+        if not isinstance(value, Quantity):
+            value = Quantity(value)
+        if self._dimensionality != value._dimensionality:
+            value = value.rescale(self._dimensionality)
         self.magnitude[key] = value
 
     @with_doc(np.ndarray.__lt__)
@@ -439,13 +442,11 @@ class Quantity(np.ndarray):
         performs the equivalent of ndarray.put() but enforces units
         values - must be an Quantity with the same units as self
         """
-        if isinstance(values, Quantity):
-            if values._dimensionality == self._dimensionality:
-                self.magnitude.put(indicies, values, mode)
-            else:
-                raise ValueError("values must have the same units as self")
-        else:
-            raise TypeError("values must be a Quantity")
+        if not isinstance(values, Quantity):
+            values = Quantity(values)
+        if values._dimensionality != self._dimensionality:
+            values = values.rescale(self.units)
+        self.magnitude.put(indicies, values, mode)
 
     # choose does not function correctly, and it is not clear
     # how it would function, so for now it will not be implemented

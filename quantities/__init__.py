@@ -264,8 +264,3 @@ from .units import *
 from . import constants
 
 from .umath import *
-
-try:
-    from .tests import test
-except ImportError:
-    pass

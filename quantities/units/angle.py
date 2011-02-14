@@ -32,7 +32,7 @@ turn = revolution = cycle = turns = circle = circles = UnitQuantity(
     2*pi*radian,
     aliases=['turns', 'revolutions', 'circles', 'cycles']
 )
-deg = degree = arcdeg = arcdegree = angular_degree = UnitQuantity(
+deg = degree = degrees = arcdeg = arcdegree = angular_degree = UnitQuantity(
     'arcdegree',
     pi/180*radian,
     symbol='deg',

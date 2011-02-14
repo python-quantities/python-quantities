@@ -288,6 +288,18 @@ class UnitQuantity(Quantity):
             self.__getstate__()
         )
 
+    def copy(self):
+        return (
+            type(self)(
+                self._name,
+                self._definition,
+                self._symbol,
+                self._u_symbol,
+                self._aliases,
+                self.__doc__
+                )
+            )
+
 unit_registry['UnitQuantity'] = UnitQuantity
 
 
@@ -400,11 +412,12 @@ class CompoundUnit(UnitQuantity):
         """
         return (
             type(self),
-            (
-                self._name,
-            ),
+            (self._name, ),
             self.__getstate__()
-        )
+            )
+
+    def copy(self):
+        return type(self)(self._name)
 
 unit_registry['CompoundUnit'] = CompoundUnit
 

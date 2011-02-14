@@ -231,6 +231,7 @@ def _d_multiply(q1, q2, out=None):
         except:
             return q2.dimensionality
 p_dict[np.multiply] = _d_multiply
+p_dict[np.cross] = _d_multiply
 
 def _d_divide(q1, q2, out=None):
     try:
@@ -279,6 +280,7 @@ p_dict[np.fmod] = _d_check_uniform
 p_dict[np.remainder] = _d_check_uniform
 p_dict[np.floor_divide] = _d_check_uniform
 p_dict[np.arctan2] = _d_check_uniform
+p_dict[np.hypot] = _d_check_uniform
 
 def _d_power(q1, q2, out=None):
     if getattr(q2, 'dimensionality', None):

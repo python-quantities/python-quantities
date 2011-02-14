@@ -23,9 +23,9 @@ class UncertainQuantity(Quantity):
         ret._uncertainty._dimensionality = ret._dimensionality
 
         if uncertainty is not None:
-            ret.uncertainty = uncertainty
+            ret.uncertainty = Quantity(uncertainty, ret._dimensionality)
         elif isinstance(data, UncertainQuantity):
-            if copy or self._dimensionality != uncertainty._dimensionality:
+            if copy or ret._dimensionality != uncertainty._dimensionality:
                 uncertainty = data.uncertainty.rescale(ret.units)
             ret.uncertainty = uncertainty
 
@@ -54,9 +54,7 @@ class UncertainQuantity(Quantity):
     @uncertainty.setter
     def uncertainty(self, uncertainty):
         if not isinstance(uncertainty, Quantity):
-            uncertainty = Quantity(
-                uncertainty, self._dimensionality, copy=False
-            )
+            uncertainty = Quantity(uncertainty, copy=False)
         try:
             assert self.shape == uncertainty.shape
         except AssertionError:

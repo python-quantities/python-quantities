@@ -7,10 +7,6 @@ import copy
 import operator
 import re
 import threading
-try:
-    import user
-except ImportError:
-    user = None
 
 
 class _Config(object):
@@ -29,7 +25,7 @@ class _Config(object):
 
     def __init__(self):
         self._lock = threading.RLock()
-        self._use_unicode = getattr(user, 'quantities_unicode', False)
+        self._use_unicode = False
 
 config = _Config()
 
