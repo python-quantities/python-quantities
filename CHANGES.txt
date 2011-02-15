@@ -8,8 +8,18 @@ CHANGES
 
 The dalton has been added as an alias for the unified atomic mass
 unit, in response to the 2005 IUPAP report recognizing that both
-terms should be officially recognized. Da is recognized as the
-symbol for the dalton.
+terms should be officially recognized. Da is recognized as the symbol
+for the dalton.
+
+The test suite has been refactored to use the unittest package
+provided by the python-2.7 and python-3.2 standard library. With
+python-2.6 or python-3.{0,1}, unittest2 is required. The test suite
+is run with::
+
+   python setup.py test
+
+Quantities no longer requires or uses Distribute or Setuptools.
+
 
 -----
 0.9.0
