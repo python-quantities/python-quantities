@@ -30,7 +30,7 @@ D = darcy = UnitQuantity(
 )
 mD = millidarcy = UnitQuantity(
     'millidarcy',
-    9.869233e-10*m**2,
+    D/1000,
     symbol='mD'
 )
 ha = hectare = UnitQuantity(
