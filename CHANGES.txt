@@ -27,6 +27,7 @@ The test suite is now run in the source directory::
 
    python setup.py test
 
+Added a defintion for the centipoise.
 
 Bugs fixed
 **********

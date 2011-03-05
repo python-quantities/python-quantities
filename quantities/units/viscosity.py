@@ -13,6 +13,11 @@ P = poise = UnitQuantity(
     1e-1*Pa*s,
     symbol='P'
 )
+cP = centipoise = UnitQuantity(
+    'centipoise',
+    P/100,
+    symbol='cP'
+)
 St = stokes = UnitQuantity(
     'stokes',
     1e-4*m**2/s,
