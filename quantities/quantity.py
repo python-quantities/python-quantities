@@ -542,17 +542,17 @@ class Quantity(np.ndarray):
             copy=False)
 
     @with_doc(np.ndarray.var)
-    def var(self, axis=None, dtype=None, out=None):
+    def var(self, axis=None, dtype=None, out=None, ddof=0):
         return Quantity(
-            self.magnitude.var(axis, dtype, out),
+            self.magnitude.var(axis, dtype, out, ddof),
             self._dimensionality**2,
             copy=False
         )
 
     @with_doc(np.ndarray.std)
-    def std(self, axis=None, dtype=None, out=None):
+    def std(self, axis=None, dtype=None, out=None, ddof=0):
         return Quantity(
-            self.magnitude.std(axis, dtype, out),
+            self.magnitude.std(axis, dtype, out, ddof),
             self._dimensionality,
             copy=False
         )
