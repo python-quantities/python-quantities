@@ -1,0 +1,67 @@
+#!/usr/bin/make -f
+
+include /usr/share/python/python.mk
+
+build:
+	dh_testdir
+	echo "Building package..."
+	python setup.py build
+
+	# Generate the docs from the doc sources; using remake as make is causing
+	# me some issues from time to time 
+	[ ! -e doc ] || make -C doc html
+
+	#And clean the cruft
+	[ ! -e doc/_build/html/_sources ] || rm -rf doc/_build/html/_sources
+	[ ! -e doc/_build/html/.doctrees ] || rm -rf doc/_build/html/.doctrees
+	[ ! -e doc/_build/html/.buildinfo ] || rm -rf doc/_build/html/.buildinfo
+	[ ! -e doc/_build/html/objects.inv ] || rm -rf doc/_build/html/objects.inv
+
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+
+	[ ! -e doc/_build/html ] || rm -rf doc/_build/html
+
+	python setup.py clean --all
+	#[ -f *.pyc ] && rm -f *.pyc
+
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_installdirs
+
+	# Fake install before packaging. We use py_setup_install_args to use
+	# debian defaults. Variable provided in /usr/share/python/python.mk
+	python setup.py install --root $(CURDIR)/debian/python-quantities $(py_setup_install_args)
+
+	# Remove jquery.js javascript as per policy 4.13
+	[ ! -e html/_static/jquery.js ] || rm -rf html/_static/jquery.js
+
+
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installdocs
+	dh_installexamples --exclude=".git"
+	dh_installchangelogs
+	dh_link -p python-quantities-doc 		/usr/share/javascript/jquery/jquery.js 		/usr/share/doc/python-quantities-doc/html/_static/jquery.js
+	dh_pysupport
+	dh_compress -Xexamples -X.js
+	dh_fixperms
+	dh_strip
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary-arch: build install
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install get-orig-source

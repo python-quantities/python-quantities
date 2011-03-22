@@ -1,0 +1,473 @@
+Metadata-Version: 1.1
+Name: quantities
+Version: 0.9.0
+Summary: Support for physical quantities with units, based on numpy
+Home-page: http://packages.python.org/quantities
+Author: Darren Dale
+Author-email: dsdale24@gmail.com
+License: BSD
+Download-URL: http://pypi.python.org/pypi/quantities
+Description: Quantities is designed to handle arithmetic and
+            conversions of physical quantities, which have a magnitude, dimensionality
+            specified by various units, and possibly an uncertainty. See the tutorial_
+            for examples. Quantities builds on the popular numpy library and is
+            designed to work with numpy ufuncs, many of which are already
+            supported. Quantities is actively developed, and while the current features
+            and API are stable, test coverage is incomplete so the package is not
+            suggested for mission-critical applications.
+        
+            .. _tutorial: http://packages.python.org/quantities/user/tutorial.html
+            
+Keywords: quantities,units,physical,constants
+Platform: Any
+Classifier: D
+Classifier: e
+Classifier: v
+Classifier: e
+Classifier: l
+Classifier: o
+Classifier: p
+Classifier: m
+Classifier: e
+Classifier: n
+Classifier: t
+Classifier:  
+Classifier: S
+Classifier: t
+Classifier: a
+Classifier: t
+Classifier: u
+Classifier: s
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: 4
+Classifier:  
+Classifier: -
+Classifier:  
+Classifier: B
+Classifier: e
+Classifier: t
+Classifier: a
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: E
+Classifier: n
+Classifier: v
+Classifier: i
+Classifier: r
+Classifier: o
+Classifier: n
+Classifier: m
+Classifier: e
+Classifier: n
+Classifier: t
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: C
+Classifier: o
+Classifier: n
+Classifier: s
+Classifier: o
+Classifier: l
+Classifier: e
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: I
+Classifier: n
+Classifier: t
+Classifier: e
+Classifier: n
+Classifier: d
+Classifier: e
+Classifier: d
+Classifier:  
+Classifier: A
+Classifier: u
+Classifier: d
+Classifier: i
+Classifier: e
+Classifier: n
+Classifier: c
+Classifier: e
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: D
+Classifier: e
+Classifier: v
+Classifier: e
+Classifier: l
+Classifier: o
+Classifier: p
+Classifier: e
+Classifier: r
+Classifier: s
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: I
+Classifier: n
+Classifier: t
+Classifier: e
+Classifier: n
+Classifier: d
+Classifier: e
+Classifier: d
+Classifier:  
+Classifier: A
+Classifier: u
+Classifier: d
+Classifier: i
+Classifier: e
+Classifier: n
+Classifier: c
+Classifier: e
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: E
+Classifier: d
+Classifier: u
+Classifier: c
+Classifier: a
+Classifier: t
+Classifier: i
+Classifier: o
+Classifier: n
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: I
+Classifier: n
+Classifier: t
+Classifier: e
+Classifier: n
+Classifier: d
+Classifier: e
+Classifier: d
+Classifier:  
+Classifier: A
+Classifier: u
+Classifier: d
+Classifier: i
+Classifier: e
+Classifier: n
+Classifier: c
+Classifier: e
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: E
+Classifier: n
+Classifier: d
+Classifier:  
+Classifier: U
+Classifier: s
+Classifier: e
+Classifier: r
+Classifier: s
+Classifier: /
+Classifier: D
+Classifier: e
+Classifier: s
+Classifier: k
+Classifier: t
+Classifier: o
+Classifier: p
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: I
+Classifier: n
+Classifier: t
+Classifier: e
+Classifier: n
+Classifier: d
+Classifier: e
+Classifier: d
+Classifier:  
+Classifier: A
+Classifier: u
+Classifier: d
+Classifier: i
+Classifier: e
+Classifier: n
+Classifier: c
+Classifier: e
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: S
+Classifier: c
+Classifier: i
+Classifier: e
+Classifier: n
+Classifier: c
+Classifier: e
+Classifier: /
+Classifier: R
+Classifier: e
+Classifier: s
+Classifier: e
+Classifier: a
+Classifier: r
+Classifier: c
+Classifier: h
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: L
+Classifier: i
+Classifier: c
+Classifier: e
+Classifier: n
+Classifier: s
+Classifier: e
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: O
+Classifier: S
+Classifier: I
+Classifier:  
+Classifier: A
+Classifier: p
+Classifier: p
+Classifier: r
+Classifier: o
+Classifier: v
+Classifier: e
+Classifier: d
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: B
+Classifier: S
+Classifier: D
+Classifier:  
+Classifier: L
+Classifier: i
+Classifier: c
+Classifier: e
+Classifier: n
+Classifier: s
+Classifier: e
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: O
+Classifier: p
+Classifier: e
+Classifier: r
+Classifier: a
+Classifier: t
+Classifier: i
+Classifier: n
+Classifier: g
+Classifier:  
+Classifier: S
+Classifier: y
+Classifier: s
+Classifier: t
+Classifier: e
+Classifier: m
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: O
+Classifier: S
+Classifier:  
+Classifier: I
+Classifier: n
+Classifier: d
+Classifier: e
+Classifier: p
+Classifier: e
+Classifier: n
+Classifier: d
+Classifier: e
+Classifier: n
+Classifier: t
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: P
+Classifier: r
+Classifier: o
+Classifier: g
+Classifier: r
+Classifier: a
+Classifier: m
+Classifier: m
+Classifier: i
+Classifier: n
+Classifier: g
+Classifier:  
+Classifier: L
+Classifier: a
+Classifier: n
+Classifier: g
+Classifier: u
+Classifier: a
+Classifier: g
+Classifier: e
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: P
+Classifier: y
+Classifier: t
+Classifier: h
+Classifier: o
+Classifier: n
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: T
+Classifier: o
+Classifier: p
+Classifier: i
+Classifier: c
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: E
+Classifier: d
+Classifier: u
+Classifier: c
+Classifier: a
+Classifier: t
+Classifier: i
+Classifier: o
+Classifier: n
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier: T
+Classifier: o
+Classifier: p
+Classifier: i
+Classifier: c
+Classifier:  
+Classifier: :
+Classifier: :
+Classifier:  
+Classifier: S
+Classifier: c
+Classifier: i
+Classifier: e
+Classifier: n
+Classifier: t
+Classifier: i
+Classifier: f
+Classifier: i
+Classifier: c
+Classifier: /
+Classifier: E
+Classifier: n
+Classifier: g
+Classifier: i
+Classifier: n
+Classifier: e
+Classifier: e
+Classifier: r
+Classifier: i
+Classifier: n
+Classifier: g
+Classifier: 
+
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Classifier:  
+Requires: python (>=2.6.0)
+Requires: numpy (>=1.4.0)

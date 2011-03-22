@@ -1,0 +1,399 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Documenting Quantities &mdash; quantities v0.9.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="quantities v0.9.0 documentation" href="../index.html" />
+    <link rel="up" title="Developer’s Guide" href="index.html" />
+    <link rel="next" title="Development" href="devnotes.html" />
+    <link rel="prev" title="Developer’s Guide" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="devnotes.html" title="Development"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Developer’s Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">quantities v0.9.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Developer&#8217;s Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Documenting Quantities</a><ul>
+<li><a class="reference external" href="#getting-started">Getting started</a></li>
+<li><a class="reference external" href="#organization-of-quantities-documentation">Organization of Quantities&#8217; documentation</a></li>
+<li><a class="reference external" href="#formatting">Formatting</a><ul>
+<li><a class="reference external" href="#docstrings">Docstrings</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#figures">Figures</a><ul>
+<li><a class="reference external" href="#dynamically-generated-figures">Dynamically generated figures</a></li>
+<li><a class="reference external" href="#static-figures">Static figures</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#referring-to-quantities-documents">Referring to quantities documents</a></li>
+<li><a class="reference external" href="#internal-section-references">Internal section references</a></li>
+<li><a class="reference external" href="#section-names-etc">Section names, etc</a></li>
+<li><a class="reference external" href="#emacs-helpers">Emacs helpers</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">Developer&#8217;s Guide</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="devnotes.html"
+                                  title="next chapter">Development</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/devel/documenting.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="documenting-quantities">
+<span id="id1"></span><h1>Documenting Quantities<a class="headerlink" href="#documenting-quantities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>The documentation for Quantities is generated from ReStructured Text
+using the <a class="reference external" href="http://sphinx.pocoo.org/">Sphinx</a> documentation generation tool and the <a class="reference external" href="http://pypi.python.org/pypi/numpydoc">numpydoc</a>
+Sphinx extension. Sphinx-0.6.3 or later is required. You can obtain
+Sphinx and numpydoc from the <a class="reference external" href="http://pypi.python.org/pypi">Python Package Index</a> or
+by doing:</p>
+<div class="highlight-python"><pre>easy_install sphinx</pre>
+</div>
+<p>The documentation sources are found in the <tt class="docutils literal"><span class="pre">doc/</span></tt> directory in the trunk.
+The output produced by Sphinx can be configured by editing the <tt class="docutils literal"><span class="pre">conf.py</span></tt>
+file located in the <tt class="docutils literal"><span class="pre">doc/</span></tt> directory. To build the users guide in html
+format, run from the main quantities directory:</p>
+<div class="highlight-python"><pre>python setup.py build_sphinx</pre>
+</div>
+<p>and the html will be produced in <cite>build/sphinx/html</cite>. To build the pdf file:</p>
+<div class="highlight-python"><pre>python setup.py build_sphinx -b latex
+cd build/sphinx/latex
+make all-pdf</pre>
+</div>
+</div>
+<div class="section" id="organization-of-quantities-documentation">
+<h2>Organization of Quantities&#8217; documentation<a class="headerlink" href="#organization-of-quantities-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The actual ReStructured Text files are kept in <tt class="docutils literal"><span class="pre">doc</span></tt>. The main
+entry point is <tt class="docutils literal"><span class="pre">doc/index.rst</span></tt>, which pulls in the
+<tt class="docutils literal"><span class="pre">index.rst</span></tt> file for the user guide and the developers guide.
+The documentation suite is built as a single document in order to
+make the most effective use of cross referencing, we want to make
+navigating the Quantities documentation as easy as possible.</p>
+<p>Additional files can be added to the various guides by including their base
+file name (the .rst extension is not necessary) in the table of contents.
+It is also possible to include other documents through the use of an include
+statement, such as:</p>
+<div class="highlight-python"><pre>.. include:: ../TODO</pre>
+</div>
+</div>
+<div class="section" id="formatting">
+<span id="formatting-quantities-docs"></span><h2>Formatting<a class="headerlink" href="#formatting" title="Permalink to this headline">¶</a></h2>
+<p>The Sphinx website contains plenty of <a class="reference external" href="http://sphinx.pocoo.org/contents.html">documentation</a> concerning ReST markup and
+working with Sphinx in general. Since quantities is so closely coupled with the
+numpy package, quantities will conform to numpy&#8217;s documentation standards and
+use numpy&#8217;s documentation tools. Please familiarize yourself with the <a class="reference external" href="http://projects.scipy.org/scipy/numpy/wiki/CodingStyleGuidelines#docstring-standard">docstring
+standard</a> and the <a class="reference external" href="http://projects.scipy.org/scipy/numpy/browser/trunk/doc/example.py#L37">examples</a> <a class="reference external" href="http://projects.scipy.org/scipy/numpy/browser/trunk/doc/EXAMPLE_DOCSTRING.txt">like these</a>.</p>
+<p>Here are a few additional things to keep in
+mind:</p>
+<ul>
+<li><p class="first">Please familiarize yourself with the Sphinx directives for <a class="reference external" href="http://sphinx.pocoo.org/markup/inline.html">inline
+markup</a>. Quantities&#8217; documentation makes heavy use of cross-referencing and
+other semantic markup. For example, when referring to external files, use the
+<tt class="docutils literal"><span class="pre">:file:</span></tt> directive.</p>
+</li>
+<li><p class="first">Function arguments and keywords should be referred to using the <em>emphasis</em>
+role. This will keep Quantities&#8217; documentation consistant with Python&#8217;s
+documentation:</p>
+<div class="highlight-python"><pre>Here is a description of *argument*</pre>
+</div>
+<p>Please do not use the <cite>default role</cite>:</p>
+<div class="highlight-python"><pre>Please do not describe `argument` like this.</pre>
+</div>
+<p>nor the <tt class="docutils literal"><span class="pre">literal</span></tt> role:</p>
+<div class="highlight-python"><pre>Please do not describe ``argument`` like this.</pre>
+</div>
+</li>
+<li><p class="first">Sphinx does not support tables with column- or row-spanning cells for
+latex output. Such tables can not be used when documenting Quantities.</p>
+</li>
+<li><p class="first">Mathematical expressions can be rendered as png images in html, and in the
+usual way by latex. For example:</p>
+<p><tt class="docutils literal"><span class="pre">:math:`\sin(x_n^2)`</span></tt> yields: <img class="math" src="../_images/math/7a2af107c60323c9f5bc4b7be160818e988c6259.png" alt="\sin(x_n^2)"/>, and:</p>
+<div class="highlight-python"><pre>.. math::
+
+  \int_{-\infty}^{\infty}\frac{e^{i\phi}}{1+x^2\frac{e^{i\phi}}{1+x^2}}</pre>
+</div>
+<p>yields:</p>
+<div class="math">
+<p><img src="../_images/math/e491fb0d111d5a1da60dcf83cd8cc790b401da1d.png" alt="\int_{-\infty}^{\infty}\frac{e^{i\phi}}{1+x^2\frac{e^{i\phi}}{1+x^2}}" /></p>
+</div></li>
+<li><p class="first">Footnotes <a class="footnote-reference" href="#id3" id="id2">[1]</a> can be added using <tt class="docutils literal"><span class="pre">[#]_</span></tt>, followed later by:</p>
+<div class="highlight-python"><pre>.. rubric:: Footnotes
+
+.. [#]</pre>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td><p class="first last">For example.</p>
+</td></tr>
+</tbody>
+</table>
+</li>
+<li><p class="first">Use the <em>note</em> and <em>warning</em> directives, sparingly, to draw attention to
+important comments:</p>
+<div class="highlight-python"><pre>.. note::
+   Here is a note</pre>
+</div>
+<p>yields:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">here is a note</p>
+</div>
+<p>also:</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">here is a warning</p>
+</div>
+</li>
+<li><p class="first">Use the <em>deprecated</em> directive when appropriate:</p>
+<div class="highlight-python"><pre>.. deprecated:: 0.98
+   This feature is obsolete, use something else.</pre>
+</div>
+<p>yields:</p>
+<p>
+<span class="versionmodified">Deprecated since version 0.98: </span>This feature is obsolete, use something else.</p>
+</li>
+<li><p class="first">Use the <em>versionadded</em> and <em>versionchanged</em> directives, which have similar
+syntax to the <em>deprecated</em> role:</p>
+<div class="highlight-python"><pre>.. versionadded:: 0.98
+   The transforms have been completely revamped.</pre>
+</div>
+<p>
+<span class="versionmodified">New in version 0.98: </span>The transforms have been completely revamped.</p>
+</li>
+<li><p class="first">Use the <em>seealso</em> directive, for example:</p>
+<div class="highlight-python"><pre>.. seealso::
+
+   Using ReST :ref:`emacs-helpers`:
+      One example
+
+   A bit about :ref:`referring-to-quantities-docs`:
+      One more</pre>
+</div>
+<p>yields:</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt>Using ResT <a class="reference internal" href="#emacs-helpers"><em>Emacs helpers</em></a>:</dt>
+<dd><p class="first last">One example</p>
+</dd>
+<dt>A bit about <a class="reference internal" href="#referring-to-quantities-docs"><em>Referring to quantities documents</em></a>:</dt>
+<dd><p class="first last">One more</p>
+</dd>
+</dl>
+</div>
+</li>
+<li><p class="first">The autodoc extension will handle index entries for the API, but additional
+entries in the <a class="reference external" href="http://sphinx.pocoo.org/markup/para.html#index-generating-markup">index</a> need to be explicitly added.</p>
+</li>
+</ul>
+<div class="section" id="docstrings">
+<h3>Docstrings<a class="headerlink" href="#docstrings" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the aforementioned formatting suggestions:</p>
+<ul class="simple">
+<li>Please limit the text width of docstrings to 70 characters.</li>
+<li>Keyword arguments should be described using a definition list.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="figures">
+<h2>Figures<a class="headerlink" href="#figures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dynamically-generated-figures">
+<h3>Dynamically generated figures<a class="headerlink" href="#dynamically-generated-figures" title="Permalink to this headline">¶</a></h3>
+<p>The top level <tt class="docutils literal"><span class="pre">doc</span></tt> dir has a folder called <tt class="docutils literal"><span class="pre">pyplots</span></tt> in
+which you should include any pyplot plotting scripts that you want to
+generate figures for the documentation.  It is not necessary to
+explicitly save the figure in the script, this will be done
+automatically at build time to insure that the code that is included
+runs and produces the advertised figure.  Several figures will be
+saved with the same basnename as the filename when the documentation
+is generated (low and high res PNGs, a PDF).  Quantities includes a
+Sphinx extension (<tt class="docutils literal"><span class="pre">sphinxext/plot_directive.py</span></tt>) for generating
+the images from the python script and including either a png copy for
+html or a pdf for latex:</p>
+<div class="highlight-python"><pre>.. plot:: pyplot_simple.py
+   :include-source:</pre>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">:scale:</span></tt> directive rescales the image to some percentage of the
+original size, though we don&#8217;t recommend using this in most cases
+since it is probably better to choose the correct figure size and dpi
+in mpl and let it handle the scaling. <tt class="docutils literal"><span class="pre">:include-source:</span></tt> will
+present the contents of the file, marked up as source code.</p>
+</div>
+<div class="section" id="static-figures">
+<h3>Static figures<a class="headerlink" href="#static-figures" title="Permalink to this headline">¶</a></h3>
+<p>Any figures that rely on optional system configurations need to be handled a
+little differently. These figures are not to be generated during the
+documentation build, in order to keep the prerequisites to the documentation
+effort as low as possible. Please run the <tt class="docutils literal"><span class="pre">doc/pyplots/make.py</span></tt> script
+when adding such figures, and commit the script <strong>and</strong> the images to
+svn. Please also add a line to the README in doc/pyplots for any additional
+requirements necessary to generate a new figure. Once these steps have been
+taken, these figures can be included in the usual way:</p>
+<div class="highlight-python"><pre>.. plot:: tex_unicode_demo.py
+   :include-source</pre>
+</div>
+</div>
+</div>
+<div class="section" id="referring-to-quantities-documents">
+<span id="referring-to-quantities-docs"></span><h2>Referring to quantities documents<a class="headerlink" href="#referring-to-quantities-documents" title="Permalink to this headline">¶</a></h2>
+<p>In the documentation, you may want to include to a document in the Quantities
+src, e.g. a license file or an example.  When you include these files,
+include them using the <tt class="docutils literal"><span class="pre">literalinclude</span></tt> directive:</p>
+<div class="highlight-python"><pre>.. literalinclude:: ../examples/some_example.py</pre>
+</div>
+</div>
+<div class="section" id="internal-section-references">
+<span id="internal-section-refs"></span><h2>Internal section references<a class="headerlink" href="#internal-section-references" title="Permalink to this headline">¶</a></h2>
+<p>To maximize internal consistency in section labeling and references,
+use hypen separated, descriptive labels for section references, eg:</p>
+<div class="highlight-python"><pre>.. _howto-webapp:</pre>
+</div>
+<p>and refer to it using  the standard reference syntax:</p>
+<div class="highlight-python"><pre>See :ref:`howto-webapp`</pre>
+</div>
+<p>Keep in mind that we may want to reorganize the contents later, so
+let&#8217;s avoid top level names in references like <tt class="docutils literal"><span class="pre">user</span></tt> or <tt class="docutils literal"><span class="pre">devel</span></tt>
+or <tt class="docutils literal"><span class="pre">faq</span></tt> unless necesssary, because for example the FAQ &#8220;what is a
+backend?&#8221; could later become part of the users guide, so the label:</p>
+<div class="highlight-python"><pre>.. _what-is-a-backend</pre>
+</div>
+<p>is better than:</p>
+<div class="highlight-python"><pre>.. _faq-backend</pre>
+</div>
+<p>In addition, since underscores are widely used by Sphinx itself, let&#8217;s prefer
+hyphens to separate words.</p>
+</div>
+<div class="section" id="section-names-etc">
+<h2>Section names, etc<a class="headerlink" href="#section-names-etc" title="Permalink to this headline">¶</a></h2>
+<p>For everything but top level chapters, please use <tt class="docutils literal"><span class="pre">Upper</span> <span class="pre">lower</span></tt> for
+section titles, eg <tt class="docutils literal"><span class="pre">Possible</span> <span class="pre">hangups</span></tt> rather than <tt class="docutils literal"><span class="pre">Possible</span>
+<span class="pre">Hangups</span></tt></p>
+</div>
+<div class="section" id="emacs-helpers">
+<span id="id4"></span><h2>Emacs helpers<a class="headerlink" href="#emacs-helpers" title="Permalink to this headline">¶</a></h2>
+<p>There is an emacs mode <a class="reference external" href="http://docutils.sourceforge.net/tools/editors/emacs/rst.el">rst.el</a> which
+automates many important ReST tasks like building and updateing
+table-of-contents, and promoting or demoting section headings.  Here
+is the basic <tt class="docutils literal"><span class="pre">.emacs</span></tt> configuration:</p>
+<div class="highlight-python"><pre>(require 'rst)
+(setq auto-mode-alist
+      (append '(("\\.txt$" . rst-mode)
+                ("\\.rst$" . rst-mode)
+                ("\\.rest$" . rst-mode)) auto-mode-alist))</pre>
+</div>
+<p>Some helpful functions:</p>
+<div class="highlight-python"><pre>C-c TAB - rst-toc-insert
+
+  Insert table of contents at point
+
+C-c C-u - rst-toc-update
+
+    Update the table of contents at point
+
+C-c C-l rst-shift-region-left
+
+    Shift region to the left
+
+C-c C-r rst-shift-region-right
+
+    Shift region to the right</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="devnotes.html" title="Development"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Developer’s Guide"
+             >previous</a> |</li>
+        <li><a href="../index.html">quantities v0.9.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Developer&#8217;s Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Darren Dale.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Known Issues &mdash; quantities v0.9.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.9.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="quantities v0.9.0 documentation" href="../index.html" />
+    <link rel="up" title="User’s Guide" href="index.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Quick-start tutorial" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Quick-start tutorial"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">quantities v0.9.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">User&#8217;s Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Known Issues</a><ul>
+<li><a class="reference external" href="#temperature-conversion">Temperature conversion</a></li>
+<li><a class="reference external" href="#umath-functions"><cite>umath</cite> functions</a></li>
+<li><a class="reference external" href="#functions-which-ignore-drop-units">Functions which ignore/drop units</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="tutorial.html"
+                                  title="previous chapter">Quick-start tutorial</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="license.html"
+                                  title="next chapter">License</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/user/issues.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="known-issues">
+<h1>Known Issues<a class="headerlink" href="#known-issues" title="Permalink to this headline">¶</a></h1>
+<p>Quantities arrays are designed to work like normal numpy arrays. However, a few
+operations are not yet fully functioning.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In the following code examples, it&#8217;s assumed that you&#8217;ve initiated the
+following imports:</p>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">quantities</span> <span class="kn">as</span> <span class="nn">pq</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="temperature-conversion">
+<h2>Temperature conversion<a class="headerlink" href="#temperature-conversion" title="Permalink to this headline">¶</a></h2>
+<p>Quantities is not designed to handle coordinate systems that require a point of
+reference, like positions on a map or absolute temperature scales. Proper
+support of coordinate systems would be a fairly large undertaking and is
+outside the scope of this project. Furthermore, consider the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">T_0</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">K</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">T_1</span> <span class="o">=</span> <span class="mi">200</span> <span class="o">*</span> <span class="n">pq</span><span class="o">.</span><span class="n">K</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dT</span> <span class="o">=</span> <span class="n">T_1</span><span class="o">-</span><span class="n">T_0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dT</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">degF</span>
+</pre></div>
+</div>
+<p>To properly support the above example, quantities would have to distinguish
+absolute temperatures with temperature differences. It would have to know how
+to combine these two different animals, etc. The quantities project has
+therefore elected to limit the scope to relative quantities.</p>
+<p>As a consequence, quantities treats temperatures as a temperature difference.
+This is a distinction without a difference when considering Kelvin and Rankine,
+or transformations between the two scales, since both scales have zero offset.
+Temperature scales in Celsius and Fahrenheit are different and would require a
+non-zero offset, which is not supported in Quantities unit transformation
+framework.</p>
+</div>
+<div class="section" id="umath-functions">
+<h2><cite>umath</cite> functions<a class="headerlink" href="#umath-functions" title="Permalink to this headline">¶</a></h2>
+<p>Many common math functions ignore the dimensions of quantities. For example,
+trigonometric functions (e.g. <cite>np.sin</cite>) suffer this fate. For these functions,
+quantities arrays are treated like normal arrays and the calculations proceed
+as normal (except that a &#8220;not implemented&#8221; warning is raised). Note, however,
+this behavior is not ideal since some functions should behave differently for
+different units. For example, you would expect <cite>np.sin</cite> to give different
+results for an angle of 1° versus an angle of 1 radian; instead, <cite>np.sin</cite>
+extracts the magnitude of the input and assumes that it is already in radians.</p>
+<p>To properly handle quantities, use the corresponding quantities functions
+whenever possible. For example, <cite>pq.sin</cite> will properly handle the angle inputs
+described above. For an exhaustive list, see the functions defined in
+<cite>pq.umath</cite>.</p>
+</div>
+<div class="section" id="functions-which-ignore-drop-units">
+<h2>Functions which ignore/drop units<a class="headerlink" href="#functions-which-ignore-drop-units" title="Permalink to this headline">¶</a></h2>
+<p>There are additional numpy functions not in <cite>pq.umath</cite> that ignore and drop
+units. Below is a list known functions in this category</p>
+<ul class="simple">
+<li><cite>vstack</cite></li>
+<li><cite>interp</cite></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="license.html" title="License"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Quick-start tutorial"
+             >previous</a> |</li>
+        <li><a href="../index.html">quantities v0.9.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >User&#8217;s Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Darren Dale.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6.
+    </div>
+  </body>
+</html>
