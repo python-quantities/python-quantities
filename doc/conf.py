@@ -48,11 +48,12 @@ copyright = u'2009, Darren Dale'
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
-from ConfigParser import ConfigParser
-cfg = ConfigParser()
-cfg.read('../setup.cfg')
+with open('../quantities/version.py') as f:
+    for line in f:
+        if line.startswith('__version__'):
+            exec(line)
 # The short X.Y version.
-version = cfg.get('metadata', 'version')
+version = __version__
 # The full version, including alpha/beta/rc tags.
 release = version
 
