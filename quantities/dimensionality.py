@@ -47,6 +47,10 @@ class Dimensionality(dict):
     @property
     def unicode(self):
         return markup.format_units_unicode(self)
+        
+    @property
+    def latex(self):
+        return markup.format_units_latex(self,font="mathrm",mult="")
 
     def __hash__(self):
         res = hash(unit_registry['dimensionless'])

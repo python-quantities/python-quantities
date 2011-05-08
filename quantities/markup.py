@@ -85,3 +85,32 @@ def format_units_unicode(udict):
     res = res.replace('**', '^').replace('*','·')
 
     return res
+    
+def format_units_latex(ustr,font='mathrm',mult=''):
+    '''
+    Replace the units string provided with an equivalent latex string.
+    
+    Division (a/b) will be replaced by \frac{a}{b}.
+    
+    Exponentiation (m**2) will be replaced with superscripts (m^{2})
+    
+    Multiplication (*) are replaced with the symbol specified by the mult argument.
+    By default this is a blank string (no multiplication symbol).  Other useful
+    options may be r'\cdot' or r'\*'
+    
+    The latex is set  with the font argument, and the default is the normal, 
+    non-italicized font mathrm.  Other useful options include 'mathnormal', 
+    'mathit', 'mathsf', and 'mathtt'.
+    '''
+    res = format_units(ustr)
+    # Replace the first last parentheses with larger ones
+    res = re.sub(r'^\(',r'\\left(',res)
+    res = re.sub(r'\)$',r'\\right)',res)
+    # Replace division (num/den) with \frac{num}{den}
+    res = re.sub(r'(?P<num>\w+)/(?P<den>\w+)','\\\\frac{\g<num>}{\g<den>}',res)
+    # Replace exponentiation (**exp) with ^{exp}
+    res = re.sub(r'\*\*(?P<exp>\d+)',r'^{\g<exp>}',res)
+    # Remove multiplication signs
+    res = re.sub(r'\*',mult,res)
+    return r'$\%s{%s}$' % (font,res)
+    
