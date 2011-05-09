@@ -29,7 +29,7 @@ class _Config(object):
 
 config = _Config()
 
-superscripts = ['‚Å∞', '¬π', '¬≤', '¬≥', '‚Å¥', '‚Åµ', '‚Å∂', '‚Å∑', '‚Å∏', '‚Åπ']
+superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
 
 def superscript(val):
     # TODO: use a regexp:
@@ -82,10 +82,12 @@ def format_units(udict):
 def format_units_unicode(udict):
     res = format_units(udict)
     res = superscript(res)
-    res = res.replace('**', '^').replace('*','¬∑')
+    res = res.replace('**', '^').replace('*','·')
 
     return res
-    
+
+
+
 def format_units_latex(ustr,font='mathrm',mult=''):
     '''
     Replace the units string provided with an equivalent latex string.
@@ -116,4 +118,3 @@ def format_units_latex(ustr,font='mathrm',mult=''):
     res = re.sub(r'\*','{'+mult+'}',res)
     res = r'$\%s{%s}$' % (font,res)
     return res
-    
