@@ -12,11 +12,10 @@ centimeter = Dimensionality({pq.cm: 1})
 centimeter_str = 'cm'
 joule = Dimensionality({pq.kg: 1, pq.m: 2, pq.s: -2})
 joule_str = 'kg*m**2/s**2'
-joule_uni = 'kg¬∑m¬≤/s¬≤'
+joule_uni = 'kg·m²/s²'
 joule_tex = r'$\mathrm{\frac{kg{\cdot}m^{2}}{s^{2}}}$'
 Joule = Dimensionality({pq.J: 1})
 Joule_str = 'J'
-
 
 class TestDimensionality(TestCase):
 
