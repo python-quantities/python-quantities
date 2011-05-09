@@ -88,7 +88,7 @@ def format_units_unicode(udict):
 
 
 
-def format_units_latex(ustr,font='mathrm',mult=''):
+def format_units_latex(ustr,font='mathrm',mult='',paren=True):
     '''
     Replace the units string provided with an equivalent latex string.
     
@@ -104,6 +104,8 @@ def format_units_latex(ustr,font='mathrm',mult=''):
     By default this is a blank string (no multiplication symbol).  Other useful
     options may be r'\cdot' or r'\*'
     
+    If paren=True, encapsulate the string in '\left(' and '\right)'
+    
     Restrictions:
     With ambiguous units (having more than one division symbol), this routine
     will likely produce undesirable results.  It is recommended that you first
@@ -116,5 +118,7 @@ def format_units_latex(ustr,font='mathrm',mult=''):
     res = re.sub(r'\*{2,2}(?P<exp>\d+)',r'^{\g<exp>}',res)
     # Remove multiplication signs
     res = re.sub(r'\*','{'+mult+'}',res)
+    if paren:
+        res = r'\left(%s\right)' % res
     res = r'$\%s{%s}$' % (font,res)
     return res
