@@ -29,7 +29,7 @@ class _Config(object):
 
 config = _Config()
 
-superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
+superscripts = ['‚Å∞', '¬π', '¬≤', '¬≥', '‚Å¥', '‚Åµ', '‚Å∂', '‚Å∑', '‚Å∏', '‚Åπ']
 
 def superscript(val):
     # TODO: use a regexp:
@@ -82,7 +82,7 @@ def format_units(udict):
 def format_units_unicode(udict):
     res = format_units(udict)
     res = superscript(res)
-    res = res.replace('**', '^').replace('*','·')
+    res = res.replace('**', '^').replace('*','¬∑')
 
     return res
     
@@ -94,23 +94,26 @@ def format_units_latex(ustr,font='mathrm',mult=''):
     
     Exponentiation (m**2) will be replaced with superscripts (m^{2})
     
+    The latex is set  with the font argument, and the default is the normal, 
+    non-italicized font mathrm.  Other useful options include 'mathnormal', 
+    'mathit', 'mathsf', and 'mathtt'.
+    
     Multiplication (*) are replaced with the symbol specified by the mult argument.
     By default this is a blank string (no multiplication symbol).  Other useful
     options may be r'\cdot' or r'\*'
     
-    The latex is set  with the font argument, and the default is the normal, 
-    non-italicized font mathrm.  Other useful options include 'mathnormal', 
-    'mathit', 'mathsf', and 'mathtt'.
+    Restrictions:
+    With ambiguous units (having more than one division symbol), this routine
+    will likely produce undesirable results.  It is recommended that you first
+    simplify the dimensionality before running it through this function.      
     '''
     res = format_units(ustr)
-    # Replace the first last parentheses with larger ones
-    res = re.sub(r'^\(',r'\\left(',res)
-    res = re.sub(r'\)$',r'\\right)',res)
     # Replace division (num/den) with \frac{num}{den}
-    res = re.sub(r'(?P<num>\w+)/(?P<den>\w+)','\\\\frac{\g<num>}{\g<den>}',res)
+    res = re.sub(r'(?P<num>.+)/(?P<den>.+)','\\\\frac{\g<num>}{\g<den>}',res)
     # Replace exponentiation (**exp) with ^{exp}
-    res = re.sub(r'\*\*(?P<exp>\d+)',r'^{\g<exp>}',res)
+    res = re.sub(r'\*{2,2}(?P<exp>\d+)',r'^{\g<exp>}',res)
     # Remove multiplication signs
-    res = re.sub(r'\*',mult,res)
-    return r'$\%s{%s}$' % (font,res)
+    res = re.sub(r'\*','{'+mult+'}',res)
+    res = r'$\%s{%s}$' % (font,res)
+    return res
     
