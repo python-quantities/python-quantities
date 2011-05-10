@@ -87,8 +87,7 @@ def format_units_unicode(udict):
     return res
 
 
-
-def format_units_latex(ustr,font='mathrm',mult='',paren=True):
+def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=True):
     '''
     Replace the units string provided with an equivalent latex string.
     
@@ -102,23 +101,31 @@ def format_units_latex(ustr,font='mathrm',mult='',paren=True):
     
     Multiplication (*) are replaced with the symbol specified by the mult argument.
     By default this is a blank string (no multiplication symbol).  Other useful
-    options may be r'\cdot' or r'\*'
+    options may be r'\cdot' or r'*'
     
     If paren=True, encapsulate the string in '\left(' and '\right)'
     
+    The result of format_units_latex is encapsulated in $.  This allows the result
+    to be used directly in Latex in normal text mode, or in Matplotlib text via the
+    MathText feature.
+    
     Restrictions:
-    With ambiguous units (having more than one division symbol), this routine
-    will likely produce undesirable results.  It is recommended that you first
-    simplify the dimensionality before running it through this function.      
+    This routine will not put CompoundUnits into a fractional form. 
     '''
-    res = format_units(ustr)
-    # Replace division (num/den) with \frac{num}{den}
-    res = re.sub(r'(?P<num>.+)/(?P<den>.+)','\\\\frac{\g<num>}{\g<den>}',res)
+    res = format_units(udict)
+    if res.startswith('(') and res.endswith(')'):
+        # Compound Unit
+        compound = True
+    else:
+        # Not a compound unit
+        compound = False
+        # Replace division (num/den) with \frac{num}{den}
+        res = re.sub(r'(?P<num>.+)/(?P<den>.+)',r'\\frac{\g<num>}{\g<den>}',res)
     # Replace exponentiation (**exp) with ^{exp}
     res = re.sub(r'\*{2,2}(?P<exp>\d+)',r'^{\g<exp>}',res)
     # Remove multiplication signs
     res = re.sub(r'\*','{'+mult+'}',res)
-    if paren:
+    if paren and not compound:
         res = r'\left(%s\right)' % res
     res = r'$\%s{%s}$' % (font,res)
     return res
