@@ -87,7 +87,7 @@ def format_units_unicode(udict):
     return res
 
 
-def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=True):
+def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=False):
     '''
     Replace the units string provided with an equivalent latex string.
     
@@ -100,8 +100,8 @@ def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=True):
     'mathit', 'mathsf', and 'mathtt'.
     
     Multiplication (*) are replaced with the symbol specified by the mult argument.
-    By default this is a blank string (no multiplication symbol).  Other useful
-    options may be r'\cdot' or r'*'
+    By default this is the latex \cdot symbol.  Other useful
+    options may be '' or '*'.
     
     If paren=True, encapsulate the string in '\left(' and '\right)'
     
