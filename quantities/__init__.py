@@ -220,10 +220,10 @@ A Latex representation of the dimensionality may be obtained in the following fa
     >>> mass = 50 * pq.kg
     >>> weight = mass*g
     >>> print weight.dimensionality.latex
-    $\mathrm{\frac{kg{\cdot}m}{s^{2}}}$
+    $\mathrm{\\frac{kg{\\cdot}m}{s^{2}}}$
     >>> weight.units = pq.N
     >>> print weight.dimensionality.latex
-    $\mathrm{N}$
+    $\\mathrm{N}$
 
 The Latex output is compliant with the MathText subset used by Matplotlib.  To add 
 formatted units to the axis label of a Matplotlib figure, one could use::
@@ -233,7 +233,7 @@ formatted units to the axis label of a Matplotlib figure, one could use::
 Greater customization is available via the markup.format_units_latex function.  It allows 
 the user to modify the font, the multiplication symbol, or to encapsulate the latex
 string in parentheses.  Due to the complexity of CompoundUnits, the latex rendering
-of CompoundUnits will utilize the latex \frac{num}{den} construct.
+of CompoundUnits will utilize the latex \\frac{num}{den} construct.
 
 Although it is not illustrated in this guide, unicode symbols can be
 used to provide a more compact representation of the units. This
