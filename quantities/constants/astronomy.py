@@ -10,7 +10,7 @@ from ..unitquantity import UnitConstant
 
 au = astronomical_unit = UnitConstant(
     'astronomical_unit',
-    UncertainQuantity(149597870691, 'm', 30),
+    UncertainQuantity(149597870700, 'm', 3),
     symbol='au',
     doc='http://en.wikipedia.org/wiki/Astronomical_unit'
 )
