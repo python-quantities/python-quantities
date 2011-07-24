@@ -397,6 +397,16 @@ class Quantity(np.ndarray):
     def __gt__(self, other):
         return self.magnitude > other
 
+    def __format__(self, format_spec):
+        """
+        If the format specification is numerical, try to cast to number first
+        """
+        if format_spec and format_spec[-1] in ('b', 'd', 'o', 'x', 'X', 'n',
+                                               'e', 'E', 'f', 'F', 'g', 'G',
+                                               '%'):
+            return format(self.magnitude.tolist(), format_spec)
+        return str(self)
+
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
     @with_doc(np.ndarray.tolist)
