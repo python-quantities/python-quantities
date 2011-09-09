@@ -15,7 +15,7 @@ if sys.version.startswith('3'):
 
 
 def rand(dtype, *args):
-    if dtype in (np.complex64, np.complex128, np.complex256):
+    if np.dtype(dtype).kind == 'c':
         return dtype(
             10*np.random.rand(*args)+10j*np.random.rand(*args),
         )
