@@ -200,7 +200,7 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None):
         '''Scalars are returned as scalar Quantity arrays.'''
-        ret = super(Quantity, self).astype(dtype)
+        ret = super(Quantity, self.view(Quantity)).astype(dtype)
         # scalar quantities get converted to plain numbers, so we fix it
         # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
@@ -569,6 +569,10 @@ class Quantity(np.ndarray):
             self._dimensionality**power,
             copy=False
         )
+
+    @with_doc(np.ndarray.cumsum)
+    def cumsum(self, axis=None, dtype=None, out=None):
+        return super(Quantity, self).cumsum(axis, dtype, out)*self.units
 
     @with_doc(np.ndarray.cumprod)
     def cumprod(self, axis=None, dtype=None, out=None):
