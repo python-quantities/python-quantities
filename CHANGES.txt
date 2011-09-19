@@ -33,6 +33,11 @@ Bugs fixed
 **********
 
 * #11 incorrect definition for millidarcy
+* #12 add definition of centipoise
+* #13 add ddof keyword for std, var methods
+* #16 add "latex" property to dimensionality for latex format strings
+* #19 Astronomical Unit definition updated to reflect 2009 spec
+
 
 -----
 0.9.0
