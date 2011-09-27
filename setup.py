@@ -95,18 +95,18 @@ with open('quantities/version.py') as f:
 setup(
     author = 'Darren Dale',
     author_email = 'dsdale24@gmail.com',
-    classifiers = """Development Status :: 4 - Beta
-        Environment :: Console
-        Intended Audience :: Developers
-        Intended Audience :: Education
-        Intended Audience :: End Users/Desktop
-        Intended Audience :: Science/Research
-        License :: OSI Approved :: BSD License
-        Operating System :: OS Independent
-        Programming Language :: Python
-        Topic :: Education
-        Topic :: Scientific/Engineering
-        """,
+#    classifiers = """Development Status :: 4 - Beta
+#        Environment :: Console
+#        Intended Audience :: Developers
+#        Intended Audience :: Education
+#        Intended Audience :: End Users/Desktop
+#        Intended Audience :: Science/Research
+#        License :: OSI Approved :: BSD License
+#        Operating System :: OS Independent
+#        Programming Language :: Python
+#        Topic :: Education
+#        Topic :: Scientific/Engineering
+#        """,
     cmdclass = {
         'build': build,
         'data': data,
