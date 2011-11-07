@@ -127,6 +127,9 @@ class Quantity(np.ndarray):
         ret._dimensionality.update(validate_dimensionality(units))
         return ret
 
+    def __hash__(self):
+        return hash(str(self.magnitude) + str(self.units))
+
     @property
     def dimensionality(self):
         return self._dimensionality.copy()
