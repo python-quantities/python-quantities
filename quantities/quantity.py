@@ -152,7 +152,7 @@ class Quantity(np.ndarray):
 
     @property
     def units(self):
-        return self.__class__(1.0, (self.dimensionality))
+        return Quantity(1.0, (self.dimensionality))
     @units.setter
     def units(self, units):
         try:
@@ -195,7 +195,7 @@ class Quantity(np.ndarray):
                 'Unable to convert between units of "%s" and "%s"'
                 %(from_u._dimensionality, to_u._dimensionality)
             )
-        return self.__class__(cf*self.magnitude, to_u)
+        return Quantity(cf*self.magnitude, to_u)
 
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None):
@@ -349,7 +349,7 @@ class Quantity(np.ndarray):
         if isinstance(ret, Quantity):
             return ret
         else:
-            return self.__class__(ret, self._dimensionality)
+            return Quantity(ret, self._dimensionality)
 
     @with_doc(np.ndarray.__setitem__)
     def __setitem__(self, key, value):
@@ -422,7 +422,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.sum)
     def sum(self, axis=None, dtype=None, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.sum(axis, dtype, out),
             self.dimensionality,
             copy=False
@@ -471,7 +471,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.max)
     def max(self, axis=None, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.max(),
             self.dimensionality,
             copy=False
@@ -479,7 +479,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.min)
     def min(self, axis=None, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.min(),
             self.dimensionality,
             copy=False
@@ -491,7 +491,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.ptp)
     def ptp(self, axis=None, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.ptp(),
             self.dimensionality,
             copy=False
@@ -516,11 +516,11 @@ class Quantity(np.ndarray):
             max.rescale(self._dimensionality).magnitude,
             out
         )
-        return self.__class__(clipped, self.dimensionality, copy=False)
+        return Quantity(clipped, self.dimensionality, copy=False)
 
     @with_doc(np.ndarray.round)
     def round(self, decimals=0, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.round(decimals, out),
             self.dimensionality,
             copy=False
@@ -528,7 +528,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.trace)
     def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.trace(offset, axis1, axis2, dtype, out),
             self.dimensionality,
             copy=False
@@ -536,14 +536,14 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.mean)
     def mean(self, axis=None, dtype=None, out=None):
-        return self.__class__(
+        return Quantity(
             self.magnitude.mean(axis, dtype, out),
             self.dimensionality,
             copy=False)
 
     @with_doc(np.ndarray.var)
     def var(self, axis=None, dtype=None, out=None, ddof=0):
-        return self.__class__(
+        return Quantity(
             self.magnitude.var(axis, dtype, out, ddof),
             self._dimensionality**2,
             copy=False
@@ -551,7 +551,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.std)
     def std(self, axis=None, dtype=None, out=None, ddof=0):
-        return self.__class__(
+        return Quantity(
             self.magnitude.std(axis, dtype, out, ddof),
             self._dimensionality,
             copy=False
@@ -564,7 +564,7 @@ class Quantity(np.ndarray):
         else:
             power = self.shape[axis]
 
-        return self.__class__(
+        return Quantity(
             self.magnitude.prod(axis, dtype, out),
             self._dimensionality**power,
             copy=False
