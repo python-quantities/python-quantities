@@ -146,6 +146,10 @@ long_ton = UnitMass(
     aliases=['long_tons']
 ) # both long and short tons are referred to as "ton" so we wont use it
 
+solar_mass = UnitMass(
+    'solar_mass', 1.99*(10**33)*g,
+    aliases=['solar_masses']
+)
 ############################################################
 ##                 Mass per unit length                   ##
 ############################################################
