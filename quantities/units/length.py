@@ -186,7 +186,8 @@ arpentlin = UnitLength(
 
 solar_radius = UnitLength(
     'solar_radius',
-    6.995 * (10**8) * m
+    6.995 * (10**8) * m,
+    aliases=['solar_radii']
 )
 
 kayser = wavenumber = UnitQuantity(
