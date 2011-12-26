@@ -19,3 +19,4 @@ kilogram_per_cubic_metre = UnitQuantity(
     aliases=['kilograms_per_cubic_metre']
 )
 
+del UnitQuantity, m, cm, kg, g
