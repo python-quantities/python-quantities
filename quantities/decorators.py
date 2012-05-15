@@ -99,7 +99,7 @@ def quantitizer(base_function,
             #test if the argument is a quantity
             if isinstance(args[i], Quantity):
                 #convert the units to the base units
-                args[i] = args[i].simplified()
+                args[i] = args[i].simplified
 
                 #view the array as an ndarray
                 args[i] = args[i].magnitude
@@ -142,7 +142,7 @@ def quantitizer(base_function,
                 result[i] = Quantity(
                                 result[i],
                                 handler_quantities[i]
-                                    .dimensionality.simplified()
+                                    .dimensionality.simplified
                                     )
                 #now convert the quantity to the appropriate units
                 result[i] = result[i].rescale(
