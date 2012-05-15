@@ -144,6 +144,22 @@ class Quantity(np.ndarray):
         return self.view(type=np.ndarray)
 
     @property
+    def real(self):
+        return Quantity(self.magnitude.real, self.dimensionality)
+
+    @real.setter
+    def real(self, r):
+        self.magnitude.real = Quantity(r, self.dimensionality).magnitude
+
+    @property
+    def imag(self):
+        return Quantity(self.magnitude.imag, self.dimensionality)
+
+    @imag.setter
+    def imag(self, i):
+        self.magnitude.imag = Quantity(i, self.dimensionality).magnitude
+
+    @property
     def simplified(self):
         rq = 1*unit_registry['dimensionless']
         for u, d in self.dimensionality.items():
