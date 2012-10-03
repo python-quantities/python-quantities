@@ -24,6 +24,11 @@ Pa = pascal = UnitQuantity(
     symbol='Pa',
     aliases=['pascals']
 )
+hPa = hectopascal = UnitQuantity(
+    'hectopascal',
+    100*Pa,
+    symbol='hPa',
+)
 kPa = kilopascal = UnitQuantity(
     'kilopascal',
     1000*Pa,
@@ -46,6 +51,11 @@ bar = UnitQuantity(
     'bar',
     100000*pascal,
     aliases=['bars']
+)
+mb = millibar = UnitQuantity(
+    'millibar',
+    0.001*bar,
+    symbol='mb',
 )
 kbar = kilobar = UnitQuantity(
     'kilobar',
