@@ -18,6 +18,9 @@ from .area import *
 from . import compound
 from .compound import *
 
+from . import density
+from .density import *
+
 from . import dimensionless
 from .dimensionless import *
 
@@ -44,6 +47,9 @@ from .length import *
 
 from . import mass
 from .mass import *
+
+from . import massrate
+from .massrate import *
 
 from . import power
 from .power import *
