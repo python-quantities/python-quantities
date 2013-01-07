@@ -5,14 +5,11 @@ from __future__ import absolute_import
 
 from math import pi
 
+from ..registry import unit_registry
 from ..unitquantity import UnitQuantity, dimensionless
 
-rad = radian = radians = UnitQuantity(
-    'radian',
-    1*dimensionless,
-    symbol='rad',
-    aliases=['radians']
-)
+rad = radian = radians = dimensionless
+unit_registry['rad'] = unit_registry['radian'] = unit_registry['radians'] = rad
 mrad = milliradian = UnitQuantity(
     'milliradian',
     rad/1000,
