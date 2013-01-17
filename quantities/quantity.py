@@ -233,7 +233,7 @@ class Quantity(np.ndarray):
             raise ValueError(
                 """ufunc %r not supported by quantities
                 please file a bug report at https://github.com/python-quantities
-                """
+                """ % uf
                 )
         return res
 

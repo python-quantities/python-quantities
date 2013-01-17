@@ -309,6 +309,7 @@ p_dict[np.reciprocal] = _d_reciprocal
 
 def _d_copy(q1, out=None):
     return q1.dimensionality
+p_dict[np.fabs] = _d_copy
 p_dict[np.absolute] = _d_copy
 p_dict[np.conjugate] = _d_copy
 p_dict[np.negative] = _d_copy
