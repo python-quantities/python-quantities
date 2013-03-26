@@ -116,12 +116,12 @@ class Quantity(np.ndarray):
     __array_priority__ = 21
 
     def __new__(cls, data, units='', dtype=None, copy=True):
-        if isinstance(data, cls):
+        if isinstance(data, Quantity):
             if units:
                 data = data.rescale(units)
             if isinstance(data, unit_registry['UnitQuantity']):
                 return 1*data
-            return np.array(data, dtype=dtype, copy=copy, subok=True)
+            return np.array(data, dtype=dtype, copy=copy, subok=True).view(cls)
 
         ret = np.array(data, dtype=dtype, copy=copy).view(cls)
         ret._dimensionality.update(validate_dimensionality(units))
