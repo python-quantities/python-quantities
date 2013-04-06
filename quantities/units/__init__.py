@@ -42,6 +42,9 @@ from .information import *
 from . import length
 from .length import *
 
+from . import logunits
+from .logunits import *
+
 from . import mass
 from .mass import *
 
