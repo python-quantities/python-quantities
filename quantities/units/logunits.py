@@ -15,11 +15,11 @@ decibel = dB = UnitQuantity(
 )
 
 bel_milliwatt = UnitLogPower(
-    'bel-milliwatt',
+    'bel_milliwatt',
     symbol='Bm'
 )
 decibel_milliwatt = dBm = UnitQuantity(
-    'decibel-milliwatt',
+    'decibel_milliwatt',
     bel_milliwatt / 10,
     symbol='dBm'
 )
