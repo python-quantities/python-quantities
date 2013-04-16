@@ -534,6 +534,14 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.ndarray.squeeze)
+    def squeeze(self, axis=None):
+        return Quantity(
+            self.magnitude.squeeze(axis),
+            self.dimensionality,
+            copy=False
+        )
+
     @with_doc(np.ndarray.mean)
     def mean(self, axis=None, dtype=None, out=None):
         return Quantity(
