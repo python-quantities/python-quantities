@@ -65,7 +65,7 @@ refrigeration_ton = ton_of_refrigeration = UnitQuantity(
     aliases=['ton_of_refrigeration']
 )
 
-solar_luminosity = UnitQuantity(
+L_s = solar_luminosity = UnitQuantity(
     'solar_luminosity',
     3.839*(10**26)*W 
 )

@@ -184,10 +184,22 @@ arpentlin = UnitLength(
     191.835*ft
 )
 
-solar_radius = UnitLength(
+R_s = solar_radius = UnitLength(
     'solar_radius',
     6.995 * (10**8) * m,
     aliases=['solar_radii']
+)
+
+R_e = earth_radius = UnitLength(
+    'earth_radius',
+    6.3675 * (10**6) * m,
+    aliases=['earth_radii']
+)
+
+R_j = jupiter_radius = UnitLength(
+    'jupiter_radius',
+    6.9173 * (10**7) * m,
+    aliases=['jupiter_radii']
 )
 
 kayser = wavenumber = UnitQuantity(
