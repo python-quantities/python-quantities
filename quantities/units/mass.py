@@ -152,12 +152,12 @@ M_s = solar_mass = UnitMass(
 )
 
 M_e = earth_mass = UnitMass(
-    'earth_mass', 5.9721986*(10**24)*kg,
+    'earth_mass', 5.9736*(10**24)*kg,
     aliases=['earth_masses']
 )
 
 M_j = jupiter_mass = UnitMass(
-    'jupiter_mass', 1.8988*(10**27)*kg,
+    'jupiter_mass', 1.8986*(10**27)*kg,
     aliases=['jupiter_masses']
 )
 
