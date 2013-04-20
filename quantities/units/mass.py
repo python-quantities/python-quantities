@@ -146,6 +146,21 @@ long_ton = UnitMass(
     aliases=['long_tons']
 ) # both long and short tons are referred to as "ton" so we wont use it
 
+M_s = solar_mass = UnitMass(
+    'solar_mass', 1.99*(10**30)*kg,
+    aliases=['solar_masses']
+)
+
+M_e = earth_mass = UnitMass(
+    'earth_mass', 5.9736*(10**24)*kg,
+    aliases=['earth_masses']
+)
+
+M_j = jupiter_mass = UnitMass(
+    'jupiter_mass', 1.8986*(10**27)*kg,
+    aliases=['jupiter_masses']
+)
+
 ############################################################
 ##                 Mass per unit length                   ##
 ############################################################
