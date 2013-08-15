@@ -107,16 +107,68 @@ F = farad = UnitQuantity(
     symbol='F',
     aliases=['farads']
 )
-ohm = UnitQuantity(
+mF = UnitQuantity(
+    'millifarad',
+    F/1000,
+    symbol='mF'
+)
+uF = UnitQuantity(
+    'microfarad',
+    mF/1000,
+    symbol='uF',
+    u_symbol='μF'
+)
+nF = UnitQuantity(
+    'nanofarad',
+    uF/1000,
+    symbol='nF'
+)
+pF = UnitQuantity(
+    'picofarad',
+    nF/1000,
+    symbol='pF'
+)
+ohm = Ohm = UnitQuantity(
     'ohm',
     V/A,
     u_symbol='Ω',
-    aliases=['ohms']
+    aliases=['ohms', 'Ohm']
+)
+kOhm = UnitQuantity(
+    'kiloohm',
+    ohm*1000,
+    u_symbol='kΩ'
+)
+MOhm = UnitQuantity(
+    'megaohm',
+    kOhm*1000,
+    u_symbol='MΩ'
 )
 S = siemens = UnitQuantity(
     'siemens',
     A/V,
     symbol='S'
+)
+mS = siemens = UnitQuantity(
+    'millisiemens',
+    S/1000,
+    symbol='mS'
+)
+uS = siemens = UnitQuantity(
+    'microsiemens',
+    mS/1000,
+    symbol='uS',
+    u_symbol='μS'
+)
+nS = siemens = UnitQuantity(
+    'nanosiemens',
+    uS/1000,
+    symbol='nS'
+)
+pS = siemens = UnitQuantity(
+    'picosiemens',
+    nS/1000,
+    symbol='pS'
 )
 Wb = weber = UnitQuantity(
     'weber',
