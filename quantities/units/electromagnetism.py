@@ -137,12 +137,14 @@ ohm = Ohm = UnitQuantity(
 kOhm = UnitQuantity(
     'kiloohm',
     ohm*1000,
-    u_symbol='kΩ'
+    u_symbol='kΩ',
+    aliases=['kOhm', 'kohm', 'kiloohms']
 )
 MOhm = UnitQuantity(
     'megaohm',
     kOhm*1000,
-    u_symbol='MΩ'
+    u_symbol='MΩ',
+    aliases=['MOhm', 'Mohm', 'megaohms']
 )
 S = siemens = UnitQuantity(
     'siemens',
