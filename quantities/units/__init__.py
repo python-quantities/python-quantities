@@ -18,6 +18,9 @@ from .area import *
 from . import compound
 from .compound import *
 
+from . import concentration
+from .concentration import *
+
 from . import dimensionless
 from .dimensionless import *
 
