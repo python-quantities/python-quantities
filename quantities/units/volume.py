@@ -28,7 +28,7 @@ ML = megaliter = megalitre = UnitQuantity(
     'megaliter',
     kiloliter*1000,
     symbol='ML',
-    aliases=['ml', 'megaliters', 'megalitre', 'megalitres']
+    aliases=['Ml', 'megaliters', 'megalitre', 'megalitres']
 )
 GL = gigaliter = gigalitre = UnitQuantity(
     'gigaliter',

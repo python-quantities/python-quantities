@@ -23,6 +23,6 @@ mM = millimolar = UnitQuantity(
 uM = micromolar = UnitQuantity(
     'micromolar',
     mM / 1000,
-    symbol='M',
+    symbol='uM',
     aliases=['mircomolar']
 )
