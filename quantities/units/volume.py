@@ -16,25 +16,25 @@ mL = milliliter = millilitre = UnitQuantity(
     'milliliter',
     liter/1000,
     symbol='mL',
-    aliases=['milliliters', 'millilitre', 'millilitres']
+    aliases=['ml', 'milliliters', 'millilitre', 'millilitres']
 )
 kL = kiloliter = kilolitre = UnitQuantity(
     'kiloliter',
     liter*1000,
     symbol='kL',
-    aliases=['kiloliters', 'kilolitre', 'kilolitres']
+    aliases=['kl', 'kiloliters', 'kilolitre', 'kilolitres']
 )
 ML = megaliter = megalitre = UnitQuantity(
     'megaliter',
     kiloliter*1000,
     symbol='ML',
-    aliases=['megaliters', 'megalitre', 'megalitres']
+    aliases=['ml', 'megaliters', 'megalitre', 'megalitres']
 )
 GL = gigaliter = gigalitre = UnitQuantity(
     'gigaliter',
     megaliter*1000,
     symbol='GL',
-    aliases=['gigaliters', 'gigalitre', 'gigalitres']
+    aliases=['Gl', 'gigaliters', 'gigalitre', 'gigalitres']
 )
 cc = cubic_centimeter = milliliter = UnitQuantity(
     'cubic_centimeter',
