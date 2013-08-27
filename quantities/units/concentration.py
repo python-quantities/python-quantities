@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 """
 from __future__ import absolute_import
@@ -10,19 +11,18 @@ M = molar = UnitQuantity(
     'molar',
     mol / L,
     symbol='M',
-    aliases=['molar', 'Molar']
+    aliases=['Molar']
 )
 
 mM = millimolar = UnitQuantity(
     'millimolar',
     molar / 1000,
-    symbol='mM',
-    aliases=['millimolar']
+    symbol='mM'
 )
 
 uM = micromolar = UnitQuantity(
     'micromolar',
     mM / 1000,
     symbol='uM',
-    aliases=['mircomolar']
+    u_symbol='µM'
 )
