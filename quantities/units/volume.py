@@ -12,11 +12,29 @@ l = L = liter = litre = UnitQuantity(
     symbol='L',
     aliases=['l', 'liters', 'litre', 'litres']
 )
-mL = milliliter = UnitQuantity(
+mL = milliliter = millilitre = UnitQuantity(
     'milliliter',
     liter/1000,
     symbol='mL',
-    aliases=['milliliters']
+    aliases=['ml', 'milliliters', 'millilitre', 'millilitres']
+)
+kL = kiloliter = kilolitre = UnitQuantity(
+    'kiloliter',
+    liter*1000,
+    symbol='kL',
+    aliases=['kl', 'kiloliters', 'kilolitre', 'kilolitres']
+)
+ML = megaliter = megalitre = UnitQuantity(
+    'megaliter',
+    kiloliter*1000,
+    symbol='ML',
+    aliases=['Ml', 'megaliters', 'megalitre', 'megalitres']
+)
+GL = gigaliter = gigalitre = UnitQuantity(
+    'gigaliter',
+    megaliter*1000,
+    symbol='GL',
+    aliases=['Gl', 'gigaliters', 'gigalitre', 'gigalitres']
 )
 cc = cubic_centimeter = milliliter = UnitQuantity(
     'cubic_centimeter',
