@@ -207,6 +207,14 @@ class UncertainQuantity(Quantity):
             copy=False
         )
 
+    @with_doc(np.ndarray.mean)
+    def mean(self, axis=None, dtype=None, out=None):
+        return UncertainQuantity(
+            self.magnitude.mean(axis, dtype, out),
+            self.dimensionality,
+            ((1.0/np.size(self,axis))**2 * np.sum(self.uncertainty.magnitude**2, axis))**0.5,
+            copy=False)
+
     def __getstate__(self):
         """
         Return the internal state of the quantity, for pickling
