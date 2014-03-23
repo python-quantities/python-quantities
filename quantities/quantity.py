@@ -622,6 +622,10 @@ class Quantity(np.ndarray):
         return (_reconstruct_quantity,
                 (self.__class__, np.ndarray, (0, ), 'b', ),
                 self.__getstate__())
+                
+    def __deepcopy__(self, memo_dict):
+        # constructor copies by default
+        return Quantity(self.magnitude, self.dimensionality)
 
 
 def _reconstruct_quantity(subtype, baseclass, baseshape, basetype,):
