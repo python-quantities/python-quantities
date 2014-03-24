@@ -565,6 +565,14 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nanstd)
+    def nanstd(self, axis=None, dtype=None, out=None, ddof=0):
+        return Quantity(
+            np.nanstd(self.magnitude, axis, dtype, out, ddof),
+            self._dimensionality,
+            copy=False
+        )
+        
     @with_doc(np.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
         if axis == None:
