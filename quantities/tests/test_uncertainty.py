@@ -60,3 +60,10 @@ class TestUncertainty(TestCase):
         self.assertQuantityEqual((a/2).uncertainty, [0.05, 0.1 ]*pq.m)
         self.assertQuantityEqual(1/a, [1., 0.5]/pq.m)
         self.assertQuantityEqual((1/a).uncertainty, [0.1, 0.05]/pq.m)
+
+    def test_uncertainquantity_subtract(self):
+        import numpy as np
+        a = UncertainQuantity(1, 'm', 1)
+        b = a.copy() # different object
+        self.assertQuantityEqual(a-a, UncertainQuantity(0, 'm', 0))
+        self.assertQuantityEqual(a-b, UncertainQuantity(0, 'm', np.sqrt(2)))
