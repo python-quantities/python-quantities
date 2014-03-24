@@ -2,7 +2,7 @@
 
 from .. import units as pq
 from .common import TestCase
-
+import numpy as np
 
 class TestQuantityMethods(TestCase):
 
@@ -109,15 +109,31 @@ class TestQuantityMethods(TestCase):
     def test_max(self):
         self.assertQuantityEqual(self.q.max(), 4*pq.m)
 
+    def test_nanmax(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertQuantityEqual(q.nanmax(), 4*pq.m)
+
     def test_argmax(self):
         self.assertEqual(self.q.argmax(), 3)
+
+    def test_nanargmax(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertEqual(self.q.nanargmax(), 3)
 
     def test_min(self):
         self.assertEqual(self.q.min(), 1 * pq.m)
 
+    def test_nanmin(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertQuantityEqual(q.nanmin(), 1*pq.m)
+
     def test_argmin(self):
         self.assertEqual(self.q.argmin(), 0)
 
+    def test_nanargmax(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertEqual(self.q.nanargmin(), 0)
+        
     def test_ptp(self):
         self.assertQuantityEqual(self.q.ptp(), 3 * pq.m)
 

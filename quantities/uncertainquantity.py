@@ -241,6 +241,42 @@ class UncertainQuantity(Quantity):
     def sqrt(self, out=None):
         return self**0.5
 
+    @with_doc(np.ndarray.max)
+    def max(self, axis=None, out=None):
+        idx = np.argmax(self.magnitude)
+        return self[idx]
+
+    @with_doc(np.nanmax)
+    def nanmax(self, axis=None, out=None):
+        idx = np.nanargmax(self.magnitude)
+        return self[idx]
+
+    @with_doc(np.ndarray.min)
+    def min(self, axis=None, out=None):
+        idx = np.argmin(self.magnitude)
+        return self[idx]
+
+    @with_doc(np.nanmin)
+    def nanmin(self, axis=None, out=None):
+        idx = np.nanargmin(self.magnitude)
+        return self[idx]
+
+    @with_doc(np.ndarray.argmin)
+    def argmin(self,axis=None, out=None):
+        return self.magnitude.argmin()
+
+    @with_doc(np.ndarray.argmax)
+    def argmax(self,axis=None, out=None):
+        return self.magnitude.argmax()
+
+    @with_doc(np.nanargmin)
+    def nanargmin(self,axis=None, out=None):
+        return np.nanargmin(self.magnitude)
+        
+    @with_doc(np.nanargmax)
+    def nanargmax(self,axis=None, out=None):
+        return np.nanargmax(self.magnitude)
+        
     def __getstate__(self):
         """
         Return the internal state of the quantity, for pickling

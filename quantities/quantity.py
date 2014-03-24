@@ -486,6 +486,14 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nanmax)
+    def nanmax(self, axis=None, out=None):
+        return Quantity(
+            np.nanmax(self.magnitude),
+            self.dimensionality,
+            copy=False
+        )
+
     @with_doc(np.ndarray.min)
     def min(self, axis=None, out=None):
         return Quantity(
@@ -494,10 +502,30 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nanmin)
+    def nanmin(self, axis=None, out=None):
+        return Quantity(
+            np.nanmin(self.magnitude),
+            self.dimensionality,
+            copy=False
+        )
+
     @with_doc(np.ndarray.argmin)
     def argmin(self,axis=None, out=None):
         return self.magnitude.argmin()
 
+    @with_doc(np.ndarray.argmax)
+    def argmax(self,axis=None, out=None):
+        return self.magnitude.argmax()
+
+    @with_doc(np.nanargmin)
+    def nanargmin(self,axis=None, out=None):
+        return np.nanargmin(self.magnitude)
+        
+    @with_doc(np.nanargmax)
+    def nanargmax(self,axis=None, out=None):
+        return np.nanargmax(self.magnitude)
+        
     @with_doc(np.ndarray.ptp)
     def ptp(self, axis=None, out=None):
         return Quantity(
