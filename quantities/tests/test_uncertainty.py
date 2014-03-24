@@ -74,3 +74,9 @@ class TestUncertainty(TestCase):
         b = UncertainQuantity([1,2,np.nan], 'm', [.1,.2,np.nan])
         self.assertQuantityEqual(a.mean(),b.nanmean())
         
+    def test_uncertainquantity_subtract(self):
+        import numpy as np
+        a = UncertainQuantity(1, 'm', 1)
+        b = a.copy() # different object
+        self.assertQuantityEqual(a-a, UncertainQuantity(0, 'm', 0))
+        self.assertQuantityEqual(a-b, UncertainQuantity(0, 'm', np.sqrt(2)))
