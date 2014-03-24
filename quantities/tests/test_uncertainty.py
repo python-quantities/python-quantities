@@ -60,3 +60,17 @@ class TestUncertainty(TestCase):
         self.assertQuantityEqual((a/2).uncertainty, [0.05, 0.1 ]*pq.m)
         self.assertQuantityEqual(1/a, [1., 0.5]/pq.m)
         self.assertQuantityEqual((1/a).uncertainty, [0.1, 0.05]/pq.m)
+
+    def test_uncertaintity_mean(self):
+        import numpy as np
+        a = UncertainQuantity([1,2], 'm', [.1,.2])
+        mean0 = np.sum(a)/np.size(a) # calculated traditionally
+        mean1 = a.mean()        # calculated using this code
+        self.assertQuantityEqual(mean0, mean1)
+
+    def test_uncertaintity_nanmean(self):
+        import numpy as np
+        a = UncertainQuantity([1,2], 'm', [.1,.2])
+        b = UncertainQuantity([1,2,np.nan], 'm', [.1,.2,np.nan])
+        self.assertQuantityEqual(a.mean(),b.nanmean())
+        
