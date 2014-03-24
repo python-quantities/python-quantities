@@ -215,6 +215,15 @@ class UncertainQuantity(Quantity):
             ((1.0/np.size(self,axis))**2 * np.sum(self.uncertainty.magnitude**2, axis))**0.5,
             copy=False)
 
+    @with_doc(np.ndarray.mean)
+    def nanmean(self, axis=None, dtype=None, out=None):
+        size = np.sum(~np.isnan(self),axis)
+        return UncertainQuantity(
+            np.nanmean(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            ((1.0/size)**2 * np.nansum(np.nan_to_num(self.uncertainty.magnitude)**2, axis))**0.5,
+            copy=False)
+
     def __getstate__(self):
         """
         Return the internal state of the quantity, for pickling
