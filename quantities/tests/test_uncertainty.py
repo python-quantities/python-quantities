@@ -3,6 +3,7 @@
 from .. import units as pq
 from ..uncertainquantity import UncertainQuantity
 from .common import TestCase
+import numpy as np
 
 
 class TestUncertainty(TestCase):
@@ -62,20 +63,17 @@ class TestUncertainty(TestCase):
         self.assertQuantityEqual((1/a).uncertainty, [0.1, 0.05]/pq.m)
 
     def test_uncertaintity_mean(self):
-        import numpy as np
         a = UncertainQuantity([1,2], 'm', [.1,.2])
         mean0 = np.sum(a)/np.size(a) # calculated traditionally
         mean1 = a.mean()        # calculated using this code
         self.assertQuantityEqual(mean0, mean1)
 
     def test_uncertaintity_nanmean(self):
-        import numpy as np
         a = UncertainQuantity([1,2], 'm', [.1,.2])
         b = UncertainQuantity([1,2,np.nan], 'm', [.1,.2,np.nan])
         self.assertQuantityEqual(a.mean(),b.nanmean())
         
     def test_uncertainquantity_subtract(self):
-        import numpy as np
         a = UncertainQuantity(1, 'm', 1)
         b = a.copy() # different object
         self.assertQuantityEqual(a-a, UncertainQuantity(0, 'm', 0))
@@ -84,3 +82,9 @@ class TestUncertainty(TestCase):
     def test_uncertainty_sqrt(self):
         a = UncertainQuantity([1,2], 'm', [.1,.2])
         self.assertQuantityEqual(a**0.5, a.sqrt())
+
+    def test_uncertainty_nansum(self):
+        uq = UncertainQuantity([1,2], 'm', [1,1])
+        uq_nan = UncertainQuantity([1,2,np.nan], 'm', [1,1,np.nan])
+        self.assertQuantityEqual(np.sum(uq), np.nansum(uq))
+        self.assertQuantityEqual(np.sum(uq), np.nansum(uq_nan))

@@ -428,6 +428,15 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nansum)
+    def nansum(self, axis=None, dtype=None, out=None):
+        import numpy as np
+        return Quantity(
+            np.nansum(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            copy=False
+        )
+        
     @with_doc(np.ndarray.fill)
     def fill(self, value):
         self.magnitude.fill(value)

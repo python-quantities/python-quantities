@@ -210,6 +210,16 @@ class UncertainQuantity(Quantity):
             copy=False
         )
 
+    @with_doc(np.nansum)
+    def nansum(self, axis=None, dtype=None, out=None):
+        import numpy as np
+        return UncertainQuantity(
+            np.nansum(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            (np.nansum(self.uncertainty.magnitude**2, axis))**0.5,
+            copy=False
+        )
+
     @with_doc(np.ndarray.mean)
     def mean(self, axis=None, dtype=None, out=None):
         return UncertainQuantity(

@@ -17,6 +17,12 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(self.q.sum(0), [4, 6]*pq.m)
         self.assertQuantityEqual(self.q.sum(1), [3, 7]*pq.m)
 
+    def test_nansum(self):
+        import numpy as np
+        qnan = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
+        self.assertQuantityEqual(qnan.nansum(), 10*pq.m )
+        self.assertQuantityEqual(qnan.nansum(0), [4,6]*pq.m )
+
     def test_fill(self):
         self.q.fill(6 * pq.ft)
         self.assertQuantityEqual(self.q, [[6, 6], [6, 6]] * pq.ft)
