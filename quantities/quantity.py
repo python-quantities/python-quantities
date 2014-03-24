@@ -345,6 +345,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.__getitem__)
     def __getitem__(self, key):
+        print "here"
         ret = super(Quantity, self).__getitem__(key)
         if isinstance(ret, Quantity):
             return ret

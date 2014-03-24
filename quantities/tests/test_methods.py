@@ -146,7 +146,6 @@ class TestQuantityMethods(TestCase):
     def test_mean(self):
         self.assertQuantityEqual(self.q.mean(), 2.5 * pq.m)
 
-        #self.q = [[1, 2], [3, 4]] * pq.m
     def test_nanmean(self):
         import numpy as np    
         q = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
@@ -163,11 +162,6 @@ class TestQuantityMethods(TestCase):
         q0 = [[1,2], [3,4]] * pq.m
         q1 = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
         self.assertQuantityEqual(q0.std(), q1.nanstd())
-
-    def test_nanmean(self):
-        import numpy as np    
-        q = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
-        self.assertQuantityEqual(q.nanstd(), self.q.std())
 
     def test_prod(self):
         self.assertQuantityEqual(self.q.prod(), 24 * pq.m**4)
