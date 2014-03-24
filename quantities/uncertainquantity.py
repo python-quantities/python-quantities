@@ -218,7 +218,7 @@ class UncertainQuantity(Quantity):
             ((1.0/np.size(self,axis))**2 * np.sum(self.uncertainty.magnitude**2, axis))**0.5,
             copy=False)
 
-    @with_doc(np.ndarray.mean)
+    @with_doc(np.nanmean)
     def nanmean(self, axis=None, dtype=None, out=None):
         size = np.sum(~np.isnan(self),axis)
         return UncertainQuantity(

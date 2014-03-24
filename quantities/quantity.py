@@ -549,6 +549,14 @@ class Quantity(np.ndarray):
             self.dimensionality,
             copy=False)
 
+    @with_doc(np.nanmean)
+    def nanmean(self, axis=None, dtype=None, out=None):
+        import numpy as np
+        return Quantity(
+            np.nanmean(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            copy=False)
+
     @with_doc(np.ndarray.var)
     def var(self, axis=None, dtype=None, out=None, ddof=0):
         return Quantity(
