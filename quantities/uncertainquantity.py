@@ -243,22 +243,22 @@ class UncertainQuantity(Quantity):
 
     @with_doc(np.ndarray.max)
     def max(self, axis=None, out=None):
-        idx = np.argmax(self.magnitude)
+        idx = np.unravel_index(np.argmax(self.magnitude), self.shape)
         return self[idx]
 
     @with_doc(np.nanmax)
     def nanmax(self, axis=None, out=None):
-        idx = np.nanargmax(self.magnitude)
+        idx = np.unravel_index(np.nanargmax(self.magnitude), self.shape)
         return self[idx]
 
     @with_doc(np.ndarray.min)
     def min(self, axis=None, out=None):
-        idx = np.argmin(self.magnitude)
+        idx = np.unravel_index(np.argmin(self.magnitude), self.shape)
         return self[idx]
 
     @with_doc(np.nanmin)
     def nanmin(self, axis=None, out=None):
-        idx = np.nanargmin(self.magnitude)
+        idx = np.unravel_index(np.nanargmin(self.magnitude), self.shape)
         return self[idx]
 
     @with_doc(np.ndarray.argmin)

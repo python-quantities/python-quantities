@@ -90,29 +90,30 @@ class TestUncertainty(TestCase):
         self.assertQuantityEqual(np.sum(uq), np.nansum(uq_nan))
 
     def test_uncertainty_minmax_nan_arg(self):
-        q = [1,2] * pq.m
-        # quantity
+        q = [[1, 2], [3, 4]] * pq.m        # quantity
         self.assertQuantityEqual(q.min(), 1*pq.m) # min
-        self.assertQuantityEqual(q.max(), 2*pq.m) # max
+        self.assertQuantityEqual(q.max(), 4*pq.m) # max
         self.assertQuantityEqual(q.argmin(), 0) # argmin
-        self.assertQuantityEqual(q.argmax(), 1) # argmax
+        self.assertQuantityEqual(q.argmax(), 3) # argmax
         # uncertain quantity
-        uq = UncertainQuantity([1,2], pq.m, [1,1])
+        uq = UncertainQuantity([[1,2],[3,4]], pq.m, [[1,1],[1,1]])
         self.assertQuantityEqual(uq.min(), 1*pq.m) # min
-        self.assertQuantityEqual(uq.max(), 2*pq.m) # max
+        self.assertQuantityEqual(uq.max(), 4*pq.m) # max
         self.assertQuantityEqual(uq.argmin(), 0) # argmin
-        self.assertQuantityEqual(uq.argmax(), 1) # argmax
+        self.assertQuantityEqual(uq.argmax(), 3) # argmax
         # now repeat the above with NaNs
-        nanq = [1,2, np.nan] * pq.m
-        nanuq = UncertainQuantity([1,2, np.nan], pq.m, [1,1,np.nan])
+        nanq = [[1, 2], [3, 4], [np.nan,np.nan]] * pq.m        # quantity
+        nanuq = UncertainQuantity([[1,2],[3,4],[np.nan,np.nan]],
+                               pq.m,
+                               [[1,1],[1,1],[np.nan,np.nan]])
         self.assertQuantityEqual(nanq.nanmin(), 1*pq.m) # min
-        self.assertQuantityEqual(nanq.nanmax(), 2*pq.m) # max
+        self.assertQuantityEqual(nanq.nanmax(), 4*pq.m) # max
         self.assertQuantityEqual(nanq.nanargmin(), 0) # argmin
-        self.assertQuantityEqual(nanq.nanargmax(), 1) # argmax
+        self.assertQuantityEqual(nanq.nanargmax(), 3) # argmax
         self.assertQuantityEqual(nanuq.nanmin(), 1*pq.m) # min
-        self.assertQuantityEqual(nanuq.nanmax(), 2*pq.m) # max
+        self.assertQuantityEqual(nanuq.nanmax(), 4*pq.m) # max
         self.assertQuantityEqual(nanuq.nanargmin(), 0) # argmin
-        self.assertQuantityEqual(nanuq.nanargmax(), 1) # argmax
+        self.assertQuantityEqual(nanuq.nanargmax(), 3) # argmax
         
             
     
