@@ -74,3 +74,7 @@ class TestUncertainty(TestCase):
         b = UncertainQuantity([1,2,np.nan], 'm', [.1,.2,np.nan])
         self.assertQuantityEqual(a.mean(),b.nanmean())
         
+
+    def test_uncertainty_sqrt(self):
+        a = UncertainQuantity([1,2], 'm', [.1,.2])
+        self.assertQuantityEqual(a**0.5, a.sqrt())
