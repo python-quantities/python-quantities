@@ -285,3 +285,9 @@ from .units import *
 from . import constants
 
 from .umath import *
+
+def test(verbosity=1):
+    import unittest
+    suite = unittest.TestLoader().discover('quantities')
+    unittest.TextTestRunner(verbosity=verbosity).run(suite)
+

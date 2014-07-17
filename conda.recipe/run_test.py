@@ -7,5 +7,5 @@ if sys.version.startswith('2.6') or sys.version.startswith('3.1'):
 else:
     import unittest
 
-suite = unittest.TestLoader().discover('..')
+suite = unittest.TestLoader().discover('quantities')
 unittest.TextTestRunner(verbosity=1).run(suite)
