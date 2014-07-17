@@ -1,0 +1,27 @@
+package:
+  name: quantities
+  version: master
+
+source:
+  git_url: https://github.com/python-quantities/python-quantities.git
+  git_tag: master
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+  run:
+    - python
+    - numpy
+
+test:
+  imports:
+    - quantities
+
+about:
+  license: BSD
+  home: http://pythonhosted.org//quantities/
+  summary: Physical quantities with units, based upon Numpy
+
