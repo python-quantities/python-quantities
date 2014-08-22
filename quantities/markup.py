@@ -32,7 +32,6 @@ config = _Config()
 superscripts = ['⁰', '¹', '²', '³', '⁴', '⁵', '⁶', '⁷', '⁸', '⁹']
 
 def superscript(val):
-    # TODO: use a regexp:
     items = re.split(r'\*{2}([\d]+)(?!\.)', val)
     ret = []
     while items:
