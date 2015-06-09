@@ -422,11 +422,14 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.sum)
     def sum(self, axis=None, dtype=None, out=None):
-        return Quantity(
-            self.magnitude.sum(axis, dtype, out),
-            self.dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.sum(axis, dtype, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.fill)
     def fill(self, value):
@@ -471,31 +474,44 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.max)
     def max(self, axis=None, out=None):
-        return Quantity(
-            self.magnitude.max(),
-            self.dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.max(axis, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
+
+    @with_doc(np.ndarray.argmin)
+    def argmax(self, axis=None, out=None):
+        return self.magnitude.argmax(axis, out)
 
     @with_doc(np.ndarray.min)
     def min(self, axis=None, out=None):
-        return Quantity(
-            self.magnitude.min(),
-            self.dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.min(axis, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.argmin)
-    def argmin(self,axis=None, out=None):
-        return self.magnitude.argmin()
+    def argmin(self, axis=None, out=None):
+        return self.magnitude.argmin(axis, out)
 
     @with_doc(np.ndarray.ptp)
     def ptp(self, axis=None, out=None):
-        return Quantity(
-            self.magnitude.ptp(),
-            self.dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.ptp(axis, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.clip)
     def clip(self, min=None, max=None, out=None):
@@ -516,23 +532,35 @@ class Quantity(np.ndarray):
             max.rescale(self._dimensionality).magnitude,
             out
         )
-        return Quantity(clipped, self.dimensionality, copy=False)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(clipped, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.round)
     def round(self, decimals=0, out=None):
-        return Quantity(
-            self.magnitude.round(decimals, out),
-            self.dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.round(decimals, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.trace)
     def trace(self, offset=0, axis1=0, axis2=1, dtype=None, out=None):
-        return Quantity(
-            self.magnitude.trace(offset, axis1, axis2, dtype, out),
-            self.dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.trace(offset, axis1, axis2, dtype, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.squeeze)
     def squeeze(self, axis=None):
@@ -544,26 +572,36 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.mean)
     def mean(self, axis=None, dtype=None, out=None):
-        return Quantity(
-            self.magnitude.mean(axis, dtype, out),
-            self.dimensionality,
-            copy=False)
+        ret = self.magnitude.mean(axis, dtype, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.var)
     def var(self, axis=None, dtype=None, out=None, ddof=0):
-        return Quantity(
-            self.magnitude.var(axis, dtype, out, ddof),
-            self._dimensionality**2,
-            copy=False
-        )
+        ret = self.magnitude.var(axis, dtype, out, ddof)
+        dim = self._dimensionality**2
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.std)
     def std(self, axis=None, dtype=None, out=None, ddof=0):
-        return Quantity(
-            self.magnitude.std(axis, dtype, out, ddof),
-            self._dimensionality,
-            copy=False
-        )
+        ret = self.magnitude.std(axis, dtype, out, ddof)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
@@ -572,15 +610,25 @@ class Quantity(np.ndarray):
         else:
             power = self.shape[axis]
 
-        return Quantity(
-            self.magnitude.prod(axis, dtype, out),
-            self._dimensionality**power,
-            copy=False
-        )
+        ret = self.magnitude.prod(axis, dtype, None if out is None else out.magnitude)
+        dim = self._dimensionality**power
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.cumsum)
     def cumsum(self, axis=None, dtype=None, out=None):
-        return super(Quantity, self).cumsum(axis, dtype, out)*self.units
+        ret = self.magnitude.cumsum(axis, dtype, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.cumprod)
     def cumprod(self, axis=None, dtype=None, out=None):
@@ -589,8 +637,14 @@ class Quantity(np.ndarray):
             raise ValueError(
                 "Quantity must be dimensionless, try using simplified"
             )
-        else:
-            return super(Quantity, self).cumprod(axis, dtype, out)
+
+        ret = self.magnitude.cumprod(axis, dtype, out)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim, copy=False)
+        if isinstance(out, Quantity):
+            out._dimensionality = dim
+        return out
 
     # list of unsupported functions: [choose]
 
