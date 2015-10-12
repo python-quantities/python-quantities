@@ -3,7 +3,9 @@ from distutils.core import setup
 from distutils.command.sdist import sdist as _sdist
 from distutils.command.build import build as _build
 import os
+import sys
 
+TEST_RESULT = None
 
 class data(Command):
 
@@ -77,7 +79,8 @@ class test(Command):
         else:
             import unittest
         suite = unittest.TestLoader().discover('.')
-        unittest.TextTestRunner(verbosity=self.verbosity+1).run(suite)
+        global TEST_RESULT
+        TEST_RESULT = unittest.TextTestRunner(verbosity=self.verbosity+1).run(suite)
 
 
 packages = []
@@ -138,3 +141,9 @@ setup(
     url = 'http://packages.python.org/quantities',
     version = __version__,
 )
+
+if __name__ == '__main__':
+    if TEST_RESULT is not None:
+        if len(TEST_RESULT.errors) > 0:
+            # failing test -> Set non-success exit-code
+            sys.exit(os.EX_OK+1)
