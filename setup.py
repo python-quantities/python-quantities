@@ -7,6 +7,7 @@ import sys
 
 import versioneer
 
+TEST_RESULT = None
 
 cmdclass = versioneer.get_cmdclass()
 
