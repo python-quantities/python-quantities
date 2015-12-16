@@ -439,7 +439,7 @@ class Quantity(np.ndarray):
             self.dimensionality,
             copy=False
         )
-        
+
     @with_doc(np.ndarray.fill)
     def fill(self, value):
         self.magnitude.fill(value)
@@ -492,7 +492,7 @@ class Quantity(np.ndarray):
         out._dimensionality = dim
         return out
 
-    @with_doc(np.ndarray.argmin)
+    @with_doc(np.ndarray.argmax)
     def argmax(self, axis=None, out=None):
         return self.magnitude.argmax(axis, out)
 
@@ -527,18 +527,14 @@ class Quantity(np.ndarray):
     def argmin(self, axis=None, out=None):
         return self.magnitude.argmin(axis, out)
 
-    @with_doc(np.ndarray.argmax)
-    def argmax(self,axis=None, out=None):
-        return self.magnitude.argmax()
-
     @with_doc(np.nanargmin)
     def nanargmin(self,axis=None, out=None):
         return np.nanargmin(self.magnitude)
-        
+
     @with_doc(np.nanargmax)
     def nanargmax(self,axis=None, out=None):
         return np.nanargmax(self.magnitude)
-        
+
     @with_doc(np.ndarray.ptp)
     def ptp(self, axis=None, out=None):
         ret = self.magnitude.ptp(axis, None if out is None else out.magnitude)
@@ -655,7 +651,7 @@ class Quantity(np.ndarray):
             self._dimensionality,
             copy=False
         )
-        
+
     @with_doc(np.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
         if axis == None:
