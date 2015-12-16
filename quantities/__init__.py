@@ -213,7 +213,7 @@ Physical constants are sort of similar to compound units, for example:
    >>> print pq.constants.proton_mass.simplified
    1.672621637e-27 kg
    +/-8.3e-35 kg (1 sigma)
-   
+
 A Latex representation of the dimensionality may be obtained in the following fashion::
 
     >>> g = pq.Quantity(9.80665,'m/s**2')
@@ -225,12 +225,12 @@ A Latex representation of the dimensionality may be obtained in the following fa
     >>> print weight.dimensionality.latex
     $\\mathrm{N}$
 
-The Latex output is compliant with the MathText subset used by Matplotlib.  To add 
+The Latex output is compliant with the MathText subset used by Matplotlib.  To add
 formatted units to the axis label of a Matplotlib figure, one could use::
 
     >>> ax.set_ylabel('Weight ' + weight.dimensionality.latex)
-    
-Greater customization is available via the markup.format_units_latex function.  It allows 
+
+Greater customization is available via the markup.format_units_latex function.  It allows
 the user to modify the font, the multiplication symbol, or to encapsulate the latex
 string in parentheses.  Due to the complexity of CompoundUnits, the latex rendering
 of CompoundUnits will utilize the latex \\frac{num}{den} construct.
@@ -267,7 +267,9 @@ units, they should still conform to valid python expressions.
 
 from __future__ import absolute_import
 
-from .version import __version__
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
 
 from .registry import unit_registry
 
@@ -290,4 +292,3 @@ def test(verbosity=1):
     import unittest
     suite = unittest.TestLoader().discover('quantities')
     unittest.TextTestRunner(verbosity=verbosity).run(suite)
-

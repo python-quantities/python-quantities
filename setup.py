@@ -4,6 +4,11 @@ from distutils.command.sdist import sdist as _sdist
 from distutils.command.build import build as _build
 import os
 
+import versioneer
+
+
+cmdclass = versioneer.get_cmdclass()
+
 
 class data(Command):
 
@@ -38,6 +43,8 @@ class data(Command):
                     %(val, prec, unit)
                 f.write("physical_constants['%s'] = %s\n"%(name, d))
 
+cmdclass['data'] = data
+
 
 class sdist(_sdist):
 
@@ -45,12 +52,16 @@ class sdist(_sdist):
         self.run_command('data')
         _sdist.run(self)
 
+cmdclass['sdist'] = sdist
+
 
 class build(_build):
 
     def run(self):
         self.run_command('data')
         _build.run(self)
+
+cmdclass['build'] = build
 
 
 class test(Command):
@@ -78,6 +89,8 @@ class test(Command):
             import unittest
         suite = unittest.TestLoader().discover('.')
         unittest.TextTestRunner(verbosity=self.verbosity+1).run(suite)
+
+cmdclass['test'] = test
 
 
 packages = []
@@ -107,12 +120,7 @@ setup(
 #        Topic :: Education
 #        Topic :: Scientific/Engineering
 #        """,
-    cmdclass = {
-        'build': build,
-        'data': data,
-        'sdist': sdist,
-        'test': test,
-        },
+    cmdclass = cmdclass,
     description = "Support for physical quantities with units, based on numpy",
     download_url = "http://pypi.python.org/pypi/quantities",
     keywords = ['quantities', 'units', 'physical', 'constants'],
