@@ -212,7 +212,6 @@ class UncertainQuantity(Quantity):
 
     @with_doc(np.nansum)
     def nansum(self, axis=None, dtype=None, out=None):
-        import numpy as np
         return UncertainQuantity(
             np.nansum(self.magnitude, axis, dtype, out),
             self.dimensionality,
@@ -272,11 +271,11 @@ class UncertainQuantity(Quantity):
     @with_doc(np.nanargmin)
     def nanargmin(self,axis=None, out=None):
         return np.nanargmin(self.magnitude)
-        
+
     @with_doc(np.nanargmax)
     def nanargmax(self,axis=None, out=None):
         return np.nanargmax(self.magnitude)
-        
+
     def __getstate__(self):
         """
         Return the internal state of the quantity, for pickling
