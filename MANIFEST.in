@@ -2,3 +2,5 @@ include distribute_setup.py
 include CHANGES.txt
 include py3tool.py
 include quantities/constants/NIST_codata.txt
+include versioneer.py
+include quantities/_version.py

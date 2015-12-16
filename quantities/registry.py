@@ -33,7 +33,7 @@ class UnitRegistry:
                 if val == self.__context[string]:
                     return
                 raise KeyError(
-                    '%s has already been registered for %s' 
+                    '%s has already been registered for %s'
                     % (string, self.__context[string])
                 )
             self.__context[string] = val
@@ -55,7 +55,7 @@ class UnitRegistry:
 
         # make sure we can parse the label ....
         if label == '': label = 'dimensionless'
-        if label == "%": label = "percent"
+        if "%" in label: label = label.replace("%", "percent")
         if label.lower() == "in": label = "inch"
 
         return self.__registry[label]

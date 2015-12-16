@@ -5,7 +5,11 @@ from distutils.command.build import build as _build
 import os
 import sys
 
-TEST_RESULT = None
+import versioneer
+
+
+cmdclass = versioneer.get_cmdclass()
+
 
 class data(Command):
 
@@ -40,6 +44,8 @@ class data(Command):
                     %(val, prec, unit)
                 f.write("physical_constants['%s'] = %s\n"%(name, d))
 
+cmdclass['data'] = data
+
 
 class sdist(_sdist):
 
@@ -47,12 +53,16 @@ class sdist(_sdist):
         self.run_command('data')
         _sdist.run(self)
 
+cmdclass['sdist'] = sdist
+
 
 class build(_build):
 
     def run(self):
         self.run_command('data')
         _build.run(self)
+
+cmdclass['build'] = build
 
 
 class test(Command):
@@ -82,6 +92,8 @@ class test(Command):
         global TEST_RESULT
         TEST_RESULT = unittest.TextTestRunner(verbosity=self.verbosity+1).run(suite)
 
+cmdclass['test'] = test
+
 
 packages = []
 for dirpath, dirnames, filenames in os.walk('quantities'):
@@ -90,10 +102,6 @@ for dirpath, dirnames, filenames in os.walk('quantities'):
     else:
         del(dirnames[:])
 
-with open('quantities/version.py') as f:
-    for line in f:
-        if line.startswith('__version__'):
-            exec(line)
 
 setup(
     author = 'Darren Dale',
@@ -110,12 +118,7 @@ setup(
 #        Topic :: Education
 #        Topic :: Scientific/Engineering
 #        """,
-    cmdclass = {
-        'build': build,
-        'data': data,
-        'sdist': sdist,
-        'test': test,
-        },
+    cmdclass = cmdclass,
     description = "Support for physical quantities with units, based on numpy",
     download_url = "http://pypi.python.org/pypi/quantities",
     keywords = ['quantities', 'units', 'physical', 'constants'],
@@ -139,7 +142,7 @@ setup(
         'numpy (>=1.4.0)',
         ],
     url = 'http://packages.python.org/quantities',
-    version = __version__,
+    version = versioneer.get_version(),
 )
 
 if __name__ == '__main__':
