@@ -100,10 +100,6 @@ for dirpath, dirnames, filenames in os.walk('quantities'):
     else:
         del(dirnames[:])
 
-with open('quantities/version.py') as f:
-    for line in f:
-        if line.startswith('__version__'):
-            exec(line)
 
 setup(
     author = 'Darren Dale',
@@ -144,5 +140,5 @@ setup(
         'numpy (>=1.4.0)',
         ],
     url = 'http://packages.python.org/quantities',
-    version = __version__,
+    version = versioneer.get_version(),
 )
