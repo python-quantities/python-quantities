@@ -428,6 +428,15 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nansum)
+    def nansum(self, axis=None, dtype=None, out=None):
+        import numpy as np
+        return Quantity(
+            np.nansum(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            copy=False
+        )
+        
     @with_doc(np.ndarray.fill)
     def fill(self, value):
         self.magnitude.fill(value)
@@ -477,6 +486,14 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nanmax)
+    def nanmax(self, axis=None, out=None):
+        return Quantity(
+            np.nanmax(self.magnitude),
+            self.dimensionality,
+            copy=False
+        )
+
     @with_doc(np.ndarray.min)
     def min(self, axis=None, out=None):
         return Quantity(
@@ -485,10 +502,30 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nanmin)
+    def nanmin(self, axis=None, out=None):
+        return Quantity(
+            np.nanmin(self.magnitude),
+            self.dimensionality,
+            copy=False
+        )
+
     @with_doc(np.ndarray.argmin)
     def argmin(self,axis=None, out=None):
         return self.magnitude.argmin()
 
+    @with_doc(np.ndarray.argmax)
+    def argmax(self,axis=None, out=None):
+        return self.magnitude.argmax()
+
+    @with_doc(np.nanargmin)
+    def nanargmin(self,axis=None, out=None):
+        return np.nanargmin(self.magnitude)
+        
+    @with_doc(np.nanargmax)
+    def nanargmax(self,axis=None, out=None):
+        return np.nanargmax(self.magnitude)
+        
     @with_doc(np.ndarray.ptp)
     def ptp(self, axis=None, out=None):
         return Quantity(
@@ -549,6 +586,14 @@ class Quantity(np.ndarray):
             self.dimensionality,
             copy=False)
 
+    @with_doc(np.nanmean)
+    def nanmean(self, axis=None, dtype=None, out=None):
+        import numpy as np
+        return Quantity(
+            np.nanmean(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            copy=False)
+
     @with_doc(np.ndarray.var)
     def var(self, axis=None, dtype=None, out=None, ddof=0):
         return Quantity(
@@ -565,6 +610,14 @@ class Quantity(np.ndarray):
             copy=False
         )
 
+    @with_doc(np.nanstd)
+    def nanstd(self, axis=None, dtype=None, out=None, ddof=0):
+        return Quantity(
+            np.nanstd(self.magnitude, axis, dtype, out, ddof),
+            self._dimensionality,
+            copy=False
+        )
+        
     @with_doc(np.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
         if axis == None:

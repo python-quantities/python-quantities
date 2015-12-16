@@ -102,7 +102,10 @@ class UncertainQuantity(Quantity):
     @scale_other_units
     def __sub__(self, other):
         res = super(UncertainQuantity, self).__sub__(other)
-        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        if self is not other:
+            u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        else:
+            u = self.uncertainty*0
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
     @with_doc(Quantity.__rsub__, use_header=False)
@@ -207,6 +210,73 @@ class UncertainQuantity(Quantity):
             copy=False
         )
 
+    @with_doc(np.nansum)
+    def nansum(self, axis=None, dtype=None, out=None):
+        import numpy as np
+        return UncertainQuantity(
+            np.nansum(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            (np.nansum(self.uncertainty.magnitude**2, axis))**0.5,
+            copy=False
+        )
+
+    @with_doc(np.ndarray.mean)
+    def mean(self, axis=None, dtype=None, out=None):
+        return UncertainQuantity(
+            self.magnitude.mean(axis, dtype, out),
+            self.dimensionality,
+            ((1.0/np.size(self,axis))**2 * np.sum(self.uncertainty.magnitude**2, axis))**0.5,
+            copy=False)
+
+    @with_doc(np.nanmean)
+    def nanmean(self, axis=None, dtype=None, out=None):
+        size = np.sum(~np.isnan(self),axis)
+        return UncertainQuantity(
+            np.nanmean(self.magnitude, axis, dtype, out),
+            self.dimensionality,
+            ((1.0/size)**2 * np.nansum(np.nan_to_num(self.uncertainty.magnitude)**2, axis))**0.5,
+            copy=False)
+
+    @with_doc(np.sqrt)
+    def sqrt(self, out=None):
+        return self**0.5
+
+    @with_doc(np.ndarray.max)
+    def max(self, axis=None, out=None):
+        idx = np.unravel_index(np.argmax(self.magnitude), self.shape)
+        return self[idx]
+
+    @with_doc(np.nanmax)
+    def nanmax(self, axis=None, out=None):
+        idx = np.unravel_index(np.nanargmax(self.magnitude), self.shape)
+        return self[idx]
+
+    @with_doc(np.ndarray.min)
+    def min(self, axis=None, out=None):
+        idx = np.unravel_index(np.argmin(self.magnitude), self.shape)
+        return self[idx]
+
+    @with_doc(np.nanmin)
+    def nanmin(self, axis=None, out=None):
+        idx = np.unravel_index(np.nanargmin(self.magnitude), self.shape)
+        return self[idx]
+
+    @with_doc(np.ndarray.argmin)
+    def argmin(self,axis=None, out=None):
+        return self.magnitude.argmin()
+
+    @with_doc(np.ndarray.argmax)
+    def argmax(self,axis=None, out=None):
+        return self.magnitude.argmax()
+
+    @with_doc(np.nanargmin)
+    def nanargmin(self,axis=None, out=None):
+        return np.nanargmin(self.magnitude)
+        
+    @with_doc(np.nanargmax)
+    def nanargmax(self,axis=None, out=None):
+        return np.nanargmax(self.magnitude)
+        
     def __getstate__(self):
         """
         Return the internal state of the quantity, for pickling

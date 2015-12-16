@@ -2,7 +2,7 @@
 
 from .. import units as pq
 from .common import TestCase
-
+import numpy as np
 
 class TestQuantityMethods(TestCase):
 
@@ -16,6 +16,12 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(self.q.sum(), 10*pq.m)
         self.assertQuantityEqual(self.q.sum(0), [4, 6]*pq.m)
         self.assertQuantityEqual(self.q.sum(1), [3, 7]*pq.m)
+
+    def test_nansum(self):
+        import numpy as np
+        qnan = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
+        self.assertQuantityEqual(qnan.nansum(), 10*pq.m )
+        self.assertQuantityEqual(qnan.nansum(0), [4,6]*pq.m )
 
     def test_fill(self):
         self.q.fill(6 * pq.ft)
@@ -103,15 +109,31 @@ class TestQuantityMethods(TestCase):
     def test_max(self):
         self.assertQuantityEqual(self.q.max(), 4*pq.m)
 
+    def test_nanmax(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertQuantityEqual(q.nanmax(), 4*pq.m)
+
     def test_argmax(self):
         self.assertEqual(self.q.argmax(), 3)
+
+    def test_nanargmax(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertEqual(self.q.nanargmax(), 3)
 
     def test_min(self):
         self.assertEqual(self.q.min(), 1 * pq.m)
 
+    def test_nanmin(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertQuantityEqual(q.nanmin(), 1*pq.m)
+
     def test_argmin(self):
         self.assertEqual(self.q.argmin(), 0)
 
+    def test_nanargmax(self):
+        q = np.append(self.q, np.nan) * self.q.units
+        self.assertEqual(self.q.nanargmin(), 0)
+        
     def test_ptp(self):
         self.assertQuantityEqual(self.q.ptp(), 3 * pq.m)
 
@@ -146,11 +168,22 @@ class TestQuantityMethods(TestCase):
     def test_mean(self):
         self.assertQuantityEqual(self.q.mean(), 2.5 * pq.m)
 
+    def test_nanmean(self):
+        import numpy as np    
+        q = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
+        self.assertQuantityEqual(q.nanmean(), self.q.mean())
+
     def test_var(self):
         self.assertQuantityEqual(self.q.var(), 1.25*pq.m**2)
 
     def test_std(self):
         self.assertQuantityEqual(self.q.std(), 1.11803*pq.m, delta=1e-5)
+
+    def test_nanstd(self):
+        import numpy as np    
+        q0 = [[1,2], [3,4]] * pq.m
+        q1 = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
+        self.assertQuantityEqual(q0.std(), q1.nanstd())
 
     def test_prod(self):
         self.assertQuantityEqual(self.q.prod(), 24 * pq.m**4)
