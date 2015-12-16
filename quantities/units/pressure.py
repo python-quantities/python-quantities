@@ -63,7 +63,7 @@ kbar = kilobar = UnitQuantity(
     symbol='kbar',
     aliases=['kilobars']
 )
-Mbar = kilobar = UnitQuantity(
+Mbar = megabar = UnitQuantity(
     'megabar',
     1000*kbar,
     symbol='Mbar',
