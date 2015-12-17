@@ -102,10 +102,7 @@ class UncertainQuantity(Quantity):
     @scale_other_units
     def __sub__(self, other):
         res = super(UncertainQuantity, self).__sub__(other)
-        if self is not other:
-            u = (self.uncertainty**2+other.uncertainty**2)**0.5
-        else:
-            u = self.uncertainty*0
+        u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
     @with_doc(Quantity.__rsub__, use_header=False)
