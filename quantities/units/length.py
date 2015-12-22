@@ -74,6 +74,12 @@ ft = foot = international_foot = UnitLength(
     symbol='ft',
     aliases=['feet', 'international_foot' 'international_feet']
 )
+kft = kilofoot = UnitLength(
+    'kilofoot',
+    1000*ft,
+    symbol='kft',
+    aliases=['kilofeet']
+)
 mi = mile = international_mile = UnitLength(
     'mile',
     5280*ft,
