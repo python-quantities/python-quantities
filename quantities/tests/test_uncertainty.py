@@ -72,12 +72,6 @@ class TestUncertainty(TestCase):
         a = UncertainQuantity([1,2], 'm', [.1,.2])
         b = UncertainQuantity([1,2,np.nan], 'm', [.1,.2,np.nan])
         self.assertQuantityEqual(a.mean(),b.nanmean())
-        
-    def test_uncertainquantity_subtract(self):
-        a = UncertainQuantity(1, 'm', 1)
-        b = a.copy() # different object
-        self.assertQuantityEqual(a-a, UncertainQuantity(0, 'm', 0))
-        self.assertQuantityEqual(a-b, UncertainQuantity(0, 'm', np.sqrt(2)))
 
     def test_uncertainty_sqrt(self):
         a = UncertainQuantity([1,2], 'm', [.1,.2])
@@ -87,7 +81,7 @@ class TestUncertainty(TestCase):
         uq = UncertainQuantity([1,2], 'm', [1,1])
         uq_nan = UncertainQuantity([1,2,np.nan], 'm', [1,1,np.nan])
         self.assertQuantityEqual(np.sum(uq), np.nansum(uq))
-        self.assertQuantityEqual(np.sum(uq), np.nansum(uq_nan))
+        self.assertQuantityEqual(np.sum(uq), uq_nan.nansum())
 
     def test_uncertainty_minmax_nan_arg(self):
         q = [[1, 2], [3, 4]] * pq.m        # quantity
@@ -114,6 +108,3 @@ class TestUncertainty(TestCase):
         self.assertQuantityEqual(nanuq.nanmax(), 4*pq.m) # max
         self.assertQuantityEqual(nanuq.nanargmin(), 0) # argmin
         self.assertQuantityEqual(nanuq.nanargmax(), 3) # argmax
-        
-            
-    

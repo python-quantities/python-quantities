@@ -102,10 +102,7 @@ class UncertainQuantity(Quantity):
     @scale_other_units
     def __sub__(self, other):
         res = super(UncertainQuantity, self).__sub__(other)
-        if self is not other:
-            u = (self.uncertainty**2+other.uncertainty**2)**0.5
-        else:
-            u = self.uncertainty*0
+        u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
     @with_doc(Quantity.__rsub__, use_header=False)
@@ -212,7 +209,6 @@ class UncertainQuantity(Quantity):
 
     @with_doc(np.nansum)
     def nansum(self, axis=None, dtype=None, out=None):
-        import numpy as np
         return UncertainQuantity(
             np.nansum(self.magnitude, axis, dtype, out),
             self.dimensionality,
@@ -272,11 +268,11 @@ class UncertainQuantity(Quantity):
     @with_doc(np.nanargmin)
     def nanargmin(self,axis=None, out=None):
         return np.nanargmin(self.magnitude)
-        
+
     @with_doc(np.nanargmax)
     def nanargmax(self,axis=None, out=None):
         return np.nanargmax(self.magnitude)
-        
+
     def __getstate__(self):
         """
         Return the internal state of the quantity, for pickling
