@@ -140,7 +140,7 @@ setup(
     platforms = 'Any',
     requires = [
         'python (>=2.6.0)',
-        'numpy (>=1.4.0)',
+        'numpy (>=1.8.2)',
         ],
     url = 'http://packages.python.org/quantities',
     version = versioneer.get_version(),
