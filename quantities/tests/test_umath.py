@@ -242,3 +242,39 @@ class TestUmath(TestCase):
     def test_unwrap(self):
         self.assertQuantityEqual(np.unwrap([0,3*np.pi]*pq.radians), [0,np.pi])
         self.assertQuantityEqual(np.unwrap([0,540]*pq.deg), [0,180]*pq.deg)
+
+    def test_equal(self):
+        arr1 = (1, 1) * pq.m
+        arr2 = (1.0, 1.0) * pq.m
+        self.assertTrue(np.all(np.equal(arr1, arr2)))
+        self.assertFalse(np.all(np.equal(arr1, arr2 * 2)))
+
+    def test_not_equal(self):
+        arr1 = (1, 1) * pq.m
+        arr2 = (1.0, 1.0) * pq.m
+        self.assertTrue(np.all(np.not_equal(arr1, arr2*2)))
+        self.assertFalse(np.all(np.not_equal(arr1, arr2)))
+
+    def test_less(self):
+        arr1 = (1, 1) * pq.m
+        arr2 = (1.0, 1.0) * pq.m
+        self.assertTrue(np.all(np.less(arr1, arr2*2)))
+        self.assertFalse(np.all(np.less(arr1*2, arr2)))
+
+    def test_less_equal(self):
+        arr1 = (1, 1) * pq.m
+        arr2 = (1.0, 2.0) * pq.m
+        self.assertTrue(np.all(np.less_equal(arr1, arr2)))
+        self.assertFalse(np.all(np.less_equal(arr2, arr1)))
+
+    def test_greater(self):
+        arr1 = (1, 1) * pq.m
+        arr2 = (1.0, 2.0) * pq.m
+        self.assertTrue(np.all(np.greater(arr2*1.01, arr1)))
+        self.assertFalse(np.all(np.greater(arr2, arr1)))
+
+    def test_greater_equal(self):
+        arr1 = (1, 1) * pq.m
+        arr2 = (1.0, 2.0) * pq.m
+        self.assertTrue(np.all(np.greater_equal(arr2, arr1)))
+        self.assertFalse(np.all(np.greater_equal(arr2*0.99, arr1)))

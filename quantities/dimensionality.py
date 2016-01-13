@@ -47,7 +47,7 @@ class Dimensionality(dict):
     @property
     def unicode(self):
         return markup.format_units_unicode(self)
-        
+
     @property
     def latex(self):
         return markup.format_units_latex(self)
@@ -285,6 +285,12 @@ p_dict[np.remainder] = _d_check_uniform
 p_dict[np.floor_divide] = _d_check_uniform
 p_dict[np.arctan2] = _d_check_uniform
 p_dict[np.hypot] = _d_check_uniform
+p_dict[np.equal] = _d_check_uniform
+p_dict[np.not_equal] = _d_check_uniform
+p_dict[np.less] = _d_check_uniform
+p_dict[np.less_equal] = _d_check_uniform
+p_dict[np.greater] = _d_check_uniform
+p_dict[np.greater_equal] = _d_check_uniform
 
 def _d_power(q1, q2, out=None):
     if getattr(q2, 'dimensionality', None):
