@@ -89,27 +89,27 @@ def format_units_unicode(udict):
 def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=False):
     '''
     Replace the units string provided with an equivalent latex string.
-    
+
     Division (a/b) will be replaced by \frac{a}{b}.
-    
+
     Exponentiation (m**2) will be replaced with superscripts (m^{2})
-    
-    The latex is set  with the font argument, and the default is the normal, 
-    non-italicized font mathrm.  Other useful options include 'mathnormal', 
+
+    The latex is set  with the font argument, and the default is the normal,
+    non-italicized font mathrm.  Other useful options include 'mathnormal',
     'mathit', 'mathsf', and 'mathtt'.
-    
+
     Multiplication (*) are replaced with the symbol specified by the mult argument.
     By default this is the latex \cdot symbol.  Other useful
     options may be '' or '*'.
-    
+
     If paren=True, encapsulate the string in '\left(' and '\right)'
-    
+
     The result of format_units_latex is encapsulated in $.  This allows the result
     to be used directly in Latex in normal text mode, or in Matplotlib text via the
     MathText feature.
-    
+
     Restrictions:
-    This routine will not put CompoundUnits into a fractional form. 
+    This routine will not put CompoundUnits into a fractional form.
     '''
     res = format_units(udict)
     if res.startswith('(') and res.endswith(')'):
@@ -127,4 +127,37 @@ def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=False):
     if paren and not compound:
         res = r'\left(%s\right)' % res
     res = r'$\%s{%s}$' % (font,res)
+    return res
+
+
+def format_units_html(udict,font='%s',mult=r'&sdot;',paren=False):
+    '''
+    Replace the units string provided with an equivalent html string.
+
+    Exponentiation (m**2) will be replaced with superscripts (m<sup>2</sup>})
+
+    No formating is done, change `font` argument to e.g.:
+    '<span style="color: #0000a0">%s</span>' to have text be colored blue.
+
+    Multiplication (*) are replaced with the symbol specified by the mult
+    argument. By default this is the latex &sdot; symbol.  Other useful options
+    may be '' or '*'.
+
+    If paren=True, encapsulate the string in '(' and ')'
+
+    '''
+    res = format_units(udict)
+    if res.startswith('(') and res.endswith(')'):
+        # Compound Unit
+        compound = True
+    else:
+        # Not a compound unit
+        compound = False
+    # Replace exponentiation (**exp) with ^{exp}
+    res = re.sub(r'\*{2,2}(?P<exp>\d+)',r'<sup>\g<exp></sup>',res)
+    # Remove multiplication signs
+    res = re.sub(r'\*',mult,res)
+    if paren and not compound:
+        res = '(%s)' % res
+    res = font % res
     return res

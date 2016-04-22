@@ -52,6 +52,10 @@ class Dimensionality(dict):
     def latex(self):
         return markup.format_units_latex(self)
 
+    @property
+    def html(self):
+        return markup.format_units_html(self)
+
     def __hash__(self):
         res = hash(unit_registry['dimensionless'])
         for key in sorted(self.keys(), key=operator.attrgetter('format_order')):
