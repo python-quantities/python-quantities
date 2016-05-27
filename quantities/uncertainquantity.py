@@ -132,6 +132,9 @@ class UncertainQuantity(Quantity):
     def __rmul__(self, other):
         return self.__mul__(other)
 
+    def __neg__(self):
+        return self*-1
+
     @with_doc(Quantity.__truediv__, use_header=False)
     def __truediv__(self, other):
         res = super(UncertainQuantity, self).__truediv__(other)
