@@ -151,23 +151,23 @@ S = siemens = UnitQuantity(
     A/V,
     symbol='S'
 )
-mS = siemens = UnitQuantity(
+mS = millisiemens = UnitQuantity(
     'millisiemens',
     S/1000,
     symbol='mS'
 )
-uS = siemens = UnitQuantity(
+uS = microsiemens = UnitQuantity(
     'microsiemens',
     mS/1000,
     symbol='uS',
     u_symbol='μS'
 )
-nS = siemens = UnitQuantity(
+nS = nanosiemens = UnitQuantity(
     'nanosiemens',
     uS/1000,
     symbol='nS'
 )
-pS = siemens = UnitQuantity(
+pS = picosiemens = UnitQuantity(
     'picosiemens',
     nS/1000,
     symbol='pS'
