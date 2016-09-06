@@ -3,6 +3,7 @@
 import pickle
 
 from .. import units as pq
+from ..quantity import Quantity
 from ..uncertainquantity import UncertainQuantity
 from .. import constants
 from .common import TestCase
@@ -33,3 +34,16 @@ class TestPersistence(TestCase):
         x = constants.m_e
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
+
+    def test_quantity_object_dtype(self):
+        # Regression test for github issue #113
+        x = Quantity(1,dtype=object)
+        y = pickle.loads(pickle.dumps(x))
+        self.assertQuantityEqual(x, y)
+
+    def test_uncertainquantity_object_dtype(self):
+        # Regression test for github issue #113
+        x = UncertainQuantity(20, 'm', 0.2, dtype=object)
+        y = pickle.loads(pickle.dumps(x))
+        self.assertQuantityEqual(x, y)
+
