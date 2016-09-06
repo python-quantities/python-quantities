@@ -11,7 +11,7 @@ from .common import TestCase
 
 class TestPersistence(TestCase):
 
-    def test_unitquantity_persistance(self):
+    def test_unitquantity_persistence(self):
         x = pq.m
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
@@ -20,17 +20,17 @@ class TestPersistence(TestCase):
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
 
-    def test_quantity_persistance(self):
+    def test_quantity_persistence(self):
         x = 20*pq.m
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
 
-    def test_uncertainquantity_persistance(self):
+    def test_uncertainquantity_persistence(self):
         x = UncertainQuantity(20, 'm', 0.2)
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
 
-    def test_unitconstant_persistance(self):
+    def test_unitconstant_persistence(self):
         x = constants.m_e
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
