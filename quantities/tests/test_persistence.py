@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pickle
+import copy
 
 from .. import units as pq
 from ..quantity import Quantity
@@ -47,3 +48,14 @@ class TestPersistence(TestCase):
         y = pickle.loads(pickle.dumps(x))
         self.assertQuantityEqual(x, y)
 
+    def test_copy_quantity(self):
+        for dtype in [float,object]:
+            x = (20*pq.m).astype(dtype)
+            y = pickle.loads(pickle.dumps(x))
+            self.assertQuantityEqual(x, y)
+
+    def test_copy_uncertainquantity(self):
+        for dtype in [float, object]:
+            x = UncertainQuantity(20, 'm', 0.2).astype(dtype)
+            y = pickle.loads(pickle.dumps(x))
+            self.assertQuantityEqual(x, y)

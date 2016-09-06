@@ -697,34 +697,21 @@ class Quantity(np.ndarray):
 
     # list of unsupported functions: [choose]
 
-    def __getstate__(self):
-        """
-        Return the internal state of the quantity, for pickling
-        purposes.
-
-        """
-        cf = 'CF'[self.flags.fnc]
-        state = (1,
-                 self.shape,
-                 self.dtype,
-                 self.flags.fnc,
-                 self.tostring(cf),
-                 self._dimensionality,
-                 )
-        return state
-
     def __setstate__(self, state):
-        (ver, shp, typ, isf, raw, units) = state
-        np.ndarray.__setstate__(self, (shp, typ, isf, raw))
+        ndarray_state = state[:-1]
+        units = state[-1]
+        np.ndarray.__setstate__(self, ndarray_state)
         self._dimensionality = units
 
     def __reduce__(self):
         """
         Return a tuple for pickling a Quantity.
         """
+        reconstruct,reconstruct_args,state = super(Quantity,self).__reduce__()
+        state = state + (self._dimensionality,)
         return (_reconstruct_quantity,
                 (self.__class__, np.ndarray, (0, ), 'b', ),
-                self.__getstate__())
+                state)
 
     def __deepcopy__(self, memo_dict):
         # constructor copies by default
