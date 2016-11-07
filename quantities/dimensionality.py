@@ -320,7 +320,6 @@ p_dict[np.absolute] = _d_copy
 p_dict[np.conjugate] = _d_copy
 p_dict[np.negative] = _d_copy
 p_dict[np.ones_like] = _d_copy
-p_dict[np.core.umath._ones_like] = _d_copy
 p_dict[np.rint] = _d_copy
 p_dict[np.floor] = _d_copy
 p_dict[np.fix] = _d_copy
