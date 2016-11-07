@@ -3,12 +3,12 @@ sudo: false
 env:
   matrix:
   - NUMPY_VERSION="1.8.2"
-  - NUMPY_VERSION="1.9.1"
+  - NUMPY_VERSION="1.11.2"
 python:
   - 2.6
   - 2.7
-  - 3.3
   - 3.4
+  - 3.5
 before_install:
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then
       pip install unittest2;
