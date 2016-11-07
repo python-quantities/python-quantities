@@ -514,4 +514,3 @@ def set_default_units(
     UnitSubstance.set_default_unit(substance)
     UnitTemperature.set_default_unit(temperature)
     UnitTime.set_default_unit(time)
-
