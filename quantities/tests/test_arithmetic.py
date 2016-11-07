@@ -363,6 +363,7 @@ class TestDTypes(TestCase):
     def test_powering(self):
         # test raising a quantity to a power
         self.assertQuantityEqual((5.5 * pq.cm)**5, (5.5**5) * (pq.cm**5))
+        self.assertQuantityEqual((5.5 * pq.cm)**0, (5.5**0) * pq.dimensionless)
 
         # must also work with compound units
         self.assertQuantityEqual((5.5 * pq.J)**5, (5.5**5) * (pq.J**5))
