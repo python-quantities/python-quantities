@@ -318,7 +318,7 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__pow__)
     @check_uniform
     def __pow__(self, other):
-        return super(Quantity, self).__pow__(other)
+        return np.power(self, other)
 
     @with_doc(np.ndarray.__ipow__)
     @check_uniform
