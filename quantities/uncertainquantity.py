@@ -273,18 +273,18 @@ class UncertainQuantity(Quantity):
     def nanargmax(self,axis=None, out=None):
         return np.nanargmax(self.magnitude)
 
-    def __getstate__(self):
-        """
-        Return the internal state of the quantity, for pickling
-        purposes.
-
-        """
-        state = list(super(UncertainQuantity, self).__getstate__())
-        state.append(self._uncertainty)
-        return tuple(state)
-
     def __setstate__(self, state):
-        (ver, shp, typ, isf, raw, units, sigma) = state
-        np.ndarray.__setstate__(self, (shp, typ, isf, raw))
+        ndarray_state = state[:-2]
+        units, sigma = state[-2:]
+        np.ndarray.__setstate__(self, ndarray_state)
         self._dimensionality = units
         self._uncertainty = sigma
+
+    def __reduce__(self):
+        """
+        Return a tuple for pickling a Quantity.
+        """
+        reconstruct, reconstruct_args, state = super(UncertainQuantity, self).__reduce__()
+        state = state + (self._uncertainty,)
+        return reconstruct, reconstruct_args, state
+
