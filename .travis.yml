@@ -3,6 +3,8 @@ sudo: false
 env:
   matrix:
   - NUMPY_VERSION="1.8.2"
+  - NUMPY_VERSION="1.9.1"
+  - NUMPY_VERSION="1.10.4"
   - NUMPY_VERSION="1.11.2"
 python:
   - 2.6
