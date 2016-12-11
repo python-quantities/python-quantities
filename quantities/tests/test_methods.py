@@ -299,6 +299,16 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual((self.q*(1+1j)).conj(), self.q*(1-1j))
         self.assertQuantityEqual((self.q*(1+1j)).conjugate(), self.q*(1-1j))
 
+    def test_real(self):
+        test_q = self.q * (1 + 1j)
+        test_q.real = [[39.3701, 39.3701], [39.3701, 39.3701]] * pq.inch
+        self.assertQuantityEqual(test_q.real, [[1., 1.], [1., 1.]] * pq.m)
+
+    def test_imag(self):
+        test_q = self.q * (1 + 1j)
+        test_q.imag = [[39.3701, 39.3701], [39.3701, 39.3701]] * pq.inch
+        self.assertQuantityEqual(test_q.imag, [[1., 1.], [1., 1.]] * pq.m)
+
     def test_getitem(self):
         self.assertRaises(IndexError, self.q.__getitem__, (0,10))
         self.assertQuantityEqual(self.q[0], [1,2]*pq.m)
