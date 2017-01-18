@@ -65,4 +65,10 @@ refrigeration_ton = ton_of_refrigeration = UnitQuantity(
     aliases=['ton_of_refrigeration']
 )
 
+dB = decibel = UnitQuantity(
+    'decibel',
+    symbol='dB',
+    aliases=['decibels']
+)
+
 del UnitQuantity, Btu, J, s, h, A, V
