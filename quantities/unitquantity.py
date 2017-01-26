@@ -382,6 +382,14 @@ class UnitInformation(IrreducibleUnit):
 class UnitCurrency(IrreducibleUnit):
 
     _primary_order = 9
+    
+class UnitLogIntensity(IrreducibleUnit):
+
+    _primary_order = 10
+    
+class UnitLogPower(IrreducibleUnit):
+
+    _primary_order = 11
 
 
 class CompoundUnit(UnitQuantity):
