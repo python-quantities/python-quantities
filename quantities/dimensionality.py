@@ -377,6 +377,7 @@ p_dict[np.cosh] = _d_trig
 p_dict[np.tan] = _d_trig
 p_dict[np.tanh] = _d_trig
 
+
 def _d_arctrig(q1, out=None):
     if getattr(q1, 'dimensionality', None):
         raise ValueError("quantity must be dimensionless")
