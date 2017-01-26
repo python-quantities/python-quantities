@@ -8,6 +8,8 @@ import operator
 
 import numpy as np
 
+from scipy.special import erf, erfc
+
 from . import markup
 from .registry import unit_registry
 from .decorators import memoize
@@ -361,6 +363,8 @@ p_dict[np.exp] = _d_dimensionless
 p_dict[np.expm1] = _d_dimensionless
 p_dict[np.logaddexp] = _d_dimensionless
 p_dict[np.logaddexp2] = _d_dimensionless
+p_dict[erfc] = _d_dimensionless
+p_dict[erf] = _d_dimensionless
 
 def _d_trig(q1, out=None):
     try:
