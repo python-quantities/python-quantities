@@ -14,6 +14,7 @@ joule = Dimensionality({pq.kg: 1, pq.m: 2, pq.s: -2})
 joule_str = 'kg*m**2/s**2'
 joule_uni = 'kg·m²/s²'
 joule_tex = r'$\mathrm{\frac{kg{\cdot}m^{2}}{s^{2}}}$'
+joule_htm = 'kg&sdot;m<sup>2</sup>/s<sup>2</sup>'
 Joule = Dimensionality({pq.J: 1})
 Joule_str = 'J'
 
@@ -24,6 +25,7 @@ class TestDimensionality(TestCase):
         self.assertEqual(joule.string, joule_str)
         self.assertEqual(joule.unicode, joule_uni)
         self.assertEqual(joule.latex, joule_tex)
+        self.assertEqual(joule.html, joule_htm)
         self.assertEqual(Joule.string, 'J')
 
     def test_equality(self):
