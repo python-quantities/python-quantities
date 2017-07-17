@@ -6,8 +6,6 @@ quantities
 
 .. |pypi version| image:: https://img.shields.io/pypi/v/quantities.png
    :target: https://pypi.python.org/pypi/quantities
-.. |pypi download| image:: https://img.shields.io/pypi/dm/quantities.png
-   :target: https://pypi.python.org/pypi/quantities
 .. |Build status| image:: https://secure.travis-ci.org/python-quantities/python-quantities.png?branch=master
     :target: http://travis-ci.org/python-quantities/python-quantities
 
