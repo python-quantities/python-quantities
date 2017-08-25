@@ -373,7 +373,7 @@ class Quantity(np.ndarray):
             value = Quantity(value)
         if self._dimensionality != value._dimensionality:
             value = value.rescale(self._dimensionality)
-        self.magnitude[key] = value
+        self.magnitude[key] = value.magnitude
 
     @with_doc(np.ndarray.__lt__)
     @wrap_comparison
@@ -412,6 +412,12 @@ class Quantity(np.ndarray):
     @wrap_comparison
     def __gt__(self, other):
         return self.magnitude > other
+
+    def __float__(self):
+        raise TypeError("Quantities can't be converted to floats")
+
+    def __int__(self):
+        raise TypeError("Quantities can't be converted to ints")
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
