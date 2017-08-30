@@ -85,10 +85,7 @@ class test(Command):
 
     def run(self):
         import sys
-        if sys.version.startswith('2.6') or sys.version.startswith('3.1'):
-            import unittest2 as unittest
-        else:
-            import unittest
+        import unittest
         suite = unittest.TestLoader().discover('.')
         global TEST_RESULT
         TEST_RESULT = unittest.TextTestRunner(verbosity=self.verbosity+1).run(suite)
@@ -139,7 +136,7 @@ setup(
     packages = packages,
     platforms = 'Any',
     requires = [
-        'python (>=2.6.0)',
+        'python (>=2.7.0)',
         'numpy (>=1.8.2)',
         ],
     url = 'http://packages.python.org/quantities',

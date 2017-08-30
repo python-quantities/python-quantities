@@ -1,7 +1,9 @@
 *.pyc
 quantities.egg-info
 build
+_build
 dist
 .project
 .pydevproject
 .settings
+.idea

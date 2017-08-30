@@ -8,5 +8,4 @@ unittest package. Unit tests can be run with the following::
   python setup.py test
 
 This works with the version of unittest provided by the python-2.7 and
-python-3.2 standard library. If you are running python-2.6 or python-3.1, you
-need to install unittest2 to run the test suite.
+python-3.2+ standard library.
