@@ -42,9 +42,11 @@ This creates the executable windows installer in the `dist/` directory.
 Building Quantities documentation
 =================================
 
-When publishing a new release, the Quantities doumentation needs to be generated
-and published as well. Sphinx_, LaTeX_ (preferably `TeX-Live`_), and dvipng_ are
-required to build the documentation. Once these are installed, do::
+The Quantities documentation is automatically built on readthedocs.io.
+
+Should you need to build the documentation locally,
+Sphinx_, LaTeX_ (preferably `TeX-Live`_), and dvipng_ are
+required. Once these are installed, do::
 
   cd doc
   make html
@@ -56,15 +58,7 @@ which will produce the html output and save it in build/sphinx/html. Then run::
   make all-pdf
   cp Quantities.pdf ../html
 
-which will generate a pdf file in the latex directory. Finally, upload the html
-content to the http://packages.python.org/quantities/ webserver. To do so::
-
-  cd build/html
-  zip -r quantities *
-
-and then visit `the Quantities project page
-<http://pypi.python.org/pypi?%3Aaction=pkg_edit&name=quantities>`_ at the Python Package Index to
-upload the zip archive.
+which will generate a pdf file in the latex directory. 
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _LaTeX: http://www.latex-project.org/

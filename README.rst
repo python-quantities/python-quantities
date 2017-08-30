@@ -28,7 +28,7 @@ Documentation and usage
 -----------------------
 You can find the official documenation at:
 
- http://packages.python.org/quantities
+http://python-quantities.readthedocs.io/
 
 Here is a simple example:
 

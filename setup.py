@@ -130,7 +130,7 @@ setup(
     and API are stable, test coverage is incomplete so the package is not
     suggested for mission-critical applications.
 
-    .. _tutorial: http://packages.python.org/quantities/user/tutorial.html
+    .. _tutorial: http://python-quantities.readthedocs.io/en/latest/user/tutorial.html
     """,
     name = 'quantities',
     packages = packages,
@@ -139,7 +139,7 @@ setup(
         'python (>=2.7.0)',
         'numpy (>=1.8.2)',
         ],
-    url = 'http://packages.python.org/quantities',
+    url = 'http://python-quantities.readthedocs.io/',
     version = versioneer.get_version(),
 )
 
