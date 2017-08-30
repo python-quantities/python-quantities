@@ -1,6 +1,5 @@
 from distutils.cmd import Command
 from distutils.core import setup
-from distutils.command.sdist import sdist as _sdist
 from distutils.command.build import build as _build
 import os
 import sys
@@ -10,6 +9,7 @@ import versioneer
 TEST_RESULT = None
 
 cmdclass = versioneer.get_cmdclass()
+_sdist = cmdclass['sdist']
 
 
 class data(Command):

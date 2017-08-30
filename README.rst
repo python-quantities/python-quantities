@@ -26,7 +26,7 @@ To get the git version do::
 
 Documentation and usage
 -----------------------
-You can find the official documenation at:
+You can find the official documentation at:
 
 http://python-quantities.readthedocs.io/
 
