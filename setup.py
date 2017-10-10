@@ -104,7 +104,10 @@ for dirpath, dirnames, filenames in os.walk('quantities'):
 setup(
     author = 'Darren Dale',
     author_email = 'dsdale24@gmail.com',
-#    classifiers = """Development Status :: 4 - Beta
+    classifiers = [
+        'Programming Language :: Python :: 3',
+    ],
+#        Development Status :: 4 - Beta
 #        Environment :: Console
 #        Intended Audience :: Developers
 #        Intended Audience :: Education
