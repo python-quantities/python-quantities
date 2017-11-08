@@ -214,9 +214,9 @@ class Quantity(np.ndarray):
         return Quantity(cf*self.magnitude, to_u)
 
     @with_doc(np.ndarray.astype)
-    def astype(self, dtype=None):
+    def astype(self, dtype=None, **kwargs):
         '''Scalars are returned as scalar Quantity arrays.'''
-        ret = super(Quantity, self.view(Quantity)).astype(dtype)
+        ret = super(Quantity, self.view(Quantity)).astype(dtype, **kwargs)
         # scalar quantities get converted to plain numbers, so we fix it
         # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
