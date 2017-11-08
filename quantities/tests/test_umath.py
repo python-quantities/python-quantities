@@ -38,6 +38,9 @@ class TestUmath(TestCase):
     def test_ediff1d(self):
         self.assertQuantityEqual(np.diff(self.q, 1), [1, 1, 1] * pq.J)
 
+    def test_linspace(self):
+        self.assertQuantityEqual(np.linspace(self.q[0], self.q[-1], 4), self.q)
+
     @unittest.expectedFailure
     def test_gradient(self):
         try:
