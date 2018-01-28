@@ -102,11 +102,7 @@ def protected_power(f):
 def wrap_comparison(f):
     @wraps(f)
     def g(self, other):
-        if isinstance(other, Quantity):
-            if other._dimensionality != self._dimensionality:
-                other = other.rescale(self._dimensionality)
-            other = other.magnitude
-        return f(self, other)
+        return f(self, self._magnitude_of_other(other))
     return g
 
 
@@ -375,43 +371,48 @@ class Quantity(np.ndarray):
             value = value.rescale(self._dimensionality)
         self.magnitude[key] = value
 
+    def _magnitude_of_other(self, other):
+        if not isinstance(other, Quantity):
+            other = other * unit_registry['dimensionless']
+        return other.rescale(self._dimensionality).magnitude
+
     @with_doc(np.ndarray.__lt__)
     @wrap_comparison
-    def __lt__(self, other):
-        return self.magnitude < other
+    def __lt__(self, other_mag):
+        return self.magnitude < other_mag
 
     @with_doc(np.ndarray.__le__)
     @wrap_comparison
-    def __le__(self, other):
-        return self.magnitude <= other
+    def __le__(self, other_mag):
+        return self.magnitude <= other_mag
 
     @with_doc(np.ndarray.__eq__)
     def __eq__(self, other):
-        if isinstance(other, Quantity):
-            try:
-                other = other.rescale(self._dimensionality).magnitude
-            except ValueError:
-                return np.zeros(self.shape, '?')
-        return self.magnitude == other
+        try:
+            other_mag = self._magnitude_of_other(other)
+        except ValueError:
+            return np.zeros(self.shape, '?')
+        else:
+            return self.magnitude == other_mag
 
     @with_doc(np.ndarray.__ne__)
     def __ne__(self, other):
-        if isinstance(other, Quantity):
-            try:
-                other = other.rescale(self._dimensionality).magnitude
-            except ValueError:
-                return np.ones(self.shape, '?')
-        return self.magnitude != other
+        try:
+            other_mag = self._magnitude_of_other(other)
+        except ValueError:
+            return np.ones(self.shape, '?')
+        else:
+            return self.magnitude != other_mag
 
     @with_doc(np.ndarray.__ge__)
     @wrap_comparison
-    def __ge__(self, other):
-        return self.magnitude >= other
+    def __ge__(self, other_mag):
+        return self.magnitude >= other_mag
 
     @with_doc(np.ndarray.__gt__)
     @wrap_comparison
-    def __gt__(self, other):
-        return self.magnitude > other
+    def __gt__(self, other_mag):
+        return self.magnitude > other_mag
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better

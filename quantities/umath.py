@@ -81,7 +81,7 @@ def gradient(f, *varargs):
                       for i,j  in zip( ret, varargsQuantities)])
 
 @with_doc(np.cross)
-def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
+def cross(a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
     if not (isinstance(a, Quantity) and isinstance(b, Quantity)):
         return np.cross(a, b, axisa, axisb, axisc, axis)
 

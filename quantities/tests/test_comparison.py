@@ -19,6 +19,8 @@ class TestComparison(TestCase):
         self.assertEqual(pq.J == 2*pq.kg*pq.m**2/pq.s**2, [False])
 
         self.assertEqual(pq.J == pq.kg, [False])
+        self.assertTrue(1e3*pq.m == pq.km)
+        self.assertFalse(1e3*pq.m == [1e3])
 
     def test_scalar_inequality(self):
         self.assertEqual(pq.J != pq.erg, [True])
@@ -66,7 +68,7 @@ class TestComparison(TestCase):
         )
         self.assertQuantityEqual(
             [1, 2, 3, 4]*pq.J == [1, 22, 3, 44],
-            [1, 0, 1, 0]
+            [0, 0, 0, 0]
         )
 
     def test_array_inequality(self):
@@ -80,7 +82,7 @@ class TestComparison(TestCase):
         )
         self.assertQuantityEqual(
             [1, 2, 3, 4]*pq.J != [1, 22, 3, 44],
-            [0, 1, 0, 1]
+            [1, 1, 1, 1]
         )
 
     def test_quantity_less_than(self):
@@ -92,9 +94,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm < [1, 1, 1]*pq.m,
             [1, 0, 0]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J < [1, 22, 3],
-            [0, 1, 0]
+        self.assertRaises(
+            ValueError,
+            op.lt,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3]
         )
         self.assertRaises(
             ValueError,
@@ -112,9 +116,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm <= [1, 1, 1]*pq.m,
             [1, 1, 0]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J <= [1, 22, 3],
-            [1, 1, 0]
+        self.assertRaises(
+            ValueError,
+            op.le,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3]
         )
         self.assertRaises(
             ValueError,
@@ -132,9 +138,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm >= [1, 1, 1]*pq.m,
             [0, 1, 1]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J >= [1, 22, 3],
-            [1, 0, 1]
+        self.assertRaises(
+            ValueError,
+            op.ge,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3]
         )
         self.assertRaises(
             ValueError,
@@ -152,13 +160,15 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm > [1, 1, 1]*pq.m,
             [0, 0, 1]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J > [1, 22, 3],
-            [0, 0, 1]
+        self.assertRaises(
+            ValueError,
+            op.gt,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3]
         )
         self.assertRaises(
             ValueError,
             op.gt,
             [1, 2, 33]*pq.J,
-            [1, 22, 3]*pq.kg,
+            [1, 22, 3]*pq.kg
         )
