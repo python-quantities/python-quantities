@@ -38,8 +38,8 @@ Here is a simple example:
    >>> distance = 42*pq.metre
    >>> time = 17*pq.second
    >>> velocity = distance / time
-   >>> velocity
-   array(2.4705882352941178) * m/s
+   >>> "%.3f %s" % (velocity.magnitude, velocity.dimensionality)
+   '2.471 m/s'
    >>> velocity + 3
    Traceback (most recent call last):
      ...
