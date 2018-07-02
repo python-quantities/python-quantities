@@ -1,24 +1,66 @@
 language: python
 sudo: false
-python:
-  - 2.7
-  - 3.4
-  - 3.5
-  - 3.6
-  - 3.7-dev
+matrix:
+  include:
+  - python: "2.7"
+    env: NUMPY_VERSION="1.8.2"
+  - python: "2.7"
+    env: NUMPY_VERSION="1.9.3"
+  - python: "2.7"
+    env: NUMPY_VERSION="1.10.4"
+  - python: "2.7"
+    env: NUMPY_VERSION="1.11.3"
+  - python: "2.7"
+    env: NUMPY_VERSION="1.12.1"
+  - python: "2.7"
+    env: NUMPY_VERSION="1.13.3"
+  - python: "2.7"
+    env: NUMPY_VERSION="1.14.5"
+  - python: "3.4"
+    env: NUMPY_VERSION="1.8.2"
+  - python: "3.4n"
+    env: NUMPY_VERSION="1.9.3"
+  - python: "3.4"
+    env: NUMPY_VERSION="1.10.4"
+  - python: "3.4"
+    env: NUMPY_VERSION="1.11.3"
+  - python: "3.4"
+    env: NUMPY_VERSION="1.12.1"
+  - python: "3.4"
+    env: NUMPY_VERSION="1.13.3"
+  - python: "3.4"
+    env: NUMPY_VERSION="1.14.5"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.8.2"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.9.3"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.10.4"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.11.3"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.12.1"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.13.3"
+  - python: "3.5"
+    env: NUMPY_VERSION="1.14.5"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.8.2"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.9.3"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.10.4"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.11.3"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.12.1"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.13.3"
+  - python: "3.6"
+    env: NUMPY_VERSION="1.14.5"
+  - python: "3.7-dev"
+    env: NUMPY_VERSION="1.14.5"
 before_install:
-  - |
-    if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-        NUMPY_VERSION=1.8.2
-    elif [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then
-        NUMPY_VERSION=1.9.1
-    elif [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
-        NUMPY_VERSION=1.10.4
-    elif [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
-        NUMPY_VERSION=1.11.3
-    elif [[ "$TRAVIS_PYTHON_VERSION" == 3.7* ]]; then
-        NUMPY_VERSION=1.14.5
-    fi
   - pip install "numpy==$NUMPY_VERSION"
 install:
   - python setup.py install
