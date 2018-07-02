@@ -86,7 +86,7 @@ def format_units_unicode(udict):
     return res
 
 
-def format_units_latex(udict,font='mathrm',mult=r'\cdot',paren=False):
+def format_units_latex(udict,font='mathrm',mult=r'\\cdot',paren=False):
     '''
     Replace the units string provided with an equivalent latex string.
 
