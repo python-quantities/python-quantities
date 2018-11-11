@@ -76,6 +76,17 @@ C = coulomb = UnitQuantity(
     A*s,
     symbol='C'
 )
+mC = millicoulomb = UnitQuantity(
+    'millicoulomb',
+    1e-3*C,
+    symbol='mC'
+)
+uC = microcoulomb = UnitQuantity(
+    'microcoulomb',
+    1e-6*C,
+    symbol='uC',
+    u_symbol='μC'
+)
 V = volt = UnitQuantity(
     'volt',
     J/C,
