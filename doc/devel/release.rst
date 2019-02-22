@@ -5,12 +5,14 @@ Releases
 Creating Source Releases
 ========================
 
-Quantities is distributed as a source release for Linux and OS-X. To create a
+Quantities is distributed as a source release for Linux and Mac OS. To create a
 source release, just do::
 
   python setup.py register
-  python setup.py sdist --formats=zip,gztar upload --sign
+  python setup.py sdist --formats=zip,gztar
+  twine upload dist/quantities-<x.y.z>.*
 
+(replacing `x`, `y` and `z` appropriately).
 This will create the tgz source file and upload it to the Python Package Index.
 Uploading to PyPi requires a .pypirc file in your home directory, something
 like::
@@ -58,7 +60,7 @@ which will produce the html output and save it in build/sphinx/html. Then run::
   make all-pdf
   cp Quantities.pdf ../html
 
-which will generate a pdf file in the latex directory. 
+which will generate a pdf file in the latex directory.
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _LaTeX: http://www.latex-project.org/

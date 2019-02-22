@@ -3,6 +3,40 @@ CHANGES
 =======
 
 
+------
+0.12.3
+------
+
+Updates to support NumPy up to version 1.16.1, and Python 3.7.
+Added microcoulomb and millicoulomb units.
+
+All changes
+***********
+
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20updated%3A2018-07-03..2019-02-22
+
+
+------
+0.12.2
+------
+
+Added SI multiples for the byte unit (kB, MB, ...) and the IEC units (KiB, MiB...).
+
+All changes
+***********
+
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20updated%3A2017-09-01..2018-07-02
+
+
+------
+0.12.1
+------
+
+Bugs fixed
+**********
+
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20updated%3A2017-08-02..2017-08-30
+
 -----
 0.12.0
 -----
@@ -87,7 +121,7 @@ more robust.
 Bugs fixed
 **********
 
-* #1 use revolution/min instead of 1/min as definition of rpm 
+* #1 use revolution/min instead of 1/min as definition of rpm
 * #2 silently fail to import test runner if nose is not installed
 * #4 remove the "jiffy", as there are conflicting definitions
   depending on (or even within a) discipline.
@@ -109,7 +143,7 @@ The log and exp functions have been removed. Quantities will work
 with numpy's version of these functions.
 
 Quantities development has migrated from bzr/launchpad to
-git/github. Please report problems to 
+git/github. Please report problems to
 http://github.com/python-quantities/python-quantities or visit the
 mailing list at http://groups.google.com/group/python-quantities
 
@@ -144,7 +178,7 @@ as well.
 
 Numpydoc, an external package developed to extend Sphinx for the
 numpy documentation project, is now required to build quantities'
-documentation. 
+documentation.
 
 Bugs fixed
 **********
