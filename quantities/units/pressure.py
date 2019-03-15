@@ -56,6 +56,7 @@ mb = mbar = millibar = UnitQuantity(
     'millibar',
     0.001*bar,
     symbol='mb',
+    aliases=['mbar']
 )
 kbar = kilobar = UnitQuantity(
     'kilobar',
