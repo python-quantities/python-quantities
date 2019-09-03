@@ -359,6 +359,16 @@ class Quantity(np.ndarray):
             dims = self.dimensionality.string
         return '%s %s'%(str(self.magnitude), dims)
 
+    if tuple(map(int, np.__version__.split('.')[:2])) >= (1, 14):
+        # in numpy 1.14 the formatting of scalar values was changed
+        # see https://github.com/numpy/numpy/pull/9883
+
+        def __format__(self, format_spec):
+            ret = super(Quantity, self).__format__(format_spec)
+            if self.ndim:
+                return ret
+            return ret + ' {}'.format(self.dimensionality)
+
     @with_doc(np.ndarray.__getitem__)
     def __getitem__(self, key):
         ret = super(Quantity, self).__getitem__(key)
