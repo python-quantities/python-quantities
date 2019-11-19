@@ -329,6 +329,13 @@ p_dict[np.floor] = _d_copy
 p_dict[np.fix] = _d_copy
 p_dict[np.ceil] = _d_copy
 
+def _d_clip(a1, a2, a3, q):
+    return q.dimensionality
+try:
+    p_dict[np.core.umath.clip] = _d_clip
+except AttributeError:
+    pass # For compatibility with Numpy < 1.17 when clip wasn't a ufunc yet
+
 def _d_sqrt(q1, out=None):
     return q1._dimensionality**0.5
 p_dict[np.sqrt] = _d_sqrt
