@@ -287,7 +287,6 @@ p_dict[np.mod] = _d_check_uniform
 p_dict[np.fmod] = _d_check_uniform
 p_dict[np.remainder] = _d_check_uniform
 p_dict[np.floor_divide] = _d_check_uniform
-p_dict[np.arctan2] = _d_check_uniform
 p_dict[np.hypot] = _d_check_uniform
 p_dict[np.equal] = _d_check_uniform
 p_dict[np.not_equal] = _d_check_uniform
@@ -295,6 +294,18 @@ p_dict[np.less] = _d_check_uniform
 p_dict[np.less_equal] = _d_check_uniform
 p_dict[np.greater] = _d_check_uniform
 p_dict[np.greater_equal] = _d_check_uniform
+
+def _d_arctan2(q1, q2, out=None):
+    try:
+        assert q1._dimensionality == q2._dimensionality
+        return Dimensionality()
+    except AssertionError:
+        raise ValueError(
+            'quantities must have identical units, got "%s" and "%s"' %
+            (q1.units, q2.units)
+        )
+
+p_dict[np.arctan2] = _d_arctan2
 
 def _d_power(q1, q2, out=None):
     if getattr(q2, 'dimensionality', None):
