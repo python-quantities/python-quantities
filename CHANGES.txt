@@ -2,6 +2,20 @@
 CHANGES
 =======
 
+------
+0.12.4
+------
+
+- Fix broken support for `pq.Quanitty('mbar')`
+- Add a `__format__` implementation for Quantity
+- Fix `np.arctan2` regression due to newer numpy version
+- Fix "<ufunc 'clip'> not supported" error
+- Test against Python 3.8 and NumPy 1.17
+
+All changes
+***********
+
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed+closed%3A2019-02-23..2020-01-08+
 
 ------
 0.12.3
@@ -13,7 +27,7 @@ Added microcoulomb and millicoulomb units.
 All changes
 ***********
 
-https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20updated%3A2018-07-03..2019-02-22
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20closed%3A2018-07-03..2019-02-22
 
 
 ------
@@ -25,7 +39,7 @@ Added SI multiples for the byte unit (kB, MB, ...) and the IEC units (KiB, MiB..
 All changes
 ***********
 
-https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20updated%3A2017-09-01..2018-07-02
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20closed%3A2017-09-01..2018-07-02
 
 
 ------
@@ -35,7 +49,7 @@ https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Acl
 Bugs fixed
 **********
 
-https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20updated%3A2017-08-02..2017-08-30
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20closed%3A2017-08-02..2017-08-30
 
 -----
 0.12.0
@@ -50,7 +64,7 @@ Added more ufuncs: equal, not_equal, less, less_equal, greater, greater_equal
 Bugs fixed
 **********
 
-https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aissue%20is%3Aclosed%20updated%3A2015-12-06..2017-08-01
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aissue%20is%3Aclosed%20closed%3A2015-12-06..2017-08-01
 
 
 -----
@@ -66,7 +80,7 @@ The test suite is now run with Travis CI
 Bugs fixed
 **********
 
-https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aissue%20is%3Aclosed%20updated%3A2011-09-27..2015-12-06
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aissue%20is%3Aclosed%20closed%3A2011-09-27..2015-12-06
 
 
 -----
