@@ -13,6 +13,10 @@ from .dimensionality import Dimensionality, p_dict
 from .registry import unit_registry
 from .decorators import with_doc
 
+PREFERRED = []  # List of preferred quanitities for each symbol,
+                # e.g. PREFERRED = [pq.mV, pq.pA, pq.UnitQuantity('femtocoulomb', 1e-15*pq.C, 'fC')]
+                # Intended to be overwritten in down-stream packages
+
 if sys.version.startswith('3'):
     unicode = str
 
@@ -195,10 +199,15 @@ class Quantity(np.ndarray):
         mag *= cf
         self._dimensionality = to_u.dimensionality
 
-    def rescale(self, units):
+    def rescale(self, units=None):
         """
         Return a copy of the quantity converted to the specified units
         """
+        if units is None:
+            try:
+                return self.rescale_preferred()
+            except Exception as e:
+                raise Exception('No argument passed to `.rescale` and %s' % e)
         to_dims = validate_dimensionality(units)
         if self.dimensionality == to_dims:
             return self.astype(self.dtype)
@@ -212,7 +221,15 @@ class Quantity(np.ndarray):
                 %(from_u._dimensionality, to_u._dimensionality)
             )
         return Quantity(cf*self.magnitude, to_u)
-
+    
+    def rescale_preferred(self):
+        units_str = str(self.simplified.dimensionality)
+        for preferred in PREFERRED:
+            if units_str == str(preferred.simplified.dimensionality):
+                return self.rescale(preferred)
+        raise Exception(("Preferred units for '%s' (or equivalent) not specified in "
+                        "quantites.quantity.PREFERRED." % self.dimensionality))
+        
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None, **kwargs):
         '''Scalars are returned as scalar Quantity arrays.'''
