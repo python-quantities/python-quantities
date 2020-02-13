@@ -201,7 +201,9 @@ class Quantity(np.ndarray):
 
     def rescale(self, units=None):
         """
-        Return a copy of the quantity converted to the specified units
+        Return a copy of the quantity converted to the specified units.
+        If `units` is `None`, an attempt will be made to rescale the quantity
+        to preferred units (see `rescale_preferred`).  
         """
         if units is None:
             try:
@@ -223,6 +225,18 @@ class Quantity(np.ndarray):
         return Quantity(cf*self.magnitude, to_u)
     
     def rescale_preferred(self):
+        """
+        Return a copy of the quantity converted to the preferred units and scale.
+        These will be identified from among the compatible units specified in the
+        list PREFERRED in this module. For example, a voltage quantity might be
+        converted to `mV`:
+        ```
+        import quantities as pq
+        pq.quantity.PREFERRED = [pq.mV, pq.pA]
+        old = 3.1415 * pq.V
+        new = old.rescale_preferred() # `new` will be 3141.5 mV.
+        ```
+        """
         units_str = str(self.simplified.dimensionality)
         for preferred in PREFERRED:
             if units_str == str(preferred.simplified.dimensionality):
