@@ -11,6 +11,7 @@ import numpy as np
 from . import markup
 from .registry import unit_registry
 from .decorators import memoize
+from collections import OrderedDict
 
 def assert_isinstance(obj, types):
     try:
@@ -21,7 +22,7 @@ def assert_isinstance(obj, types):
         )
 
 
-class Dimensionality(dict):
+class Dimensionality(OrderedDict):
 
     """
     """
