@@ -80,3 +80,4 @@ Initiative `licenses page <http://www.opensource.org/licenses>`_
 for details on individual licenses.
 
 See `doc/user/license.rst <doc/user/license.rst>`_ for further details on the license of quantities
+
