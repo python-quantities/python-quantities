@@ -461,7 +461,10 @@ class Quantity(np.ndarray):
         #first get a dummy array from the ndarray method
         work_list = self.magnitude.tolist()
         #now go through and replace all numbers with the appropriate Quantity
-        self._tolist(work_list)
+        if isinstance(work_list, list):
+            self._tolist(work_list)
+        else:
+            work_list = Quantity(work_list, self.dimensionality)
         return work_list
 
     def _tolist(self, work_list):
