@@ -11,6 +11,8 @@ class TestQuantityMethods(TestCase):
 
     def test_tolist(self):
         self.assertEqual(self.q.tolist(), [[1*pq.m, 2*pq.m], [3*pq.m, 4*pq.m]])
+        q_singleton = 1 * pq.m
+        self.assertEqual(q_singleton.tolist(), q_singleton)
 
     def test_sum(self):
         self.assertQuantityEqual(self.q.sum(), 10*pq.m)
