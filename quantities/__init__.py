@@ -220,7 +220,7 @@ A Latex representation of the dimensionality may be obtained in the following fa
     >>> mass = 50 * pq.kg
     >>> weight = mass*g
     >>> print weight.dimensionality.latex
-    $\mathrm{\\frac{kg{\\cdot}m}{s^{2}}}$
+    $\\mathrm{\\frac{kg{\\cdot}m}{s^{2}}}$
     >>> weight.units = pq.N
     >>> print weight.dimensionality.latex
     $\\mathrm{N}$
