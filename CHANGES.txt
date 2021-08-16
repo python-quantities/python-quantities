@@ -3,6 +3,20 @@ CHANGES
 =======
 
 ------
+0.12.5
+------
+
+- Added preferred units support for .rescale
+- Added dimensionless unit 'lsb' (least significant bit)
+- Added SI multiples for Kelvin
+- Fixed invalid escape sequence
+
+All changes
+***********
+
+https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed+closed%3A2020-01-08..2021-08-16
+
+------
 0.12.4
 ------
 
