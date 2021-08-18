@@ -90,7 +90,7 @@ def format_units_latex(udict,font='mathrm',mult=r'\\cdot',paren=False):
     '''
     Replace the units string provided with an equivalent latex string.
 
-    Division (a/b) will be replaced by \frac{a}{b}.
+    Division (a/b) will be replaced by \\frac{a}{b}.
 
     Exponentiation (m**2) will be replaced with superscripts (m^{2})
 
@@ -102,7 +102,7 @@ def format_units_latex(udict,font='mathrm',mult=r'\\cdot',paren=False):
     By default this is the latex \\cdot symbol.  Other useful
     options may be '' or '*'.
 
-    If paren=True, encapsulate the string in '\left(' and '\right)'
+    If paren=True, encapsulate the string in '\\left(' and '\\right)'
 
     The result of format_units_latex is encapsulated in $.  This allows the result
     to be used directly in Latex in normal text mode, or in Matplotlib text via the
