@@ -145,6 +145,5 @@ setup(
 
 if __name__ == '__main__':
     if TEST_RESULT is not None:
-        if len(TEST_RESULT.errors) > 0:
-            # failing test -> Set non-success exit-code
-            sys.exit(os.EX_OK+1)
+        n_errors_failures = len(TEST_RESULT.errors) + len(TEST_RESULT.failures)
+        sys.exit(n_errors_failures)
