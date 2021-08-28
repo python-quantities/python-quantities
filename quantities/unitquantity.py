@@ -1,6 +1,5 @@
 """
 """
-from __future__ import absolute_import
 
 import sys
 import weakref
@@ -311,7 +310,7 @@ class IrreducibleUnit(UnitQuantity):
         self, name, definition=None, symbol=None, u_symbol=None,
         aliases=[], doc=None
     ):
-        super(IrreducibleUnit, self).__init__(
+        super().__init__(
             name, definition, symbol, u_symbol, aliases, doc
         )
         cls = type(self)

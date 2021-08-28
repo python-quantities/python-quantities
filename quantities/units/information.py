@@ -1,6 +1,5 @@
 """
 """
-from __future__ import absolute_import
 
 from ..unitquantity import UnitQuantity, UnitInformation, dimensionless
 from .time import s

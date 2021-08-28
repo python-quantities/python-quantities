@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 """
-from __future__ import absolute_import
 
 import sys
 import operator
@@ -17,7 +15,7 @@ def assert_isinstance(obj, types):
         assert isinstance(obj, types)
     except AssertionError:
         raise TypeError(
-            "arg %r must be of type %r, got %r" % (obj, types, type(obj))
+            f"arg {obj!r} must be of type {types!r}, got {type(obj)!r}"
         )
 
 

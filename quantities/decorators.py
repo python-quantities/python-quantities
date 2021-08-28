@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
 import inspect
 import os
 import re
@@ -46,10 +43,10 @@ class with_doc:
 
         if original_doc and new_doc:
             new_method.__doc__ = """
-    %s
-    %s
-    %s
-        """ % (original_doc, header, new_doc)
+    {}
+    {}
+    {}
+        """.format(original_doc, header, new_doc)
 
         elif original_doc:
             new_method.__doc__ = original_doc

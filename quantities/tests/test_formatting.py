@@ -7,8 +7,8 @@ class TestFormatting(TestCase):
     @staticmethod
     def _check(quantity, formatted):
         assert str(quantity) == formatted
-        assert '{}'.format(quantity) == formatted
-        assert '{!s}'.format(quantity) == formatted
+        assert f'{quantity}' == formatted
+        assert f'{quantity!s}' == formatted
 
     def test_str_format_scalar(self):
         self._check(1*pq.J, '1.0 J')

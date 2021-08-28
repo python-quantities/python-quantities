@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 """
-from __future__ import absolute_import
 
 import sys
 
@@ -33,18 +31,18 @@ class UncertainQuantity(Quantity):
 
     @Quantity.units.setter
     def units(self, units):
-        super(UncertainQuantity, self)._set_units(units)
+        super()._set_units(units)
         self.uncertainty.units = self._dimensionality
 
     @property
     def _reference(self):
-        ret = super(UncertainQuantity, self)._reference.view(UncertainQuantity)
+        ret = super()._reference.view(UncertainQuantity)
         ret.uncertainty = self.uncertainty._reference
         return ret
 
     @property
     def simplified(self):
-        ret = super(UncertainQuantity, self).simplified.view(UncertainQuantity)
+        ret = super().simplified.view(UncertainQuantity)
         ret.uncertainty = self.uncertainty.simplified
         return ret
 
@@ -89,7 +87,7 @@ class UncertainQuantity(Quantity):
     @with_doc(Quantity.__add__, use_header=False)
     @scale_other_units
     def __add__(self, other):
-        res = super(UncertainQuantity, self).__add__(other)
+        res = super().__add__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
@@ -101,7 +99,7 @@ class UncertainQuantity(Quantity):
     @with_doc(Quantity.__sub__, use_header=False)
     @scale_other_units
     def __sub__(self, other):
-        res = super(UncertainQuantity, self).__sub__(other)
+        res = super().__sub__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
         return UncertainQuantity(res, uncertainty=u, copy=False)
 
@@ -115,7 +113,7 @@ class UncertainQuantity(Quantity):
 
     @with_doc(Quantity.__mul__, use_header=False)
     def __mul__(self, other):
-        res = super(UncertainQuantity, self).__mul__(other)
+        res = super().__mul__(other)
         try:
             sru = self.relative_uncertainty
             oru = other.relative_uncertainty
@@ -137,7 +135,7 @@ class UncertainQuantity(Quantity):
 
     @with_doc(Quantity.__truediv__, use_header=False)
     def __truediv__(self, other):
-        res = super(UncertainQuantity, self).__truediv__(other)
+        res = super().__truediv__(other)
         try:
             sru = self.relative_uncertainty
             oru = other.relative_uncertainty
@@ -164,7 +162,7 @@ class UncertainQuantity(Quantity):
 
     @with_doc(Quantity.__pow__, use_header=False)
     def __pow__(self, other):
-        res = super(UncertainQuantity, self).__pow__(other)
+        res = super().__pow__(other)
         res.uncertainty = res.view(Quantity) * other * self.relative_uncertainty
         return res
 
@@ -287,7 +285,7 @@ class UncertainQuantity(Quantity):
         """
         Return a tuple for pickling a Quantity.
         """
-        reconstruct, reconstruct_args, state = super(UncertainQuantity, self).__reduce__()
+        reconstruct, reconstruct_args, state = super().__reduce__()
         state = state + (self._uncertainty,)
         return reconstruct, reconstruct_args, state
 

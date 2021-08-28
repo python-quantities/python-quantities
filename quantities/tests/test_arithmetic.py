@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import operator as op
 from functools import partial
 import sys
@@ -50,7 +48,7 @@ def check(f, *args, **kwargs):
     return (new, )
 
 
-class iter_dtypes(object):
+class iter_dtypes:
 
     def __init__(self):
         self._i = 1
@@ -78,7 +76,7 @@ def get_dtypes():
     return list(iter_dtypes())
 
 
-class iter_types(object):
+class iter_types:
 
     def __init__(self, dtype):
         self._index = -1

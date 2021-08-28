@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import math as _math
 
 from ..unitquantity import UnitConstant

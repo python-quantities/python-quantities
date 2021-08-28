@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 """
-from __future__ import absolute_import, with_statement
 
 import copy
 import operator
@@ -9,7 +7,7 @@ import re
 import threading
 
 
-class _Config(object):
+class _Config:
 
     @property
     def lock(self):
@@ -51,7 +49,7 @@ def format_units(udict):
     den = []
     keys = [k for k, o in
         sorted(
-            [(k, k.format_order) for k in udict],
+            ((k, k.format_order) for k in udict),
             key=operator.itemgetter(1)
         )
     ]
@@ -102,7 +100,7 @@ def format_units_latex(udict,font='mathrm',mult=r'\\cdot',paren=False):
     By default this is the latex \\cdot symbol.  Other useful
     options may be '' or '*'.
 
-    If paren=True, encapsulate the string in '\left(' and '\right)'
+    If paren=True, encapsulate the string in '\\left(' and '\right)'
 
     The result of format_units_latex is encapsulated in $.  This allows the result
     to be used directly in Latex in normal text mode, or in Matplotlib text via the
@@ -126,7 +124,7 @@ def format_units_latex(udict,font='mathrm',mult=r'\\cdot',paren=False):
     res = re.sub(r'\*','{'+mult+'}',res)
     if paren and not compound:
         res = r'\left(%s\right)' % res
-    res = r'$\%s{%s}$' % (font,res)
+    res = fr'$\{font}{{{res}}}$'
     return res
 
 
