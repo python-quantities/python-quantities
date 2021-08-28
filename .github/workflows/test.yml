@@ -1,0 +1,93 @@
+name: Test
+
+on: [push, pull_request]
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest ]
+        python-version: [ "2.7", "3.5", "3.6", "3.7", "3.8" ]
+        numpy-version: [
+            "1.8.2",
+            "1.9.3",
+            "1.10.4",
+            "1.11.3",
+            "1.12.1",
+            "1.13.3",
+            "1.14.5",
+            "1.15.1",
+            "1.15.4",
+            "1.16.1",
+            "1.17.2",
+        ]
+        exclude:
+          - { python-version: "2.7", numpy-version: "1.16.1" }
+          - { python-version: "2.7", numpy-version: "1.17.2" }
+
+          - { python-version: "3.5", numpy-version: "1.15.1" }
+          - { python-version: "3.5", numpy-version: "1.15.4" }
+          - { python-version: "3.5", numpy-version: "1.16.1" }
+          - { python-version: "3.5", numpy-version: "1.17.2" }
+
+          - { python-version: "3.6", numpy-version: "1.17.2" }
+
+          - { python-version: "3.7", numpy-version: "1.8.2" }
+          - { python-version: "3.7", numpy-version: "1.9.3" }
+          - { python-version: "3.7", numpy-version: "1.10.4" }
+          - { python-version: "3.7", numpy-version: "1.11.3" }
+          - { python-version: "3.7", numpy-version: "1.12.1" }
+          - { python-version: "3.7", numpy-version: "1.13.3" }
+
+          - { python-version: "3.8", numpy-version: "1.8.2" }
+          - { python-version: "3.8", numpy-version: "1.9.3" }
+          - { python-version: "3.8", numpy-version: "1.10.4" }
+          - { python-version: "3.8", numpy-version: "1.11.3" }
+          - { python-version: "3.8", numpy-version: "1.12.1" }
+          - { python-version: "3.8", numpy-version: "1.13.3" }
+          - { python-version: "3.8", numpy-version: "1.14.5" }
+          - { python-version: "3.8", numpy-version: "1.15.1" }
+          - { python-version: "3.8", numpy-version: "1.15.4" }
+          - { python-version: "3.8", numpy-version: "1.16.1" }
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key:
+            ${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.numpy-version }}-v1-${{ hashFiles('**/setup.py') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.numpy-version }}-v1-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U pip
+          python -m pip install -U wheel
+          python -m pip install "numpy==${{ matrix.numpy-version }}"
+
+      - name: Install
+        run: |
+          python setup.py install
+
+      - name: Test
+        run: |
+          python setup.py test
+          python -m doctest README.rst
