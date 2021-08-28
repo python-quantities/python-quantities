@@ -162,7 +162,7 @@ class TestUmath(TestCase):
             self.assertQuantityEqual(
                 np.fix([2.1, 2.9, -2.1, -2.9] * pq.degF),
                 [2., 2., -2., -2.] * pq.degF
-                )
+            )
         except ValueError as e:
             raise self.failureException(e)
 
