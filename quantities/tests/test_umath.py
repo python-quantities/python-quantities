@@ -154,7 +154,6 @@ class TestUmath(TestCase):
             [-1., -1., -0., 1., 2., 2., 2.] * pq.m
             )
 
-    @unittest.expectedFailure
     def test_fix(self):
         try:
             self.assertQuantityEqual(np.fix(3.14 * pq.degF), 3.0 * pq.degF)
