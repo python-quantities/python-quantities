@@ -136,8 +136,8 @@ setup(
     packages = packages,
     platforms = 'Any',
     requires = [
-        'python (>=2.7.0)',
-        'numpy (>=1.8.2)',
+        'python (>=3.7)',
+        'numpy (>=1.18)',
         ],
     url = 'http://python-quantities.readthedocs.io/',
     version = versioneer.get_version(),

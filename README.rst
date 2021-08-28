@@ -10,7 +10,7 @@ quantities
     :target: http://travis-ci.org/python-quantities/python-quantities
 
 A Python package for handling physical quantities. The source code and issue 
-tracker are hosted on github:
+tracker are hosted on GitHub:
 
 https://www.github.com/python-quantities/python-quantities
 
@@ -19,7 +19,7 @@ Download
 Get the latest version of quantities from
 https://pypi.python.org/pypi/quantities/
 
-To get the git version do::
+To get the Git version do::
 
     $ git clone git://github.com/python-quantities/python-quantities.git
 
