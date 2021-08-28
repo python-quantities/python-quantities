@@ -1,7 +1,6 @@
 """
 """
 
-import sys
 import operator
 
 import numpy as np
@@ -147,11 +146,6 @@ class Dimensionality(dict):
                 new[unit] = -power
         return new
 
-    if sys.version_info[0] < 3:
-        def __div__(self, other):
-            assert_isinstance(other, Dimensionality)
-            return self.__truediv__(other)
-
     def __itruediv__(self, other):
         assert_isinstance(other, Dimensionality)
         for unit, power in other.items():
@@ -162,11 +156,6 @@ class Dimensionality(dict):
             except KeyError:
                 self[unit] = -power
         return self
-
-    if sys.version_info[0] < 3:
-        def __idiv__(self, other):
-            assert_isinstance(other, Dimensionality)
-            return self.__itruediv__(other)
 
     def __pow__(self, other):
         try:

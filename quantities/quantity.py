@@ -3,7 +3,6 @@
 
 import copy
 from functools import wraps
-import sys
 
 import numpy as np
 
@@ -15,9 +14,6 @@ from .decorators import with_doc
 PREFERRED = []  # List of preferred quanitities for each symbol,
                 # e.g. PREFERRED = [pq.mV, pq.pA, pq.UnitQuantity('femtocoulomb', 1e-15*pq.C, 'fC')]
                 # Intended to be overwritten in down-stream packages
-
-if sys.version.startswith('3'):
-    unicode = str
 
 def validate_unit_quantity(value):
     try:
@@ -32,7 +28,7 @@ def validate_unit_quantity(value):
     return value
 
 def validate_dimensionality(value):
-    if isinstance(value, (str, unicode)):
+    if isinstance(value, str):
         try:
             return unit_registry[value].dimensionality
         except (KeyError, UnicodeDecodeError):
@@ -350,16 +346,6 @@ class Quantity(np.ndarray):
     def __rtruediv__(self, other):
         return np.true_divide(other, self)
         return super().__rtruediv__(other)
-
-    if sys.version_info[0] < 3:
-        @with_doc(np.ndarray.__idiv__)
-        @protected_multiplication
-        def __idiv__(self, other):
-            return super().__itruediv__(other)
-
-        @with_doc(np.ndarray.__rdiv__)
-        def __rdiv__(self, other):
-            return np.divide(other, self)
 
     @with_doc(np.ndarray.__pow__)
     @check_uniform

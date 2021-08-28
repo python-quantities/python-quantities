@@ -1,8 +1,6 @@
 """
 """
 
-import sys
-
 import numpy as np
 
 from . import markup
@@ -155,10 +153,6 @@ class UncertainQuantity(Quantity):
             self.relative_uncertainty/self.magnitude, copy=False
         )
         return other * temp
-
-    if sys.version_info[0] < 3:
-        __div__ = __truediv__
-        __rdiv__ = __rtruediv__
 
     @with_doc(Quantity.__pow__, use_header=False)
     def __pow__(self, other):
