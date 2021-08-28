@@ -62,12 +62,16 @@ If you install it system-wide, you may need to prefix the previous command with 
 
 Tests
 -----
-To execute all tests, run::
+To execute all tests, install pytest::
 
-    $ python setup.py test
+    $ python -m pip install pytest
+
+And run::
+
+    $ pytest
 
 in the current directory. The master branch is automatically tested by
-Travis CI.
+GitHub Actions.
 
 Author
 ------
