@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import numpy as np
 
 from .quantity import Quantity
@@ -67,18 +65,18 @@ def gradient(f, *varargs):
     #       varargs = (Quantity(1),)
 
     varargsQuantities = [Quantity(i, copy=False) for i in varargs]
-    varargsMag = tuple([i.magnitude for i in varargsQuantities])
+    varargsMag = tuple(i.magnitude for i in varargsQuantities)
     ret = np.gradient(f.magnitude, *varargsMag)
 
     if len(varargs) == 1:
         # if there was only one sample distance provided,
         # apply the units in all directions
-        return tuple([ Quantity(i, f.units/varargs[0].units)  for i  in ret])
+        return tuple( Quantity(i, f.units/varargs[0].units)  for i  in ret)
     else:
         #give each output array the units of the input array
         #divided by the units of the spacing quantity given
-        return tuple([ Quantity(i, f.units/j.units)
-                      for i,j  in zip( ret, varargsQuantities)])
+        return tuple( Quantity(i, f.units/j.units)
+                      for i,j  in zip( ret, varargsQuantities))
 
 @with_doc(np.cross)
 def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):

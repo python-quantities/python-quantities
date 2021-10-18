@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .. import units as pq
 from .common import TestCase
 

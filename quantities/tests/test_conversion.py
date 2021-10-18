@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import unittest
 from .. import units as pq
 from .. import quantity

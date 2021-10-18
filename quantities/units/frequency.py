@@ -1,6 +1,5 @@
 """
 """
-from __future__ import absolute_import
 
 from ..unitquantity import UnitQuantity
 from .angle import revolution

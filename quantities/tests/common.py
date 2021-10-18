@@ -26,7 +26,7 @@ class TestCase(unittest.TestCase):
         q2 = Quantity(q2)
         if q1.shape != q2.shape:
             raise self.failureException(
-                "Shape mismatch (%s vs %s)%s" % (q1.shape, q2.shape, msg)
+                f"Shape mismatch ({q1.shape} vs {q2.shape}){msg}"
                 )
         if not np.all(np.abs(q1.magnitude - q2.magnitude) < delta):
             raise self.failureException(
@@ -38,5 +38,5 @@ class TestCase(unittest.TestCase):
         d2 = getattr(q2, '_dimensionality', None)
         if (d1 or d2) and not (d1 == d2):
             raise self.failureException(
-                "Dimensionalities are not equal (%s vs %s)%s" % (d1, d2, msg)
+                f"Dimensionalities are not equal ({d1} vs {d2}){msg}"
                 )

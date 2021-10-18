@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # quantities documentation build configuration file, created by
 # sphinx-quickstart on Sun Oct 25 09:49:05 2009.
@@ -41,8 +40,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'quantities'
-copyright = u'2009, Darren Dale'
+project = 'quantities'
+copyright = '2009, Darren Dale'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -178,8 +177,8 @@ htmlhelp_basename = 'quantitiesdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'quantities.tex', u'quantities Documentation',
-   u'Darren Dale', 'manual'),
+  ('index', 'quantities.tex', 'quantities Documentation',
+   'Darren Dale', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
