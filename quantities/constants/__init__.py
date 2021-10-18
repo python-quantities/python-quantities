@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 from .alpha import *
 from .astronomy import *
 from .atomicunits import *

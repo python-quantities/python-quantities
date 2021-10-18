@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 import numpy as np
 
 from .. import units as pq
@@ -154,17 +151,13 @@ class TestUmath(TestCase):
             [-1., -1., -0., 1., 2., 2., 2.] * pq.m
             )
 
-    @unittest.expectedFailure
     def test_fix(self):
-        try:
-            self.assertQuantityEqual(np.fix(3.14 * pq.degF), 3.0 * pq.degF)
-            self.assertQuantityEqual(np.fix(3.0 * pq.degF), 3.0 * pq.degF)
-            self.assertQuantityEqual(
-                np.fix([2.1, 2.9, -2.1, -2.9] * pq.degF),
-                [2., 2., -2., -2.] * pq.degF
-                )
-        except ValueError as e:
-            raise self.failureException(e)
+        self.assertQuantityEqual(np.fix(3.14 * pq.degF), 3.0 * pq.degF)
+        self.assertQuantityEqual(np.fix(3.0 * pq.degF), 3.0 * pq.degF)
+        self.assertQuantityEqual(
+            np.fix([2.1, 2.9, -2.1, -2.9] * pq.degF),
+            [2., 2., -2., -2.] * pq.degF
+            )
 
     def test_exp(self):
         self.assertQuantityEqual(np.exp(1*pq.dimensionless), np.e)
@@ -226,7 +219,9 @@ class TestUmath(TestCase):
             np.arctan2(3*pq.V, 3*pq.V),
             np.radians(45)*pq.dimensionless
             )
-        self.assertRaises(ValueError, np.arctan2, (1*pq.m, 1*pq.m))
+        # NumPy <1.21 raises ValueError
+        # NumPy >=1.21 raises TypeError
+        self.assertRaises((TypeError, ValueError), np.arctan2, (1*pq.m, 1*pq.m))
 
     def test_hypot(self):
         self.assertQuantityEqual(np.hypot(3 * pq.m, 4 * pq.m),  5 * pq.m)

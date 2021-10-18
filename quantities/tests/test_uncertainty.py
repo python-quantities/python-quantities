@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from .. import units as pq
 from ..uncertainquantity import UncertainQuantity
 from .common import TestCase

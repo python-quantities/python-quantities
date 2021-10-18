@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
 """
-from __future__ import absolute_import
 
 from ._utils import _cd
 from ..unitquantity import UnitConstant

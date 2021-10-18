@@ -1,10 +1,8 @@
 """
 """
-from __future__ import absolute_import
 
 import copy
 from functools import wraps
-import sys
 
 import numpy as np
 
@@ -16,9 +14,6 @@ from .decorators import with_doc
 PREFERRED = []  # List of preferred quanitities for each symbol,
                 # e.g. PREFERRED = [pq.mV, pq.pA, pq.UnitQuantity('femtocoulomb', 1e-15*pq.C, 'fC')]
                 # Intended to be overwritten in down-stream packages
-
-if sys.version.startswith('3'):
-    unicode = str
 
 def validate_unit_quantity(value):
     try:
@@ -33,7 +28,7 @@ def validate_unit_quantity(value):
     return value
 
 def validate_dimensionality(value):
-    if isinstance(value, (str, unicode)):
+    if isinstance(value, str):
         try:
             return unit_registry[value].dimensionality
         except (KeyError, UnicodeDecodeError):
@@ -241,8 +236,8 @@ class Quantity(np.ndarray):
         for preferred in PREFERRED:
             if units_str == str(preferred.simplified.dimensionality):
                 return self.rescale(preferred)
-        raise Exception(("Preferred units for '%s' (or equivalent) not specified in "
-                        "quantites.quantity.PREFERRED." % self.dimensionality))
+        raise Exception("Preferred units for '%s' (or equivalent) not specified in "
+                        "quantites.quantity.PREFERRED." % self.dimensionality)
         
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None, **kwargs):
@@ -293,74 +288,64 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__add__)
     @scale_other_units
     def __add__(self, other):
-        return super(Quantity, self).__add__(other)
+        return super().__add__(other)
 
     @with_doc(np.ndarray.__radd__)
     @scale_other_units
     def __radd__(self, other):
         return np.add(other, self)
-        return super(Quantity, self).__radd__(other)
+        return super().__radd__(other)
 
     @with_doc(np.ndarray.__iadd__)
     @scale_other_units
     def __iadd__(self, other):
-        return super(Quantity, self).__iadd__(other)
+        return super().__iadd__(other)
 
     @with_doc(np.ndarray.__sub__)
     @scale_other_units
     def __sub__(self, other):
-        return super(Quantity, self).__sub__(other)
+        return super().__sub__(other)
 
     @with_doc(np.ndarray.__rsub__)
     @scale_other_units
     def __rsub__(self, other):
         return np.subtract(other, self)
-        return super(Quantity, self).__rsub__(other)
+        return super().__rsub__(other)
 
     @with_doc(np.ndarray.__isub__)
     @scale_other_units
     def __isub__(self, other):
-        return super(Quantity, self).__isub__(other)
+        return super().__isub__(other)
 
     @with_doc(np.ndarray.__mod__)
     @scale_other_units
     def __mod__(self, other):
-        return super(Quantity, self).__mod__(other)
+        return super().__mod__(other)
 
     @with_doc(np.ndarray.__imod__)
     @scale_other_units
     def __imod__(self, other):
-        return super(Quantity, self).__imod__(other)
+        return super().__imod__(other)
 
     @with_doc(np.ndarray.__imul__)
     @protected_multiplication
     def __imul__(self, other):
-        return super(Quantity, self).__imul__(other)
+        return super().__imul__(other)
 
     @with_doc(np.ndarray.__rmul__)
     def __rmul__(self, other):
         return np.multiply(other, self)
-        return super(Quantity, self).__rmul__(other)
+        return super().__rmul__(other)
 
     @with_doc(np.ndarray.__itruediv__)
     @protected_multiplication
     def __itruediv__(self, other):
-        return super(Quantity, self).__itruediv__(other)
+        return super().__itruediv__(other)
 
     @with_doc(np.ndarray.__rtruediv__)
     def __rtruediv__(self, other):
         return np.true_divide(other, self)
-        return super(Quantity, self).__rtruediv__(other)
-
-    if sys.version_info[0] < 3:
-        @with_doc(np.ndarray.__idiv__)
-        @protected_multiplication
-        def __idiv__(self, other):
-            return super(Quantity, self).__itruediv__(other)
-
-        @with_doc(np.ndarray.__rdiv__)
-        def __rdiv__(self, other):
-            return np.divide(other, self)
+        return super().__rtruediv__(other)
 
     @with_doc(np.ndarray.__pow__)
     @check_uniform
@@ -371,7 +356,7 @@ class Quantity(np.ndarray):
     @check_uniform
     @protected_power
     def __ipow__(self, other):
-        return super(Quantity, self).__ipow__(other)
+        return super().__ipow__(other)
 
     def __round__(self, decimals=0):
         return np.around(self, decimals)
@@ -395,14 +380,14 @@ class Quantity(np.ndarray):
         # see https://github.com/numpy/numpy/pull/9883
 
         def __format__(self, format_spec):
-            ret = super(Quantity, self).__format__(format_spec)
+            ret = super().__format__(format_spec)
             if self.ndim:
                 return ret
-            return ret + ' {}'.format(self.dimensionality)
+            return ret + f' {self.dimensionality}'
 
     @with_doc(np.ndarray.__getitem__)
     def __getitem__(self, key):
-        ret = super(Quantity, self).__getitem__(key)
+        ret = super().__getitem__(key)
         if isinstance(ret, Quantity):
             return ret
         else:
@@ -461,7 +446,10 @@ class Quantity(np.ndarray):
         #first get a dummy array from the ndarray method
         work_list = self.magnitude.tolist()
         #now go through and replace all numbers with the appropriate Quantity
-        self._tolist(work_list)
+        if isinstance(work_list, list):
+            self._tolist(work_list)
+        else:
+            work_list = Quantity(work_list, self.dimensionality)
         return work_list
 
     def _tolist(self, work_list):
@@ -764,7 +752,7 @@ class Quantity(np.ndarray):
         """
         Return a tuple for pickling a Quantity.
         """
-        reconstruct,reconstruct_args,state = super(Quantity,self).__reduce__()
+        reconstruct,reconstruct_args,state = super().__reduce__()
         state = state + (self._dimensionality,)
         return (_reconstruct_quantity,
                 (self.__class__, np.ndarray, (0, ), 'b', ),
