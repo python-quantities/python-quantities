@@ -137,7 +137,7 @@ setup(
     platforms = 'Any',
     requires = [
         'python (>=3.7)',
-        'numpy (>=1.18)',
+        'numpy (>=1.16)',
         ],
     url = 'http://python-quantities.readthedocs.io/',
     version = versioneer.get_version(),

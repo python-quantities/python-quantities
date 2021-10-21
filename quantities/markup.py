@@ -100,7 +100,7 @@ def format_units_latex(udict,font='mathrm',mult=r'\\cdot',paren=False):
     By default this is the latex \\cdot symbol.  Other useful
     options may be '' or '*'.
 
-    If paren=True, encapsulate the string in '\\left(' and '\right)'
+    If paren=True, encapsulate the string in '\\left(' and '\\right)'
 
     The result of format_units_latex is encapsulated in $.  This allows the result
     to be used directly in Latex in normal text mode, or in Matplotlib text via the
