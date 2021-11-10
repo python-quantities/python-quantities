@@ -57,7 +57,7 @@ def ediff1d(ary, to_end=None, to_begin=None):
 @with_doc(np.gradient)
 def gradient(f, *varargs):
     # if no sample distances are specified, use dimensionless 1
-    # this mimicks the behavior of np.gradient, but perhaps we should
+    # this mimics the behavior of np.gradient, but perhaps we should
     # remove this default behavior
     # removed for now::
     #
