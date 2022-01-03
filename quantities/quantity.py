@@ -11,7 +11,7 @@ from .dimensionality import Dimensionality, p_dict
 from .registry import unit_registry
 from .decorators import with_doc
 
-PREFERRED = []  # List of preferred quanitities for each symbol,
+PREFERRED = []  # List of preferred quantities for each symbol,
                 # e.g. PREFERRED = [pq.mV, pq.pA, pq.UnitQuantity('femtocoulomb', 1e-15*pq.C, 'fC')]
                 # Intended to be overwritten in down-stream packages
 

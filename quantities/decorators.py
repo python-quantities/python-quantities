@@ -104,7 +104,7 @@ def quantitizer(base_function,
         #convert the list back to a tuple so it can be used as an output
         args = tuple (args)
 
-        #repalce all the quantities in the keyword argument
+        #replace all the quantities in the keyword argument
         #dictionary with ndarrays
         for i in kwargs:
             #test if the argument is a quantity

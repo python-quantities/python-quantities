@@ -257,7 +257,7 @@ and refer to it using  the standard reference syntax::
 
 Keep in mind that we may want to reorganize the contents later, so
 let's avoid top level names in references like ``user`` or ``devel``
-or ``faq`` unless necesssary, because for example the FAQ "what is a
+or ``faq`` unless necessary, because for example the FAQ "what is a
 backend?" could later become part of the users guide, so the label::
 
     .. _what-is-a-backend
@@ -286,7 +286,7 @@ Emacs helpers
 
 There is an emacs mode `rst.el
 <http://docutils.sourceforge.net/tools/editors/emacs/rst.el>`_ which
-automates many important ReST tasks like building and updateing
+automates many important ReST tasks like building and updating
 table-of-contents, and promoting or demoting section headings.  Here
 is the basic ``.emacs`` configuration::
 
