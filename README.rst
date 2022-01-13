@@ -2,14 +2,14 @@
 quantities
 ==========
 
-|pypi version| |pypi download| |Build status|
+|pypi version|_ |Build status|_
 
 .. |pypi version| image:: https://img.shields.io/pypi/v/quantities.png
-   :target: https://pypi.python.org/pypi/quantities
-.. |Build status| image:: https://secure.travis-ci.org/python-quantities/python-quantities.png?branch=master
-    :target: http://travis-ci.org/python-quantities/python-quantities
+.. _`pypi version`: https://pypi.python.org/pypi/quantities
+.. |Build status| image:: https://github.com/python-quantities/python-quantities/actions/workflows/test.yml/badge.svg?branch=master
+.. _`Build status`: https://github.com/python-quantities/python-quantities/actions/workflows/test.yml
 
-A Python package for handling physical quantities. The source code and issue 
+A Python package for handling physical quantities. The source code and issue
 tracker are hosted on GitHub:
 
 https://www.github.com/python-quantities/python-quantities
@@ -75,7 +75,9 @@ GitHub Actions.
 
 Author
 ------
-quantities is written by Darren Dale
+quantities was originally written by Darren Dale, and has received contributions from `many people`_.
+
+.. _`many people`: https://github.com/python-quantities/python-quantities/graphs/contributors
 
 License
 -------
