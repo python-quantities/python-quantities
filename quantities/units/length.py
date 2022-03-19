@@ -14,6 +14,12 @@ km = kilometer = kilometre = UnitLength(
     symbol='km',
     aliases=['kilometers', 'kilometre', 'kilometres']
 )
+dm = decimeter = decimetre = UnitLength(
+    'decimeter',
+    m/10,
+    'dm',
+    aliases=['decimeters', 'decimetre', 'decimetres']
+)
 cm = centimeter = centimetre = UnitLength(
     'centimeter',
     m/100,
