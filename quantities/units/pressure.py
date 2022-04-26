@@ -51,11 +51,11 @@ bar = UnitQuantity(
     100000*pascal,
     aliases=['bars']
 )
-mb = mbar = millibar = UnitQuantity(
+mbar = millibar = UnitQuantity(
     'millibar',
     0.001*bar,
-    symbol='mb',
-    aliases=['mbar']
+    symbol='mbar',
+    aliases=['millibars']
 )
 kbar = kilobar = UnitQuantity(
     'kilobar',
