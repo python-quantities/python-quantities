@@ -70,6 +70,16 @@ class TestConversion(TestCase):
             delta=1e83
             )
 
+    def test_float_conversion(self):
+        with self.assertRaisesRegexp(
+                TypeError, "Quantities can't be converted to floats"):
+            float(3 * pq.um)
+
+    def test_int_conversion(self):
+        with self.assertRaisesRegexp(
+                TypeError, "Quantities can't be converted to ints"):
+            int(3 * pq.um)
+
 
 class TestDefaultUnits(TestCase):
 
