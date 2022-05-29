@@ -198,7 +198,7 @@ class Quantity(np.ndarray):
         """
         Return a copy of the quantity converted to the specified units.
         If `units` is `None`, an attempt will be made to rescale the quantity
-        to preferred units (see `rescale_preferred`).  
+        to preferred units (see `rescale_preferred`).
         """
         if units is None:
             try:
@@ -217,8 +217,8 @@ class Quantity(np.ndarray):
                 'Unable to convert between units of "%s" and "%s"'
                 %(from_u._dimensionality, to_u._dimensionality)
             )
-        return Quantity(cf*self.magnitude, to_u)
-    
+        return Quantity(cf*self.magnitude, to_u, dtype=self.dtype)
+
     def rescale_preferred(self):
         """
         Return a copy of the quantity converted to the preferred units and scale.
@@ -238,7 +238,7 @@ class Quantity(np.ndarray):
                 return self.rescale(preferred)
         raise Exception("Preferred units for '%s' (or equivalent) not specified in "
                         "quantites.quantity.PREFERRED." % self.dimensionality)
-        
+
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None, **kwargs):
         '''Scalars are returned as scalar Quantity arrays.'''
