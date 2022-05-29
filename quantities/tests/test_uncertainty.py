@@ -38,6 +38,8 @@ class TestUncertainty(TestCase):
         self.assertTrue(seventyish_km.dtype == np.float32)
         in_meters = seventyish_km.rescale(pq.m)
         self.assertTrue(in_meters.dtype == seventyish_km.dtype)
+        seventyish_km_rescaled_idempotent = seventyish_km.rescale(pq.km)
+        self.assertTrue(seventyish_km_rescaled_idempotent.dtype == np.float32)
 
     def test_set_uncertainty(self):
         a = UncertainQuantity([1, 2], 'm', [.1, .2])

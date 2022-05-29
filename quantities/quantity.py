@@ -247,9 +247,9 @@ class Quantity(np.ndarray):
         # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
             if self.__array_priority__ >= Quantity.__array_priority__:
-                ret = type(self)(ret, self._dimensionality)
+                ret = type(self)(ret, self._dimensionality, dtype=self.dtype)
             else:
-                ret = Quantity(ret, self._dimensionality)
+                ret = Quantity(ret, self._dimensionality, dtype=self.dtype)
 
         return ret
 
