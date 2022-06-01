@@ -59,7 +59,7 @@ def scale_other_units(f):
         if not isinstance(other, Quantity):
             other = other.view(type=Quantity)
         if other._dimensionality != self._dimensionality:
-            other = other.rescale(self.units)
+            other = other.rescale(self.units, dtype=np.result_type(self.dtype, other.dtype))
         return f(self, other, *args)
     return g
 
