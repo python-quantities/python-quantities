@@ -359,7 +359,7 @@ class TestDTypes(TestCase):
         self.assertRaises(ValueError, op.isub, [1, 2, 3]*pq.m, 5*pq.J)
 
     def test_division(self):
-        molar = pq.UnitQuantity('M',  1e3 * pq.mole/pq.m**3, u_symbol='M')
+        molar = pq.UnitQuantity('M',  1000 * pq.mole/pq.m**3, u_symbol='M')
         for subtr in [1, 1.0]:
             q = 1*molar/(1000*pq.mole/pq.m**3)
             self.assertQuantityEqual((q - subtr).simplified, 0)
