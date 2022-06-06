@@ -106,4 +106,3 @@ class Quantity(npt.NDArray):
 
     def __setitem__(self, key: int, value: QuantityData) -> None:
         ...
-
