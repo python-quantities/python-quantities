@@ -238,6 +238,7 @@ def _d_divide(q1, q2, out=None):
             return q2.dimensionality**-1
 p_dict[np.divide] = _d_divide
 p_dict[np.true_divide] = _d_divide
+p_dict[np.floor_divide] = _d_divide
 
 def _d_check_uniform(q1, q2, out=None):
     try:
@@ -273,7 +274,6 @@ p_dict[np.subtract] = _d_check_uniform
 p_dict[np.mod] = _d_check_uniform
 p_dict[np.fmod] = _d_check_uniform
 p_dict[np.remainder] = _d_check_uniform
-p_dict[np.floor_divide] = _d_check_uniform
 p_dict[np.hypot] = _d_check_uniform
 p_dict[np.equal] = _d_check_uniform
 p_dict[np.not_equal] = _d_check_uniform
