@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 from quantities.dimensionality import Dimensionality
 from quantities.typing.quantities import DimensionalityDescriptor, QuantityData
@@ -13,6 +13,8 @@ def validate_dimensionality(value: DimensionalityDescriptor) -> Dimensionality:
 def get_conversion_factor(from_u: Quantity, to_u: Quantity) -> float:
     ...
 
+def scale_other_units(f: Any) -> None:
+    ...
 
 class Quantity(npt.NDArray):
 
