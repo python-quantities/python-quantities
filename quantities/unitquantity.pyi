@@ -89,8 +89,9 @@ class UnitQuantity(Quantity):
     def __rpow__(self, other) -> Quantity:
         ...
 
- class Dimensionless(UnitQuantity):
 
-     @property
-     def _dimensionality(self) -> Dimensionality:
-         ...
+class Dimensionless(UnitQuantity):
+
+    @property
+    def _dimensionality(self) -> Dimensionality:
+        ...
