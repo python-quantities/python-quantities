@@ -52,7 +52,7 @@ class iter_dtypes:
 
     def __init__(self):
         self._i = 1
-        self._typeDict = np.typeDict.copy()
+        self._typeDict = np.sctypeDict.copy()
         self._typeDict[17] = int
         self._typeDict[18] = long
         self._typeDict[19] = float
@@ -131,6 +131,20 @@ class TestDTypes(TestCase):
                         self.check_mul(x, y)
                         self.check_rmul(x, y)
             dtypes.pop(0)
+
+    def test_truediv(self):
+        q = Quantity([44, 40, 36, 32], units=pq.ms)
+        self.assertQuantityEqual(
+            q/(4 * pq.ms),
+            Quantity([11, 10, 9, 8], units=pq.dimensionless)
+        )
+
+    def test_floordiv(self):
+        q = Quantity([45, 43, 39, 32], units=pq.ms)
+        self.assertQuantityEqual(
+            q//(4 * pq.ms),
+            Quantity([11, 10, 9, 8], units=pq.dimensionless)
+        )
 
     def test_mixed_addition(self):
         self.assertQuantityEqual(1*pq.ft + 1*pq.m, 4.280839895 * pq.ft)
