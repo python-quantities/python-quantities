@@ -59,7 +59,7 @@ def scale_other_units(f):
         if not isinstance(other, Quantity):
             other = other.view(type=Quantity)
         if other._dimensionality != self._dimensionality:
-            other = other.rescale(self.units)
+            other = other.rescale(self.units, dtype=np.result_type(self.dtype, other.dtype))
         return f(self, other, *args)
     return g
 
@@ -194,11 +194,11 @@ class Quantity(np.ndarray):
         mag *= cf
         self._dimensionality = to_u.dimensionality
 
-    def rescale(self, units=None):
+    def rescale(self, units=None, dtype=None):
         """
         Return a copy of the quantity converted to the specified units.
         If `units` is `None`, an attempt will be made to rescale the quantity
-        to preferred units (see `rescale_preferred`).  
+        to preferred units (see `rescale_preferred`).
         """
         if units is None:
             try:
@@ -206,8 +206,10 @@ class Quantity(np.ndarray):
             except Exception as e:
                 raise Exception('No argument passed to `.rescale` and %s' % e)
         to_dims = validate_dimensionality(units)
+        if dtype is None:
+            dtype = self.dtype
         if self.dimensionality == to_dims:
-            return self.astype(self.dtype)
+            return self.astype(dtype)
         to_u = Quantity(1.0, to_dims)
         from_u = Quantity(1.0, self.dimensionality)
         try:
@@ -217,8 +219,8 @@ class Quantity(np.ndarray):
                 'Unable to convert between units of "%s" and "%s"'
                 %(from_u._dimensionality, to_u._dimensionality)
             )
-        return Quantity(cf*self.magnitude, to_u)
-    
+        return Quantity(cf*self.magnitude, to_u, dtype=dtype)
+
     def rescale_preferred(self):
         """
         Return a copy of the quantity converted to the preferred units and scale.
@@ -238,7 +240,7 @@ class Quantity(np.ndarray):
                 return self.rescale(preferred)
         raise Exception("Preferred units for '%s' (or equivalent) not specified in "
                         "quantites.quantity.PREFERRED." % self.dimensionality)
-        
+
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None, **kwargs):
         '''Scalars are returned as scalar Quantity arrays.'''
@@ -247,9 +249,9 @@ class Quantity(np.ndarray):
         # might be related to numpy ticket # 826
         if not isinstance(ret, type(self)):
             if self.__array_priority__ >= Quantity.__array_priority__:
-                ret = type(self)(ret, self._dimensionality)
+                ret = type(self)(ret, self._dimensionality, dtype=self.dtype)
             else:
-                ret = Quantity(ret, self._dimensionality)
+                ret = Quantity(ret, self._dimensionality, dtype=self.dtype)
 
         return ret
 
@@ -398,7 +400,9 @@ class Quantity(np.ndarray):
         if not isinstance(value, Quantity):
             value = Quantity(value)
         if self._dimensionality != value._dimensionality:
-            value = value.rescale(self._dimensionality)
+            # Setting `dtype` to 'd' is done to ensure backwards
+            # compatibility, arguably it's questionable design.
+            value = value.rescale(self._dimensionality, dtype='d')
         self.magnitude[key] = value
 
     @with_doc(np.ndarray.__lt__)
@@ -494,15 +498,17 @@ class Quantity(np.ndarray):
             pass
 
     @with_doc(np.ndarray.put)
-    def put(self, indicies, values, mode='raise'):
+    def put(self, indicies, values, mode='raise', dtype='d'):
         """
         performs the equivalent of ndarray.put() but enforces units
         values - must be an Quantity with the same units as self
         """
+        # The default of `dtype` is set to 'd' to ensure backwards
+        # compatibility, arguably it's questionable design.
         if not isinstance(values, Quantity):
             values = Quantity(values)
         if values._dimensionality != self._dimensionality:
-            values = values.rescale(self.units)
+            values = values.rescale(self.units, dtype=dtype)
         self.magnitude.put(indicies, values, mode)
 
     # choose does not function correctly, and it is not clear

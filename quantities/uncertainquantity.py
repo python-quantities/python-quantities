@@ -64,10 +64,10 @@ class UncertainQuantity(Quantity):
         return self.uncertainty.magnitude/self.magnitude
 
     @with_doc(Quantity.rescale, use_header=False)
-    def rescale(self, units):
+    def rescale(self, units, dtype=None):
         cls = UncertainQuantity
-        ret = super(cls, self).rescale(units).view(cls)
-        ret.uncertainty = self.uncertainty.rescale(units)
+        ret = super(cls, self).rescale(units, dtype=dtype).view(cls)
+        ret.uncertainty = self.uncertainty.rescale(units, dtype=dtype)
         return ret
 
     def __array_finalize__(self, obj):
@@ -282,4 +282,3 @@ class UncertainQuantity(Quantity):
         reconstruct, reconstruct_args, state = super().__reduce__()
         state = state + (self._uncertainty,)
         return reconstruct, reconstruct_args, state
-

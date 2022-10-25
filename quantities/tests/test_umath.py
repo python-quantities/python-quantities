@@ -163,6 +163,10 @@ class TestUmath(TestCase):
         self.assertQuantityEqual(np.exp(1*pq.dimensionless), np.e)
         self.assertRaises(ValueError, np.exp, 1*pq.m)
 
+    def test_exp2(self):
+        self.assertQuantityEqual(np.exp2(1*pq.dimensionless), 2.0)
+        self.assertRaises(ValueError, np.exp2, 1*pq.m)
+
     def test_log(self):
         self.assertQuantityEqual(np.log(1*pq.dimensionless), 0)
         self.assertRaises(ValueError, np.log, 1*pq.m)

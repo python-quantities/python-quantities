@@ -1,4 +1,5 @@
 from .. import units as pq
+from ..quantity import Quantity
 from ..uncertainquantity import UncertainQuantity
 from .common import TestCase
 import numpy as np
@@ -30,6 +31,17 @@ class TestUncertainty(TestCase):
             a.rescale('ft').uncertainty,
             [0.32808399, 0.32808399, 0.32808399]*pq.ft
             )
+
+        seventy_km = Quantity(70, pq.km, dtype=np.float32)
+        seven_km = Quantity(7, pq.km, dtype=np.float32)
+        seventyish_km = UncertainQuantity(seventy_km, pq.km, seven_km, dtype=np.float32)
+        self.assertTrue(seventyish_km.dtype == np.float32)
+        in_meters = seventyish_km.rescale(pq.m)
+        self.assertTrue(in_meters.dtype == seventyish_km.dtype)
+        seventyish_km_rescaled_idempotent = seventyish_km.rescale(pq.km)
+        self.assertTrue(seventyish_km_rescaled_idempotent.dtype == np.float32)
+        self.assertQuantityEqual(seventyish_km + in_meters, 2*seventy_km)
+
 
     def test_set_uncertainty(self):
         a = UncertainQuantity([1, 2], 'm', [.1, .2])

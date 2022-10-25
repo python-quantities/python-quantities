@@ -367,6 +367,7 @@ p_dict[np.log10] = _d_dimensionless
 p_dict[np.log2] = _d_dimensionless
 p_dict[np.log1p] = _d_dimensionless
 p_dict[np.exp] = _d_dimensionless
+p_dict[np.exp2] = _d_dimensionless
 p_dict[np.expm1] = _d_dimensionless
 p_dict[np.logaddexp] = _d_dimensionless
 p_dict[np.logaddexp2] = _d_dimensionless
