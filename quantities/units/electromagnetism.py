@@ -139,7 +139,7 @@ pF = UnitQuantity(
 )
 fF = UnitQuantity(
     'femtofarad',
-    pf/1000,
+    pF/1000,
     symbol='fF'
 )
 ohm = Ohm = UnitQuantity(
