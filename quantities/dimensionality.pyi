@@ -23,7 +23,8 @@ class Dimensionality(dict):
     def html(self) -> str:
         ...
 
-    def __hash__(self) -> int:
+
+    def __hash__(self) -> int: # type: ignore
         ...
 
     def __add__(self, other: Dimensionality) -> Dimensionality:

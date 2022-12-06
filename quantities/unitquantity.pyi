@@ -1,4 +1,4 @@
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Any, overload
 
 from quantities import Quantity
 from quantities.dimensionality import Dimensionality
@@ -62,10 +62,11 @@ class UnitQuantity(Quantity):
     def __radd__(self, other) -> Quantity:
         ...
 
-    def __sub__(self, other) -> Quantity:
+    def __sub__(self, other) -> Any:
         ...
 
-    def __rsub__(self, other) -> Quantity:
+
+    def __rsub__(self, other) -> Any:
         ...
 
     def __mod__(self, other) -> Quantity:
@@ -80,10 +81,10 @@ class UnitQuantity(Quantity):
     def __rmul__(self, other) -> Quantity:
         ...
 
-    def __truediv__(self, other) -> Quantity:
+    def __truediv__(self, other) -> Any:
         ...
 
-    def __rtruediv__(self, other) -> Quantity:
+    def __rtruediv__(self, other) -> Any:
         ...
 
     def __pow__(self, other) -> Quantity:
@@ -94,131 +95,54 @@ class UnitQuantity(Quantity):
 
 
 class IrreducibleUnit(UnitQuantity):
-    _default_unit: Optional[UnitQuantity]
+    _default_unit: Optional[Quantity]
 
     @property
     def simplified(self) -> Quantity:
         ...
 
     @classmethod
-    def get_default_unit(cls) -> Optional[UnitQuantity]:
+    def get_default_unit(cls) -> Optional[Quantity]:
         ...
 
     @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitQuantity]):
+    def set_default_unit(cls, unit: Union[str, Quantity]):
         ...
 
 
 class UnitMass(IrreducibleUnit):
-    _default_unit: Optional[UnitMass]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitMass]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitMass]):
-        ...
+    ...
 
 
 class UnitLength(IrreducibleUnit):
-    _default_unit: Optional[UnitLength]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitLength]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitLength]):
-        ...
+    ...
 
 
 class UnitTime(IrreducibleUnit):
-    _default_unit: Optional[UnitTime]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitTime]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitTime]):
-        ...
+    ...
 
 
 class UnitCurrent(IrreducibleUnit):
-    _default_unit: Optional[UnitCurrent]
-
-
-@classmethod
-
-
-def get_default_unit(cls) -> Optional[UnitCurrent]:
     ...
-
-
-@classmethod
-def set_default_unit(cls, unit: Union[str, UnitCurrent]):
-    ...
-
 
 class UnitLuminousIntensity(IrreducibleUnit):
-    _default_unit: Optional[UnitLuminousIntensity]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitLuminousIntensity]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitLuminousIntensity]):
-        ...
+    ...
 
 
 class UnitSubstance(IrreducibleUnit):
-    _default_unit: Optional[UnitSubstance]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitSubstance]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitSubstance]):
-        ...
+    ...
 
 
 class UnitTemperature(IrreducibleUnit):
-    _default_unit: Optional[UnitTemperature]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitTemperature]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitTemperature]):
-        ...
+    ...
 
 
 class UnitInformation(IrreducibleUnit):
-    _default_unit: Optional[UnitInformation]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitInformation]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitInformation]):
-        ...
+    ...
 
 
 class UnitCurrency(IrreducibleUnit):
-    _default_unit: Optional[UnitCurrency]
-
-    @classmethod
-    def get_default_unit(cls) -> Optional[UnitCurrency]:
-        ...
-
-    @classmethod
-    def set_default_unit(cls, unit: Union[str, UnitCurrency]):
-        ...
+    ...
 
 
 class CompoundUnit(UnitQuantity):
@@ -231,6 +155,7 @@ class Dimensionless(UnitQuantity):
     def _dimensionality(self) -> Dimensionality:
         ...
 
+dimensionless: Dimensionless
 
 class UnitConstant(UnitQuantity):
     ...
