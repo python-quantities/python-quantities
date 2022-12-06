@@ -27,7 +27,7 @@ class UncertainQuantity(Quantity):
 
         return ret
 
-    @Quantity.units.setter
+    @Quantity.units.setter   #type: ignore
     def units(self, units):
         super()._set_units(units)
         self.uncertainty.units = self._dimensionality
