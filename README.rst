@@ -2,12 +2,23 @@
 quantities
 ==========
 
+Quantities is designed to handle arithmetic and
+conversions of physical quantities, which have a magnitude, dimensionality
+specified by various units, and possibly an uncertainty. See the tutorial_
+for examples. Quantities builds on the popular numpy library and is
+designed to work with numpy ufuncs, many of which are already
+supported. Quantities is actively developed, and while the current features
+and API are stable, test coverage is incomplete so the package is not
+suggested for mission-critical applications.
+
 |pypi version|_ |Build status|_
 
 .. |pypi version| image:: https://img.shields.io/pypi/v/quantities.png
 .. _`pypi version`: https://pypi.python.org/pypi/quantities
 .. |Build status| image:: https://github.com/python-quantities/python-quantities/actions/workflows/test.yml/badge.svg?branch=master
 .. _`Build status`: https://github.com/python-quantities/python-quantities/actions/workflows/test.yml
+.. _tutorial: http://python-quantities.readthedocs.io/en/latest/user/tutorial.html
+
 
 A Python package for handling physical quantities. The source code and issue
 tracker are hosted on GitHub:
