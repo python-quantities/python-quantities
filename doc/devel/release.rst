@@ -8,8 +8,8 @@ Creating Source Releases
 Quantities is distributed as a source release for Linux and Mac OS. To create a
 source release, just do::
 
-  python setup.py register
-  python setup.py sdist --formats=zip,gztar
+  pip install build
+  python -m build
   twine upload dist/quantities-<x.y.z>.*
 
 (replacing `x`, `y` and `z` appropriately).
@@ -23,22 +23,9 @@ like::
 
 You can create a source distribution without uploading by doing::
 
-  python setup.py sdist
+  python -m build --sdist
 
 This creates a source distribution in the `dist/` directory.
-
-
-Creating Windows Installers
-===========================
-
-We distribute binary installers for the windows platform. In order to build the
-windows installer, open a DOS window, cd into the quantities source directory
-and run::
-
-  python setup.py build
-  python setup.py bdist_msi
-
-This creates the executable windows installer in the `dist/` directory.
 
 
 Building Quantities documentation

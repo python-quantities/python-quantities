@@ -65,11 +65,8 @@ http://docs.scipy.org/doc/numpy/user/install.html
 
 To install quantities itself, then simply run::
 
-    $ python setup.py install --user
+    $ pip install quantities
 
-If you install it system-wide, you may need to prefix the previous command with ``sudo``::
-
-    $ sudo python setup.py install
 
 Tests
 -----

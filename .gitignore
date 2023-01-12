@@ -8,3 +8,5 @@ dist
 .settings
 .idea
 .*cache/
+_version.py
+MANIFEST
