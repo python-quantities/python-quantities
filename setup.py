@@ -1,10 +1,8 @@
 from setuptools import Command, setup
 from setuptools.command.build_py import build_py as _build
 from setuptools.command.sdist import sdist as _sdist
-import versioneer
-cmdclass = versioneer.get_cmdclass()
-_sdist = cmdclass['sdist']
 from datetime import datetime
+
 
 class data(Command):
 
@@ -38,7 +36,6 @@ class data(Command):
                     %(val, prec, unit)
                 f.write("physical_constants['%s'] = %s\n"%(name, d))
 
-cmdclass['data'] = data
 
 class sdist(_sdist):
 
@@ -46,7 +43,6 @@ class sdist(_sdist):
         self.run_command('data')
         _sdist.run(self)
 
-cmdclass['sdist'] = sdist
 
 class build(_build):
 
@@ -54,9 +50,5 @@ class build(_build):
         self.run_command('data')
         _build.run(self)
 
-cmdclass['build'] = build
 
-setup(
-    version=versioneer.get_version(),
-    cmdclass=versioneer.get_cmdclass()
-)
+setup(cmdclass={"build_py": build, "sdist": sdist, "data": data})

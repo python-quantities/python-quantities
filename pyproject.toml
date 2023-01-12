@@ -1,9 +1,8 @@
 [project]
 name = "quantities"
-version = "0.13.1.dev"
 description = "Support for physical quantities with units, based on numpy"
 readme = "README.rst"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 license = {file = "doc/user/license.rst"}
 authors = [
   {name = "Darren Dale", email = "dsdale24@gmail.com"}
@@ -26,9 +25,9 @@ classifiers = [
   "Topic :: Scientific/Engineering"
 ]
 dependencies = [
-  "numpy>=1.16"
+  "numpy>=1.19"
 ]
-dynamic = ["entry-points"]
+dynamic = ["version"]
 
 [project.optional-dependencies]
 test = [
@@ -46,13 +45,8 @@ changelog = "https://github.com/python-quantities/python-quantities/blob/master/
 download = "http://pypi.python.org/pypi/quantities"
 
 [build-system]
-requires = ["setuptools", "versioneer[toml]"]
+requires = ["setuptools", "setuptools_scm[toml]"]
 build-backend = "setuptools.build_meta"
 
-[tool.versioneer]
-VCS = "git"
-style = "pep440"
-versionfile_source = "quantities/_version.py"
-versionfile_build = "quantities/_version.py"
-tag_prefix = "v"
-parentdir_prefix = "quantities-"
+[tool.setuptools_scm]
+write_to = "quantities/_version.py"
