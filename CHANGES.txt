@@ -3,6 +3,21 @@ CHANGES
 =======
 
 ------
+0.14.0
+------
+
+- Added decimeter to list of supported units [`PR#202 <https://github.com/python-quantities/python-quantities/pull/202>`_]
+- Removed deprecated mb as symbol for millibar unit [`PR#203 <https://github.com/python-quantities/python-quantities/pull/203>`_]
+- Fixed failure to preserve dtype in rescale [`PR#204 <https://github.com/python-quantities/python-quantities/pull/204>`_]
+- Added exp2 as a supported ufunc
+- Fixed failure to handle units with floordiv [`PR#207 <https://github.com/python-quantities/python-quantities/pull/207>`_]
+- Added femtofarad (fF) to list of supported units
+- Dropped support for Python 3.7
+- Dropped support for NumPy versions older than 1.19
+- Converted the project packaging from setup.py-based to pyproject.toml-based
+
+
+------
 0.13.0
 ------
 
