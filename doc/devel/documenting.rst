@@ -13,7 +13,7 @@ Sphinx extension. Sphinx-0.6.3 or later is required. You can obtain
 Sphinx and numpydoc from the `Python Package Index`_ or
 by doing::
 
-  easy_install sphinx
+  pip install sphinx
 
 .. _Sphinx: http://sphinx.pocoo.org/
 .. _numpydoc: http://pypi.python.org/pypi/numpydoc
@@ -37,7 +37,7 @@ Organization of Quantities' documentation
 ==========================================
 
 The actual ReStructured Text files are kept in :file:`doc`. The main
-entry point is :file:`doc/index.rst`, which pulls in the 
+entry point is :file:`doc/index.rst`, which pulls in the
 :file:`index.rst` file for the user guide and the developers guide.
 The documentation suite is built as a single document in order to
 make the most effective use of cross referencing, we want to make
@@ -314,4 +314,3 @@ Some helpful functions::
     C-c C-r rst-shift-region-right
 
         Shift region to the right
-

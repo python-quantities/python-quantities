@@ -1,0 +1,52 @@
+[project]
+name = "quantities"
+description = "Support for physical quantities with units, based on numpy"
+readme = "README.rst"
+requires-python = ">=3.8"
+license = {file = "doc/user/license.rst"}
+authors = [
+  {name = "Darren Dale", email = "dsdale24@gmail.com"}
+]
+maintainers = [
+  {name = "Andrew Davison", email = "andrew.davison@cnrs.fr"}
+]
+keywords = ["quantities", "units", "physical", "constants"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: End Users/Desktop",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Topic :: Education",
+  "Topic :: Scientific/Engineering"
+]
+dependencies = [
+  "numpy>=1.19"
+]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "wheel"
+]
+doc = [
+  "sphinx"
+]
+
+[project.urls]
+documentation = "http://python-quantities.readthedocs.io/"
+repository = "https://github.com/python-quantities/python-quantities"
+changelog = "https://github.com/python-quantities/python-quantities/blob/master/CHANGES.txt"
+download = "http://pypi.python.org/pypi/quantities"
+
+[build-system]
+requires = ["setuptools", "setuptools_scm[toml]"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "quantities/_version.py"

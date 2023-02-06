@@ -22,5 +22,5 @@ test:
 
 about:
   license: BSD
-  home: http://pythonhosted.org//quantities/
+  home: https://github.com/python-quantities/python-quantities/
   summary: Physical quantities with units, based upon Numpy

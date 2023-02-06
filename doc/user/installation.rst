@@ -17,9 +17,8 @@ Quantities has a few dependencies:
 Source Code Installation
 ========================
 
-To install Quantities, download the Quantites sourcecode from PyPI_
-and run "python setup.py install" in the quantities source directory,
-or run "pip install quantities".
+To install Quantities, run "pip install quantities".
+
 
 Development
 ===========
