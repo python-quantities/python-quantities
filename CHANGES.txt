@@ -3,6 +3,12 @@ CHANGES
 =======
 
 ------
+0.14.1
+------
+
+- Fixed a bug when scaling quantities with integer dtype [`PR#216 <https://github.com/python-quantities/python-quantities/pull/216>`_]
+
+------
 0.14.0
 ------
 
