@@ -1,4 +1,5 @@
 import unittest
+import numpy as np
 from .. import units as pq
 from .. import quantity
 from .common import TestCase
@@ -15,7 +16,7 @@ class TestConversion(TestCase):
     def test_rescale(self):
         for u in ('ft', 'feet', pq.ft):
             self.assertQuantityEqual((10*pq.m).rescale(u), 32.80839895 * pq.ft)
-            
+
     def test_rescale_preferred(self):
         quantity.PREFERRED = [pq.mV, pq.pA]
         q = 10*pq.V
@@ -23,7 +24,7 @@ class TestConversion(TestCase):
         q = 5*pq.A
         self.assertQuantityEqual(q.rescale_preferred(), q.rescale(pq.pA))
         quantity.PREFERRED = []
-    
+
     def test_rescale_preferred_failure(self):
         quantity.PREFERRED = [pq.pA]
         q = 10*pq.V
@@ -34,7 +35,7 @@ class TestConversion(TestCase):
         else:
             self.assertTrue(False)
         quantity.PREFERRED = []
-    
+
     def test_rescale_noargs(self):
         quantity.PREFERRED = [pq.mV, pq.pA]
         q = 10*pq.V
@@ -42,7 +43,7 @@ class TestConversion(TestCase):
         q = 5*pq.A
         self.assertQuantityEqual(q.rescale(), q.rescale(pq.pA))
         quantity.PREFERRED = []
-    
+
     def test_rescale_noargs_failure(self):
         quantity.PREFERRED = [pq.pA]
         q = 10*pq.V
