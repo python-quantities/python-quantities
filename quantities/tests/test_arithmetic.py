@@ -139,8 +139,20 @@ class TestDTypes(TestCase):
             Quantity([11, 10, 9, 8], units=pq.dimensionless)
         )
 
+        q = Quantity([46, 42, 38, 34], units=pq.ms)
+        self.assertQuantityEqual(
+            q/(4 * pq.ms),
+            Quantity([11.5, 10.5, 9.5, 8.5], units=pq.dimensionless)
+        )
+
     def test_floordiv(self):
         q = Quantity([45, 43, 39, 32], units=pq.ms)
+        self.assertQuantityEqual(
+            q//(4 * pq.ms),
+            Quantity([11, 10, 9, 8], units=pq.dimensionless)
+        )
+
+        q = Quantity([46, 42, 38, 34], units=pq.ms)
         self.assertQuantityEqual(
             q//(4 * pq.ms),
             Quantity([11, 10, 9, 8], units=pq.dimensionless)

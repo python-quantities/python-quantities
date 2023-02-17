@@ -16,6 +16,8 @@ class TestConversion(TestCase):
     def test_rescale(self):
         for u in ('ft', 'feet', pq.ft):
             self.assertQuantityEqual((10*pq.m).rescale(u), 32.80839895 * pq.ft)
+        self.assertQuantityEqual((10 * pq.deg).rescale(pq.rad), 0.17453293 * pq.rad)
+        self.assertQuantityEqual(quantity.Quantity(10, pq.deg).rescale(pq.rad), 0.17453293 * pq.rad)
 
     def test_rescale_preferred(self):
         quantity.PREFERRED = [pq.mV, pq.pA]
