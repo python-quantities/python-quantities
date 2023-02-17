@@ -219,7 +219,9 @@ class Quantity(np.ndarray):
                 'Unable to convert between units of "%s" and "%s"'
                 %(from_u._dimensionality, to_u._dimensionality)
             )
-        return Quantity(cf*self.magnitude, to_u, dtype=dtype)
+        new_magnitude = cf*self.magnitude
+        dtype = np.result_type(dtype, new_magnitude)
+        return Quantity(new_magnitude, to_u, dtype=dtype)
 
     def rescale_preferred(self):
         """

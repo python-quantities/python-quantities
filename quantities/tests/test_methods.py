@@ -188,7 +188,7 @@ class TestQuantityMethods(TestCase):
     def test_nanargmax(self):
         q = np.append(self.q, np.nan) * self.q.units
         self.assertEqual(self.q.nanargmin(), 0)
-        
+
     def test_ptp(self):
         self.methodWithOut('ptp', 3 * pq.m)
         self.methodWithOut('ptp', [2, 2] * pq.m, axis=0)
@@ -248,7 +248,7 @@ class TestQuantityMethods(TestCase):
         self.methodWithOut('mean', [1.5, 3.5] * pq.m, axis=1)
 
     def test_nanmean(self):
-        import numpy as np    
+        import numpy as np
         q = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
         self.assertQuantityEqual(q.nanmean(), self.q.mean())
 
@@ -263,7 +263,7 @@ class TestQuantityMethods(TestCase):
         self.methodWithOut('std', [0.5, 0.5] * pq.m, axis=1)
 
     def test_nanstd(self):
-        import numpy as np    
+        import numpy as np
         q0 = [[1,2], [3,4]] * pq.m
         q1 = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
         self.assertQuantityEqual(q0.std(), q1.nanstd())
@@ -345,3 +345,10 @@ class TestQuantityMethods(TestCase):
     def test_iterator(self):
         for q in self.q.flatten():
             self.assertQuantityEqual(q.units, pq.m)
+
+    def test_rescale_integer_argument(self):
+        from .. import Quantity
+        self.assertQuantityEqual(
+            Quantity(10, pq.deg).rescale(pq.rad),
+            np.pi/18*pq.rad
+        )
