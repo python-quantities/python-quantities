@@ -35,7 +35,7 @@ GL = gigaliter = gigalitre = UnitQuantity(
     symbol='GL',
     aliases=['Gl', 'gigaliters', 'gigalitre', 'gigalitres']
 )
-cc = cubic_centimeter = milliliter = UnitQuantity(
+cc = cubic_centimeter = UnitQuantity(
     'cubic_centimeter',
     cm**3,
     symbol='cc',
@@ -203,4 +203,4 @@ firkin = UnitQuantity(
     barrel/4
 )
 
-del UnitQuantity, cm, m
+del UnitQuantity, cm, m, foot, inch, acre
