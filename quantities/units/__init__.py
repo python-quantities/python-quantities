@@ -58,7 +58,44 @@ from . import information
 from .information import *
 
 from . import length
-from .length import *
+from .length import (
+    m, meter, metre,
+    km, kilometer, kilometre,
+    dm, decimeter, decimetre,
+    cm, centimeter, centimetre,
+    mm, millimeter, millimetre,
+    um, micrometer, micrometre, micron,
+    nm, nanometer, nanometre,
+    pm, picometer, picometre,
+    angstrom,
+    fm, femtometer, femtometre, fermi,
+
+    inch, international_inch,
+    ft, foot, international_foot,
+    mi, mile, international_mile,
+    yd, yard, international_yard,
+    mil, thou,
+    pc, parsec,
+    ly, light_year,
+    au, astronomical_unit,
+
+    nmi, nautical_mile,
+    # pt,
+    printers_point, point,
+    pica,
+
+    US_survey_foot,
+    US_survey_yard,
+    US_survey_mile, US_statute_mile,
+    rod, pole, perch,
+    furlong,
+    fathom,
+    chain,
+    barleycorn,
+    arpentlin,
+
+    kayser, wavenumber
+)
 
 from . import mass
 from .mass import *
@@ -105,8 +142,7 @@ from .volume import (
     dry_quart, US_dry_quart,
     dry_pint, US_dry_pint,
     quart, liquid_quart, US_liquid_quart,
-    # pt,
-    pint, liquid_pint, US_liquid_pint,
+    pt, pint, liquid_pint, US_liquid_pint,
     cup, US_liquid_cup,
     gill, US_liquid_gill,
     floz, fluid_ounce, US_fluid_ounce, US_liquid_ounce,
