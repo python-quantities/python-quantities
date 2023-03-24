@@ -24,7 +24,7 @@ class Dimensionality(dict):
         ...
 
 
-    def __hash__(self) -> int: # type: ignore
+    def __hash__(self) -> int: # type: ignore[override]
         ...
 
     def __add__(self, other: Dimensionality) -> Dimensionality:
