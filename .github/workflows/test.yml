@@ -58,6 +58,7 @@ jobs:
           python -m pip install -U wheel
           python -m pip install -U pytest
           python -m pip install "numpy==${{ matrix.numpy-version }}"
+          python -m pip install -U mypy
 
       - name: Install
         run: |
@@ -67,3 +68,7 @@ jobs:
         run: |
           PY_IGNORE_IMPORTMISMATCH=1 pytest
           python -m doctest README.rst
+
+      - name: Check type information
+        run: |
+          mypy quantities
