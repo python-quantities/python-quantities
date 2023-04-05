@@ -18,7 +18,6 @@ gigaliter: UnitQuantity
 gigalitre: UnitQuantity
 cc: UnitQuantity
 cubic_centimeter: UnitQuantity
-milliliter: UnitQuantity
 stere: UnitQuantity
 gross_register_ton: UnitQuantity
 register_ton: UnitQuantity

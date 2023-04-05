@@ -5,7 +5,7 @@ from quantities.typing.quantities import DimensionalityDescriptor, QuantityData
 import numpy.typing as npt
 
 
-def validate_unit_quantity(value: Quantity) -> Quantity:   #type: ignore
+def validate_unit_quantity(value: Quantity) -> Quantity:
     ...
 
 
@@ -39,12 +39,12 @@ class Quantity(npt.NDArray):
     def magnitude(self) -> npt.NDArray:
         ...
 
-    @property   #type: ignore
-    def real(self) -> Quantity:   #type: ignore
+    @property # type: ignore[misc]
+    def real(self) -> Quantity:  # type: ignore[override]
         ...
 
-    @property   #type: ignore
-    def imag(self) -> Quantity:   #type: ignore
+    @property # type: ignore[misc]
+    def imag(self) -> Quantity:  # type: ignore[override]
         ...
 
     @property
@@ -67,15 +67,15 @@ class Quantity(npt.NDArray):
         ...
 
 
-    def __sub__(self, other) -> Quantity:   #type: ignore
+    def __sub__(self, other) -> Quantity:  # type: ignore[override]
         ...
 
 
-    def __rsub__(self, other) -> Quantity:   #type: ignore
+    def __rsub__(self, other) -> Quantity:  # type: ignore[override]
         ...
 
 
-    def __isub__(self, other) -> Quantity:   #type: ignore
+    def __isub__(self, other) -> Quantity:  # type: ignore[override]
         ...
 
     def __mod__(self, other) -> Quantity:
@@ -94,7 +94,7 @@ class Quantity(npt.NDArray):
     #       ...
 
 
-    def __rtruediv__(self, other) -> Quantity:  #type: ignore
+    def __rtruediv__(self, other) -> Quantity:  # type: ignore[override]
         ...
 
     def __pow__(self, power) -> Quantity:

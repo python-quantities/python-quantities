@@ -101,7 +101,7 @@ ksi = kip_per_square_inch = UnitQuantity(
     kip/inch**2,
     symbol='ksi'
 )
-barye = barie = barad = barad = barrie = baryd = UnitQuantity(
+barye = barie = barad = barrie = baryd = UnitQuantity(
     'barye',
     0.1*N/m**2,
     symbol='Ba',

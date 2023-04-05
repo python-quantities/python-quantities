@@ -1,13 +1,38 @@
 import numpy as np
 
 from .quantity import Quantity
-from .units import dimensionless, radian, degree
+from .units import dimensionless, radian, degree  # type: ignore[no-redef]
 from .decorators import with_doc
 
 
-#__all__ = [
-#    'exp', 'expm1', 'log', 'log10', 'log1p', 'log2'
-#]
+__all__ = [
+    "arccos",
+    "arccosh",
+    "arcsin",
+    "arcsinh",
+    "arctan",
+    "arctan2",
+    "arctanh",
+    "cos",
+    "cosh",
+    "cross",
+    "cumprod",
+    "cumsum",
+    "diff",
+    "ediff1d",
+    "gradient",
+    "hypot",
+    "nansum",
+    "np",
+    "prod",
+    "sin",
+    "sinh",
+    "sum",
+    "tan",
+    "tanh",
+    "trapz",
+    "unwrap",
+]
 
 
 @with_doc(np.prod)
