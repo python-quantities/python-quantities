@@ -185,7 +185,7 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(ret, [0, 0])
         self.assertEqual(ret.ctypes.data, out.ctypes.data)
 
-    def test_nanargmax(self):
+    def test_nanargmin(self):
         q = np.append(self.q, np.nan) * self.q.units
         self.assertEqual(self.q.nanargmin(), 0)
 
