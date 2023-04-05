@@ -35,7 +35,6 @@ kip_per_square_inch: UnitQuantity
 barye: UnitQuantity
 barie: UnitQuantity
 barad: UnitQuantity
-barad: UnitQuantity
 barrie: UnitQuantity
 baryd: UnitQuantity
 mmHg: UnitQuantity

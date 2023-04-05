@@ -23,7 +23,7 @@ class UnitQuantity(Quantity):
     ) -> None:
         ...
 
-    def __hash__(self) -> int:
+    def __hash__(self) -> int:  # type: ignore[override]
         ...
 
     @property
