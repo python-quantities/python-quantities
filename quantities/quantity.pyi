@@ -58,9 +58,9 @@ class Quantity(npt.NDArray):
         ...
 
     # numeric methods
-    def __add__(self, other: Quantity) -> Quantity: ...
-    def __radd__(self, other: Quantity) -> Quantity: ...
-    def __iadd__(self, other: Quantity) -> Quantity: ...
+    def __add__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __radd__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __iadd__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
 
     def __sub__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
     def __rsub__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
@@ -80,9 +80,9 @@ class Quantity(npt.NDArray):
     def __rfloordiv__(self, other) -> Quantity: ...  # type: ignore[override]
     def __ifloordiv__(self, other) -> Quantity: ...  # type: ignore[override]
 
-    def __mod__(self, other: Quantity) -> Quantity: ...
-    def __rmod__(self, other: Quantity) -> Quantity: ...
-    def __imod__(self, other: Quantity) -> Quantity: ...
+    def __mod__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __rmod__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __imod__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
 
     # NOTE divmod is not supported
 
