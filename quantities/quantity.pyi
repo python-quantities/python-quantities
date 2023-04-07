@@ -1,9 +1,9 @@
-from typing import Optional, Any
+from typing import Any, Optional
+
+import numpy.typing as npt
 
 from quantities.dimensionality import Dimensionality
 from quantities.typing.quantities import DimensionalityDescriptor, QuantityData
-import numpy.typing as npt
-
 
 def validate_unit_quantity(value: Quantity) -> Quantity:
     ...
@@ -23,8 +23,8 @@ def scale_other_units(f: Any) -> None:
 
 class Quantity(npt.NDArray):
 
-    def __new__(cls, data: QuantityData, units: DimensionalityDescriptor = '',
-                dtype: Optional[object] = None, copy: bool = True) -> Quantity:   #type: ignore
+    def __new__(cls, data: QuantityData, units: DimensionalityDescriptor = ...,
+                dtype: Optional[object] = ..., copy: bool = ...) -> Quantity:
         ...
 
     @property
@@ -51,7 +51,7 @@ class Quantity(npt.NDArray):
     def units(self) -> Quantity:
         ...
 
-    def rescale(self, units: Optional[DimensionalityDescriptor] = None) -> Quantity:
+    def rescale(self, units: Optional[DimensionalityDescriptor] = ...) -> Quantity:
         ...
 
     def rescale_preferred(self) -> Quantity:
@@ -103,7 +103,7 @@ class Quantity(npt.NDArray):
     def __ipow__(self, other) -> Quantity:
         ...
 
-    def __round__(self, decimals: int = 0) -> Quantity:
+    def __round__(self, decimals: int = ...) -> Quantity:
         ...
 
     def __repr__(self) -> str:
