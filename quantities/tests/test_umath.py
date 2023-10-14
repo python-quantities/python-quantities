@@ -17,7 +17,7 @@ class TestUmath(TestCase):
         self.assertQuantityEqual(np.sum(self.q), 10 * pq.J)
 
     def test_nansum(self):
-        c = [1,2,3, np.NaN] * pq.m
+        c = [1,2,3, np.nan] * pq.m
         self.assertQuantityEqual(np.nansum(c), 6 * pq.m)
 
     def test_cumprod(self):
