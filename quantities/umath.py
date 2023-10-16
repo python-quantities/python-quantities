@@ -119,8 +119,65 @@ def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
         copy=False
     )
 
-@with_doc(np.trapz)
+
 def trapz(y, x=None, dx=1.0, axis=-1):
+    """
+    Integrate along the given axis using the composite trapezoidal rule.
+
+    If `x` is provided, the integration happens in sequence along its
+    elements - they are not sorted.
+
+    Integrate `y` (`x`) along each 1d slice on the given axis, compute
+    :math:`\int y(x) dx`.
+    When `x` is specified, this integrates along the parametric curve,
+    computing :math:`\int_t y(t) dt =
+    \int_t y(t) \left.\frac{dx}{dt}\right|_{x=x(t)} dt`.
+
+    Parameters
+    ----------
+    y : array_like
+        Input array to integrate.
+    x : array_like, optional
+        The sample points corresponding to the `y` values. If `x` is None,
+        the sample points are assumed to be evenly spaced `dx` apart. The
+        default is None.
+    dx : scalar, optional
+        The spacing between sample points when `x` is None. The default is 1.
+    axis : int, optional
+        The axis along which to integrate.
+
+    Returns
+    -------
+    trapz : float or ndarray
+        Definite integral of `y` = n-dimensional array as approximated along
+        a single axis by the trapezoidal rule. If `y` is a 1-dimensional array,
+        then the result is a float. If `n` is greater than 1, then the result
+        is an `n`-1 dimensional array.
+
+    See Also
+    --------
+    sum, cumsum
+
+    Notes
+    -----
+    Image [2]_ illustrates trapezoidal rule -- y-axis locations of points
+    will be taken from `y` array, by default x-axis distances between
+    points will be 1.0, alternatively they can be provided with `x` array
+    or with `dx` scalar.  Return value will be equal to combined area under
+    the red lines.
+
+    Docstring is from the numpy 1.26 code base
+    https://github.com/numpy/numpy/blob/v1.26.0/numpy/lib/function_base.py#L4857-L4984
+
+
+    References
+    ----------
+    .. [1] Wikipedia page: https://en.wikipedia.org/wiki/Trapezoidal_rule
+
+    .. [2] Illustration image:
+           https://en.wikipedia.org/wiki/File:Composite_trapezoidal_rule_illustration.png
+
+    """
     # this function has a weird input structure, so it is tricky to wrap it
     # perhaps there is a simpler way to do this
     if (
@@ -128,7 +185,7 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         and not isinstance(x, Quantity)
         and not isinstance(dx, Quantity)
     ):
-        return np.trapz(y, x, dx, axis)
+        return _trapz(y, x, dx, axis)
 
     if not isinstance(y, Quantity):
         y = Quantity(y, copy = False)
@@ -138,11 +195,42 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         dx = Quantity(dx, copy = False)
 
     if x is None:
-        ret = np.trapz(y.magnitude , x, dx.magnitude, axis)
+        ret = _trapz(y.magnitude , x, dx.magnitude, axis)
         return Quantity ( ret, y.units * dx.units)
     else:
-        ret = np.trapz(y.magnitude , x.magnitude, dx.magnitude, axis)
+        ret = _trapz(y.magnitude , x.magnitude, dx.magnitude, axis)
         return Quantity ( ret, y.units * x.units)
+    
+def _trapz(y, x, dx, axis):
+    """ported from numpy 1.26 since it will be deprecated and removed"""
+    from numpy.core.numeric import asanyarray
+    from numpy.core.umath import add
+    y = asanyarray(y)
+    if x is None:
+        d = dx
+    else:
+        x = asanyarray(x)
+        if x.ndim == 1:
+            d = diff(x)
+            # reshape to correct shape
+            shape = [1]*y.ndim
+            shape[axis] = d.shape[0]
+            d = d.reshape(shape)
+        else:
+            d = diff(x, axis=axis)
+    nd = y.ndim
+    slice1 = [slice(None)]*nd
+    slice2 = [slice(None)]*nd
+    slice1[axis] = slice(1, None)
+    slice2[axis] = slice(None, -1)
+    try:
+        ret = (d * (y[tuple(slice1)] + y[tuple(slice2)]) / 2.0).sum(axis)
+    except ValueError:
+        # Operations didn't work, cast to ndarray
+        d = np.asarray(d)
+        y = np.asarray(y)
+        ret = add.reduce(d * (y[tuple(slice1)]+y[tuple(slice2)])/2.0, axis)
+    return ret
 
 @with_doc(np.sin)
 def sin(x, out=None):
