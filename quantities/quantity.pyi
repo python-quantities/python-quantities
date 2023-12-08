@@ -1,9 +1,9 @@
-from typing import Optional, Any
+from typing import Any, Optional
+
+import numpy.typing as npt
 
 from quantities.dimensionality import Dimensionality
 from quantities.typing.quantities import DimensionalityDescriptor, QuantityData
-import numpy.typing as npt
-
 
 def validate_unit_quantity(value: Quantity) -> Quantity:
     ...
@@ -23,8 +23,8 @@ def scale_other_units(f: Any) -> None:
 
 class Quantity(npt.NDArray):
 
-    def __new__(cls, data: QuantityData, units: DimensionalityDescriptor = '',
-                dtype: Optional[object] = None, copy: bool = True) -> Quantity:   #type: ignore
+    def __new__(cls, data: QuantityData, units: DimensionalityDescriptor = ...,
+                dtype: Optional[object] = ..., copy: bool = ...) -> Quantity:
         ...
 
     @property
@@ -51,59 +51,54 @@ class Quantity(npt.NDArray):
     def units(self) -> Quantity:
         ...
 
-    def rescale(self, units: Optional[DimensionalityDescriptor] = None) -> Quantity:
+    def rescale(self, units: Optional[DimensionalityDescriptor] = ...) -> Quantity:
         ...
 
     def rescale_preferred(self) -> Quantity:
         ...
 
-    def __add__(self, other) -> Quantity:
-        ...
+    # numeric methods
+    def __add__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __radd__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __iadd__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
 
-    def __radd__(self, other) -> Quantity:
-        ...
+    def __sub__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __rsub__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __isub__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
 
-    def __iadd__(self, other) -> Quantity:
-        ...
+    def __mul__(self, other) -> Quantity: ...
+    def __rmul__(self, other) -> Quantity: ...
+    def __imul__(self, other) -> Quantity: ...
 
+    # NOTE matmul is not supported
 
-    def __sub__(self, other) -> Quantity:  # type: ignore[override]
-        ...
+    def __truediv__(self, other) -> Quantity: ...  # type: ignore[override]
+    def __rtruediv__(self, other) -> Quantity: ...  # type: ignore[override]
+    def __itruediv__(self, other) -> Quantity: ...  # type: ignore[override]
 
+    def __floordiv__(self, other) -> Quantity: ...  # type: ignore[override]
+    def __rfloordiv__(self, other) -> Quantity: ...  # type: ignore[override]
+    def __ifloordiv__(self, other) -> Quantity: ...  # type: ignore[override]
 
-    def __rsub__(self, other) -> Quantity:  # type: ignore[override]
-        ...
+    def __mod__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __rmod__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
+    def __imod__(self, other: Quantity) -> Quantity: ...  # type: ignore[override]
 
+    # NOTE divmod is not supported
 
-    def __isub__(self, other) -> Quantity:  # type: ignore[override]
-        ...
+    def __pow__(self, power) -> Quantity: ...
+    def __rpow__(self, power) -> Quantity: ...
+    def __ipow__(self, power) -> Quantity: ...
 
-    def __mod__(self, other) -> Quantity:
-        ...
+    # shift and bitwise are not supported
 
-    def __imod__(self, other) -> Quantity:
-        ...
+    # unary methods
+    def __neg__(self) -> Quantity: ...
+    # def __pos__(self) -> Quantity: ...  # GH#94
+    def __abs__(self) -> Quantity: ...
+    # NOTE invert is not supported
 
-    #  def __imul__(self, other):
-    #      ...
-
-    def __rmul__(self, other) -> Quantity:
-        ...
-
-    #   def __itruediv__(self, other) :
-    #       ...
-
-
-    def __rtruediv__(self, other) -> Quantity:  # type: ignore[override]
-        ...
-
-    def __pow__(self, power) -> Quantity:
-        ...
-
-    def __ipow__(self, other) -> Quantity:
-        ...
-
-    def __round__(self, decimals: int = 0) -> Quantity:
+    def __round__(self, decimals: int = ...) -> Quantity:
         ...
 
     def __repr__(self) -> str:

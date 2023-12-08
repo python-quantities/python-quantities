@@ -1,8 +1,7 @@
-from typing import Optional, Union, List, Any, overload
+from typing import Any, List, Optional, Union, overload
 
 from quantities import Quantity
 from quantities.dimensionality import Dimensionality
-
 
 class UnitQuantity(Quantity):
     _primary_order: int
@@ -10,16 +9,16 @@ class UnitQuantity(Quantity):
     _reference_quantity: Optional[Quantity]
 
     def __new__(
-            cls, name: str, definition: Optional[Union[Quantity, float, int]] = None, symbol: Optional[str] = None,
-            u_symbol: Optional[str] = None,
-            aliases: List[str] = [], doc=None
+            cls, name: str, definition: Optional[Union[Quantity, float, int]] = ..., symbol: Optional[str] = ...,
+            u_symbol: Optional[str] = ...,
+            aliases: List[str] = ..., doc=...
     ) -> UnitQuantity:
         ...
 
     def __init__(
-            self, name: str, definition: Optional[Union[Quantity, float, int]] = None, symbol: Optional[str] = None,
-            u_symbol: Optional[str] = None,
-            aliases: List[str] = [], doc=None
+            self, name: str, definition: Optional[Union[Quantity, float, int]] = ..., symbol: Optional[str] = ...,
+            u_symbol: Optional[str] = ...,
+            aliases: List[str] = ..., doc=...
     ) -> None:
         ...
 
@@ -161,10 +160,14 @@ class UnitConstant(UnitQuantity):
     ...
 
 
-def set_default_units(system: Optional[str], currency: Optional[Union[str, UnitCurrency]],
-                      current: Optional[Union[str, UnitCurrent]], information: Optional[Union[str, UnitInformation]],
-                      length: Optional[Union[str, UnitLength]],
-                      luminous_intensity: Optional[Union[str, UnitLuminousIntensity]],
-                      mass: Optional[Union[str, UnitMass]], substance: Optional[Union[str, UnitSubstance]],
-                      temperature: Optional[Union[str, UnitTemperature]], time: Optional[Union[str, UnitTime]]):
+def set_default_units(system: Optional[str] = ...,
+                      currency: Optional[Union[str, UnitCurrency]] = ...,
+                      current: Optional[Union[str, UnitCurrent]] = ...,
+                      information: Optional[Union[str, UnitInformation]] = ...,
+                      length: Optional[Union[str, UnitLength]] = ...,
+                      luminous_intensity: Optional[Union[str, UnitLuminousIntensity]] = ...,
+                      mass: Optional[Union[str, UnitMass]] = ...,
+                      substance: Optional[Union[str, UnitSubstance]] = ...,
+                      temperature: Optional[Union[str, UnitTemperature]] = ...,
+                      time: Optional[Union[str, UnitTime]] = ...):
     ...
