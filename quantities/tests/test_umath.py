@@ -17,7 +17,7 @@ class TestUmath(TestCase):
         self.assertQuantityEqual(np.sum(self.q), 10 * pq.J)
 
     def test_nansum(self):
-        c = [1,2,3, np.NaN] * pq.m
+        c = [1,2,3, np.nan] * pq.m
         self.assertQuantityEqual(np.nansum(c), 6 * pq.m)
 
     def test_cumprod(self):
@@ -114,19 +114,19 @@ class TestUmath(TestCase):
             [0, 0, 0, 10] * pq.J
             )
 
-    def test_round_(self):
+    def test_round(self):
         self.assertQuantityEqual(
-            np.round_([.5, 1.5, 2.5, 3.5, 4.5] * pq.J),
+            np.round([.5, 1.5, 2.5, 3.5, 4.5] * pq.J),
             [0., 2., 2., 4., 4.] * pq.J
             )
 
         self.assertQuantityEqual(
-            np.round_([1,2,3,11] * pq.J, decimals=1),
+            np.round([1,2,3,11] * pq.J, decimals=1),
             [1, 2, 3, 11] * pq.J
             )
 
         self.assertQuantityEqual(
-            np.round_([1,2,3,11] * pq.J, decimals=-1),
+            np.round([1,2,3,11] * pq.J, decimals=-1),
             [0, 0, 0, 10] * pq.J
             )
 
