@@ -3,6 +3,14 @@ CHANGES
 =======
 
 ------
+0.15.0
+------
+
+- Quantities now has type stubs for all classes and functions. Many thanks to Peter Konradi and Takumasa Nakamura for this major effort.
+- Fixed a number of deprecations coming from NumPy (thanks to Zach McKenzie)
+- Dropped support for NumPy 1.19, added testing for Numpy 1.25 and 1.26, and for Python 3.12
+
+------
 0.14.1
 ------
 
