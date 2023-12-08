@@ -121,7 +121,7 @@ def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
 
 
 def trapz(y, x=None, dx=1.0, axis=-1):
-    """
+    r"""
     Integrate along the given axis using the composite trapezoidal rule.
 
     If `x` is provided, the integration happens in sequence along its
