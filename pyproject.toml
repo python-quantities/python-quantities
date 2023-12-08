@@ -25,7 +25,7 @@ classifiers = [
   "Topic :: Scientific/Engineering"
 ]
 dependencies = [
-  "numpy>=1.19"
+  "numpy>=1.20"
 ]
 dynamic = ["version"]
 
