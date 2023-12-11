@@ -140,7 +140,7 @@ html_use_smartypants = True
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
-html_sidebars = {'index': ['indexsidebar.html']}
+html_sidebars = {'index': ['localtoc.html', 'relations.html', 'sourcelink.html', 'indexsidebar.html', 'searchbox.html']}
 
 # If false, no module index is generated.
 #html_use_modindex = True
