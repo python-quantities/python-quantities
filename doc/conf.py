@@ -140,7 +140,7 @@ html_use_smartypants = True
 
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
-html_sidebars = {'index': 'indexsidebar.html'}
+html_sidebars = {'index': ['indexsidebar.html']}
 
 # If false, no module index is generated.
 #html_use_modindex = True
@@ -200,4 +200,4 @@ latex_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
