@@ -22,8 +22,7 @@ def validate_unit_quantity(value):
         assert value.magnitude == 1
     except AssertionError:
         raise ValueError(
-                'units must be a scalar Quantity with unit magnitude, got %s'\
-                %value
+                f'units must be a scalar Quantity with unit magnitude, got {value}'
             )
     return value
 
@@ -40,8 +39,7 @@ def validate_dimensionality(value):
         return value.copy()
     else:
         raise TypeError(
-            'units must be a quantity, string, or dimensionality, got %s'\
-            %type(value)
+            f'units must be a quantity, string, or dimensionality, got {type(value)}'
         )
 
 def get_conversion_factor(from_u, to_u):
@@ -187,8 +185,7 @@ class Quantity(np.ndarray):
             cf = get_conversion_factor(from_u, to_u)
         except AssertionError:
             raise ValueError(
-                'Unable to convert between units of "%s" and "%s"'
-                %(from_u._dimensionality, to_u._dimensionality)
+                f'Unable to convert between units of "{from_u._dimensionality}" and "{to_u._dimensionality}"'
             )
         mag = self.magnitude
         mag *= cf
@@ -204,7 +201,7 @@ class Quantity(np.ndarray):
             try:
                 return self.rescale_preferred()
             except Exception as e:
-                raise Exception('No argument passed to `.rescale` and %s' % e)
+                raise Exception(f'No argument passed to `.rescale` and {e}')
         to_dims = validate_dimensionality(units)
         if dtype is None:
             dtype = self.dtype
@@ -216,8 +213,7 @@ class Quantity(np.ndarray):
             cf = get_conversion_factor(from_u, to_u)
         except AssertionError:
             raise ValueError(
-                'Unable to convert between units of "%s" and "%s"'
-                %(from_u._dimensionality, to_u._dimensionality)
+                f'Unable to convert between units of "{from_u._dimensionality}" and "{to_u._dimensionality}"'
             )
         new_magnitude = cf*self.magnitude
         dtype = np.result_type(dtype, new_magnitude)
@@ -277,9 +273,9 @@ class Quantity(np.ndarray):
             res._dimensionality = p_dict[uf](*objs)
         except KeyError:
             raise ValueError(
-                """ufunc %r not supported by quantities
+                f"""ufunc {uf!r} not supported by quantities
                 please file a bug report at https://github.com/python-quantities
-                """ % uf
+                """
                 )
         return res
 
@@ -367,9 +363,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.__repr__)
     def __repr__(self):
-        return '%s * %s'%(
-            repr(self.magnitude), self.dimensionality.string
-        )
+        return f'{repr(self.magnitude)} * {self.dimensionality.string}'
 
     @with_doc(np.ndarray.__str__)
     def __str__(self):
@@ -377,7 +371,7 @@ class Quantity(np.ndarray):
             dims = self.dimensionality.unicode
         else:
             dims = self.dimensionality.string
-        return '%s %s'%(str(self.magnitude), dims)
+        return f'{str(self.magnitude)} {dims}'
 
     if tuple(map(int, np.__version__.split('.')[:2])) >= (1, 14):
         # in numpy 1.14 the formatting of scalar values was changed

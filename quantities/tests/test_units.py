@@ -17,7 +17,7 @@ class TestUnits(TestCase):
             u.units = v
 
         def inplace(op, u, val):
-            getattr(u, '__i%s__'%op)(val)
+            getattr(u, f'__i{op}__')(val)
 
         self.assertRaises(AttributeError, setunits, pq.m, pq.ft)
         self.assertRaises(TypeError, inplace, 'add', pq.m, pq.m)

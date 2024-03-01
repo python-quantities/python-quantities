@@ -69,8 +69,7 @@ class Dimensionality(dict):
             assert self == other
         except AssertionError:
             raise ValueError(
-                'can not add units of %s and %s'\
-                %(str(self), str(other))
+                f'can not add units of {str(self)} and {str(other)}'
             )
         return self.copy()
 
@@ -82,8 +81,7 @@ class Dimensionality(dict):
             assert self == other
         except AssertionError:
             raise ValueError(
-                'can not add units of %s and %s'\
-                %(str(self), str(other))
+                f'can not add units of {str(self)} and {str(other)}'
             )
         return self
 
@@ -93,8 +91,7 @@ class Dimensionality(dict):
             assert self == other
         except AssertionError:
             raise ValueError(
-                'can not subtract units of %s and %s'\
-                %(str(self), str(other))
+                f'can not subtract units of {str(self)} and {str(other)}'
             )
         return self.copy()
 
@@ -106,8 +103,7 @@ class Dimensionality(dict):
             assert self == other
         except AssertionError:
             raise ValueError(
-                'can not add units of %s and %s'\
-                %(str(self), str(other))
+                f'can not add units of {str(self)} and {str(other)}'
             )
         return self
 
@@ -161,7 +157,7 @@ class Dimensionality(dict):
         try:
             assert np.isscalar(other)
         except AssertionError:
-            raise TypeError('exponent must be a scalar, got %r' % other)
+            raise TypeError(f'exponent must be a scalar, got {other!r}')
         if other == 0:
             return Dimensionality()
         new = Dimensionality(self)
@@ -173,7 +169,7 @@ class Dimensionality(dict):
         try:
             assert np.isscalar(other)
         except AssertionError:
-            raise TypeError('exponent must be a scalar, got %r' % other)
+            raise TypeError(f'exponent must be a scalar, got {other!r}')
         if other == 0:
             self.clear()
             return self
@@ -246,8 +242,7 @@ def _d_check_uniform(q1, q2, out=None):
         return q1.dimensionality
     except AssertionError:
         raise ValueError(
-            'quantities must have identical units, got "%s" and "%s"' %
-            (q1.units, q2.units)
+            f'quantities must have identical units, got "{q1.units}" and "{q2.units}"'
         )
     except AttributeError:
         try:
@@ -265,8 +260,7 @@ def _d_check_uniform(q1, q2, out=None):
                     raise ValueError
         except ValueError:
             raise ValueError(
-                'quantities must have identical units, got "%s" and "%s"' %
-                (q1.units, q2.units)
+                f'quantities must have identical units, got "{q1.units}" and "{q2.units}"'
             )
 
 p_dict[np.add] = _d_check_uniform
@@ -288,8 +282,7 @@ def _d_arctan2(q1, q2, out=None):
         return Dimensionality()
     except AssertionError:
         raise ValueError(
-            'quantities must have identical units, got "%s" and "%s"' %
-            (q1.units, q2.units)
+            f'quantities must have identical units, got "{q1.units}" and "{q2.units}"'
         )
 
 p_dict[np.arctan2] = _d_arctan2
@@ -343,7 +336,7 @@ def _d_radians(q1, out=None):
         assert q1.units == unit_registry['degree']
     except AssertionError:
         raise ValueError(
-            'expected units of degrees, got "%s"' % q1._dimensionality
+            f'expected units of degrees, got "{q1._dimensionality}"'
         )
     return unit_registry['radian'].dimensionality
 p_dict[np.radians] = _d_radians
@@ -353,7 +346,7 @@ def _d_degrees(q1, out=None):
         assert q1.units == unit_registry['radian']
     except AssertionError:
         raise ValueError(
-            'expected units of radians, got "%s"' % q1._dimensionality
+            f'expected units of radians, got "{q1._dimensionality}"'
         )
     return unit_registry['degree'].dimensionality
 p_dict[np.degrees] = _d_degrees
@@ -377,7 +370,7 @@ def _d_trig(q1, out=None):
         assert q1.units == unit_registry['radian']
     except AssertionError:
         raise ValueError(
-            'expected units of radians, got "%s"' % q1._dimensionality
+            f'expected units of radians, got "{q1._dimensionality}"'
         )
     return Dimensionality()
 p_dict[np.sin] = _d_trig

@@ -21,7 +21,7 @@ class UnitRegistry:
             except NameError:
                 # could return self['UnitQuantity'](string)
                 raise LookupError(
-                    'Unable to parse units: "%s"'%string
+                    f'Unable to parse units: "{string}"'
                 )
 
         def __setitem__(self, string, val):
@@ -32,8 +32,7 @@ class UnitRegistry:
                 if val == self.__context[string]:
                     return
                 raise KeyError(
-                    '%s has already been registered for %s'
-                    % (string, self.__context[string])
+                    f'{string} has already been registered for {self.__context[string]}'
                 )
             self.__context[string] = val
 

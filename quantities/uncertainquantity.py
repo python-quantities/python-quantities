@@ -184,11 +184,7 @@ class UncertainQuantity(Quantity):
             dims = self.dimensionality.unicode
         else:
             dims = self.dimensionality.string
-        s = '%s %s\n+/-%s (1 sigma)'%(
-            str(self.magnitude),
-            dims,
-            str(self.uncertainty)
-        )
+        s = f'{str(self.magnitude)} {dims}\n+/-{str(self.uncertainty)} (1 sigma)'
         if markup.config.use_unicode:
             return s.replace('+/-', '±').replace(' sigma', 'σ')
         return s

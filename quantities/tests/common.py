@@ -20,7 +20,7 @@ class TestCase(unittest.TestCase):
         precision.
         """
         delta = 1e-5 if delta is None else delta
-        msg = '' if msg is None else ' (%s)' % msg
+        msg = '' if msg is None else f' ({msg})'
 
         q1 = Quantity(q1)
         q2 = Quantity(q2)
@@ -30,8 +30,7 @@ class TestCase(unittest.TestCase):
                 )
         if not np.all(np.abs(q1.magnitude - q2.magnitude) < delta):
             raise self.failureException(
-                "Magnitudes differ by more than %g (%s vs %s)%s"
-                % (delta, q1.magnitude, q2.magnitude, msg)
+                f"Magnitudes differ by more than {delta:g} ({q1.magnitude} vs {q2.magnitude}){msg}"
                 )
 
         d1 = getattr(q1, '_dimensionality', None)
