@@ -12,28 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
-        numpy-version: [ "1.20", "1.21", "1.22", "1.23", "1.24", "1.25", "1.26" ]
-        exclude:
-          - python-version: "3.8"
-            numpy-version: "1.25"
-            os: ubuntu-latest
-          - python-version: "3.8"
-            numpy-version: "1.26"
-            os: ubuntu-latest
-          - python-version: "3.10"
-            numpy-version: "1.20"
-            os: ubuntu-latest
-          - python-version: "3.11"
-            numpy-version: "1.20"
-            os: ubuntu-latest
-          - python-version: "3.11"
-            numpy-version: "1.21"
-            os: ubuntu-latest
-        include:
-          - python-version: "3.12"
-            numpy-version: "1.26"
-            os: ubuntu-latest
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        numpy-version: [ "1.22", "1.23", "1.24", "1.25", "1.26", "2.0" ]
     steps:
       - uses: actions/checkout@v2
 
@@ -79,19 +59,8 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        python-version: [ "3.8", "3.9", "3.10", "3.11" ]
-        numpy-version: [ "1.22", "1.23", "1.24", "1.25", "1.26" ]
-        exclude:
-          - python-version: "3.8"
-            numpy-version: "1.25"
-            os: ubuntu-latest
-          - python-version: "3.8"
-            numpy-version: "1.26"
-            os: ubuntu-latest
-        include:
-          - python-version: "3.12"
-            numpy-version: "1.26"
-            os: ubuntu-latest
+        python-version: [ "3.9", "3.10", "3.11", "3.12" ]
+        numpy-version: [ "1.22", "1.23", "1.24", "1.25", "1.26", "2.0" ]
     steps:
       - uses: actions/checkout@v2
 
