@@ -19,7 +19,11 @@ class TestCase(unittest.TestCase):
         Make sure q1 and q2 are the same quantities to within the given
         precision.
         """
-        delta = 1e-5 if delta is None else delta
+        if delta is None:
+            # NumPy 2 introduced float16, so we base tolerance on machine epsilon
+            delta1 = np.finfo(q1.dtype).eps if isinstance(q1, np.ndarray) and q1.dtype.kind in 'fc' else 1e-15
+            delta2 = np.finfo(q2.dtype).eps if isinstance(q2, np.ndarray) and q2.dtype.kind in 'fc' else 1e-15
+            delta = max(delta1, delta2)**0.3
         msg = '' if msg is None else ' (%s)' % msg
 
         q1 = Quantity(q1)
@@ -28,6 +32,7 @@ class TestCase(unittest.TestCase):
             raise self.failureException(
                 f"Shape mismatch ({q1.shape} vs {q2.shape}){msg}"
                 )
+
         if not np.all(np.abs(q1.magnitude - q2.magnitude) < delta):
             raise self.failureException(
                 "Magnitudes differ by more than %g (%s vs %s)%s"

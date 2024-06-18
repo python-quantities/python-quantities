@@ -120,9 +120,9 @@ class Quantity(np.ndarray):
                 data = data.rescale(units)
             if isinstance(data, unit_registry['UnitQuantity']):
                 return 1*data
-            return np.array(data, dtype=dtype, copy=copy, subok=True).view(cls)
+            return np.asanyarray(data, dtype=dtype).view(cls)
 
-        ret = np.array(data, dtype=dtype, copy=copy).view(cls)
+        ret = np.asarray(data, dtype=dtype).view(cls)
         ret._dimensionality.update(validate_dimensionality(units))
         return ret
 
@@ -210,8 +210,8 @@ class Quantity(np.ndarray):
             dtype = self.dtype
         if self.dimensionality == to_dims:
             return self.astype(dtype)
-        to_u = Quantity(1.0, to_dims)
-        from_u = Quantity(1.0, self.dimensionality)
+        to_u = Quantity(1.0, to_dims, dtype=dtype)
+        from_u = Quantity(1.0, self.dimensionality, dtype=dtype)
         try:
             cf = get_conversion_factor(from_u, to_u)
         except AssertionError:
@@ -219,6 +219,8 @@ class Quantity(np.ndarray):
                 'Unable to convert between units of "%s" and "%s"'
                 %(from_u._dimensionality, to_u._dimensionality)
             )
+        if np.dtype(dtype).kind in 'fc':
+            cf = np.array(cf, dtype=dtype)
         new_magnitude = cf*self.magnitude
         dtype = np.result_type(dtype, new_magnitude)
         return Quantity(new_magnitude, to_u, dtype=dtype)
@@ -272,7 +274,7 @@ class Quantity(np.ndarray):
         uf, objs, huh = context
         if uf.__name__.startswith('is'):
             return obj
-        #print self, obj, res, uf, objs
+
         try:
             res._dimensionality = p_dict[uf](*objs)
         except KeyError:
@@ -590,7 +592,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.ptp)
     def ptp(self, axis=None, out=None):
-        ret = self.magnitude.ptp(axis, None if out is None else out.magnitude)
+        ret = np.ptp(self.magnitude, axis, None if out is None else out.magnitude)
         dim = self.dimensionality
         if out is None:
             return Quantity(ret, dim, copy=False)

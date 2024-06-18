@@ -118,7 +118,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = np.array(other, copy=False, subok=True)
+            other = np.asanyarray(other)
             u = (self.uncertainty**2*other**2)**0.5
 
         res._uncertainty = u
@@ -140,7 +140,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = np.array(other, copy=False, subok=True)
+            other = np.asanyarray(other)
             u = (self.uncertainty**2/other**2)**0.5
 
         res._uncertainty = u
