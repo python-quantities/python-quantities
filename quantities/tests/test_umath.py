@@ -3,6 +3,8 @@ import numpy as np
 from .. import units as pq
 from .common import TestCase, unittest
 
+_np_version = tuple(map(int, np.__version__.split('.')))
+
 
 class TestUmath(TestCase):
 
@@ -54,7 +56,13 @@ class TestUmath(TestCase):
         self.assertQuantityEqual(np.cross(a,b), [-15,-2,39]*pq.kPa*pq.m**2)
 
     def test_trapz(self):
-        self.assertQuantityEqual(np.trapz(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
+        # np.trapz is deprecated, np.trapezoid is recommend
+        if _np_version < (2, 0, 0):
+            self.assertQuantityEqual(np.trapz(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
+
+    def test_trapezoid(self):
+        if _np_version >= (2, 0, 0):
+            self.assertQuantityEqual(np.trapezoid(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
 
     def test_sinh(self):
         q = [1, 2, 3, 4, 6] * pq.radian
