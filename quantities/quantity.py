@@ -292,10 +292,13 @@ class Quantity(np.ndarray):
 
     def __array_wrap__(self, obj, context=None, return_scalar=False):
         if not isinstance(obj, Quantity):
+            if tuple(map(int, np.__version__.split('.'))) < (2, 0, 0):
             # backwards compatibility with numpy-1.3
-            return self.__array_prepare__(obj, context)
+                return self.__array_prepare__(obj, context)
+            else:
+                return super().__array_wrap__(obj, context, return_scalar)
         else:
-            return super().__array_wrap__(obj, context, return_scalar)
+            return obj
 
     @with_doc(np.ndarray.__add__)
     @scale_other_units
