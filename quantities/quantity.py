@@ -292,13 +292,18 @@ class Quantity(np.ndarray):
 
     def __array_wrap__(self, obj, context=None, return_scalar=False):
         _np_version = tuple(map(int, np.__version__.split('.')))
+        # For NumPy < 2.0 we do old behavior
         if _np_version < (2, 0, 0):
             if not isinstance(obj, Quantity):
                 return self.__array_prepare__(obj, context)
             else:
                 return obj
+        # For NumPy > 2.0 we either do the prepare or the wrap
         else:
-            return super().__array_wrap__(obj, context, return_scalar)
+            if not isinstance(obj, Quantity):
+                return self.__array_prepare__(obj, context)
+            else:
+                return super().__array_wrap__(obj, context, return_scalar)
 
 
     @with_doc(np.ndarray.__add__)
