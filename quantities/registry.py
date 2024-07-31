@@ -21,6 +21,8 @@ class UnitRegistry:
             all_builtins = dir(builtins)
             # because we have kilobytes, other bytes we have to remove bytes
             all_builtins.remove("bytes")
+            # have to deal with octet as well
+            all_builtins.remove("oct")
             for builtin in all_builtins:
                 if builtin in string:
                     raise RuntimeError(f"String parsing error for {string}. Enter a string accepted by quantities")
