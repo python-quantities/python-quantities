@@ -20,7 +20,7 @@ class UnitRegistry:
             # easy hack to prevent arbitrary evaluation of code
             all_builtins = dir(builtins)
             # because we have kilobytes, other bytes we have to remove bytes
-            all_builtins = all_builtins.remove("bytes")
+            all_builtins.remove("bytes")
             for builtin in all_builtins:
                 if builtin in string:
                     raise RuntimeError(f"String parsing error for {string}. Enter a string accepted by quantities")
