@@ -1,8 +1,8 @@
 """
 """
 
-import copy
 import re
+import builtins
 
 
 class UnitRegistry:
@@ -16,6 +16,13 @@ class UnitRegistry:
             self.__context = {}
 
         def __getitem__(self, string):
+            
+            # easy hack to prevent arbitrary evaluation of code
+            all_builtins = dir(builtins)
+            for builtin in all_builtins:
+                if builtin in string:
+                    raise RuntimeError(f"String parsing error for {string}. Enter a string accepted by quantities")
+
             try:
                 return eval(string, self.__context)
             except NameError:
