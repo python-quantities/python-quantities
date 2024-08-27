@@ -3,6 +3,14 @@ CHANGES
 =======
 
 ------
+0.16.0
+------
+
+- Added support for NumPy 2.0, while maintaining support for older versions back to 1.22 [`PR#235 <https://github.com/python-quantities/python-quantities/pull/235>`_]. Many thanks to Björn Dahlgren and Zach McKenzie for this.
+- Fixed a potential security hole [`PR#236 <https://github.com/python-quantities/python-quantities/pull/236>`_]
+- Dropped support for Python 3.8
+
+------
 0.15.0
 ------
 
