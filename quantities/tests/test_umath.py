@@ -3,7 +3,7 @@ import numpy as np
 from .. import units as pq
 from .common import TestCase, unittest
 
-_np_version = tuple(map(int, np.__version__.split('.')))
+_np_version = tuple(map(int, np.__version__.split(".dev")[0].split(".")))
 
 
 class TestUmath(TestCase):

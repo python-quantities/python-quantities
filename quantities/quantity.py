@@ -291,7 +291,7 @@ class Quantity(np.ndarray):
         return res
 
     def __array_wrap__(self, obj, context=None, return_scalar=False):
-        _np_version = tuple(map(int, np.__version__.split('.')))
+        _np_version = tuple(map(int, np.__version__.split(".dev")[0].split(".")))
         # For NumPy < 2.0 we do old behavior
         if _np_version < (2, 0, 0):
             if not isinstance(obj, Quantity):
