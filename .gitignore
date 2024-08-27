@@ -10,3 +10,4 @@ dist
 .*cache/
 _version.py
 MANIFEST
+.venv
