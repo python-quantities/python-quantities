@@ -48,32 +48,9 @@ def check(f, *args, **kwargs):
     return (new, )
 
 
-class iter_dtypes:
-
-    def __init__(self):
-        self._i = 1
-        self._typeDict = np.sctypeDict.copy()
-        self._typeDict[17] = int
-        self._typeDict[18] = long
-        self._typeDict[19] = float
-        self._typeDict[20] = complex
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self._i > 20:
-            raise StopIteration
-
-        i = self._i
-        self._i += 1
-        return self._typeDict[i]
-
-    def next(self):
-        return self.__next__()
-
 def get_dtypes():
-    return list(iter_dtypes())
+    numeric_dtypes = 'iufc'  # https://numpy.org/doc/stable/reference/generated/numpy.dtype.kind.html
+    return [v for v in np.sctypeDict.values() if np.dtype(v).kind in numeric_dtypes] + [int, long, float, complex]
 
 
 class iter_types:

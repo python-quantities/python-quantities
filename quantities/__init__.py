@@ -265,6 +265,8 @@ units, they should still conform to valid python expressions.
 
 """
 
+class QuantitiesDeprecationWarning(DeprecationWarning):
+    pass
 
 from ._version import __version__
 

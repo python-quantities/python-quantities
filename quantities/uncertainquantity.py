@@ -2,8 +2,9 @@
 """
 
 import numpy as np
+import warnings
 
-from . import markup
+from . import markup, QuantitiesDeprecationWarning
 from .quantity import Quantity, scale_other_units
 from .registry import unit_registry
 from .decorators import with_doc
@@ -13,15 +14,20 @@ class UncertainQuantity(Quantity):
     # TODO: what is an appropriate value?
     __array_priority__ = 22
 
-    def __new__(cls, data, units='', uncertainty=None, dtype='d', copy=True):
-        ret = Quantity.__new__(cls, data, units, dtype, copy)
+    def __new__(cls, data, units='', uncertainty=None, dtype='d', copy=None):
+        if copy is not None:
+            warnings.warn(("The 'copy' argument in UncertainQuantity is deprecated and will be removed in the future. "
+                           "The argument has no effect since quantities-0.16.0 (to aid numpy-2.0 support)."),
+                           QuantitiesDeprecationWarning, stacklevel=2)
+        ret = Quantity.__new__(cls, data, units, dtype)
         # _uncertainty initialized to be dimensionless by __array_finalize__:
         ret._uncertainty._dimensionality = ret._dimensionality
 
         if uncertainty is not None:
             ret.uncertainty = Quantity(uncertainty, ret._dimensionality)
         elif isinstance(data, UncertainQuantity):
-            if copy or ret._dimensionality != uncertainty._dimensionality:
+            is_copy = id(data) == id(ret)
+            if is_copy or ret._dimensionality != uncertainty._dimensionality:
                 uncertainty = data.uncertainty.rescale(ret.units)
             ret.uncertainty = uncertainty
 
@@ -50,7 +56,7 @@ class UncertainQuantity(Quantity):
     @uncertainty.setter
     def uncertainty(self, uncertainty):
         if not isinstance(uncertainty, Quantity):
-            uncertainty = Quantity(uncertainty, copy=False)
+            uncertainty = Quantity(uncertainty)
         try:
             assert self.shape == uncertainty.shape
         except AssertionError:
@@ -78,7 +84,6 @@ class UncertainQuantity(Quantity):
             Quantity(
                 np.zeros(self.shape, self.dtype),
                 self._dimensionality,
-                copy=False
             )
         )
 
@@ -87,7 +92,7 @@ class UncertainQuantity(Quantity):
     def __add__(self, other):
         res = super().__add__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
-        return UncertainQuantity(res, uncertainty=u, copy=False)
+        return UncertainQuantity(res, uncertainty=u)
 
     @with_doc(Quantity.__radd__, use_header=False)
     @scale_other_units
@@ -99,13 +104,13 @@ class UncertainQuantity(Quantity):
     def __sub__(self, other):
         res = super().__sub__(other)
         u = (self.uncertainty**2+other.uncertainty**2)**0.5
-        return UncertainQuantity(res, uncertainty=u, copy=False)
+        return UncertainQuantity(res, uncertainty=u)
 
     @with_doc(Quantity.__rsub__, use_header=False)
     @scale_other_units
     def __rsub__(self, other):
         if not isinstance(other, UncertainQuantity):
-            other = UncertainQuantity(other, copy=False)
+            other = UncertainQuantity(other)
 
         return UncertainQuantity.__sub__(other, self)
 
@@ -118,7 +123,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = np.array(other, copy=False, subok=True)
+            other = np.asanyarray(other)
             u = (self.uncertainty**2*other**2)**0.5
 
         res._uncertainty = u
@@ -140,7 +145,7 @@ class UncertainQuantity(Quantity):
             ru = (sru**2+oru**2)**0.5
             u = res.view(Quantity) * ru
         except AttributeError:
-            other = np.array(other, copy=False, subok=True)
+            other = np.asanyarray(other)
             u = (self.uncertainty**2/other**2)**0.5
 
         res._uncertainty = u
@@ -150,7 +155,7 @@ class UncertainQuantity(Quantity):
     def __rtruediv__(self, other):
         temp = UncertainQuantity(
             1/self.magnitude, self.dimensionality**-1,
-            self.relative_uncertainty/self.magnitude, copy=False
+            self.relative_uncertainty/self.magnitude
         )
         return other * temp
 
@@ -165,8 +170,7 @@ class UncertainQuantity(Quantity):
         return UncertainQuantity(
             self.magnitude[key],
             self._dimensionality,
-            self.uncertainty[key],
-            copy=False
+            self.uncertainty[key]
         )
 
     @with_doc(Quantity.__repr__, use_header=False)
@@ -198,8 +202,7 @@ class UncertainQuantity(Quantity):
         return UncertainQuantity(
             self.magnitude.sum(axis, dtype, out),
             self.dimensionality,
-            (np.sum(self.uncertainty.magnitude**2, axis))**0.5,
-            copy=False
+            (np.sum(self.uncertainty.magnitude**2, axis))**0.5
         )
 
     @with_doc(np.nansum)
@@ -207,8 +210,7 @@ class UncertainQuantity(Quantity):
         return UncertainQuantity(
             np.nansum(self.magnitude, axis, dtype, out),
             self.dimensionality,
-            (np.nansum(self.uncertainty.magnitude**2, axis))**0.5,
-            copy=False
+            (np.nansum(self.uncertainty.magnitude**2, axis))**0.5
         )
 
     @with_doc(np.ndarray.mean)
@@ -216,8 +218,8 @@ class UncertainQuantity(Quantity):
         return UncertainQuantity(
             self.magnitude.mean(axis, dtype, out),
             self.dimensionality,
-            ((1.0/np.size(self,axis))**2 * np.sum(self.uncertainty.magnitude**2, axis))**0.5,
-            copy=False)
+            ((1.0/np.size(self,axis))**2 * np.sum(self.uncertainty.magnitude**2, axis))**0.5
+        )
 
     @with_doc(np.nanmean)
     def nanmean(self, axis=None, dtype=None, out=None):
@@ -225,8 +227,8 @@ class UncertainQuantity(Quantity):
         return UncertainQuantity(
             np.nanmean(self.magnitude, axis, dtype, out),
             self.dimensionality,
-            ((1.0/size)**2 * np.nansum(np.nan_to_num(self.uncertainty.magnitude)**2, axis))**0.5,
-            copy=False)
+            ((1.0/size)**2 * np.nansum(np.nan_to_num(self.uncertainty.magnitude)**2, axis))**0.5
+        )
 
     @with_doc(np.sqrt)
     def sqrt(self, out=None):
