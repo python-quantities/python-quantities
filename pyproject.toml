@@ -2,7 +2,7 @@
 name = "quantities"
 description = "Support for physical quantities with units, based on numpy"
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = {file = "doc/user/license.rst"}
 authors = [
   {name = "Darren Dale", email = "dsdale24@gmail.com"}
