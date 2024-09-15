@@ -284,6 +284,8 @@ p_dict[np.less] = _d_check_uniform
 p_dict[np.less_equal] = _d_check_uniform
 p_dict[np.greater] = _d_check_uniform
 p_dict[np.greater_equal] = _d_check_uniform
+p_dict[np.maximum] = _d_check_uniform
+p_dict[np.minimum] = _d_check_uniform
 
 def _d_arctan2(q1, q2, out=None):
     try:

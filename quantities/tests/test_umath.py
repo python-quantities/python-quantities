@@ -293,3 +293,13 @@ class TestUmath(TestCase):
         arr2 = (1.0, 2.0) * pq.m
         self.assertTrue(np.all(np.greater_equal(arr2, arr1)))
         self.assertFalse(np.all(np.greater_equal(arr2*0.99, arr1)))
+
+    def test_maximum(self):
+        arr1 = (998, 999) * pq.m
+        arr2 = (1e3, 5e2) * pq.m
+        self.assertQuantityEqual(np.maximum(arr1, arr2) - [1000, 999]*pq.m, [0, 0]*pq.m)
+
+    def test_minimum(self):
+        arr1 = (998, 999) * pq.m
+        arr2 = (1e3, 5e2) * pq.m
+        self.assertQuantityEqual(np.minimum(arr1, arr2) - [998, 500]*pq.m, [0, 0]*pq.m)
