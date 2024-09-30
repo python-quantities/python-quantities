@@ -226,6 +226,12 @@ class TestDTypes(TestCase):
             [1, 2, 3]*pq.hp + [1, 2, 3]*pq.hp,
             [2, 4, 6]*pq.hp
         )
+        # add in test with 'min' since this caused issues
+        # see https://github.com/python-quantities/python-quantities/issues/243
+        self.assertQuantityEqual(
+            Quantity(1, 'min') + Quantity(1, 'min'),
+            2*pq.min
+        )
 
         self.assertRaises(ValueError, op.add, pq.kPa, pq.lb)
         self.assertRaises(ValueError, op.add, pq.kPa, 10)

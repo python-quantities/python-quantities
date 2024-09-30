@@ -64,7 +64,7 @@ min = minute = UnitTime(
     60*s,
     symbol='min',
     aliases=['minutes']
-)
+) # min is function in python
 h = hr = hour = UnitTime(
     'hour',
     60*min,
