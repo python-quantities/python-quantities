@@ -27,7 +27,7 @@ class UnitRegistry:
             all_builtins.remove("min")
             for builtin in all_builtins:
                 if builtin in string:
-                    raise RuntimeError(f"String parsing error for {string}. Enter a string accepted by quantities")
+                    raise RuntimeError(f"String parsing error for `{string}`. Enter a string accepted by quantities")
 
             try:
                 return eval(string, self.__context)
