@@ -3,6 +3,13 @@ CHANGES
 =======
 
 ------
+0.16.1
+------
+
+- Fixed a couple of small bugs ([`PR#238 <https://github.com/python-quantities/python-quantities/pull/238>`_] and [`PR#242 <https://github.com/python-quantities/python-quantities/pull/242>`_])
+- Added umath funcs: `maximum` & `minimum`
+
+------
 0.16.0
 ------
 
