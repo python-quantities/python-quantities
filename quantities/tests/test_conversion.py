@@ -97,6 +97,10 @@ class TestDefaultUnits(TestCase):
         self.assertQuantityEqual(pq.kg.simplified, 1000*pq.g)
         self.assertQuantityEqual(pq.m.simplified, 1000*pq.mm)
 
+        # test a time default as well as mass and weight
+        pq.set_default_units('SI')
+        self.assertQuantityEqual(pq.min.simplified, 60*pq.sec)
+
 class TestUnitInformation(TestCase):
 
     def test_si(self):
