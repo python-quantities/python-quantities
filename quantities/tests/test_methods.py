@@ -19,7 +19,6 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(self.q.sum(1), [3, 7]*pq.m)
 
     def test_nansum(self):
-        import numpy as np
         qnan = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
         self.assertQuantityEqual(qnan.nansum(), 10*pq.m )
         self.assertQuantityEqual(qnan.nansum(0), [4,6]*pq.m )
@@ -108,7 +107,7 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(q.nonzero()[0], [0, 2, 3, 5])
 
     def methodWithOut(self, name, result, q=None, *args, **kw):
-        import numpy as np
+
         from .. import Quantity
 
         if q is None:
@@ -153,7 +152,6 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(q.nanmax(), 4*pq.m)
 
     def test_argmax(self):
-        import numpy as np
         self.assertQuantityEqual(self.q.argmax(), 3)
         self.assertQuantityEqual(self.q.argmax(axis=0), [1, 1])
         self.assertQuantityEqual(self.q.argmax(axis=1), [1, 1])
@@ -178,7 +176,6 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(q.nanmin(), 1*pq.m)
 
     def test_argmin(self):
-        import numpy as np
         self.assertQuantityEqual(self.q.argmin(), 0)
         self.assertQuantityEqual(self.q.argmin(axis=0), [0, 0])
         self.assertQuantityEqual(self.q.argmin(axis=1), [0, 0])
@@ -252,7 +249,6 @@ class TestQuantityMethods(TestCase):
         self.methodWithOut('mean', [1.5, 3.5] * pq.m, axis=1)
 
     def test_nanmean(self):
-        import numpy as np
         q = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
         self.assertQuantityEqual(q.nanmean(), self.q.mean())
 
@@ -267,7 +263,6 @@ class TestQuantityMethods(TestCase):
         self.methodWithOut('std', [0.5, 0.5] * pq.m, axis=1)
 
     def test_nanstd(self):
-        import numpy as np
         q0 = [[1,2], [3,4]] * pq.m
         q1 = [[1,2], [3,4], [np.nan,np.nan]] * pq.m
         self.assertQuantityEqual(q0.std(), q1.nanstd())
