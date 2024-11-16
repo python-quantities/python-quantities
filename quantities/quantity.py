@@ -459,7 +459,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.__gt__)
     def __gt__(self, other):
-        return (self - other).magnitude >= 0
+        return (self - other).magnitude > 0
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
