@@ -250,6 +250,21 @@ class Quantity(np.ndarray):
         raise Exception("Preferred units for '%s' (or equivalent) not specified in "
                         "quantites.quantity.PREFERRED." % self.dimensionality)
 
+    @property
+    def plain(self):
+        """
+        Return a copy of the quantity as a plain number provided that the quantity
+        is dimensionless. For example:
+        ```
+        import quantities as pq
+        t = 2 * pq.ms
+        f = 3 * pq.MHz
+        n = (t*f).plain # n will be 6000
+        ```
+        If the quantity is not dimensionless, a conversion error is raised.
+        """
+        return self.rescale(unit_registry['dimensionless']).magnitude
+
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None, **kwargs):
         '''Scalars are returned as scalar Quantity arrays.'''
