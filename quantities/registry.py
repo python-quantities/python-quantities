@@ -1,41 +1,49 @@
 """
 """
 
+import ast
 import re
-import builtins
 
 
 class UnitRegistry:
+    # Note that this structure ensures that UnitRegistry behaves as a singleton
 
     class __Registry:
 
         __shared_state = {}
+        whitelist = (
+            ast.Expression,
+            ast.Constant,
+            ast.Name,
+            ast.Load,
+            ast.BinOp,
+            ast.UnaryOp,
+            ast.operator,
+            ast.unaryop,
+            ast.Num,
+        )
 
         def __init__(self):
             self.__dict__ = self.__shared_state
             self.__context = {}
 
         def __getitem__(self, string):
-            
-            # easy hack to prevent arbitrary evaluation of code
-            all_builtins = dir(builtins)
-            # because we have kilobytes, other bytes we have to remove bytes
-            all_builtins.remove("bytes")
-            # have to deal with octet as well
-            all_builtins.remove("oct")
-            # have to remove min which is short for minute
-            all_builtins.remove("min")
-            for builtin in all_builtins:
-                if builtin in string:
-                    raise RuntimeError(f"String parsing error for `{string}`. Enter a string accepted by quantities")
-
-            try:
-                return eval(string, self.__context)
-            except NameError:
+            tree = ast.parse(string, mode="eval")
+            valid = all(isinstance(node, self.whitelist) for node in ast.walk(tree))
+            if valid:
+                try:
+                    item = eval(
+                        compile(tree, filename="", mode="eval"),
+                        {"__builtins__": {}},
+                        self.__context,
+                    )
+                except NameError:
+                    raise LookupError('Unable to parse units: "%s"' % string)
+                else:
+                    return item
+            else:
                 # could return self['UnitQuantity'](string)
-                raise LookupError(
-                    'Unable to parse units: "%s"'%string
-                )
+                raise LookupError('Unable to parse units: "%s"' % string)
 
         def __setitem__(self, string, val):
             assert isinstance(string, str)
