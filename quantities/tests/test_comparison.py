@@ -64,7 +64,7 @@ class TestComparison(TestCase):
         )
         self.assertQuantityEqual(
             [1, 2, 3, 4]*pq.J == [1, 22, 3, 44],
-            [1, 0, 1, 0]
+            [0, 0, 0, 0]
         )
 
     def test_array_inequality(self):
@@ -78,7 +78,7 @@ class TestComparison(TestCase):
         )
         self.assertQuantityEqual(
             [1, 2, 3, 4]*pq.J != [1, 22, 3, 44],
-            [0, 1, 0, 1]
+            [1, 1, 1, 1]
         )
 
     def test_quantity_less_than(self):
@@ -90,9 +90,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm < [1, 1, 1]*pq.m,
             [1, 0, 0]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J < [1, 22, 3],
-            [0, 1, 0]
+        self.assertRaises(
+            ValueError,
+            op.lt, 
+            [1, 2, 33]*pq.J,
+            [1, 22, 3],
         )
         self.assertRaises(
             ValueError,
@@ -110,9 +112,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm <= [1, 1, 1]*pq.m,
             [1, 1, 0]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J <= [1, 22, 3],
-            [1, 1, 0]
+        self.assertRaises(
+            ValueError,
+            op.le,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3],
         )
         self.assertRaises(
             ValueError,
@@ -130,9 +134,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm >= [1, 1, 1]*pq.m,
             [0, 1, 1]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J >= [1, 22, 3],
-            [1, 0, 1]
+        self.assertRaises(
+            ValueError,
+            op.ge,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3],
         )
         self.assertRaises(
             ValueError,
@@ -150,9 +156,11 @@ class TestComparison(TestCase):
             [50, 100, 150]*pq.cm > [1, 1, 1]*pq.m,
             [0, 0, 1]
         )
-        self.assertQuantityEqual(
-            [1, 2, 33]*pq.J > [1, 22, 3],
-            [0, 0, 1]
+        self.assertRaises(
+            ValueError,
+            op.gt,
+            [1, 2, 33]*pq.J,
+            [1, 22, 3],
         )
         self.assertRaises(
             ValueError,
@@ -160,3 +168,46 @@ class TestComparison(TestCase):
             [1, 2, 33]*pq.J,
             [1, 22, 3]*pq.kg,
         )
+
+    def test_quantity_more_raises(self):
+        self.assertRaises(ValueError, op.gt, pq.ms, 1)
+        self.assertRaises(ValueError, op.ge, pq.ms, 1)
+        self.assertRaises(ValueError, op.lt, pq.ms, 1)
+        self.assertRaises(ValueError, op.le, pq.ms, 1)
+
+    def test_quantity_more_equal(self):
+        self.assertEqual(pq.ms == 1, False)
+        self.assertEqual(pq.ms != 1, True)
+        self.assertEqual(pq.ms == .001 * pq.m, False)
+        self.assertEqual(pq.ms != .001 * pq.m, True)
+        self.assertEqual(pq.ms == .001 * pq.s, True)
+        self.assertEqual(pq.ms != .001 * pq.s, False)
+
+    def test_quantity_more_compare(self):
+        self.assertEqual(pq.ms * pq.Hz < 1, True)
+        self.assertEqual(pq.ms * pq.Hz <= 1, True)
+        self.assertEqual(pq.ms * pq.Hz > 1, False)
+        self.assertEqual(pq.ms * pq.Hz >= 1, False)
+        self.assertEqual(pq.ms * pq.Hz == 0.001, True)
+        self.assertEqual(pq.ms * pq.Hz != 0.001, False)
+        self.assertEqual(pq.ms * pq.Hz >= 0.001, True)
+        self.assertEqual(pq.ms * pq.Hz <= 0.001, True)
+
+        self.assertQuantityEqual([1, 2, 3, 4] * pq.ms * pq.Hz
+                                 == [0.001, 0.022, 0.003, 0.044],
+                                 [1, 0, 1, 0])
+        self.assertQuantityEqual([1, 2, 3, 4] * pq.ms * pq.Hz
+                                 != [0.001, 0.022, 0.003, 0.044],
+                                 [0, 1, 0, 1])
+        self.assertQuantityEqual([1, 2, 33] * pq.ms * pq.Hz
+                                 < [0.001, 0.020, 0.003],
+                                 [0, 1, 0])
+        self.assertQuantityEqual([1, 2, 33] * pq.ms * pq.Hz
+                                 <= [0.001, 0.020, 0.003],
+                                 [1, 1, 0])
+        self.assertQuantityEqual([1, 2, 33] * pq.ms * pq.Hz
+                                 >= [0.001, 0.020, 0.003],
+                                 [1, 0, 1])
+        self.assertQuantityEqual([1, 2, 33] * pq.ms * pq.Hz
+                                 > [0.001, 0.020, 0.003],
+                                 [0, 0, 1])        
