@@ -1,5 +1,8 @@
+import pytest
+
 from .. import units as pq
 from .common import TestCase
+
 
 class TestUnits(TestCase):
 
@@ -30,3 +33,8 @@ class TestUnits(TestCase):
         self.assertQuantityEqual(pq.m.copy(), pq.m)
         pc_per_cc = pq.CompoundUnit("pc/cm**3")
         self.assertQuantityEqual(pc_per_cc.copy(), pc_per_cc)
+
+    def test_code_injection(self):
+        with pytest.raises(LookupError) as exc_info:
+            pq.CompoundUnit("exec(\"print('Hello there.')\\nprint('General Wasabi!')\")")
+            assert "Wasabi" in str(exc_info.value)
