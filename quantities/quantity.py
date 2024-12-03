@@ -145,6 +145,16 @@ class Quantity(np.ndarray):
 
     @property
     def magnitude(self):
+        """
+        Returns a view onto the numerical value of the quantity, stripping
+        away the associated units. For example:
+        ```
+        import quantities as pq
+        t = 2 * pq.millisecond
+        n = t.magnitude # n will be 2 (not 0.002)
+        ```
+        See also: dimensionless_magnitude.
+        """
         return self.view(type=np.ndarray)
 
     @property
@@ -249,6 +259,23 @@ class Quantity(np.ndarray):
                 return self.rescale(preferred)
         raise Exception("Preferred units for '%s' (or equivalent) not specified in "
                         "quantites.quantity.PREFERRED." % self.dimensionality)
+
+    @property
+    def dimensionless_magnitude(self):
+        """
+        Returns the numerical value of a dimensionless quantity in the form of
+        a numpy array. Any decimal prefixes are normalized away first.
+        For example:
+        ```
+        import quantities as pq
+        t = 2 * pq.ms
+        f = 3 * pq.MHz
+        n = (t*f).dimensionless_magnitude # n will be 6000 (not 6)
+        ```
+        If the quantity is not dimensionless, a conversion error is raised.
+        See also: magnitude.
+        """
+        return self.rescale(unit_registry['dimensionless']).magnitude
 
     @with_doc(np.ndarray.astype)
     def astype(self, dtype=None, **kwargs):

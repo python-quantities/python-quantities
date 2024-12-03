@@ -356,3 +356,10 @@ class TestQuantityMethods(TestCase):
             Quantity(10, pq.deg).rescale(pq.rad),
             np.pi/18*pq.rad
         )
+
+    def test_dimensionless_magnitude(self):
+        self.assertEqual((pq.kg/pq.g).dimensionless_magnitude, 1000)
+        self.assertQuantityEqual((self.q / pq.cm).dimensionless_magnitude,
+                                 100 * self.q.magnitude)
+        self.assertRaises(ValueError, lambda x: x.dimensionless_magnitude,
+                          self.q)
