@@ -432,9 +432,9 @@ class Quantity(np.ndarray):
             return self.magnitude == other
         else:
             try:
-                pln = self.plain
+                pln = self.rescale(unit_registry['dimensionless']).magnitude
             except ValueError:
-                return np.logical_and(self.magnitude != other, False)
+                return np.logical_and(self.magnitude == other, False)
             return pln == other
 
 
@@ -448,7 +448,7 @@ class Quantity(np.ndarray):
             return self.magnitude != other
         else:
             try:
-                pln = self.plain
+                pln = self.rescale(unit_registry['dimensionless']).magnitude
             except ValueError:
                 return np.logical_or(self.magnitude != other, True)
             return pln != other
