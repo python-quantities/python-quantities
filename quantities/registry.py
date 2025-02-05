@@ -20,7 +20,6 @@ class UnitRegistry:
             ast.UnaryOp,
             ast.operator,
             ast.unaryop,
-            ast.Num,
         )
 
         def __init__(self):
