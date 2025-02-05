@@ -118,6 +118,7 @@ jobs:
           python -m pip install -U setuptools
           python -m pip install -U wheel
           python -m pip install "numpy==${{ matrix.numpy-version }}"
+          python -m pip install -U pytest
           python -m pip install -U mypy
 
       - name: Install
