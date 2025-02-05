@@ -27,6 +27,8 @@ class UnitRegistry:
             self.__context = {}
 
         def __getitem__(self, string):
+            # This approach to avoiding arbitrary evaluation of code is based on https://stackoverflow.com/a/11952618 
+            # by https://stackoverflow.com/users/567292/ecatmur
             tree = ast.parse(string, mode="eval")
             valid = all(isinstance(node, self.whitelist) for node in ast.walk(tree))
             if valid:
