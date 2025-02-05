@@ -2,6 +2,7 @@ from ..unitquantity import UnitQuantity
 
 N: UnitQuantity
 newton: UnitQuantity
+kilonewton: UnitQuantity
 dyne: UnitQuantity
 pond: UnitQuantity
 kgf: UnitQuantity

@@ -14,6 +14,12 @@ N = newton = UnitQuantity(
     symbol='N',
     aliases=['newtons']
 )
+kN = kilonewton = UnitQuantity(
+    'kilonewton',
+    1000*N,
+    symbol='kN',
+    aliases=['kilonewtons']
+)
 dyne = UnitQuantity(
     'dyne',
     gram*cm/s**2,
