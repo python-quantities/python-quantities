@@ -99,16 +99,6 @@ def protected_power(f):
         return f(self, other, *args)
     return g
 
-def wrap_comparison(f):
-    @wraps(f)
-    def g(self, other):
-        if isinstance(other, Quantity):
-            if other._dimensionality != self._dimensionality:
-                other = other.rescale(self._dimensionality)
-            other = other.magnitude
-        return f(self, other)
-    return g
-
 
 class Quantity(np.ndarray):
 
@@ -452,14 +442,12 @@ class Quantity(np.ndarray):
         self.magnitude[key] = value
 
     @with_doc(np.ndarray.__lt__)
-    @wrap_comparison
     def __lt__(self, other):
-        return self.magnitude < other
+        return (self - other).magnitude < 0
 
     @with_doc(np.ndarray.__le__)
-    @wrap_comparison
     def __le__(self, other):
-        return self.magnitude <= other
+        return (self - other).magnitude <= 0
 
     @with_doc(np.ndarray.__eq__)
     def __eq__(self, other):
@@ -467,8 +455,15 @@ class Quantity(np.ndarray):
             try:
                 other = other.rescale(self._dimensionality).magnitude
             except ValueError:
-                return np.zeros(self.shape, '?')
-        return self.magnitude == other
+                return np.logical_and(self.magnitude != other.magnitude, False)
+            return self.magnitude == other
+        else:
+            try:
+                pln = self.rescale(unit_registry['dimensionless']).magnitude
+            except ValueError:
+                return np.logical_and(self.magnitude == other, False)
+            return pln == other
+
 
     @with_doc(np.ndarray.__ne__)
     def __ne__(self, other):
@@ -476,18 +471,22 @@ class Quantity(np.ndarray):
             try:
                 other = other.rescale(self._dimensionality).magnitude
             except ValueError:
-                return np.ones(self.shape, '?')
-        return self.magnitude != other
-
+                return np.logical_or(self.magnitude != other.magnitude, True)
+            return self.magnitude != other
+        else:
+            try:
+                pln = self.rescale(unit_registry['dimensionless']).magnitude
+            except ValueError:
+                return np.logical_or(self.magnitude != other, True)
+            return pln != other
+        
     @with_doc(np.ndarray.__ge__)
-    @wrap_comparison
     def __ge__(self, other):
-        return self.magnitude >= other
+        return (self - other).magnitude >= 0
 
     @with_doc(np.ndarray.__gt__)
-    @wrap_comparison
     def __gt__(self, other):
-        return self.magnitude > other
+        return (self - other).magnitude > 0
 
     #I don't think this implementation is particularly efficient,
     #perhaps there is something better
