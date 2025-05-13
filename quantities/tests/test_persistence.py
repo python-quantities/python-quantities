@@ -71,6 +71,15 @@ class TestPersistence(TestCase):
             y = copy.copy(x)
             self.assertQuantityEqual(x, y)
 
+    def test_deepcopy_quantity(self):
+        x = [1, 2, 3] * pq.m
+        y = copy.deepcopy(x)
+        self.assertQuantityEqual(x, y)
+
+        y[0] = 100 * pq.m
+        self.assertQuantityEqual(x, [1, 2, 3] * pq.m)
+
+
     def test_copy_uncertainquantity(self):
         for dtype in [float, object]:
             x = UncertainQuantity(20, 'm', 0.2).astype(dtype)
