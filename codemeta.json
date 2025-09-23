@@ -1,0 +1,173 @@
+{
+  "@context": "https://w3id.org/codemeta/3.0",
+  "type": "SoftwareSourceCode",
+  "author": [
+    {
+      "type": "Person",
+      "familyName": "Dale",
+      "givenName": "Darren"
+    },
+    {
+      "id": "http://orcid.org/0000-0002-4793-7541",
+      "type": "Person",
+      "email": "andrew.davison@cnrs.fr",
+      "familyName": "Davison",
+      "givenName": "Andrew P."
+    },
+    {
+      "type": "Person",
+      "givenName": "Bjorn",
+      "alternateName": "@bjodah"
+    },
+    {
+      "type": "Person",
+      "familyName": "McKenzie",
+      "givenName": "Zach"
+    },
+    {
+      "type": "Person",
+      "familyName": "Mankoff",
+      "givenName": "Ken"
+    },
+    {
+      "type": "Person",
+      "familyName": "Wimmer",
+      "givenName": "Thomas"
+    },
+    {
+      "type": "Person",
+      "familyName": "Salvatier",
+      "givenName": "John"
+    },
+    {
+      "type": "Person",
+      "familyName": "N.",
+      "givenName": "Takumasa",
+      "alternateName": "@n-takumasa"
+    },
+    {
+      "type": "Person",
+      "familyName": "Falck",
+      "givenName": "Rob"
+    },
+    {
+      "type": "Person",
+      "familyName": "Delley",
+      "givenName": "Yves"
+    },
+    {
+      "type": "Person",
+      "familyName": "van Kemenade",
+      "givenName": "Hugo"
+    },
+    {
+      "type": "Person",
+      "familyName": "Gerkin",
+      "givenName": "Richard C."
+    },
+    {
+      "type": "Person",
+      "familyName": "Wagenaar",
+      "givenName": "Daniel"
+    },
+    {
+      "type": "Person",
+      "familyName": "Konradi",
+      "givenName": "Peter"
+    },
+    {
+      "type": "Person",
+      "familyName": "May",
+      "givenName": "Ryan"
+    },
+    {
+      "type": "Person",
+      "familyName": "Scheltienne",
+      "givenName": "Mathieu"
+    },
+    {
+      "type": "Person",
+      "familyName": "McCloy",
+      "givenName": "Daniel"
+    },
+    {
+      "type": "Person",
+      "familyName": "Wilson",
+      "givenName": "Andy"
+    },
+    {
+      "type": "Person",
+      "alternateName": "@dotlambda"
+    },
+    {
+      "type": "Person",
+      "familyName": "Pfabe",
+      "givenName": "Johannes"
+    },
+    {
+      "type": "Person",
+      "familyName": "Senkbeil",
+      "givenName": "Ryan"
+    },
+    {
+      "type": "Person",
+      "familyName": "Gates",
+      "givenName": "Tim"
+    },
+    {
+      "type": "Person",
+      "familyName": "Górny",
+      "givenName": "Michał"
+    },
+    {
+      "type": "Person",
+      "alternateName": "@jadoro"
+    },
+    {
+      "type": "Person",
+      "familyName": "Kemetmüller",
+      "givenName": "Josef"
+    },
+    {
+      "type": "Person",
+      "familyName": "Sechet",
+      "givenName": "Olivier"
+    },
+    {
+      "type": "Person",
+      "alternateName": "@lumbric"
+    },
+    {
+      "type": "Person",
+      "familyName": "Yoshikawa",
+      "givenName": "Takashi"
+    },
+    {
+      "type": "Person",
+      "familyName": "Jones",
+      "givenName": "Peter"
+    },
+    {
+      "type": "Person",
+      "familyName": "Nelson",
+      "givenName": "Mark"
+    }
+  ],
+  "codeRepository": "https://github.com/python-quantities/python-quantities",
+  "dateCreated": "2008-12-01",
+  "dateModified": "2025-04-11",
+  "datePublished": "2009-10-13",
+  "description": "A Python package for handling physical quantities.\n\nQuantities is designed to handle arithmetic and conversions of physical quantities, which have a magnitude, dimensionality specified by various units, and possibly an uncertainty. Quantities builds on the popular numpy library and is designed to work with numpy ufuncs, many of which are already supported. ",
+  "downloadUrl": "https://files.pythonhosted.org/packages/40/b4/a14dbeebf8ab08600152f157344fd88db961a3afdfd0eddc25958c5182a1/quantities-0.16.2.tar.gz",
+  "license": "https://spdx.org/licenses/BSD-3-Clause",
+  "name": "quantities",
+  "operatingSystem": ["Linux", "Windows", "macOS"],
+  "programmingLanguage": "Python 3",
+  "relatedLink": "https://python-quantities.readthedocs.io/",
+  "releaseNotes": "https://github.com/python-quantities/python-quantities/blob/master/CHANGES.txt",
+  "softwareRequirements": "https://pypi.org/project/numpy/",
+  "version": "0.16.2",
+  "continuousIntegration": "https://github.com/python-quantities/python-quantities/actions",
+  "developmentStatus": "active",
+  "issueTracker": "https://github.com/python-quantities/python-quantities/issues"
+}
