@@ -629,7 +629,7 @@ class Quantity(np.ndarray):
     def nanargmax(self,axis=None, out=None):
         return np.nanargmax(self.magnitude)
 
-    @with_doc(np.ndarray.ptp)
+    @with_doc(np.ptp)
     def ptp(self, axis=None, out=None):
         ret = np.ptp(self.magnitude, axis, None if out is None else out.magnitude)
         dim = self.dimensionality
