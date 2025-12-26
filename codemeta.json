@@ -157,7 +157,7 @@
   "dateCreated": "2008-12-01",
   "dateModified": "2025-04-11",
   "datePublished": "2009-10-13",
-  "description": "A Python package for handling physical quantities.\n\nQuantities is designed to handle arithmetic and conversions of physical quantities, which have a magnitude, dimensionality specified by various units, and possibly an uncertainty. Quantities builds on the popular numpy library and is designed to work with numpy ufuncs, many of which are already supported. ",
+  "description": "A Python package for handling physical quantities.\n\nQuantities is designed to handle arithmetic and conversions of physical quantities, which have a magnitude, dimensionality specified by various units, and possibly an uncertainty. Quantities builds on the popular NumPy library and is designed to work with NumPy ufuncs, many of which are already supported.",
   "downloadUrl": "https://files.pythonhosted.org/packages/40/b4/a14dbeebf8ab08600152f157344fd88db961a3afdfd0eddc25958c5182a1/quantities-0.16.2.tar.gz",
   "license": "https://spdx.org/licenses/BSD-3-Clause",
   "name": "quantities",
