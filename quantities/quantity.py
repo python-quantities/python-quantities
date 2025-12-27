@@ -804,10 +804,6 @@ class Quantity(np.ndarray):
                 (self.__class__, np.ndarray, (0, ), 'b', ),
                 state)
 
-    def __deepcopy__(self, memo_dict):
-        # constructor copies by default
-        return Quantity(self.magnitude, self.dimensionality)
-
 
 def _reconstruct_quantity(subtype, baseclass, baseshape, basetype,):
     """Internal function that builds a new MaskedArray from the
