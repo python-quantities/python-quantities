@@ -331,6 +331,7 @@ p_dict[np.rint] = _d_copy
 p_dict[np.floor] = _d_copy
 p_dict[np.fix] = _d_copy
 p_dict[np.ceil] = _d_copy
+p_dict[np.trunc] = _d_copy
 
 def _d_clip(a1, a2, a3, q):
     return q.dimensionality
