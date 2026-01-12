@@ -86,10 +86,10 @@ class UnitQuantity(Quantity):
     def __rtruediv__(self, other) -> Any:
         ...
 
-    def __pow__(self, other) -> Quantity:
+    def __pow__(self, other) -> Quantity:  # type: ignore[override]
         ...
 
-    def __rpow__(self, other) -> Quantity:
+    def __rpow__(self, other) -> Quantity:  # type: ignore[override]
         ...
 
 

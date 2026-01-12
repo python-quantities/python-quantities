@@ -86,9 +86,9 @@ class Quantity(npt.NDArray):
 
     # NOTE divmod is not supported
 
-    def __pow__(self, power) -> Quantity: ...
-    def __rpow__(self, power) -> Quantity: ...
-    def __ipow__(self, power) -> Quantity: ...
+    def __pow__(self, power) -> Quantity: ...  # type: ignore[override]
+    def __rpow__(self, power) -> Quantity: ...  # type: ignore[override]
+    def __ipow__(self, power) -> Quantity: ...  # type: ignore[override]
 
     # shift and bitwise are not supported
 
@@ -110,5 +110,5 @@ class Quantity(npt.NDArray):
     def __getitem__(self, item: Any) -> Quantity:
         ...
 
-    def __setitem__(self, key: int, value: QuantityData) -> None:
+    def __setitem__(self, key: int, value: QuantityData) -> None:  # type: ignore
         ...
