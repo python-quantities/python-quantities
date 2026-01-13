@@ -367,11 +367,34 @@ class TestDTypes(TestCase):
         self.assertRaises(ValueError, op.isub, [1, 2, 3]*pq.m, pq.J)
         self.assertRaises(ValueError, op.isub, [1, 2, 3]*pq.m, 5*pq.J)
 
+    def test_in_place_multiplication(self):
+        velocity = 3 * pq.m/pq.s
+        time = 2 * pq.s
+
+        self.assertQuantityEqual(velocity * time, 6 * pq.m)
+
+        distance = velocity.copy()
+        distance *= time
+        self.assertQuantityEqual(distance, 6 * pq.m)
+
     def test_division(self):
         molar = pq.UnitQuantity('M',  1000 * pq.mole/pq.m**3, u_symbol='M')
         for subtr in [1, 1.0]:
             q = 1*molar/(1000*pq.mole/pq.m**3)
             self.assertQuantityEqual((q - subtr).simplified, 0)
+
+        a = np.array([5, 10, 15]) * pq.s
+        b = np.array([2, 4, 6]) * pq.kg
+
+        c = a / b
+        self.assertQuantityEqual(c, np.array([2.5, 2.5, 2.5]) * pq.s / pq.kg)
+
+    def test_in_place_division(self):
+        a = np.array([5, 10, 15]) * pq.s
+        b = np.array([2, 4, 6]) * pq.kg
+
+        a /= b
+        self.assertQuantityEqual(a, np.array([2.5, 2.5, 2.5]) * pq.s / pq.kg)
 
     def test_powering(self):
         # test raising a quantity to a power
@@ -403,3 +426,12 @@ class TestDTypes(TestCase):
         def ipow(q1, q2):
             q1 -= q2
         self.assertRaises(ValueError, ipow, 1*pq.m, [1, 2])
+
+    def test_inplace_powering(self):
+        a = 5.5 * pq.cm
+        a **= 5
+        self.assertQuantityEqual(a, (5.5**5) * (pq.cm**5))
+
+        b = np.array([1, 2, 3, 4, 5]) * pq.kg
+        b **= 3
+        self.assertQuantityEqual(b, np.array([1, 8, 27, 64, 125]) * pq.kg**3)
