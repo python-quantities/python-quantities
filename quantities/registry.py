@@ -29,7 +29,8 @@ class UnitRegistry:
         def __getitem__(self, string):
             # This approach to avoiding arbitrary evaluation of code is based on https://stackoverflow.com/a/11952618 
             # by https://stackoverflow.com/users/567292/ecatmur
-            tree = ast.parse(string, mode="eval")
+            stripped_string = string.strip()  # discard leading or trailing spaces before parsing
+            tree = ast.parse(stripped_string, mode="eval")
             valid = all(isinstance(node, self.whitelist) for node in ast.walk(tree))
             if valid:
                 try:
