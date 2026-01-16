@@ -384,12 +384,12 @@ class Quantity(np.ndarray):
         # See:
         # - https://numpy.org/devdocs/release/2.0.0-notes.html#array-prepare-is-removed
         # - https://numpy.org/neps/nep-0013-ufunc-overrides.html
-        cself = self.copy()
-        cother = other.copy()
-        res = super().__imul__(other)
         if _np_version < (2, 0, 0):
-            return res
+            return super().__imul__(other)
         else:
+            cself = self.copy()
+            cother = other.copy()
+            res = super().__imul__(other)
             context = (np.multiply, (cself, cother, cself), 0)
             return self.__array_prepare__(res, context=context)
 
@@ -401,12 +401,12 @@ class Quantity(np.ndarray):
     @protected_multiplication
     def __itruediv__(self, other):
         # see comment above on __imul__
-        cself = self.copy()
-        cother = other.copy()
-        res = super().__itruediv__(other)
         if _np_version < (2, 0, 0):
-            return res
+            return super().__itruediv__(other)
         else:
+            cself = self.copy()
+            cother = other.copy()
+            res = super().__itruediv__(other)
             context = (np.true_divide, (cself, cother, cself), 0)
             return self.__array_prepare__(res, context=context)
 
@@ -424,12 +424,12 @@ class Quantity(np.ndarray):
     @protected_power
     def __ipow__(self, other):
         # see comment above on __imul__
-        cself = self.copy()
-        cother = other.copy()
-        res = super().__ipow__(other)
         if _np_version < (2, 0, 0):
-            return res
+            return super().__ipow__(other)
         else:
+            cself = self.copy()
+            cother = other.copy()
+            res = super().__ipow__(other)
             context = (np.power, (cself, cother, cself), 0)
             return self.__array_prepare__(res, context=context)
 
