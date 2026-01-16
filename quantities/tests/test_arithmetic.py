@@ -377,6 +377,9 @@ class TestDTypes(TestCase):
         distance *= time
         self.assertQuantityEqual(distance, 6 * pq.m)
 
+        velocity *= 2
+        self.assertQuantityEqual(velocity, 6 * pq.m/pq.s)
+
     def test_division(self):
         molar = pq.UnitQuantity('M',  1000 * pq.mole/pq.m**3, u_symbol='M')
         for subtr in [1, 1.0]:
@@ -395,6 +398,14 @@ class TestDTypes(TestCase):
 
         a /= b
         self.assertQuantityEqual(a, np.array([2.5, 2.5, 2.5]) * pq.s / pq.kg)
+
+        b /= 2
+        self.assertQuantityEqual(b, np.array([1, 2, 3]) * pq.kg)
+
+        c = np.array([5, 10, 15]) * pq.s
+        d = np.array([2, 4, 6])
+        c /= d
+        self.assertQuantityEqual(c, np.array([2.5, 2.5, 2.5]) * pq.s)
 
     def test_powering(self):
         # test raising a quantity to a power

@@ -388,7 +388,10 @@ class Quantity(np.ndarray):
             return super().__imul__(other)
         else:
             cself = self.copy()
-            cother = other.copy()
+            if hasattr(other, "copy"):
+                cother = other.copy()
+            else:
+                cother = other
             res = super().__imul__(other)
             context = (np.multiply, (cself, cother, cself), 0)
             return self.__array_prepare__(res, context=context)
@@ -405,7 +408,10 @@ class Quantity(np.ndarray):
             return super().__itruediv__(other)
         else:
             cself = self.copy()
-            cother = other.copy()
+            if hasattr(other, "copy"):
+                cother = other.copy()
+            else:
+                cother = other
             res = super().__itruediv__(other)
             context = (np.true_divide, (cself, cother, cself), 0)
             return self.__array_prepare__(res, context=context)
@@ -428,7 +434,10 @@ class Quantity(np.ndarray):
             return super().__ipow__(other)
         else:
             cself = self.copy()
-            cother = other.copy()
+            if hasattr(other, "copy"):
+                cother = other.copy()
+            else:
+                cother = other
             res = super().__ipow__(other)
             context = (np.power, (cself, cother, cself), 0)
             return self.__array_prepare__(res, context=context)
@@ -735,7 +744,6 @@ class Quantity(np.ndarray):
 
     @with_doc(np.nanmean)
     def nanmean(self, axis=None, dtype=None, out=None):
-        import numpy as np
         return Quantity(
             np.nanmean(self.magnitude, axis, dtype, out),
             self.dimensionality)
@@ -830,6 +838,11 @@ class Quantity(np.ndarray):
                 (self.__class__, np.ndarray, (0, ), 'b', ),
                 state)
 
+    def __deepcopy__(self, memo):
+        new_obj = super().__deepcopy__(memo).view(self.__class__)
+        new_obj.__dict__.update(self.__dict__)
+        memo[id(self)] = new_obj
+        return new_obj
 
 def _reconstruct_quantity(subtype, baseclass, baseshape, basetype,):
     """Internal function that builds a new MaskedArray from the

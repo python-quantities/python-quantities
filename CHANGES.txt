@@ -3,6 +3,12 @@ CHANGES
 =======
 
 ------
+0.16.4
+------
+
+- Fix problems with v0.16.3: deepcopy was not copying all necessary attributes of UnitQuantity; in-place arithmetic didn't handle multiplying by scalars
+
+------
 0.16.3
 ------
 

@@ -79,6 +79,9 @@ class TestPersistence(TestCase):
         y[0] = 100 * pq.m
         self.assertQuantityEqual(x, [1, 2, 3] * pq.m)
 
+        # deepcopy of UnitLength
+        metre = copy.deepcopy(pq.m)
+        repr(metre)  # accesses the "_definition" attribute
 
     def test_copy_uncertainquantity(self):
         for dtype in [float, object]:
