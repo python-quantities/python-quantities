@@ -58,12 +58,8 @@ Here is a simple example:
 
 Installation
 ------------
-quantities has a hard dependency on the `NumPy <http://www.numpy.org>`_ library.
-You should install it first, please refer to the NumPy installation guide:
 
-http://docs.scipy.org/doc/numpy/user/install.html
-
-To install quantities itself, then simply run::
+To install quantities itself, simply run::
 
     $ pip install quantities
 

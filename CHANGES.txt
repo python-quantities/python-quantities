@@ -3,6 +3,17 @@ CHANGES
 =======
 
 ------
+0.16.3
+------
+
+- Fix broken `deepcopy` behaviour when using quantities with NumPy 2.x (`PR#257 <https://github.com/python-quantities/python-quantities/pull/257>`_)
+- Fixes for assorted breakages that appear with recent NumPy versions (`PR#262 <https://github.com/python-quantities/python-quantities/pull/262>`_, `PR#267 <<https://github.com/python-quantities/python-quantities/pull/267>`_)
+- Revert to previous behaviour where spaces around units were allowed  (`PR#270 <https://github.com/python-quantities/python-quantities/pull/270>`_)
+- Fix broken in-place arithmetic when using quantities with NumPy 2.x (`PR#271 <https://github.com/python-quantities/python-quantities/pull/271>`_)
+- Add CI testing for Python 3.13 and 3.14, drop support for Python 3.9
+- Add CI testing for NumPy versions 2.1 to 2.4, drop support for NumPy 1.22 and 1.23.
+
+------
 0.16.2
 ------
 

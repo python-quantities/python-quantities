@@ -2,8 +2,8 @@
 name = "quantities"
 description = "Support for physical quantities with units, based on numpy"
 readme = "README.rst"
-requires-python = ">=3.9"
-license = {file = "doc/user/license.rst"}
+requires-python = ">=3.10"
+license-files = ["doc/user/license.rst"]
 authors = [
   {name = "Darren Dale", email = "dsdale24@gmail.com"}
 ]
@@ -18,14 +18,13 @@ classifiers = [
   "Intended Audience :: Education",
   "Intended Audience :: End Users/Desktop",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: BSD License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Topic :: Education",
   "Topic :: Scientific/Engineering"
 ]
 dependencies = [
-  "numpy>=1.20"
+  "numpy>=1.24"
 ]
 dynamic = ["version"]
 
