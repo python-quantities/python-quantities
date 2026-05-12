@@ -326,6 +326,7 @@ p_dict[np.fabs] = _d_copy
 p_dict[np.absolute] = _d_copy
 p_dict[np.conjugate] = _d_copy
 p_dict[np.negative] = _d_copy
+p_dict[np.positive] = _d_copy
 p_dict[np.ones_like] = _d_copy
 p_dict[np.rint] = _d_copy
 p_dict[np.floor] = _d_copy
