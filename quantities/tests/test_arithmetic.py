@@ -185,6 +185,20 @@ class TestDTypes(TestCase):
             Quantity(5.0, 'm')
         )
 
+    def test_positive(self):
+        self.assertQuantityEqual(
+            +pq.m,
+            Quantity(1, 'm')
+        )
+        self.assertQuantityEqual(
+            +Quantity(5, 'm'),
+            Quantity(5, 'm')
+        )
+        self.assertQuantityEqual(
+            +Quantity(-5.0, 'm'),
+            Quantity(-5.0, 'm')
+        )
+
     def test_addition(self):
         self.assertQuantityEqual(
             pq.eV + pq.eV,
