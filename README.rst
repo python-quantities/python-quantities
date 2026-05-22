@@ -11,12 +11,14 @@ supported. Quantities is actively developed, and while the current features
 and API are stable, test coverage is incomplete so the package is not
 suggested for mission-critical applications.
 
-|pypi version|_ |Build status|_
+|pypi version|_ |Build status|_ |Coverage Status|_
 
 .. |pypi version| image:: https://img.shields.io/pypi/v/quantities.png
 .. _`pypi version`: https://pypi.python.org/pypi/quantities
 .. |Build status| image:: https://github.com/python-quantities/python-quantities/actions/workflows/test.yml/badge.svg?branch=master
 .. _`Build status`: https://github.com/python-quantities/python-quantities/actions/workflows/test.yml
+.. |Coverage Status| image:: https://gitlab.ebrains.eu/NeuralEnsemble/python-quantities/badges/master/coverage.svg
+.. _`Coverage Status`: https://gitlab.ebrains.eu/NeuralEnsemble/python-quantities/-/pipelines
 .. _tutorial: http://python-quantities.readthedocs.io/en/latest/user/tutorial.html
 
 
@@ -76,6 +78,13 @@ And run::
 
 in the current directory. The master branch is automatically tested by
 GitHub Actions.
+
+Contributing
+------------
+Bug reports, fixes, and pull requests are welcome. Please see
+`CONTRIBUTING.md <CONTRIBUTING.md>`_ for a quick overview, and the
+`developer documentation <https://python-quantities.readthedocs.io/en/latest/devel/index.html>`_
+for the onboarding guide, architecture overview, and development workflow.
 
 Author
 ------

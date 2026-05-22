@@ -1,0 +1,27 @@
+# GitLab CI configuration for the EBRAINS GitLab mirror.
+#
+# The canonical CI is GitHub Actions (see .github/workflows/). This pipeline
+# runs on the EBRAINS GitLab mirror only, and exists primarily to compute and
+# publish a code-coverage badge. The badge URL is derived from this project's
+# slug on gitlab.ebrains.eu:
+#
+#   https://gitlab.ebrains.eu/<group>/<project>/badges/master/coverage.svg
+
+stages:
+  - test
+
+coverage:
+  stage: test
+  image: python:3.13
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -e ".[test]"
+  script:
+    - pytest --cov=quantities --cov-report=term --cov-report=xml
+  coverage: '/^TOTAL.*\s+(\d+(?:\.\d+)?)%/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
