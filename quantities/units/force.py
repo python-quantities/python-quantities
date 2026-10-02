@@ -28,7 +28,7 @@ dyne = UnitQuantity(
 )
 pond = UnitQuantity(
     'pond',
-    g_0*kg,
+    g_0*gram,
     symbol='p',
     aliases=['ponds']
 )
