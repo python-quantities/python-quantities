@@ -2,7 +2,7 @@
 name = "quantities"
 description = "Support for physical quantities with units, based on numpy"
 readme = "README.rst"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license-files = ["doc/user/license.rst"]
 authors = [
   {name = "Darren Dale", email = "dsdale24@gmail.com"}
@@ -24,7 +24,7 @@ classifiers = [
   "Topic :: Scientific/Engineering"
 ]
 dependencies = [
-  "numpy>=1.24"
+  "numpy>=2.0"
 ]
 dynamic = ["version"]
 
@@ -58,7 +58,7 @@ write_to = "quantities/_version.py"
 
 [tool.ruff]
 line-length = 120
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 # pycodestyle errors and warnings, pyflakes, isort.
