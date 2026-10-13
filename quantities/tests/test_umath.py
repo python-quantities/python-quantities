@@ -22,6 +22,42 @@ class TestUmath(TestCase):
         c = [1,2,3, np.nan] * pq.m
         self.assertQuantityEqual(np.nansum(c), 6 * pq.m)
 
+    def test_nan_variance_and_standard_deviation(self):
+        values = np.array([[1., np.nan, 5.], [2., 4., 8.]])
+        for data in (values, values + 1j * values):
+            q = data * pq.ms
+            for func, units in ((np.nanvar, pq.ms**2), (np.nanstd, pq.ms)):
+                for axis in (None, 0, 1):
+                    for keepdims in (False, True):
+                        with self.subTest(func=func, axis=axis, keepdims=keepdims,
+                                          dtype=data.dtype):
+                            expected = func(data, axis=axis, keepdims=keepdims)
+                            result = func(q, axis=axis, keepdims=keepdims)
+                            self.assertQuantityEqual(result, expected * units)
+                            out = np.zeros_like(expected) * pq.kg
+                            self.assertIs(func(q, axis=axis, keepdims=keepdims,
+                                               out=out), out)
+                            self.assertQuantityEqual(out, expected * units)
+            self.assertQuantityEqual(np.nanstd(q, ddof=1),
+                                     np.nanstd(data, ddof=1) * pq.ms)
+            np.testing.assert_array_equal(q.magnitude, data)
+            self.assertEqual(q.units, pq.ms)
+
+    def test_ufunc_output_units(self):
+        q = [2., 4.] * pq.m
+        out = [0., 0.] * pq.s
+        self.assertIs(np.multiply(q, q, out=out), out)
+        self.assertQuantityEqual(out, [4., 16.] * pq.m**2)
+        self.assertIs(np.sqrt(out, out=out), out)
+        self.assertQuantityEqual(out, q)
+        self.assertIs(np.divide(out, q, out=out), out)
+        self.assertQuantityEqual(out, [1., 1.] * pq.dimensionless)
+        q **= 2
+        self.assertQuantityEqual(q, [4., 16.] * pq.m**2)
+        scalar = 2. * pq.m
+        scalar **= scalar.magnitude
+        self.assertQuantityEqual(scalar, 4. * pq.m**2)
+
     def test_cumprod(self):
         self.assertRaises(ValueError, np.cumprod, self.q)
 

@@ -17,6 +17,7 @@ class TestQuantityMethods(TestCase):
         self.assertQuantityEqual(self.q.sum(), 10*pq.m)
         self.assertQuantityEqual(self.q.sum(0), [4, 6]*pq.m)
         self.assertQuantityEqual(self.q.sum(1), [3, 7]*pq.m)
+        self.assertQuantityEqual(self.q.sum(1, keepdims=True), [[3], [7]]*pq.m)
 
     def test_nansum(self):
         import numpy as np
