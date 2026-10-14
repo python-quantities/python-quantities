@@ -2,11 +2,10 @@
 """
 
 from ..unitquantity import UnitQuantity
-from .time import s
-from .mass import kg
-from .energy import J
 from .electromagnetism import coulomb
-
+from .energy import J
+from .mass import kg
+from .time import s
 
 Bq = becquerel = UnitQuantity(
     'becquerel',

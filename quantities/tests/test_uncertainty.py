@@ -1,8 +1,9 @@
+import numpy as np
+
 from .. import units as pq
 from ..quantity import Quantity
 from ..uncertainquantity import UncertainQuantity
 from .common import TestCase
-import numpy as np
 
 
 class TestUncertainty(TestCase):

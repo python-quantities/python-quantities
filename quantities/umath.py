@@ -1,9 +1,8 @@
 import numpy as np
 
-from .quantity import Quantity
-from .units import dimensionless, radian, degree  # type: ignore[no-redef]
 from .decorators import with_doc
-
+from .quantity import Quantity
+from .units import dimensionless, radian  # type: ignore[no-redef]
 
 __all__ = [
     "arccos",
@@ -191,7 +190,7 @@ def trapz(y, x=None, dx=1.0, axis=-1):
 
     if not isinstance(y, Quantity):
         y = Quantity(y)
-    if not isinstance(x, Quantity) and not x is None:
+    if not isinstance(x, Quantity) and x is not None:
         x = Quantity(x)
     if not isinstance(dx, Quantity):
         dx = Quantity(dx)

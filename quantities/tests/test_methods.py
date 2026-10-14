@@ -1,6 +1,8 @@
+import numpy as np
+
 from .. import units as pq
 from .common import TestCase
-import numpy as np
+
 
 class TestQuantityMethods(TestCase):
 
@@ -109,6 +111,7 @@ class TestQuantityMethods(TestCase):
 
     def methodWithOut(self, name, result, q=None, *args, **kw):
         import numpy as np
+
         from .. import Quantity
 
         if q is None:

@@ -1,10 +1,10 @@
-import pickle
 import copy
+import pickle
 
+from .. import constants
 from .. import units as pq
 from ..quantity import Quantity
 from ..uncertainquantity import UncertainQuantity
-from .. import constants
 from .common import TestCase
 
 

@@ -1,10 +1,4 @@
-import inspect
-import os
-import re
-import string
-import sys
-import warnings
-from functools import partial, wraps
+from functools import wraps
 
 
 def memoize(f, cache={}):

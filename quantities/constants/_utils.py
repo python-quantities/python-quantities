@@ -1,6 +1,7 @@
-from ._codata import physical_constants
 from quantities.quantity import Quantity
 from quantities.uncertainquantity import UncertainQuantity
+
+from ._codata import physical_constants
 
 
 def _cd(name):

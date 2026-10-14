@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 hertz_inverse_meter_relationship = UnitConstant(
     'hertz_inverse_meter_relationship',

@@ -2,8 +2,8 @@
 """
 
 from ..unitquantity import UnitQuantity
-from .length import cm, m, foot, inch
 from .area import acre
+from .length import cm, foot, inch, m
 
 l = L = liter = litre = UnitQuantity(
     'liter',

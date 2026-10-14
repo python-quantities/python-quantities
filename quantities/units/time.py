@@ -3,7 +3,6 @@
 
 from ..unitquantity import UnitQuantity, UnitTime
 
-
 s = sec = second = UnitTime(
     'second',
     symbol='s',

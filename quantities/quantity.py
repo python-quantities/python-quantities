@@ -1,16 +1,15 @@
 """
 """
 
-import copy
-from functools import wraps
 import warnings
+from functools import wraps
 
 import numpy as np
 
-from . import markup, QuantitiesDeprecationWarning
+from . import QuantitiesDeprecationWarning, markup
+from .decorators import with_doc
 from .dimensionality import Dimensionality, p_dict
 from .registry import unit_registry
-from .decorators import with_doc
 
 PREFERRED = []  # List of preferred quantities for each symbol,
                 # e.g. PREFERRED = [pq.mV, pq.pA, pq.UnitQuantity('femtocoulomb', 1e-15*pq.C, 'fC')]

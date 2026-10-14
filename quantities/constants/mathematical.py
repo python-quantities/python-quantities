@@ -2,7 +2,6 @@ import math as _math
 
 from ..unitquantity import UnitConstant
 
-
 pi = UnitConstant(
     'pi',
     _math.pi,

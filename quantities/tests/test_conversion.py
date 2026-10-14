@@ -1,7 +1,5 @@
-import unittest
-import numpy as np
-from .. import units as pq
 from .. import quantity
+from .. import units as pq
 from .common import TestCase
 
 

@@ -3,8 +3,7 @@
 
 from ..unitquantity import UnitQuantity
 from .length import m, nmi
-from .time import s, h
-
+from .time import h, s
 
 c = speed_of_light = UnitQuantity(
     'speed_of_light',

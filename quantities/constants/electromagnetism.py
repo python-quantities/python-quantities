@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 Z_0 = impedence_of_free_space = characteristic_impedance_of_vacuum = UnitConstant(
     'characteristic_impedance_of_vacuum',
