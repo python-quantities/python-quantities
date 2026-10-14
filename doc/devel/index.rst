@@ -7,6 +7,10 @@ Developer's Guide
 .. toctree::
    :maxdepth: 2
 
-   documenting.rst
-   devnotes.rst
+   onboarding
+   architecture
+   workflow
+   documenting
+   devnotes
    release
+   maintenance
