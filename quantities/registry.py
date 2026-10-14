@@ -40,12 +40,12 @@ class UnitRegistry:
                         self.__context,
                     )
                 except NameError:
-                    raise LookupError('Unable to parse units: "%s"' % string)
+                    raise LookupError(f'Unable to parse units: "{string}"')
                 else:
                     return item
             else:
                 # could return self['UnitQuantity'](string)
-                raise LookupError('Unable to parse units: "%s"' % string)
+                raise LookupError(f'Unable to parse units: "{string}"')
 
         def __setitem__(self, string, val):
             assert isinstance(string, str)
@@ -55,8 +55,7 @@ class UnitRegistry:
                 if val == self.__context[string]:
                     return
                 raise KeyError(
-                    '%s has already been registered for %s'
-                    % (string, self.__context[string])
+                    f'{string} has already been registered for {self.__context[string]}'
                 )
             self.__context[string] = val
 

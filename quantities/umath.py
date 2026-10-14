@@ -344,8 +344,7 @@ def arctan2(x1, x2, out=None):
 
     if x1._dimensionality.simplified != x2._dimensionality.simplified:
         raise ValueError(
-            'x1 and x2 must have identical units, got "%s" and "%s"'\
-            % (str(x1._dimensionality), str(x2._dimensionality))
+            f'x1 and x2 must have identical units, got "{str(x1._dimensionality)}" and "{str(x2._dimensionality)}"'
         )
 
     return Quantity(
@@ -369,8 +368,7 @@ def hypot(x1, x2, out = None):
 
     if x1._dimensionality != x2._dimensionality:
         raise ValueError(
-            'x1 and x2 must have identical units, got "%s" and "%s"'\
-            % (str(x1._dimensionality), str(x2._dimensionality))
+            f'x1 and x2 must have identical units, got "{str(x1._dimensionality)}" and "{str(x2._dimensionality)}"'
         )
 
     return Quantity(

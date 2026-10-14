@@ -35,13 +35,12 @@ class UnitQuantity(Quantity):
         try:
             assert isinstance(name, str)
         except AssertionError:
-            raise TypeError('name must be a string, got %s (not unicode)'%name)
+            raise TypeError(f'name must be a string, got {name} (not unicode)')
         try:
             assert symbol is None or isinstance(symbol, str)
         except AssertionError:
             raise TypeError(
-                'symbol must be a string, '
-                'got %s (u_symbol can be unicode)'%symbol
+                f'symbol must be a string, got {symbol} (u_symbol can be unicode)'
             )
 
         ret = numpy.array(1, dtype='d').view(cls)
@@ -139,29 +138,27 @@ class UnitQuantity(Quantity):
     def __repr__(self):
         ref = self._definition
         if ref:
-            ref = ', %s * %s'%(str(ref.magnitude), ref.dimensionality.string)
+            ref = f', {str(ref.magnitude)} * {ref.dimensionality.string}'
         else:
             ref = ''
         symbol = self._symbol
-        symbol = ', %s'%(repr(symbol)) if symbol else ''
+        symbol = f', {repr(symbol)}' if symbol else ''
         if markup.config.use_unicode:
             u_symbol = self._u_symbol
-            u_symbol = ', %s'%(repr(u_symbol)) if u_symbol else ''
+            u_symbol = f', {repr(u_symbol)}' if u_symbol else ''
         else:
             u_symbol = ''
-        return '%s(%s%s%s%s)'%(
-            self.__class__.__name__, repr(self.name), ref, symbol, u_symbol
-        )
+        return f'{self.__class__.__name__}({repr(self.name)}{ref}{symbol}{u_symbol})'
 
     @with_doc(Quantity.__str__, use_header=False)
     def __str__(self):
         if self.u_symbol != self.name:
             if markup.config.use_unicode:
-                s = '1 %s (%s)'%(self.u_symbol, self.name)
+                s = f'1 {self.u_symbol} ({self.name})'
             else:
-                s = '1 %s (%s)'%(self.symbol, self.name)
+                s = f'1 {self.symbol} ({self.name})'
         else:
-            s = '1 %s'%self.name
+            s = f'1 {self.name}'
 
         return s
 
@@ -381,14 +378,14 @@ class CompoundUnit(UnitQuantity):
 
     @with_doc(UnitQuantity.__add__, use_header=False)
     def __repr__(self):
-        return '1 %s'%self.name
+        return f'1 {self.name}'
 
     @property
     def name(self):
         if markup.config.use_unicode:
-            return '(%s)'%(markup.superscript(self._name))
+            return f'({markup.superscript(self._name)})'
         else:
-            return '(%s)'%self._name
+            return f'({self._name})'
 
     def __reduce__(self):
         """
@@ -476,7 +473,7 @@ def set_default_units(
         try:
             assert system in ('si', 'cgs')
         except AssertionError:
-            raise ValueError('system must be "SI" or "cgs", got "%s"' % system)
+            raise ValueError(f'system must be "SI" or "cgs", got "{system}"')
         if system == 'si':
             UnitCurrent.set_default_unit('A')
             UnitLength.set_default_unit('m')

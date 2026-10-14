@@ -61,12 +61,12 @@ def format_units(udict):
             u = key.symbol
         if d>0:
             if d != 1:
-                u = u + ('**%s'%d).rstrip('0').rstrip('.')
+                u = u + f'**{d}'.rstrip('0').rstrip('.')
             num.append(u)
         elif d<0:
             d = -d
             if d != 1:
-                u = u + ('**%s'%d).rstrip('0').rstrip('.')
+                u = u + f'**{d}'.rstrip('0').rstrip('.')
             den.append(u)
     res = '*'.join(num)
     if len(den):
@@ -156,6 +156,6 @@ def format_units_html(udict,font='%s',mult=r'&sdot;',paren=False):
     # Remove multiplication signs
     res = re.sub(r'\*',mult,res)
     if paren and not compound:
-        res = '(%s)' % res
+        res = f'({res})'
     res = font % res
     return res

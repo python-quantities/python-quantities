@@ -24,7 +24,7 @@ class TestCase(unittest.TestCase):
             delta1 = np.finfo(q1.dtype).eps if isinstance(q1, np.ndarray) and q1.dtype.kind in 'fc' else 1e-15
             delta2 = np.finfo(q2.dtype).eps if isinstance(q2, np.ndarray) and q2.dtype.kind in 'fc' else 1e-15
             delta = max(delta1, delta2)**0.3
-        msg = '' if msg is None else ' (%s)' % msg
+        msg = '' if msg is None else f' ({msg})'
 
         q1 = Quantity(q1)
         q2 = Quantity(q2)
@@ -35,8 +35,7 @@ class TestCase(unittest.TestCase):
 
         if not np.all(np.abs(q1.magnitude - q2.magnitude) < delta):
             raise self.failureException(
-                "Magnitudes differ by more than %g (%s vs %s)%s"
-                % (delta, q1.magnitude, q2.magnitude, msg)
+                f"Magnitudes differ by more than {delta:g} ({q1.magnitude} vs {q2.magnitude}){msg}"
                 )
 
         d1 = getattr(q1, '_dimensionality', None)
