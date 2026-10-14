@@ -311,13 +311,17 @@ class Quantity(np.ndarray):
             return obj
 
         try:
-            res._dimensionality = p_dict[uf](*objs)
+            dimensionality = p_dict[uf](*objs)
         except KeyError:
             raise ValueError(
                 """ufunc %r not supported by quantities
                 please file a bug report at https://github.com/python-quantities
                 """ % uf
                 )
+        if (isinstance(res.base, Quantity)
+                and res._dimensionality != dimensionality):
+            raise ValueError('can not modify units of a view of a Quantity')
+        res._dimensionality = dimensionality
         return res
 
     def __array_wrap__(self, obj, context=None, return_scalar=False):
@@ -328,12 +332,9 @@ class Quantity(np.ndarray):
                 return self.__array_prepare__(obj, context)
             else:
                 return obj
-        # For NumPy > 2.0 we either do the prepare or the wrap
+        # NumPy 2 no longer calls __array_prepare__, even for Quantity outputs.
         else:
-            if not isinstance(obj, Quantity):
-                return self.__array_prepare__(obj, context)
-            else:
-                return super().__array_wrap__(obj, context, return_scalar)
+            return self.__array_prepare__(obj, context)
 
 
     @with_doc(np.ndarray.__add__)
@@ -379,22 +380,7 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__imul__)
     @protected_multiplication
     def __imul__(self, other):
-        # the following is an inelegant fix for the removal of __array_prepare__ in NumPy 2.x
-        # the longer-term solution is probably to implement __array_ufunc__
-        # See:
-        # - https://numpy.org/devdocs/release/2.0.0-notes.html#array-prepare-is-removed
-        # - https://numpy.org/neps/nep-0013-ufunc-overrides.html
-        if _np_version < (2, 0, 0):
-            return super().__imul__(other)
-        else:
-            cself = self.copy()
-            if hasattr(other, "copy"):
-                cother = other.copy()
-            else:
-                cother = other
-            res = super().__imul__(other)
-            context = (np.multiply, (cself, cother, cself), 0)
-            return self.__array_prepare__(res, context=context)
+        return super().__imul__(other)
 
     @with_doc(np.ndarray.__rmul__)
     def __rmul__(self, other):
@@ -403,18 +389,7 @@ class Quantity(np.ndarray):
     @with_doc(np.ndarray.__itruediv__)
     @protected_multiplication
     def __itruediv__(self, other):
-        # see comment above on __imul__
-        if _np_version < (2, 0, 0):
-            return super().__itruediv__(other)
-        else:
-            cself = self.copy()
-            if hasattr(other, "copy"):
-                cother = other.copy()
-            else:
-                cother = other
-            res = super().__itruediv__(other)
-            context = (np.true_divide, (cself, cother, cself), 0)
-            return self.__array_prepare__(res, context=context)
+        return super().__itruediv__(other)
 
     @with_doc(np.ndarray.__rtruediv__)
     def __rtruediv__(self, other):
@@ -429,18 +404,9 @@ class Quantity(np.ndarray):
     @check_uniform
     @protected_power
     def __ipow__(self, other):
-        # see comment above on __imul__
-        if _np_version < (2, 0, 0):
-            return super().__ipow__(other)
-        else:
-            cself = self.copy()
-            if hasattr(other, "copy"):
-                cother = other.copy()
-            else:
-                cother = other
-            res = super().__ipow__(other)
-            context = (np.power, (cself, cother, cself), 0)
-            return self.__array_prepare__(res, context=context)
+        # The exponent can share our magnitude buffer. Keep its original value
+        # for the dimensionality calculation performed after the ufunc.
+        return super().__ipow__(other.copy())
 
     def __round__(self, decimals=0):
         return np.around(self, decimals)
@@ -552,8 +518,11 @@ class Quantity(np.ndarray):
     # item, itemset, tofile, dump, byteswap
 
     @with_doc(np.ndarray.sum)
-    def sum(self, axis=None, dtype=None, out=None):
-        ret = self.magnitude.sum(axis, dtype, None if out is None else out.magnitude)
+    def sum(self, axis=None, dtype=None, out=None, keepdims=False):
+        ret = self.magnitude.sum(
+            axis, dtype, None if out is None else out.magnitude,
+            keepdims=keepdims
+        )
         dim = self.dimensionality
         if out is None:
             return Quantity(ret, dim)
@@ -692,7 +661,7 @@ class Quantity(np.ndarray):
         clipped = self.magnitude.clip(
             min.rescale(self._dimensionality).magnitude,
             max.rescale(self._dimensionality).magnitude,
-            out
+            None if out is None else out.magnitude
         )
         dim = self.dimensionality
         if out is None:
