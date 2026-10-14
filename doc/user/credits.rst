@@ -65,9 +65,9 @@ Zach McKenzie
 
 Additional contributions — including targeted bug fixes, unit
 additions, and documentation improvements — have been made by
-Daniel McCloy, Daniel A. Wagenaar, Espen Hagen, jadoro,
+ac1982, Daniel McCloy, Daniel A. Wagenaar, Espen Hagen, jadoro,
 Jakob Kaiser, Johannes Pfabe, Josef Kemetmüller, Justin Keogh,
 lumbric, Mathieu Scheltienne, Michael von Papen, Michał Górny,
 mjn, Olivier Sechet, p2jones, Philipp Rautenberg, Richard Gerkin,
 Rob Falck, Robert Schütz, Ryan May, Ryan Senkbeil, Sai Asish Y,
-Takashi, Takumasa Nakamura, Tim Gates, wilsaj, and Yves Delley.
+Siyan Zhao, Takashi, Takumasa Nakamura, Tim Gates, wilsaj, and Yves Delley.
