@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 
 from .. import units as pq
@@ -137,6 +139,17 @@ class TestUmath(TestCase):
             trapz(y2 * pq.m, x=[0., 1., 4.] * pq.s, axis=0),
             np.trapezoid(y2, x=[0., 1., 4.], axis=0) * pq.m*pq.s
         )
+
+    def test_no_internal_deprecation_warnings(self):
+        # functions in umath must not trigger the deprecation of
+        # Quantity's 'copy' argument
+        from .. import QuantitiesDeprecationWarning, umath
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", QuantitiesDeprecationWarning)
+            umath.sin(1 * pq.radian)
+            umath.arctan2(1 * pq.m, 2 * pq.m)
+            umath.trapz([1., 2., 3.] * pq.J, dx=1 * pq.m)
+            umath.sum(self.q)
 
     def test_sinh(self):
         q = [1, 2, 3, 4, 6] * pq.radian
