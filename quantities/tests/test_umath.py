@@ -124,6 +124,20 @@ class TestUmath(TestCase):
     def test_trapezoid(self):
         self.assertQuantityEqual(np.trapezoid(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
 
+    def test_umath_trapz(self):
+        from ..umath import trapz
+        y = [1., 2., 3.] * pq.J
+        x = [0., 1., 3.] * pq.s
+        self.assertQuantityEqual(trapz(y, dx=2*pq.m), 8. * pq.J*pq.m)
+        self.assertQuantityEqual(trapz(y, x=x), 6.5 * pq.J*pq.s)
+        self.assertQuantityEqual(trapz(y), 4. * pq.J)
+        self.assertEqual(trapz(y.magnitude, x=x.magnitude), 6.5)
+        y2 = np.arange(12.).reshape(3, 4)
+        self.assertQuantityEqual(
+            trapz(y2 * pq.m, x=[0., 1., 4.] * pq.s, axis=0),
+            np.trapezoid(y2, x=[0., 1., 4.], axis=0) * pq.m*pq.s
+        )
+
     def test_sinh(self):
         q = [1, 2, 3, 4, 6] * pq.radian
         self.assertQuantityEqual(

@@ -14,7 +14,7 @@ Updating dependencies
 
 *quantities* has a single runtime dependency (NumPy) and a handful of
 optional ones (``pytest`` for tests, ``sphinx`` for docs, ``ruff`` for
-linting, ``scipy`` as an optional backend for numerical integration).
+linting).
 
 When NumPy releases a new minor version:
 

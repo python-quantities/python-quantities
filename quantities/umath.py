@@ -185,7 +185,7 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         and not isinstance(x, Quantity)
         and not isinstance(dx, Quantity)
     ):
-        return _trapz(y, x, dx, axis)
+        return np.trapezoid(y, x=x, dx=dx, axis=axis)
 
     if not isinstance(y, Quantity):
         y = Quantity(y, copy = False)
@@ -195,49 +195,11 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         dx = Quantity(dx, copy = False)
 
     if x is None:
-        ret = _trapz(y.magnitude , x, dx.magnitude, axis)
+        ret = np.trapezoid(y.magnitude, x=x, dx=dx.magnitude, axis=axis)
         return Quantity ( ret, y.units * dx.units)
     else:
-        ret = _trapz(y.magnitude , x.magnitude, dx.magnitude, axis)
+        ret = np.trapezoid(y.magnitude, x=x.magnitude, dx=dx.magnitude, axis=axis)
         return Quantity ( ret, y.units * x.units)
-
-def _trapz(y, x, dx, axis):
-    """ported from numpy 1.26 since it will be deprecated and removed"""
-    try:
-        # if scipy is available, we use it
-        from scipy.integrate import trapezoid  # type: ignore
-    except ImportError:
-        # otherwise we use the implementation ported from numpy 1.26
-        from numpy.core.numeric import asanyarray
-        from numpy.core.umath import add
-        y = asanyarray(y)
-        if x is None:
-            d = dx
-        else:
-            x = asanyarray(x)
-            if x.ndim == 1:
-                d = diff(x)
-                # reshape to correct shape
-                shape = [1]*y.ndim
-                shape[axis] = d.shape[0]
-                d = d.reshape(shape)
-            else:
-                d = diff(x, axis=axis)
-        nd = y.ndim
-        slice1 = [slice(None)]*nd
-        slice2 = [slice(None)]*nd
-        slice1[axis] = slice(1, None)
-        slice2[axis] = slice(None, -1)
-        try:
-            ret = (d * (y[tuple(slice1)] + y[tuple(slice2)]) / 2.0).sum(axis)
-        except ValueError:
-            # Operations didn't work, cast to ndarray
-            d = np.asarray(d)
-            y = np.asarray(y)
-            ret = add.reduce(d * (y[tuple(slice1)]+y[tuple(slice2)])/2.0, axis)
-        return ret
-    else:
-        return trapezoid(y, x=x, dx=dx, axis=axis)
 
 @with_doc(np.sin)
 def sin(x, out=None):
