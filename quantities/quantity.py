@@ -311,13 +311,17 @@ class Quantity(np.ndarray):
             return obj
 
         try:
-            res._dimensionality = p_dict[uf](*objs)
+            dimensionality = p_dict[uf](*objs)
         except KeyError:
             raise ValueError(
                 """ufunc %r not supported by quantities
                 please file a bug report at https://github.com/python-quantities
                 """ % uf
                 )
+        if (isinstance(res.base, Quantity)
+                and res._dimensionality != dimensionality):
+            raise ValueError('can not modify units of a view of a Quantity')
+        res._dimensionality = dimensionality
         return res
 
     def __array_wrap__(self, obj, context=None, return_scalar=False):

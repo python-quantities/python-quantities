@@ -58,6 +58,38 @@ class TestUmath(TestCase):
         scalar **= scalar.magnitude
         self.assertQuantityEqual(scalar, 4. * pq.m**2)
 
+    def test_ufunc_output_view_units(self):
+        for operation in (
+                lambda v: np.multiply(v, v, out=v),
+                lambda v: np.divide(v, v, out=v),
+                lambda v: np.square(v, out=v),
+                lambda v: np.sqrt(v, out=v)):
+            with self.subTest(operation=operation):
+                q = [1., 4., 9.] * pq.m
+                view = q[:2]
+                with self.assertRaisesRegex(ValueError, 'modify units of a view'):
+                    operation(view)
+                self.assertEqual(view.units, pq.m)
+                self.assertEqual(q.units, pq.m)
+
+        q = [1., 4., 9.] * pq.m
+        view = q[:2]
+        self.assertIs(np.multiply(view, 2, out=view), view)
+        self.assertQuantityEqual(q, [2., 8., 9.] * pq.m)
+        self.assertIs(np.add(view, view, out=view), view)
+        self.assertQuantityEqual(q, [4., 16., 9.] * pq.m)
+        self.assertQuantityEqual(np.square(view), [16., 256.] * pq.m**2)
+
+        source = [2., 3.] * pq.m
+        destination = [0., 0., 0.] * pq.m**2
+        output = destination[:2]
+        self.assertIs(np.multiply(source, source, out=output), output)
+        self.assertQuantityEqual(destination, [4., 9., 0.] * pq.m**2)
+        with self.assertRaisesRegex(ValueError, 'modify units of a view'):
+            np.sqrt(source, out=output)
+        self.assertEqual(destination.units, pq.m**2)
+        self.assertEqual(output.units, pq.m**2)
+
     def test_cumprod(self):
         self.assertRaises(ValueError, np.cumprod, self.q)
 
