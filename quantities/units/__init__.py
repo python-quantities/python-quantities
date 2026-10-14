@@ -131,7 +131,7 @@ from .volume import (
     kL, kiloliter, kilolitre,
     ML, megaliter, megalitre,
     GL, gigaliter, gigalitre,
-    cc, cubic_centimeter, milliliter,
+    cc, cubic_centimeter,
     stere,
     gross_register_ton, register_ton,
     acre_foot,
