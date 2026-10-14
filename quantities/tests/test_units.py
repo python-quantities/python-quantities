@@ -1,6 +1,7 @@
 import pytest
 
 from .. import units as pq
+from ..quantity import Quantity
 from .common import TestCase
 
 
@@ -38,3 +39,46 @@ class TestUnits(TestCase):
         with pytest.raises(LookupError) as exc_info:
             pq.CompoundUnit("exec(\"print('Hello there.')\\nprint('General Wasabi!')\")")
             assert "Wasabi" in str(exc_info.value)
+
+
+class TestForceUnits(TestCase):
+
+    def test_pond_newtons(self):
+        # A pond is a gram-force, not a kilogram-force.
+        self.assertQuantityEqual(
+            pq.pond.rescale(pq.N), 0.00980665 * pq.N, delta=1e-12
+        )
+
+    def test_pond_names(self):
+        self.assertEqual(pq.pond.name, 'pond')
+        self.assertEqual(pq.pond.symbol, 'p')
+        for unit in ('pond', 'ponds', 'p'):
+            with self.subTest(unit=unit):
+                self.assertQuantityEqual(
+                    Quantity(1, unit).rescale(pq.N),
+                    0.00980665 * pq.N,
+                    delta=1e-12
+                )
+
+    def test_pond_array(self):
+        self.assertQuantityEqual(
+            ([-1, 0, 1, 1000] * pq.pond).rescale(pq.N),
+            [-0.00980665, 0, 0.00980665, 9.80665] * pq.N,
+            delta=1e-12
+        )
+
+    def test_pond_dimensionality(self):
+        self.assertEqual(
+            pq.pond.simplified.dimensionality,
+            (pq.kg * pq.m / pq.s**2).dimensionality
+        )
+
+    def test_gram_force_newtons(self):
+        self.assertQuantityEqual(
+            pq.gram_force.rescale(pq.N), 0.00980665 * pq.N, delta=1e-12
+        )
+
+    def test_kilogram_force_newtons(self):
+        self.assertQuantityEqual(
+            pq.kgf.rescale(pq.N), 9.80665 * pq.N, delta=1e-12
+        )
