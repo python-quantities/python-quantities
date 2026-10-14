@@ -73,3 +73,5 @@ ignore = []
 "quantities/units/*.py" = ["F401"]
 "quantities/constants/*.py" = ["F401"]
 "quantities/__init__.py" = ["F401", "F403"]
+# Generated from NIST_codata.txt with one constant per line.
+"quantities/constants/_codata.py" = ["E501"]
