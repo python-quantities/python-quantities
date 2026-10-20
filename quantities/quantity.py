@@ -332,6 +332,12 @@ class Quantity(np.ndarray):
         else:
             return self.__array_prepare__(obj, context)
 
+    def __array_function__(self, func, types, args, kwargs):
+        # NumPy 2 removed ndarray.ptp, so np.ptp no longer dispatches to
+        # Quantity.ptp and would drop the units.
+        if func is np.ptp and isinstance(args[0], Quantity):
+            return Quantity.ptp(*args, **kwargs)
+        return super().__array_function__(func, types, args, kwargs)
 
     @with_doc(np.ndarray.__add__)
     @scale_other_units
@@ -628,8 +634,9 @@ class Quantity(np.ndarray):
         return np.nanargmax(self.magnitude)
 
     @with_doc(np.ptp)
-    def ptp(self, axis=None, out=None):
-        ret = np.ptp(self.magnitude, axis, None if out is None else out.magnitude)
+    def ptp(self, axis=None, out=None, keepdims=False):
+        ret = np.ptp(self.magnitude, axis, None if out is None else out.magnitude,
+                     keepdims=keepdims)
         dim = self.dimensionality
         if out is None:
             return Quantity(ret, dim)

@@ -6,6 +6,8 @@ CHANGES
 Unreleased
 -----------
 
+- Fix ``np.ptp`` dropping the units of a Quantity with NumPy 2, which no
+  longer dispatches it to ``Quantity.ptp``.
 - Correct the pond force unit to 0.00980665 N (one gram-force); it was
   previously 1000 times too large (`#44 <https://github.com/python-quantities/python-quantities/issues/44>`_).
 
