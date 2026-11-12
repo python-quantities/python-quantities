@@ -653,8 +653,8 @@ class Quantity(np.ndarray):
             )
 
         clipped = self.magnitude.clip(
-            min.rescale(self._dimensionality).magnitude,
-            max.rescale(self._dimensionality).magnitude,
+            Quantity(min).rescale(self._dimensionality).magnitude,
+            Quantity(max).rescale(self._dimensionality).magnitude,
             None if out is None else out.magnitude
         )
         dim = self.dimensionality

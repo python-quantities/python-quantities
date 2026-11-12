@@ -218,6 +218,23 @@ class TestQuantityMethods(TestCase):
         self.assertRaises(ValueError, self.q.clip, pq.J)
         self.assertRaises(ValueError, self.q.clip, 1)
 
+    def test_clip_dimensionless_numeric_bounds(self):
+        q = [[-2., 0.5], [1.5, 3.]] * pq.dimensionless
+        for lower, upper in ((0, 1), (None, 1), (0, None),
+                             (np.array([[0.], [1.]]), [1., 2.])):
+            with self.subTest(lower=lower, upper=upper):
+                expected = q.magnitude.clip(lower, upper) * pq.dimensionless
+                self.assertQuantityEqual(q.clip(lower, upper), expected)
+                self.assertQuantityEqual(np.clip(q, lower, upper), expected)
+                out = np.empty(q.shape) * pq.dimensionless
+                self.assertIs(q.clip(lower, upper, out=out), out)
+                self.assertQuantityEqual(out, expected)
+        self.assertQuantityEqual(q.clip(0, 1 * pq.dimensionless),
+                                 [[0., 0.5], [1., 1.]] * pq.dimensionless)
+        self.assertRaises(ValueError, q.clip, 0 * pq.m, 1)
+        self.assertRaises(ValueError, self.q.clip, 0, 1 * pq.m)
+        self.assertQuantityEqual(q, [[-2., 0.5], [1.5, 3.]] * pq.dimensionless)
+
     def test_round(self):
         q = [1, 1.33, 5.67, 22] * pq.m
         self.methodWithOut(
