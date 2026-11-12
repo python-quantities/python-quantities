@@ -130,8 +130,5 @@ jobs:
           python -m pip install -U ruff
 
       - name: Run Ruff
-        # Advisory: report style issues but do not fail the build while the
-        # existing codebase is being brought into full Ruff conformance.
-        # Drop --exit-zero once the codebase is clean.
         run: |
-          ruff check --exit-zero quantities
+          ruff check quantities
