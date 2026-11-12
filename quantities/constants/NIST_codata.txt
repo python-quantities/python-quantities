@@ -1,6 +1,6 @@
 
              Fundamental Physical Constants --- Complete Listing
-
+             2006 CODATA adjustment
 
   From:  http://physics.nist.gov/constants
 
