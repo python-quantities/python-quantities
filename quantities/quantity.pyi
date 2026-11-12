@@ -1,5 +1,6 @@
 from typing import Any, Optional
 
+import numpy as np
 import numpy.typing as npt
 
 from quantities.dimensionality import Dimensionality
@@ -21,7 +22,7 @@ def scale_other_units(f: Any) -> None:
     ...
 
 
-class Quantity(npt.NDArray):
+class Quantity(np.ndarray[Any, np.dtype[Any]]):
 
     def __new__(cls, data: QuantityData, units: DimensionalityDescriptor = ...,
                 dtype: Optional[object] = ..., copy: bool = ...) -> Quantity:

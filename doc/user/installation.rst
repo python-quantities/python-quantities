@@ -8,8 +8,8 @@ Prerequisites
 
 Quantities has a few dependencies:
 
-* Python_ (>=3.8)
-* NumPy_ (>=1.19)
+* Python_ (>=3.11)
+* NumPy_ (>=2.0)
 
 (bearing in mind that not all combinations of Python and NumPy versions necessarily work).
 
