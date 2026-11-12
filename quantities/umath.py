@@ -73,6 +73,11 @@ def ediff1d(ary, to_end=None, to_begin=None):
     if not isinstance(ary, Quantity):
         return np.ediff1d(ary, to_end, to_begin)
 
+    if isinstance(to_end, Quantity):
+        to_end = to_end.rescale(ary.dimensionality).magnitude
+    if isinstance(to_begin, Quantity):
+        to_begin = to_begin.rescale(ary.dimensionality).magnitude
+
     return Quantity(
         np.ediff1d(ary.magnitude, to_end, to_begin),
         ary.dimensionality,

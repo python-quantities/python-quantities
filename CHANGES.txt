@@ -14,6 +14,8 @@ Unreleased
 - Fix type checking with NumPy 2.5
 - Add CI testing for Python 3.15 and NumPy 2.5, drop support for Python 3.10 and for NumPy 1.x (following NEP 29 plus one year)
 
+- Convert quantity-valued `ediff1d` boundary differences to the input units.
+
 ------
 0.16.4
 ------

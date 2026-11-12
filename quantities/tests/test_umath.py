@@ -105,6 +105,33 @@ class TestUmath(TestCase):
     def test_ediff1d(self):
         self.assertQuantityEqual(np.diff(self.q, 1), [1, 1, 1] * pq.J)
 
+    def test_ediff1d_boundary_units(self):
+        from ..quantity import Quantity
+        from ..umath import ediff1d
+
+        values = [[1., 3.], [6., 10.]] * pq.m
+        for begin, end in ((100 * pq.cm, [200, 300] * pq.cm),
+                           (1 * pq.m, [2, 3] * pq.m),
+                           (1, [2, 3])):
+            with self.subTest(begin=begin, end=end):
+                self.assertQuantityEqual(
+                    ediff1d(values, to_begin=begin, to_end=end),
+                    [1., 2., 3., 4., 2., 3.] * pq.m,
+                )
+        self.assertQuantityEqual(ediff1d(values, to_begin=100 * pq.cm),
+                                 [1., 2., 3., 4.] * pq.m)
+        self.assertQuantityEqual(ediff1d(values, to_end=200 * pq.cm),
+                                 [2., 3., 4., 2.] * pq.m)
+        self.assertRaises(ValueError, ediff1d, values, to_begin=1 * pq.s)
+        self.assertRaises(ValueError, ediff1d, values, to_end=1 * pq.s)
+        integer_values = Quantity([1, 3, 6], pq.m, dtype=int)
+        self.assertQuantityEqual(ediff1d(integer_values, to_begin=1),
+                                 [1, 2, 3] * pq.m)
+        # Converted fractional boundaries must obey NumPy's casting rules.
+        self.assertRaises(TypeError, ediff1d, integer_values,
+                          to_begin=1 * pq.cm)
+        self.assertQuantityEqual(values, [[1., 3.], [6., 10.]] * pq.m)
+
     def test_linspace(self):
         self.assertQuantityEqual(np.linspace(self.q[0], self.q[-1], 4), self.q)
 
