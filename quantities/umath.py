@@ -50,8 +50,7 @@ def nansum(a, axis=None):
 
     return Quantity(
         np.nansum(a.magnitude, axis),
-        a.dimensionality,
-        copy=False
+        a.dimensionality
     )
 
 @with_doc(np.cumprod)
@@ -75,8 +74,7 @@ def ediff1d(ary, to_end=None, to_begin=None):
 
     return Quantity(
         np.ediff1d(ary.magnitude, to_end, to_begin),
-        ary.dimensionality,
-        copy=False
+        ary.dimensionality
     )
 
 @with_doc(np.gradient)
@@ -89,7 +87,7 @@ def gradient(f, *varargs):
     #   if len(varargs) == 0:
     #       varargs = (Quantity(1),)
 
-    varargsQuantities = [Quantity(i, copy=False) for i in varargs]
+    varargsQuantities = [Quantity(i) for i in varargs]
     varargsMag = tuple(i.magnitude for i in varargsQuantities)
     ret = np.gradient(f.magnitude, *varargsMag)
 
@@ -109,14 +107,13 @@ def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
         return np.cross(a, b, axisa, axisb, axisc, axis)
 
     if not isinstance(a, Quantity):
-        a = Quantity(a, dimensionless, copy=False)
+        a = Quantity(a, dimensionless)
     if not isinstance(b, Quantity):
-        b = Quantity(b, dimensionless, copy=False)
+        b = Quantity(b, dimensionless)
 
     return Quantity(
         np.cross(a, b, axisa, axisb, axisc, axis),
-        a._dimensionality*b._dimensionality,
-        copy=False
+        a._dimensionality*b._dimensionality
     )
 
 
@@ -185,59 +182,21 @@ def trapz(y, x=None, dx=1.0, axis=-1):
         and not isinstance(x, Quantity)
         and not isinstance(dx, Quantity)
     ):
-        return _trapz(y, x, dx, axis)
+        return np.trapezoid(y, x=x, dx=dx, axis=axis)
 
     if not isinstance(y, Quantity):
-        y = Quantity(y, copy = False)
+        y = Quantity(y)
     if not isinstance(x, Quantity) and not x is None:
-        x = Quantity(x, copy = False)
+        x = Quantity(x)
     if not isinstance(dx, Quantity):
-        dx = Quantity(dx, copy = False)
+        dx = Quantity(dx)
 
     if x is None:
-        ret = _trapz(y.magnitude , x, dx.magnitude, axis)
+        ret = np.trapezoid(y.magnitude, x=x, dx=dx.magnitude, axis=axis)
         return Quantity ( ret, y.units * dx.units)
     else:
-        ret = _trapz(y.magnitude , x.magnitude, dx.magnitude, axis)
+        ret = np.trapezoid(y.magnitude, x=x.magnitude, dx=dx.magnitude, axis=axis)
         return Quantity ( ret, y.units * x.units)
-
-def _trapz(y, x, dx, axis):
-    """ported from numpy 1.26 since it will be deprecated and removed"""
-    try:
-        # if scipy is available, we use it
-        from scipy.integrate import trapezoid  # type: ignore
-    except ImportError:
-        # otherwise we use the implementation ported from numpy 1.26
-        from numpy.core.numeric import asanyarray
-        from numpy.core.umath import add
-        y = asanyarray(y)
-        if x is None:
-            d = dx
-        else:
-            x = asanyarray(x)
-            if x.ndim == 1:
-                d = diff(x)
-                # reshape to correct shape
-                shape = [1]*y.ndim
-                shape[axis] = d.shape[0]
-                d = d.reshape(shape)
-            else:
-                d = diff(x, axis=axis)
-        nd = y.ndim
-        slice1 = [slice(None)]*nd
-        slice2 = [slice(None)]*nd
-        slice1[axis] = slice(1, None)
-        slice2[axis] = slice(None, -1)
-        try:
-            ret = (d * (y[tuple(slice1)] + y[tuple(slice2)]) / 2.0).sum(axis)
-        except ValueError:
-            # Operations didn't work, cast to ndarray
-            d = np.asarray(d)
-            y = np.asarray(y)
-            ret = add.reduce(d * (y[tuple(slice1)]+y[tuple(slice2)])/2.0, axis)
-        return ret
-    else:
-        return trapezoid(y, x=x, dx=dx, axis=axis)
 
 @with_doc(np.sin)
 def sin(x, out=None):
@@ -249,8 +208,7 @@ def sin(x, out=None):
     if not isinstance(x, Quantity):
         return np.sin(x, out)
 
-    return Quantity(np.sin(x.rescale(radian).magnitude, out),
-                    copy=False)
+    return Quantity(np.sin(x.rescale(radian).magnitude, out))
 
 @with_doc(np.arcsin)
 def arcsin(x, out=None):
@@ -265,8 +223,7 @@ def arcsin(x, out=None):
 
     return Quantity(
         np.arcsin(x.rescale(dimensionless).magnitude, out),
-        radian,
-        copy=False
+        radian
     )
 
 @with_doc(np.cos)
@@ -279,7 +236,7 @@ def cos(x, out=None):
     if not isinstance(x, Quantity):
         return np.cos(x, out)
 
-    return Quantity(np.cos(x.rescale(radian).magnitude), copy=False)
+    return Quantity(np.cos(x.rescale(radian).magnitude))
 
 @with_doc(np.arccos)
 def arccos(x, out=None):
@@ -294,8 +251,7 @@ def arccos(x, out=None):
 
     return Quantity(
         np.arccos(x.rescale(dimensionless).magnitude, out),
-        radian,
-        copy=False
+        radian
     )
 
 @with_doc(np.tan)
@@ -308,7 +264,7 @@ def tan(x, out=None):
     if not isinstance(x, Quantity):
         return np.tan(x, out)
 
-    return Quantity(np.tan(x.rescale(radian).magnitude), copy=False)
+    return Quantity(np.tan(x.rescale(radian).magnitude))
 
 @with_doc(np.arctan)
 def arctan(x, out=None):
@@ -323,8 +279,7 @@ def arctan(x, out=None):
 
     return Quantity(
         np.arctan(x.rescale(dimensionless).magnitude, out),
-        radian,
-        copy=False
+        radian
     )
 
 @with_doc(np.arctan2)
@@ -338,9 +293,9 @@ def arctan2(x1, x2, out=None):
         return np.arctan2(x1, x2, out)
 
     if not isinstance(x1, Quantity):
-        x1 = Quantity(x1, dimensionless, copy=False)
+        x1 = Quantity(x1, dimensionless)
     if not isinstance(x2, Quantity):
-        x2 = Quantity(x2, dimensionless, copy=False)
+        x2 = Quantity(x2, dimensionless)
 
     if x1._dimensionality.simplified != x2._dimensionality.simplified:
         raise ValueError(
@@ -349,8 +304,7 @@ def arctan2(x1, x2, out=None):
 
     return Quantity(
         np.arctan2(x1.magnitude, x2.magnitude, out),
-        radian,
-        copy=False
+        radian
     )
 
 @with_doc(np.hypot)
@@ -362,9 +316,9 @@ def hypot(x1, x2, out = None):
         return np.hypot(x1, x2, out)
 
     if not isinstance(x1, Quantity):
-        x1 = Quantity(x1, dimensionless, copy=False)
+        x1 = Quantity(x1, dimensionless)
     if not isinstance(x2, Quantity):
-        x2 = Quantity(x2, dimensionless, copy=False)
+        x2 = Quantity(x2, dimensionless)
 
     if x1._dimensionality != x2._dimensionality:
         raise ValueError(
@@ -373,8 +327,7 @@ def hypot(x1, x2, out = None):
 
     return Quantity(
         np.hypot(x1.magnitude, x2.magnitude, out),
-        x1.dimensionality,
-        copy = False
+        x1.dimensionality
     )
 
 @with_doc(np.unwrap)
@@ -383,9 +336,9 @@ def unwrap(p, discont=np.pi, axis=-1):
         return np.unwrap(p, discont, axis)
 
     if not isinstance(p, Quantity):
-        p = Quantity(p, copy=False)
+        p = Quantity(p)
     if not isinstance(discont, Quantity):
-        discont = Quantity(discont, copy=False)
+        discont = Quantity(discont)
 
     discont = discont.rescale(p.units)
 
@@ -405,8 +358,7 @@ def sinh(x, out=None):
 
     return Quantity(
         np.sinh(x.rescale(dimensionless).magnitude, out),
-        dimensionless,
-        copy=False
+        dimensionless
     )
 
 @with_doc(np.cosh)
@@ -420,8 +372,7 @@ def cosh(x, out=None):
 
     return Quantity(
         np.cosh(x.rescale(dimensionless).magnitude, out),
-        dimensionless,
-        copy=False
+        dimensionless
     )
 
 @with_doc(np.tanh)
@@ -435,8 +386,7 @@ def tanh(x, out=None):
 
     return Quantity(
         np.tanh(x.rescale(dimensionless).magnitude, out),
-        dimensionless,
-        copy=False
+        dimensionless
     )
 
 @with_doc(np.arcsinh)
@@ -450,8 +400,7 @@ def arcsinh(x, out=None):
 
     return Quantity(
         np.arcsinh(x.rescale(dimensionless).magnitude, out),
-        dimensionless,
-        copy=False
+        dimensionless
     )
 
 @with_doc(np.arccosh)
@@ -465,8 +414,7 @@ def arccosh(x, out=None):
 
     return Quantity(
         np.arccosh(x.rescale(dimensionless).magnitude, out),
-        dimensionless,
-        copy=False
+        dimensionless
     )
 
 @with_doc(np.arctanh)
@@ -480,6 +428,5 @@ def arctanh(x, out=None):
 
     return Quantity(
         np.arctanh(x.rescale(dimensionless).magnitude, out),
-        dimensionless,
-        copy=False
+        dimensionless
     )

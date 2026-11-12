@@ -9,8 +9,6 @@ from . import markup
 from .registry import unit_registry
 from .decorators import memoize
 
-_np_version = tuple(map(int, np.__version__.split(".dev")[0].split(".")))
-
 
 def assert_isinstance(obj, types):
     try:
@@ -330,10 +328,7 @@ p_dict[np.trunc] = _d_copy
 def _d_clip(a1, a2, a3, q):
     return q.dimensionality
 
-if _np_version < (2, 0, 0):
-    p_dict[np.core.umath.clip] = _d_clip
-else:
-    p_dict[np.clip] = _d_clip
+p_dict[np.clip] = _d_clip
 
 def _d_sqrt(q1, out=None):
     return q1._dimensionality**0.5

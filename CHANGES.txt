@@ -10,6 +10,8 @@ Unreleased
   previously 1000 times too large (`#44 <https://github.com/python-quantities/python-quantities/issues/44>`_).
 - Fix type checking with NumPy 2.5
 - Add CI testing for Python 3.15 and NumPy 2.5, drop support for Python 3.10 and for NumPy 1.x (following NEP 29 plus one year)
+- `quantities.umath.trapz` now always uses `numpy.trapezoid`; SciPy is no longer used, and the `scipy` optional dependency has been removed
+- Functions in `quantities.umath` no longer emit a spurious `QuantitiesDeprecationWarning` about the `copy` argument
 
 ------
 0.16.4

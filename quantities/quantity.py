@@ -16,8 +16,6 @@ PREFERRED = []  # List of preferred quantities for each symbol,
                 # e.g. PREFERRED = [pq.mV, pq.pA, pq.UnitQuantity('femtocoulomb', 1e-15*pq.C, 'fC')]
                 # Intended to be overwritten in down-stream packages
 
-_np_version = tuple(map(int, np.__version__.split(".dev")[0].split(".")))
-
 
 def validate_unit_quantity(value):
     try:
@@ -321,16 +319,9 @@ class Quantity(np.ndarray):
         return res
 
     def __array_wrap__(self, obj, context=None, return_scalar=False):
-
-        # For NumPy < 2.0 we do old behavior
-        if _np_version < (2, 0, 0):
-            if not isinstance(obj, Quantity):
-                return self.__array_prepare__(obj, context)
-            else:
-                return obj
-        # NumPy 2 no longer calls __array_prepare__, even for Quantity outputs.
-        else:
-            return self.__array_prepare__(obj, context)
+        # NumPy 2 no longer calls __array_prepare__ itself, so we call it here,
+        # including for Quantity outputs.
+        return self.__array_prepare__(obj, context)
 
 
     @with_doc(np.ndarray.__add__)
@@ -419,15 +410,11 @@ class Quantity(np.ndarray):
             dims = self.dimensionality.string
         return f'{str(self.magnitude)} {dims}'
 
-    if tuple(map(int, np.__version__.split('.')[:2])) >= (1, 14):
-        # in numpy 1.14 the formatting of scalar values was changed
-        # see https://github.com/numpy/numpy/pull/9883
-
-        def __format__(self, format_spec):
-            ret = super().__format__(format_spec)
-            if self.ndim:
-                return ret
-            return ret + f' {self.dimensionality}'
+    def __format__(self, format_spec):
+        ret = super().__format__(format_spec)
+        if self.ndim:
+            return ret
+        return ret + f' {self.dimensionality}'
 
     @with_doc(np.ndarray.__getitem__)
     def __getitem__(self, key):

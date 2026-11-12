@@ -1,9 +1,9 @@
+import warnings
+
 import numpy as np
 
 from .. import units as pq
 from .common import TestCase, unittest
-
-_np_version = tuple(map(int, np.__version__.split(".dev")[0].split(".")))
 
 
 class TestUmath(TestCase):
@@ -123,14 +123,33 @@ class TestUmath(TestCase):
         b = [4, 9, 2] * pq.m**2
         self.assertQuantityEqual(np.cross(a,b), [-15,-2,39]*pq.kPa*pq.m**2)
 
-    def test_trapz(self):
-        # np.trapz is deprecated, np.trapezoid is recommend
-        if _np_version < (2, 0, 0):
-            self.assertQuantityEqual(np.trapz(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
-
     def test_trapezoid(self):
-        if _np_version >= (2, 0, 0):
-            self.assertQuantityEqual(np.trapezoid(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
+        self.assertQuantityEqual(np.trapezoid(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
+
+    def test_umath_trapz(self):
+        from ..umath import trapz
+        y = [1., 2., 3.] * pq.J
+        x = [0., 1., 3.] * pq.s
+        self.assertQuantityEqual(trapz(y, dx=2*pq.m), 8. * pq.J*pq.m)
+        self.assertQuantityEqual(trapz(y, x=x), 6.5 * pq.J*pq.s)
+        self.assertQuantityEqual(trapz(y), 4. * pq.J)
+        self.assertEqual(trapz(y.magnitude, x=x.magnitude), 6.5)
+        y2 = np.arange(12.).reshape(3, 4)
+        self.assertQuantityEqual(
+            trapz(y2 * pq.m, x=[0., 1., 4.] * pq.s, axis=0),
+            np.trapezoid(y2, x=[0., 1., 4.], axis=0) * pq.m*pq.s
+        )
+
+    def test_no_internal_deprecation_warnings(self):
+        # functions in umath must not trigger the deprecation of
+        # Quantity's 'copy' argument
+        from .. import QuantitiesDeprecationWarning, umath
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", QuantitiesDeprecationWarning)
+            umath.sin(1 * pq.radian)
+            umath.arctan2(1 * pq.m, 2 * pq.m)
+            umath.trapz([1., 2., 3.] * pq.J, dx=1 * pq.m)
+            umath.sum(self.q)
 
     def test_sinh(self):
         q = [1, 2, 3, 4, 6] * pq.radian
