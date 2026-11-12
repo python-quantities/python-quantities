@@ -41,7 +41,7 @@ rads = UnitQuantity(
     'rads',
     1e-2*gray,
     doc='''
-    rad is commonly used symbol for radian. 
+    rad is commonly used symbol for radian.
     rads unit of radiation is deprecated.
     '''
 )

@@ -75,9 +75,12 @@ class UnitRegistry:
             r"\g<1>*\g<2>", label.replace('^', '**').replace('·', '*'))
 
         # make sure we can parse the label ....
-        if label == '': label = 'dimensionless'
-        if "%" in label: label = label.replace("%", "percent")
-        if label.lower() == "in": label = "inch"
+        if label == '':
+            label = 'dimensionless'
+        if "%" in label:
+            label = label.replace("%", "percent")
+        if label.lower() == "in":
+            label = "inch"
 
         return self.__registry[label]
 

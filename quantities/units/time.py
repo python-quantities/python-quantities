@@ -152,7 +152,7 @@ synodic_month = lunar_month = UnitTime(
     29.530589*day,
     aliases=['synodic_months', 'lunar_month', 'lunar_months'],
     doc='''
-    long-term average. 
+    long-term average.
 
     http://en.wikipedia.org/wiki/Month#Synodic_month
     '''

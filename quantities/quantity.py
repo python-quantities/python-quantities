@@ -646,8 +646,10 @@ class Quantity(np.ndarray):
         if min is None and max is None:
             raise ValueError("at least one of min or max must be set")
         else:
-            if min is None: min = Quantity(-np.inf, self._dimensionality)
-            if max is None: max = Quantity(np.inf, self._dimensionality)
+            if min is None:
+                min = Quantity(-np.inf, self._dimensionality)
+            if max is None:
+                max = Quantity(np.inf, self._dimensionality)
 
         if self.dimensionality and not \
                 (isinstance(min, Quantity) and isinstance(max, Quantity)):
@@ -745,7 +747,7 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
-        if axis == None:
+        if axis is None:
             power = self.size
         else:
             power = self.shape[axis]

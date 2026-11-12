@@ -219,7 +219,7 @@ def _d_multiply(q1, q2, out=None):
     except AttributeError:
         try:
             return q1.dimensionality
-        except:
+        except AttributeError:
             return q2.dimensionality
 p_dict[np.multiply] = _d_multiply
 p_dict[np.cross] = _d_multiply
@@ -230,7 +230,7 @@ def _d_divide(q1, q2, out=None):
     except AttributeError:
         try:
             return q1.dimensionality
-        except:
+        except AttributeError:
             return q2.dimensionality**-1
 p_dict[np.divide] = _d_divide
 p_dict[np.true_divide] = _d_divide

@@ -5,7 +5,7 @@ from ..unitquantity import UnitQuantity
 from .area import acre
 from .length import cm, foot, inch, m
 
-l = L = liter = litre = UnitQuantity(
+l = L = liter = litre = UnitQuantity(  # noqa: E741
     'liter',
     1e-3*m**3,
     symbol='L',
