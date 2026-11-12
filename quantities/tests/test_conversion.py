@@ -28,12 +28,8 @@ class TestConversion(TestCase):
     def test_rescale_preferred_failure(self):
         quantity.PREFERRED = [pq.pA]
         q = 10*pq.V
-        try:
-            self.assertQuantityEqual(q.rescale_preferred(), q.rescale(pq.mV))
-        except:
-            self.assertTrue(True)
-        else:
-            self.assertTrue(False)
+        with self.assertRaises(Exception):
+            q.rescale_preferred()
         quantity.PREFERRED = []
 
     def test_rescale_noargs(self):
@@ -47,12 +43,8 @@ class TestConversion(TestCase):
     def test_rescale_noargs_failure(self):
         quantity.PREFERRED = [pq.pA]
         q = 10*pq.V
-        try:
-            self.assertQuantityEqual(q.rescale_preferred(), q.rescale(pq.mV))
-        except:
-            self.assertTrue(True)
-        else:
-            self.assertTrue(False)
+        with self.assertRaises(Exception):
+            q.rescale()
         quantity.PREFERRED = []
 
     def test_compound_reduction(self):

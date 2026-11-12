@@ -138,9 +138,9 @@ class TestUmath(TestCase):
     @unittest.expectedFailure
     def test_gradient(self):
         try:
-            l = np.gradient([[1,1],[3,4]] * pq.J, 1 * pq.m)
-            self.assertQuantityEqual(l[0], [[2., 3.], [2., 3.]] * pq.J/pq.m)
-            self.assertQuantityEqual(l[1], [[0., 0.], [1., 1.]] * pq.J/pq.m)
+            grad = np.gradient([[1,1],[3,4]] * pq.J, 1 * pq.m)
+            self.assertQuantityEqual(grad[0], [[2., 3.], [2., 3.]] * pq.J/pq.m)
+            self.assertQuantityEqual(grad[1], [[0., 0.], [1., 1.]] * pq.J/pq.m)
         except ValueError as e:
             raise self.failureException(e)
 

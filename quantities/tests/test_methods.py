@@ -166,7 +166,7 @@ class TestQuantityMethods(TestCase):
 
     def test_nanargmax(self):
         q = np.append(self.q, np.nan) * self.q.units
-        self.assertEqual(self.q.nanargmax(), 3)
+        self.assertEqual(q.nanargmax(), 3)
 
     def test_min(self):
         self.methodWithOut('min', 1 * pq.m)
@@ -191,7 +191,7 @@ class TestQuantityMethods(TestCase):
 
     def test_nanargmin(self):
         q = np.append(self.q, np.nan) * self.q.units
-        self.assertEqual(self.q.nanargmin(), 0)
+        self.assertEqual(q.nanargmin(), 0)
 
     def test_ptp(self):
         self.methodWithOut('ptp', 3 * pq.m)
