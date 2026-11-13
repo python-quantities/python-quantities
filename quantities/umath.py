@@ -20,8 +20,15 @@ __all__ = [
     "cumsum",
     "diff",
     "ediff1d",
+    "exp",
+    "exp2",
+    "expm1",
     "gradient",
     "hypot",
+    "log",
+    "log10",
+    "log1p",
+    "log2",
     "nansum",
     "np",
     "prod",
@@ -488,3 +495,102 @@ def arctanh(x, out=None):
         dimensionless,
         copy=False
     )
+
+@with_doc(np.exp)
+def exp(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.exp(x, out)
+
+    return Quantity(
+        np.exp(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
+@with_doc(np.exp2)
+def exp2(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.exp2(x, out)
+
+    return Quantity(
+        np.exp2(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
+@with_doc(np.expm1)
+def expm1(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.expm1(x, out)
+
+    return Quantity(
+        np.expm1(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
+@with_doc(np.log)
+def log(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.log(x, out)
+
+    return Quantity(
+        np.log(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
+@with_doc(np.log2)
+def log2(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.log2(x, out)
+
+    return Quantity(
+        np.log2(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
+@with_doc(np.log10)
+def log10(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.log10(x, out)
+
+    return Quantity(
+        np.log10(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
+@with_doc(np.log1p)
+def log1p(x, out=None):
+    """
+    Raises a ValueError if input cannot be rescaled to a dimensionless
+    quantity.
+    """
+    if not isinstance(x, Quantity):
+        return np.log1p(x, out)
+
+    return Quantity(
+        np.log1p(x.rescale(dimensionless).magnitude, out),
+        dimensionless,
+    )
+
