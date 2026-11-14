@@ -359,9 +359,11 @@ def _d_degrees(q1, out=None):
     return unit_registry['degree'].dimensionality
 p_dict[np.degrees] = _d_degrees
 
-def _d_dimensionless(q1, out=None):
-    if getattr(q1, 'dimensionality', None):
-        raise ValueError("quantity must be dimensionless")
+def _d_dimensionless(*args, out=None):
+    for q in args:
+        dim = getattr(q, 'dimensionality', None)
+        if dim and dim.simplified != Dimensionality():
+            raise ValueError("quantity must be dimensionless")
     return Dimensionality()
 p_dict[np.log] = _d_dimensionless
 p_dict[np.log10] = _d_dimensionless
@@ -389,7 +391,8 @@ p_dict[np.tan] = _d_trig
 p_dict[np.tanh] = _d_trig
 
 def _d_arctrig(q1, out=None):
-    if getattr(q1, 'dimensionality', None):
+    dim = getattr(q1, 'dimensionality', None)
+    if dim and dim.simplified != Dimensionality():
         raise ValueError("quantity must be dimensionless")
     return unit_registry['radian'].dimensionality
 p_dict[np.arcsin] = _d_arctrig

@@ -1,6 +1,7 @@
 import numpy as np
 
 from .. import units as pq
+from .. import umath
 from .common import TestCase, unittest
 
 _np_version = tuple(map(int, np.__version__.split(".dev")[0].split(".")))
@@ -265,30 +266,79 @@ class TestUmath(TestCase):
     def test_exp(self):
         self.assertQuantityEqual(np.exp(1*pq.dimensionless), np.e)
         self.assertRaises(ValueError, np.exp, 1*pq.m)
+        self.assertQuantityEqual(umath.exp(1*pq.dimensionless), np.e * pq.dimensionless)
+        self.assertRaises(ValueError, umath.exp, 1*pq.m)
+        compound_dl = 1 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.exp(compound_dl), np.e)
+        self.assertQuantityEqual(umath.exp(compound_dl), np.e * pq.dimensionless)
 
     def test_exp2(self):
         self.assertQuantityEqual(np.exp2(1*pq.dimensionless), 2.0)
         self.assertRaises(ValueError, np.exp2, 1*pq.m)
+        self.assertQuantityEqual(umath.exp2(1*pq.dimensionless), 2.0 * pq.dimensionless)
+        self.assertRaises(ValueError, umath.exp2, 1*pq.m)
+        compound_dl = 1 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.exp2(compound_dl), 2.0)
+        self.assertQuantityEqual(umath.exp2(compound_dl), 2.0 * pq.dimensionless)
 
     def test_log(self):
         self.assertQuantityEqual(np.log(1*pq.dimensionless), 0)
         self.assertRaises(ValueError, np.log, 1*pq.m)
+        self.assertQuantityEqual(umath.log(1*pq.dimensionless), 0 * pq.dimensionless)
+        self.assertRaises(ValueError, umath.log, 1*pq.m)
+        compound_dl = 1 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.log(compound_dl), 0)
+        self.assertQuantityEqual(umath.log(compound_dl), 0 * pq.dimensionless)
 
     def test_log10(self):
         self.assertQuantityEqual(np.log10(1*pq.dimensionless), 0)
         self.assertRaises(ValueError, np.log10, 1*pq.m)
+        self.assertQuantityEqual(umath.log10(1*pq.dimensionless), 0 * pq.dimensionless)
+        self.assertRaises(ValueError, umath.log10, 1*pq.m)
+        compound_dl = 1 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.log10(compound_dl), 0)
+        self.assertQuantityEqual(umath.log10(compound_dl), 0 * pq.dimensionless)
 
     def test_log2(self):
         self.assertQuantityEqual(np.log2(1*pq.dimensionless), 0)
         self.assertRaises(ValueError, np.log2, 1*pq.m)
+        self.assertQuantityEqual(umath.log2(1*pq.dimensionless), 0 * pq.dimensionless)
+        self.assertRaises(ValueError, umath.log2, 1*pq.m)
+        compound_dl = 1 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.log2(compound_dl), 0)
+        self.assertQuantityEqual(umath.log2(compound_dl), 0 * pq.dimensionless)
 
     def test_expm1(self):
         self.assertQuantityEqual(np.expm1(1*pq.dimensionless), np.e-1)
         self.assertRaises(ValueError, np.expm1, 1*pq.m)
+        self.assertQuantityEqual(umath.expm1(1*pq.dimensionless), (np.e-1) * pq.dimensionless)
+        self.assertRaises(ValueError, umath.expm1, 1*pq.m)
+        compound_dl = 1 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.expm1(compound_dl), np.e-1)
+        self.assertQuantityEqual(umath.expm1(compound_dl), (np.e-1) * pq.dimensionless)
 
     def test_log1p(self):
         self.assertQuantityEqual(np.log1p(0*pq.dimensionless), 0)
         self.assertRaises(ValueError, np.log1p, 1*pq.m)
+        self.assertQuantityEqual(umath.log1p(0*pq.dimensionless), 0 * pq.dimensionless)
+        self.assertRaises(ValueError, umath.log1p, 1*pq.m)
+        compound_dl = 0 * pq.J / (pq.N * pq.m)
+        self.assertQuantityEqual(np.log1p(compound_dl), 0)
+        self.assertQuantityEqual(umath.log1p(compound_dl), 0 * pq.dimensionless)
+
+    def test_logaddexp(self):
+        q1 = 1 * pq.dimensionless
+        q2 = 2 * pq.dimensionless
+        self.assertQuantityEqual(np.logaddexp(q1, q2), np.logaddexp(1, 2) * pq.dimensionless)
+        self.assertRaises(ValueError, np.logaddexp, 1 * pq.m, q2)
+        self.assertRaises(ValueError, np.logaddexp, q1, 1 * pq.m)
+
+    def test_logaddexp2(self):
+        q1 = 1 * pq.dimensionless
+        q2 = 2 * pq.dimensionless
+        self.assertQuantityEqual(np.logaddexp2(q1, q2), np.logaddexp2(1, 2) * pq.dimensionless)
+        self.assertRaises(ValueError, np.logaddexp2, 1 * pq.m, q2)
+        self.assertRaises(ValueError, np.logaddexp2, q1, 1 * pq.m)
 
     def test_sin(self):
         self.assertQuantityEqual(np.sin(np.pi/2*pq.radian), 1)
