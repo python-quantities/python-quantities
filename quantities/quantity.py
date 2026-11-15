@@ -335,8 +335,18 @@ class Quantity(np.ndarray):
     def __array_function__(self, func, types, args, kwargs):
         # NumPy 2 removed ndarray.ptp, so np.ptp no longer dispatches to
         # Quantity.ptp and would drop the units.
-        if func is np.ptp and isinstance(args[0], Quantity):
-            return Quantity.ptp(*args, **kwargs)
+        if func is np.ptp:
+            kwargs = dict(kwargs)
+            # ``a`` may be given by keyword, so args can be empty.
+            a = args[0] if args else kwargs.pop("a", None)
+            rest = args[1:]
+            if isinstance(a, Quantity):
+                out = rest[1] if len(rest) > 1 else kwargs.get("out")
+                if out is None or isinstance(out, Quantity):
+                    return Quantity.ptp(a, *rest, **kwargs)
+                # A plain ndarray ``out`` receives the bare magnitude, as
+                # np.ptp did before.
+                return np.ptp(a.magnitude, *rest, **kwargs)
         return super().__array_function__(func, types, args, kwargs)
 
     @with_doc(np.ndarray.__add__)
