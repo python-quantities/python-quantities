@@ -199,6 +199,30 @@ class TestQuantityMethods(TestCase):
         self.methodWithOut('ptp', [2, 2] * pq.m, axis=0)
         self.methodWithOut('ptp', [1, 1] * pq.m, axis=1)
 
+    def test_np_ptp(self):
+        self.assertQuantityEqual(np.ptp(self.q), 3 * pq.m)
+        self.assertQuantityEqual(np.ptp(self.q, axis=0), [2, 2] * pq.m)
+        self.assertQuantityEqual(np.ptp(self.q, 1), [1, 1] * pq.m)
+        self.assertQuantityEqual(
+            np.ptp(self.q, axis=1, keepdims=True), [[1], [1]] * pq.m
+        )
+
+    def test_np_ptp_array_keyword(self):
+        self.assertQuantityEqual(np.ptp(a=self.q), 3 * pq.m)
+        self.assertQuantityEqual(np.ptp(a=self.q, axis=0), [2, 2] * pq.m)
+
+    def test_np_ptp_out(self):
+        out = [0, 0] * pq.m
+        res = np.ptp(self.q, axis=0, out=out)
+        self.assertIs(res, out)
+        self.assertQuantityEqual(out, [2, 2] * pq.m)
+
+        out = np.empty(2)
+        res = np.ptp(self.q, axis=0, out=out)
+        self.assertIs(res, out)
+        self.assertNotIsInstance(res, type(self.q))
+        np.testing.assert_array_equal(out, [2, 2])
+
     def test_clip(self):
         self.methodWithOut(
             'clip',

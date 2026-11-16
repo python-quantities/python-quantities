@@ -15,6 +15,8 @@ Unreleased
 - Add CI testing for Python 3.15 and NumPy 2.5, drop support for Python 3.10 and for NumPy 1.x (following NEP 29 plus one year)
 
 - Convert quantity-valued `ediff1d` boundary differences to the input units.
+- Fix ``np.ptp`` dropping the units of a Quantity with NumPy 2, which no
+  longer dispatches it to ``Quantity.ptp``.
 
 ------
 0.16.4
