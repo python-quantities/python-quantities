@@ -37,11 +37,6 @@ test = [
 doc = [
   "sphinx"
 ]
-scipy = [
-  # use the SciPy implementation of the trapezoidal rule
-  # for numerical integration,
-  "scipy"
-]
 
 [project.urls]
 documentation = "http://python-quantities.readthedocs.io/"

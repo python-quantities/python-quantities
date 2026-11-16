@@ -1,5 +1,4 @@
-import warnings
-from .. import QuantitiesDeprecationWarning, units as pq
+from .. import units as pq
 from .common import TestCase
 import numpy as np
 
@@ -121,10 +120,7 @@ class TestQuantityMethods(TestCase):
         )
         if isinstance(result, Quantity):
             # deliberately using an incompatible unit
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", category=QuantitiesDeprecationWarning)
-                out = Quantity(np.empty_like(result.magnitude), pq.s, copy=False)
-            # we can drop 'copy=False' above once the deprecation of the arg has expired.
+            out = Quantity(np.empty_like(result.magnitude), pq.s)
         else:
             out = np.empty_like(result)
         ret = getattr(q.copy(), name)(*args, out=out, **kw)
