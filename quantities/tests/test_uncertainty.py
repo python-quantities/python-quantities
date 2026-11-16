@@ -42,6 +42,29 @@ class TestUncertainty(TestCase):
         self.assertTrue(seventyish_km_rescaled_idempotent.dtype == np.float32)
         self.assertQuantityEqual(seventyish_km + in_meters, 2*seventy_km)
 
+    def test_creation_from_uncertain_quantity(self):
+        for magnitude, uncertainty in [(1, 0.1), ([1, 2], [0.1, 0.2])]:
+            source = UncertainQuantity(magnitude, pq.m, uncertainty)
+            for units in ['', pq.m, pq.cm]:
+                with self.subTest(magnitude=magnitude, units=str(units)):
+                    result = UncertainQuantity(source, units)
+                    expected_units = units or pq.m
+                    self.assertQuantityEqual(result, Quantity(magnitude, pq.m).rescale(expected_units))
+                    self.assertQuantityEqual(
+                        result.uncertainty, Quantity(uncertainty, pq.m).rescale(expected_units)
+                    )
+                    self.assertEqual(result.dimensionality, Quantity(1, expected_units).dimensionality)
+                    self.assertEqual(result.uncertainty.dimensionality, result.dimensionality)
+                    self.assertQuantityEqual(source, Quantity(magnitude, pq.m))
+                    self.assertQuantityEqual(source.uncertainty, Quantity(uncertainty, pq.m))
+
+    def test_creation_from_uncertain_quantity_with_explicit_uncertainty(self):
+        source = UncertainQuantity([1, 2], pq.m, [0.1, 0.2])
+        result = UncertainQuantity(source, pq.cm, uncertainty=[3, 4])
+        self.assertQuantityEqual(result, [100, 200] * pq.cm)
+        self.assertQuantityEqual(result.uncertainty, [3, 4] * pq.cm)
+        self.assertQuantityEqual(source.uncertainty, [0.1, 0.2] * pq.m)
+
 
     def test_set_uncertainty(self):
         a = UncertainQuantity([1, 2], 'm', [.1, .2])

@@ -6,6 +6,9 @@ CHANGES
 Unreleased
 -----------
 
+- Preserve and rescale uncertainty when constructing an ``UncertainQuantity``
+  from another ``UncertainQuantity`` without an explicit uncertainty.
+
 - Allow numeric bounds when clipping dimensionless quantities (`#108
   <https://github.com/python-quantities/python-quantities/issues/108>`_).
 
