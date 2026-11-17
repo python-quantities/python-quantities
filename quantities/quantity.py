@@ -221,7 +221,7 @@ class Quantity(np.ndarray):
         if dtype is None:
             dtype = self.dtype
         if self.dimensionality == to_dims:
-            return self.astype(dtype)
+            return Quantity(self.magnitude.astype(dtype), to_dims, dtype=dtype)
         to_u = Quantity(1.0, to_dims, dtype=dtype)
         from_u = Quantity(1.0, self.dimensionality, dtype=dtype)
         try:

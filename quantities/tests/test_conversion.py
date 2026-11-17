@@ -1,3 +1,5 @@
+import numpy as np
+
 from .. import quantity
 from .. import units as pq
 from .common import TestCase
@@ -16,6 +18,23 @@ class TestConversion(TestCase):
             self.assertQuantityEqual((10*pq.m).rescale(u), 32.80839895 * pq.ft)
         self.assertQuantityEqual((10 * pq.deg).rescale(pq.rad), 0.17453293 * pq.rad)
         self.assertQuantityEqual(quantity.Quantity(10, pq.deg).rescale(pq.rad), 0.17453293 * pq.rad)
+
+    def test_rescale_same_units(self):
+        # rescaling to the same units should give the same kind of result
+        # as rescaling to different units (#42)
+        q = quantity.Quantity([1.0, 2.0], 'mm')
+        for units in ('mm', 'um'):
+            r = q.rescale(units)
+            self.assertIs(type(r), quantity.Quantity)
+            self.assertIsInstance(r.base, np.ndarray)
+            self.assertNotIsInstance(r.base, quantity.Quantity)
+            self.assertFalse(np.shares_memory(r, q))
+        self.assertQuantityEqual(q.rescale('mm'), q)
+
+    def test_rescale_same_units_dtype(self):
+        q = quantity.Quantity([1, 2], 'mm')
+        self.assertEqual(q.rescale('mm').dtype, q.dtype)
+        self.assertEqual(q.rescale('mm', dtype=np.float32).dtype, np.float32)
 
     def test_rescale_preferred(self):
         quantity.PREFERRED = [pq.mV, pq.pA]
