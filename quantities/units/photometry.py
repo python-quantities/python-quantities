@@ -1,4 +1,10 @@
-"""Units of luminous flux, illuminance and luminance."""
+"""Units of luminous flux, illuminance and luminance.
+
+As in the SI, the steradian simplifies to dimensionless, so lumen simplifies
+to candela and lux to candela per square metre. This does not distinguish the
+physical quantities illuminance and luminance; use their appropriate units
+in calculations.
+"""
 
 from ..unitquantity import UnitQuantity
 from .angle import sr
