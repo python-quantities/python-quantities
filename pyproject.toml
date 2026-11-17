@@ -45,7 +45,7 @@ changelog = "https://github.com/python-quantities/python-quantities/blob/master/
 download = "http://pypi.python.org/pypi/quantities"
 
 [build-system]
-requires = ["setuptools", "setuptools_scm[toml]"]
+requires = ["setuptools", "setuptools_scm>=7"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
