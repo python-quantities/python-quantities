@@ -18,8 +18,10 @@ and is designed to work with numpy's standard ufuncs, many of which are
 already supported.
 
 Quantities is actively developed, and while the current features and API are
-stable, test coverage is incomplete and the package is not ready for
-production use. Python-2.6.0 or later is required.
+stable, test coverage is incomplete so the package is not suggested for
+mission-critical applications. Support for uncertainties is incomplete: many
+numpy functions do not propagate uncertainty (see the :doc:`user/tutorial`
+for details).
 
 .. toctree::
    :maxdepth: 2
