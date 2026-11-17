@@ -268,7 +268,8 @@ units, they should still conform to valid python expressions.
 class QuantitiesDeprecationWarning(DeprecationWarning):
     pass
 
-from ._version import __version__
+# setuptools_scm < 7 does not define __version__ in the generated file, only version
+from ._version import version as __version__
 
 from .registry import unit_registry
 

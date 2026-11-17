@@ -1,10 +1,10 @@
-import sys
 import unittest
 
 import numpy as np
 
 from ..quantity import Quantity
 from ..units import set_default_units
+
 
 class TestCase(unittest.TestCase):
 

@@ -2,12 +2,11 @@
 """
 
 from ..unitquantity import UnitQuantity
-from .temperature import K, degF
-from .length import m, ft
-from .power import W
 from .energy import BTU
+from .length import ft, m
+from .power import W
+from .temperature import K, degF
 from .time import h
-
 
 RSI = UnitQuantity(
     'RSI',

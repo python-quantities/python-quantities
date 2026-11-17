@@ -1,7 +1,8 @@
-import warnings
-from .. import QuantitiesDeprecationWarning, units as pq
-from .common import TestCase
 import numpy as np
+
+from .. import units as pq
+from .common import TestCase
+
 
 class TestQuantityMethods(TestCase):
 
@@ -110,6 +111,7 @@ class TestQuantityMethods(TestCase):
 
     def methodWithOut(self, name, result, q=None, *args, **kw):
         import numpy as np
+
         from .. import Quantity
 
         if q is None:
@@ -121,10 +123,7 @@ class TestQuantityMethods(TestCase):
         )
         if isinstance(result, Quantity):
             # deliberately using an incompatible unit
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore", category=QuantitiesDeprecationWarning)
-                out = Quantity(np.empty_like(result.magnitude), pq.s, copy=False)
-            # we can drop 'copy=False' above once the deprecation of the arg has expired.
+            out = Quantity(np.empty_like(result.magnitude), pq.s)
         else:
             out = np.empty_like(result)
         ret = getattr(q.copy(), name)(*args, out=out, **kw)
@@ -167,7 +166,7 @@ class TestQuantityMethods(TestCase):
 
     def test_nanargmax(self):
         q = np.append(self.q, np.nan) * self.q.units
-        self.assertEqual(self.q.nanargmax(), 3)
+        self.assertEqual(q.nanargmax(), 3)
 
     def test_min(self):
         self.methodWithOut('min', 1 * pq.m)
@@ -192,12 +191,36 @@ class TestQuantityMethods(TestCase):
 
     def test_nanargmin(self):
         q = np.append(self.q, np.nan) * self.q.units
-        self.assertEqual(self.q.nanargmin(), 0)
+        self.assertEqual(q.nanargmin(), 0)
 
     def test_ptp(self):
         self.methodWithOut('ptp', 3 * pq.m)
         self.methodWithOut('ptp', [2, 2] * pq.m, axis=0)
         self.methodWithOut('ptp', [1, 1] * pq.m, axis=1)
+
+    def test_np_ptp(self):
+        self.assertQuantityEqual(np.ptp(self.q), 3 * pq.m)
+        self.assertQuantityEqual(np.ptp(self.q, axis=0), [2, 2] * pq.m)
+        self.assertQuantityEqual(np.ptp(self.q, 1), [1, 1] * pq.m)
+        self.assertQuantityEqual(
+            np.ptp(self.q, axis=1, keepdims=True), [[1], [1]] * pq.m
+        )
+
+    def test_np_ptp_array_keyword(self):
+        self.assertQuantityEqual(np.ptp(a=self.q), 3 * pq.m)
+        self.assertQuantityEqual(np.ptp(a=self.q, axis=0), [2, 2] * pq.m)
+
+    def test_np_ptp_out(self):
+        out = [0, 0] * pq.m
+        res = np.ptp(self.q, axis=0, out=out)
+        self.assertIs(res, out)
+        self.assertQuantityEqual(out, [2, 2] * pq.m)
+
+        out = np.empty(2)
+        res = np.ptp(self.q, axis=0, out=out)
+        self.assertIs(res, out)
+        self.assertNotIsInstance(res, type(self.q))
+        np.testing.assert_array_equal(out, [2, 2])
 
     def test_clip(self):
         self.methodWithOut(

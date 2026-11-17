@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 natural_unit_of_action = UnitConstant(
     'natural_unit_of_action',

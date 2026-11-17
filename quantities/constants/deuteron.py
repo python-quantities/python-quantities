@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 R_d = deuteron_rms_charge_radius = UnitConstant(
     'deuteron_rms_charge_radius',

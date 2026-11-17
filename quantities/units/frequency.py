@@ -3,9 +3,8 @@
 
 from ..unitquantity import UnitQuantity
 from .angle import revolution
-from .time import s, min
 from .dimensionless import count
-
+from .time import min, s
 
 Hz = hertz = rps = UnitQuantity(
     'hertz',

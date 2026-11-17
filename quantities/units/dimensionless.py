@@ -1,7 +1,7 @@
 """
 """
 
-from ..unitquantity import dimensionless, UnitQuantity
+from ..unitquantity import UnitQuantity, dimensionless
 
 percent = UnitQuantity(
     'percent',

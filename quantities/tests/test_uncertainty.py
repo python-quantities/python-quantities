@@ -1,8 +1,9 @@
+import numpy as np
+
 from .. import units as pq
 from ..quantity import Quantity
 from ..uncertainquantity import UncertainQuantity
 from .common import TestCase
-import numpy as np
 
 
 class TestUncertainty(TestCase):
@@ -22,11 +23,9 @@ class TestUncertainty(TestCase):
 
     def test_rescale(self):
         a = UncertainQuantity([1, 1, 1], pq.m, [.1, .1, .1])
-        b = a.rescale(pq.ft)
-        self.assertQuantityEqual(
-            a.rescale('ft'),
-            [3.2808399, 3.2808399, 3.2808399]*pq.ft
-            )
+        expected = [3.2808399, 3.2808399, 3.2808399]*pq.ft
+        self.assertQuantityEqual(a.rescale(pq.ft), expected)
+        self.assertQuantityEqual(a.rescale('ft'), expected)
         self.assertQuantityEqual(
             a.rescale('ft').uncertainty,
             [0.32808399, 0.32808399, 0.32808399]*pq.ft

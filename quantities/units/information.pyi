@@ -1,4 +1,4 @@
-from ..unitquantity import UnitQuantity, UnitInformation
+from ..unitquantity import UnitInformation, UnitQuantity
 
 bit: UnitInformation
 B: UnitInformation

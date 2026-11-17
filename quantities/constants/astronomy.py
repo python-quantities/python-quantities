@@ -1,10 +1,9 @@
 """
 """
 
-from ._utils import _cd
 from ..uncertainquantity import UncertainQuantity
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 au = astronomical_unit = UnitConstant(
     'astronomical_unit',

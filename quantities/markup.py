@@ -70,10 +70,12 @@ def format_units(udict):
             den.append(u)
     res = '*'.join(num)
     if len(den):
-        if not res: res = '1'
+        if not res:
+            res = '1'
         fmt = '(%s)' if len(den) > 1 else '%s'
         res = res + '/' + fmt%('*'.join(den))
-    if not res: res = 'dimensionless'
+    if not res:
+        res = 'dimensionless'
     return res
 
 def format_units_unicode(udict):

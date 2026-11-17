@@ -34,7 +34,7 @@ merged. CI (GitHub Actions) must pass, including:
 
 * the ``pytest`` matrix across the supported Python and NumPy versions,
 * the ``mypy`` type-check job,
-* the ``ruff`` lint job (currently advisory — see below),
+* the ``ruff`` lint job,
 * the ``doctest`` of ``README.rst``.
 
 Reviewers look for: correctness, test coverage, dimensional-correctness of
@@ -45,16 +45,14 @@ Code style
 ==========
 
 The project follows :pep:`8`. The ``ruff`` linter is configured in
-``pyproject.toml`` and is run in CI. While the existing codebase is brought
-into full conformance the lint job is **advisory** (``continue-on-error:
-true``); new code should nevertheless pass ``ruff check`` cleanly.
+``pyproject.toml`` and is run in CI; code must pass ``ruff check`` cleanly.
 
 Docstrings follow the NumPy documentation standard described in
 :ref:`documenting-quantities`.
 
 To run the linter locally::
 
-  pip install -e ".[lint]"
+  pip install -e ".[test]"
   ruff check quantities
 
 

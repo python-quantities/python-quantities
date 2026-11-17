@@ -1,4 +1,4 @@
-from ..unitquantity import UnitQuantity, UnitMass
+from ..unitquantity import UnitMass, UnitQuantity
 
 kg: UnitMass
 kilogram: UnitMass

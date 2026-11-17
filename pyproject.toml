@@ -37,11 +37,6 @@ test = [
 doc = [
   "sphinx"
 ]
-scipy = [
-  # use the SciPy implementation of the trapezoidal rule
-  # for numerical integration,
-  "scipy"
-]
 
 [project.urls]
 documentation = "http://python-quantities.readthedocs.io/"
@@ -50,7 +45,7 @@ changelog = "https://github.com/python-quantities/python-quantities/blob/master/
 download = "http://pypi.python.org/pypi/quantities"
 
 [build-system]
-requires = ["setuptools", "setuptools_scm[toml]"]
+requires = ["setuptools", "setuptools_scm>=7"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
@@ -72,6 +67,9 @@ ignore = []
 # "imported but unused" warnings there.
 "quantities/units/*.py" = ["F401"]
 "quantities/constants/*.py" = ["F401"]
-"quantities/__init__.py" = ["F401", "F403"]
+# Import order in these matters, so isort must not reorder it.
+"quantities/__init__.py" = ["F401", "F403", "E402", "I001"]
+"quantities/units/__init__.py" = ["F403", "I001"]
+"quantities/constants/__init__.py" = ["F403"]
 # Generated from NIST_codata.txt with one constant per line.
 "quantities/constants/_codata.py" = ["E501"]

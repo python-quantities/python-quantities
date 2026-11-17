@@ -100,6 +100,16 @@ from .length import (
 from . import mass
 from .mass import *
 
+from . import photometry
+from .photometry import (
+    lm, lumen,
+    lx, lux,
+    fc, foot_candle, footcandle,
+    ph, phot,
+    nt, nit,
+    sb, stilb,
+)
+
 from . import power
 from .power import *
 
@@ -131,7 +141,7 @@ from .volume import (
     kL, kiloliter, kilolitre,
     ML, megaliter, megalitre,
     GL, gigaliter, gigalitre,
-    cc, cubic_centimeter, milliliter,
+    cc, cubic_centimeter,
     stere,
     gross_register_ton, register_ton,
     acre_foot,

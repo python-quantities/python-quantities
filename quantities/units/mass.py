@@ -1,7 +1,7 @@
 """
 """
 
-from ..unitquantity import UnitQuantity, UnitMass
+from ..unitquantity import UnitMass, UnitQuantity
 from .length import m
 
 kg = kilogram =  UnitMass(
