@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 N_A = L = Avogadro_constant = UnitConstant(
     'Avogadro_constant',

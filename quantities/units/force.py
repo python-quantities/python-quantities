@@ -2,11 +2,10 @@
 """
 
 from ..unitquantity import UnitQuantity
-from .mass import gram, kg, ounce, lb
-from .length import cm, m, ft
-from .time import s
 from .acceleration import g_0
-
+from .length import cm, ft, m
+from .mass import gram, kg, lb, ounce
+from .time import s
 
 N = newton = UnitQuantity(
     'newton',

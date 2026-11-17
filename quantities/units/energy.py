@@ -2,9 +2,9 @@
 """
 
 from ..unitquantity import UnitQuantity
-from .force import dyne, N
+from .force import N, dyne
 from .length import cm, m
-from .time import s, h
+from .time import h, s
 
 J = joule = UnitQuantity(
     'joule',

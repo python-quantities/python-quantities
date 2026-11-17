@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 molar_Planck_constant = UnitConstant(
     'molar_Planck_constant',

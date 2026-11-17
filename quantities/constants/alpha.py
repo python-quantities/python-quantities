@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 m_alpha = alpha_particle_mass = UnitConstant(
     'alpha_particle_mass',

@@ -3,7 +3,6 @@
 
 from ..unitquantity import UnitTemperature
 
-
 K = degK = kelvin = Kelvin = UnitTemperature(
     'Kelvin',
     symbol='K',

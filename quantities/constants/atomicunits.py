@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 amu = atomic_mass_constant = UnitConstant(
     'atomic_mass_constant',

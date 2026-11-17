@@ -1,7 +1,7 @@
 """
 """
 
-from ..unitquantity import UnitQuantity, UnitInformation, dimensionless
+from ..unitquantity import UnitInformation, UnitQuantity, dimensionless
 from .time import s
 
 bit = UnitInformation(

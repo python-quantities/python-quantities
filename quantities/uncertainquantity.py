@@ -1,13 +1,14 @@
 """
 """
 
-import numpy as np
 import warnings
 
-from . import markup, QuantitiesDeprecationWarning
-from .quantity import Quantity, scale_other_units
-from .registry import unit_registry
+import numpy as np
+
+from . import QuantitiesDeprecationWarning, markup
 from .decorators import with_doc
+from .quantity import Quantity, scale_other_units
+
 
 class UncertainQuantity(Quantity):
 

@@ -1,10 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
-
+from ._utils import _cd
 
 m_h = helion_mass = UnitConstant(
     'helion_mass',

@@ -1,12 +1,12 @@
 import operator as op
-from functools import partial
 import sys
+from functools import partial
 
 import numpy as np
+
 from .. import units as pq
 from ..quantity import Quantity
 from .common import TestCase
-
 
 if sys.version.startswith('3'):
     long = int

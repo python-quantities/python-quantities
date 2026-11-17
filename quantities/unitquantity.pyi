@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Union, overload
+from typing import Any, List, Optional, Union
 
 from quantities import Quantity
 from quantities.dimensionality import Dimensionality

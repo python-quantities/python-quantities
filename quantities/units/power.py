@@ -2,12 +2,11 @@
 """
 
 from ..unitquantity import UnitQuantity
-from .energy import Btu, J
-from .time import s, h, min
 from .electromagnetism import A, V
-from .length import ft
+from .energy import Btu, J
 from .force import lbf
-
+from .length import ft
+from .time import h, min, s
 
 W = watt = volt_ampere = UnitQuantity(
     'watt',

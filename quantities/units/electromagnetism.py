@@ -1,14 +1,14 @@
 """
 """
 
-from ..unitquantity import UnitCurrent, UnitLuminousIntensity, UnitQuantity
-from .time import s
-from .length import cm, m
-from .energy import J, erg
-from .velocity import c
-from .force import N
 from math import pi
 
+from ..unitquantity import UnitCurrent, UnitLuminousIntensity, UnitQuantity
+from .energy import J, erg
+from .force import N
+from .length import cm, m
+from .time import s
+from .velocity import c
 
 A = amp = amps = ampere = amperes = UnitCurrent(
     'ampere',

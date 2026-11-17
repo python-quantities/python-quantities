@@ -1,9 +1,8 @@
 """
 """
 
-from ._utils import _cd
 from ..unitquantity import UnitConstant
-
+from ._utils import _cd
 
 Angstrom_star = UnitConstant(
     'Angstrom_star',
