@@ -6,6 +6,9 @@ CHANGES
 Unreleased
 -----------
 
+- Add lumen, lux, foot-candle, phot, nit and stilb photometric units
+  (`#286 <https://github.com/python-quantities/python-quantities/issues/286>`_).
+
 - Allow numeric bounds when clipping dimensionless quantities (`#108
   <https://github.com/python-quantities/python-quantities/issues/108>`_).
 

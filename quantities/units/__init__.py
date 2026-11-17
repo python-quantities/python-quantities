@@ -100,6 +100,16 @@ from .length import (
 from . import mass
 from .mass import *
 
+from . import photometry
+from .photometry import (
+    lm, lumen,
+    lx, lux,
+    fc, foot_candle, footcandle,
+    ph, phot,
+    nt, nit,
+    sb, stilb,
+)
+
 from . import power
 from .power import *
 
