@@ -12,7 +12,8 @@ development.
 Andrew Davison has maintained the project since around 2019, reviewing and
 merging contributions and fixing compatibility issues as Python and NumPy have
 evolved (floordiv, parsing of unit strings, in-place arithmetic under NumPy
-2.x), migrating the build system to pyproject.toml, and expanding CI coverage.
+2.x), migrating the build system to pyproject.toml, expanding CI coverage,
+and adding documentation for developers and maintainers.
 
 Special thanks to those who have made valuable contributions
 (roughly in order of first contribution by date)
@@ -70,4 +71,5 @@ Jakob Kaiser, Johannes Pfabe, Josef Kemetmüller, Justin Keogh,
 lumbric, Mathieu Scheltienne, Michael von Papen, Michał Górny,
 mjn, Olivier Sechet, p2jones, Philipp Rautenberg, Richard Gerkin,
 Rob Falck, Robert Schütz, Ryan May, Ryan Senkbeil, Sai Asish Y,
-Siyan Zhao, Takashi, Takumasa Nakamura, Tim Gates, wilsaj, and Yves Delley.
+Siyan Zhao, Takashi, Takumasa Nakamura, Tim Gates, wilsaj, Yves Delley,
+Syed Ahnaf Raza, Anthony Mercer, Shurong Cao, and FFspiky.
