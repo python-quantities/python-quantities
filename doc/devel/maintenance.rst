@@ -28,7 +28,7 @@ When NumPy releases a new minor version:
      pytest
 
 3. Fix any regressions and record the new supported version in
-   ``CHANGES.txt``.
+   ``CHANGES.rst``.
 
 When dropping support for an old Python or NumPy version, also bump
 ``requires-python`` and the ``numpy`` lower bound in ``pyproject.toml``

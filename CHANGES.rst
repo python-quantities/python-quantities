@@ -1,5 +1,5 @@
 =======
-CHANGES
+Changes
 =======
 
 -----------
@@ -165,9 +165,9 @@ Bugs fixed
 
 https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aclosed%20closed%3A2017-08-02..2017-08-30
 
------
+------
 0.12.0
------
+------
 
 Removed support for Python 2.6, since NumPy removed support for it as of
 version 1.12. Numpy-1.8.2 or later is now required.
@@ -181,9 +181,9 @@ Bugs fixed
 https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aissue%20is%3Aclosed%20closed%3A2015-12-06..2017-08-01
 
 
------
+------
 0.11.0
------
+------
 
 Added many new unit definitions, including aliases for American/British spellings of liter/litre
 The Quantity class can now be subclassed.
@@ -197,9 +197,9 @@ Bugs fixed
 https://github.com/python-quantities/python-quantities/issues?utf8=✓&q=is%3Aissue%20is%3Aclosed%20closed%3A2011-09-27..2015-12-06
 
 
------
+------
 0.10.0
------
+------
 
 The dalton has been added as an alias for the unified atomic mass
 unit, in response to the 2005 IUPAP report recognizing that both

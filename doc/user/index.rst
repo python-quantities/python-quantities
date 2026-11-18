@@ -12,3 +12,4 @@ User's Guide
    issues.rst
    license.rst
    credits.rst
+   changes.rst

@@ -26,7 +26,7 @@ Before opening a pull request:
 
 1. Make sure the test suite passes locally (`pytest`).
 2. Add a test for any bug fix or new feature.
-3. Add an entry to `CHANGES.txt` describing the change.
+3. Add an entry to `CHANGES.rst` describing the change.
 
 [onboarding]: https://python-quantities.readthedocs.io/en/latest/devel/onboarding.html
 [workflow]: https://python-quantities.readthedocs.io/en/latest/devel/workflow.html

@@ -97,15 +97,15 @@ deprecated before being removed:
    * mark the entry in the docstring with the Sphinx ``deprecated::``
      directive, naming the version in which the deprecation was introduced
      and the replacement to use;
-   * record the deprecation in ``CHANGES.txt`` under the release notes for
+   * record the deprecation in ``CHANGES.rst`` under the release notes for
      that release.
 
 2. Keep the deprecated entry point working for **at least one minor
    release** before it is removed.
 
 3. In the release that removes the deprecated entry point, record the
-   removal in ``CHANGES.txt``.
+   removal in ``CHANGES.rst``.
 
 For small, low-impact API tweaks where no caller is plausibly affected, the
 deprecation step may be skipped at the maintainer's discretion; this should
-still be called out in ``CHANGES.txt``.
+still be called out in ``CHANGES.rst``.

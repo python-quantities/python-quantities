@@ -169,7 +169,7 @@
   "operatingSystem": ["Linux", "Windows", "macOS"],
   "programmingLanguage": "Python 3",
   "relatedLink": "https://python-quantities.readthedocs.io/",
-  "releaseNotes": "https://github.com/python-quantities/python-quantities/blob/master/CHANGES.txt",
+  "releaseNotes": "https://github.com/python-quantities/python-quantities/blob/master/CHANGES.rst",
   "softwareRequirements": "https://pypi.org/project/numpy/",
   "version": "0.16.4",
   "continuousIntegration": "https://github.com/python-quantities/python-quantities/actions",
