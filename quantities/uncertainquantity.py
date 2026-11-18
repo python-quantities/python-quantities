@@ -27,10 +27,7 @@ class UncertainQuantity(Quantity):
         if uncertainty is not None:
             ret.uncertainty = Quantity(uncertainty, ret._dimensionality)
         elif isinstance(data, UncertainQuantity):
-            is_copy = id(data) == id(ret)
-            if is_copy or ret._dimensionality != uncertainty._dimensionality:
-                uncertainty = data.uncertainty.rescale(ret.units)
-            ret.uncertainty = uncertainty
+            ret.uncertainty = data.uncertainty.rescale(ret.units)
 
         return ret
 
