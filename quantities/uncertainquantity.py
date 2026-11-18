@@ -10,6 +10,14 @@ from .decorators import with_doc
 from .quantity import Quantity, scale_other_units
 
 
+def _uncertainty_of(q):
+    """Return the uncertainty of a Quantity, which is zero if it has none."""
+    try:
+        return q.uncertainty
+    except AttributeError:
+        return Quantity(np.zeros(q.shape), q._dimensionality)
+
+
 class UncertainQuantity(Quantity):
 
     # TODO: what is an appropriate value?
@@ -89,7 +97,7 @@ class UncertainQuantity(Quantity):
     @scale_other_units
     def __add__(self, other):
         res = super().__add__(other)
-        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        u = (self.uncertainty**2+_uncertainty_of(other)**2)**0.5
         return UncertainQuantity(res, uncertainty=u)
 
     @with_doc(Quantity.__radd__, use_header=False)
@@ -101,7 +109,7 @@ class UncertainQuantity(Quantity):
     @scale_other_units
     def __sub__(self, other):
         res = super().__sub__(other)
-        u = (self.uncertainty**2+other.uncertainty**2)**0.5
+        u = (self.uncertainty**2+_uncertainty_of(other)**2)**0.5
         return UncertainQuantity(res, uncertainty=u)
 
     @with_doc(Quantity.__rsub__, use_header=False)
