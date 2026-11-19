@@ -39,30 +39,46 @@ non-zero offset, which is not supported in Quantities unit transformation
 framework. 
 
 
-`umath` functions
-=================
+Trigonometric and other math functions
+======================================
 
-Many common math functions ignore the dimensions of quantities. For example,
-trigonometric functions (e.g. `np.sin`) suffer this fate. For these functions,
-quantities arrays are treated like normal arrays and the calculations proceed
-as normal (except that a "not implemented" warning is raised). Note, however,
-this behavior is not ideal since some functions should behave differently for
-different units. For example, you would expect `np.sin` to give different
-results for an angle of 1° versus an angle of 1 radian; instead, `np.sin`
-extracts the magnitude of the input and assumes that it is already in radians.
+numpy's trigonometric ufuncs, such as `np.sin`, accept quantities in
+radians or dimensionless units, and raise an error for any other units, even
+other angular units::
 
-To properly handle quantities, use the corresponding quantities functions
-whenever possible. For example, `pq.sin` will properly handle the angle inputs
-described above. For an exhaustive list, see the functions defined in
-`pq.umath`.
+  >>> np.sin(90 * pq.deg)
+  Traceback (most recent call last):
+    ...
+  ValueError: expected units of radians, got "deg"
+
+Either rescale the argument to radians first, or use the corresponding
+quantities function, which accepts any angular units::
+
+  >>> np.sin((90 * pq.deg).rescale(pq.rad))
+  array(1.) * dimensionless
+  >>> pq.sin(90 * pq.deg)
+  array(1.) * dimensionless
+
+For an exhaustive list of these functions, see `pq.umath`.
+
+Similarly, `np.exp`, `np.log` and related functions require a dimensionless
+argument. Quantities whose units cancel out but are not plain
+`dimensionless`, such as `ms/s`, are currently rejected by these functions
+and by the trigonometric ufuncs. Use `.simplified` to reduce them first::
+
+  >>> np.sin((1 * pq.ms / pq.s).simplified)
+  array(0.001) * dimensionless
+
+numpy ufuncs that quantities does not know about raise a `ValueError`
+instead of silently ignoring the units.
 
 
 Functions which ignore/drop units
 =================================
 
 There are additional numpy functions not in `pq.umath` that ignore and drop
-units. Below is a list known functions in this category
+units. Below is a list of known functions in this category
 
-* `vstack`
+* `concatenate`, `hstack`, `vstack` and `stack` (the result is dimensionless)
+* `arange`
 * `interp`
-

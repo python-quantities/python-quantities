@@ -58,7 +58,7 @@ jobs:
       - name: Test
         run: |
           PY_IGNORE_IMPORTMISMATCH=1 pytest
-          python -m doctest README.rst
+          python -m doctest README.rst doc/user/issues.rst
 
   type-check:
     runs-on: ${{ matrix.os }}

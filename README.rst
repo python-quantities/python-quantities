@@ -9,7 +9,9 @@ for examples. Quantities builds on the popular numpy library and is
 designed to work with numpy ufuncs, many of which are already
 supported. Quantities is actively developed, and while the current features
 and API are stable, test coverage is incomplete so the package is not
-suggested for mission-critical applications.
+suggested for mission-critical applications. Support for uncertainties is
+incomplete: many numpy functions do not propagate uncertainty (see the
+tutorial_ for details).
 
 |pypi version|_ |Build status|_ |Coverage Status|_
 
