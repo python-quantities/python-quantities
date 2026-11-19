@@ -18,6 +18,7 @@ Unreleased
 - ``rescale()`` to the same units now returns a new Quantity built in the same way as for different units, so ``.base`` is no longer ``None`` (`#42 <https://github.com/python-quantities/python-quantities/issues/42>`_)
 - Fix constructing an ``UncertainQuantity`` from another ``UncertainQuantity`` without an explicit uncertainty, which raised ``AttributeError`` (`PR#289 <https://github.com/python-quantities/python-quantities/pull/289>`_)
 - Adding or subtracting a number or Quantity without an uncertainty to or from an ``UncertainQuantity`` now treats it as exact, instead of raising ``AttributeError`` (`#45 <https://github.com/python-quantities/python-quantities/issues/45>`_)
+- ``Quantity.nanmax()``, ``nanmin()``, ``nanargmax()`` and ``nanargmin()`` now honour ``axis`` and ``out``; they used to reduce over the whole array and ignore ``out``
 - ``quantities.umath.trapz`` now always uses ``numpy.trapezoid``; SciPy is no longer used, and the ``scipy`` optional dependency has been removed (`PR#285 <https://github.com/python-quantities/python-quantities/pull/285>`_)
 - Functions in ``quantities.umath`` no longer emit a spurious ``QuantitiesDeprecationWarning`` about the ``copy`` argument (`PR#285 <https://github.com/python-quantities/python-quantities/pull/285>`_)
 - Fix the import of ``__version__`` when the package is built with setuptools_scm older than 7.0, which is now the minimum required (`#224 <https://github.com/python-quantities/python-quantities/issues/224>`_)

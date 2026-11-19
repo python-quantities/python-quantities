@@ -151,6 +151,9 @@ class TestQuantityMethods(TestCase):
     def test_nanmax(self):
         q = np.append(self.q, np.nan) * self.q.units
         self.assertQuantityEqual(q.nanmax(), 4*pq.m)
+        q = [[1, np.nan], [3, 4]] * pq.m
+        self.methodWithOut('nanmax', [3, 4] * pq.m, q=q, axis=0)
+        self.methodWithOut('nanmax', [1, 4] * pq.m, q=q, axis=1)
 
     def test_argmax(self):
         import numpy as np
@@ -167,6 +170,9 @@ class TestQuantityMethods(TestCase):
     def test_nanargmax(self):
         q = np.append(self.q, np.nan) * self.q.units
         self.assertEqual(q.nanargmax(), 3)
+        q = [[1, np.nan], [3, 4]] * pq.m
+        self.assertEqual(q.nanargmax(axis=0).tolist(), [1, 1])
+        self.assertEqual(q.nanargmax(axis=1).tolist(), [0, 1])
 
     def test_min(self):
         self.methodWithOut('min', 1 * pq.m)
@@ -176,6 +182,9 @@ class TestQuantityMethods(TestCase):
     def test_nanmin(self):
         q = np.append(self.q, np.nan) * self.q.units
         self.assertQuantityEqual(q.nanmin(), 1*pq.m)
+        q = [[1, np.nan], [3, 4]] * pq.m
+        self.methodWithOut('nanmin', [1, 4] * pq.m, q=q, axis=0)
+        self.methodWithOut('nanmin', [1, 3] * pq.m, q=q, axis=1)
 
     def test_argmin(self):
         import numpy as np
@@ -192,6 +201,9 @@ class TestQuantityMethods(TestCase):
     def test_nanargmin(self):
         q = np.append(self.q, np.nan) * self.q.units
         self.assertEqual(q.nanargmin(), 0)
+        q = [[1, np.nan], [3, 4]] * pq.m
+        self.assertEqual(q.nanargmin(axis=0).tolist(), [0, 1])
+        self.assertEqual(q.nanargmin(axis=1).tolist(), [0, 0])
 
     def test_ptp(self):
         self.methodWithOut('ptp', 3 * pq.m)
