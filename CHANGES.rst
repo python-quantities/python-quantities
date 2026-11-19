@@ -2,9 +2,9 @@
 Changes
 =======
 
------------
-Unreleased
------------
+------
+0.17.0
+------
 
 - Drop support for Python 3.10 and NumPy 1.x, following NEP 29 plus one year, and add CI testing for Python 3.15 and NumPy 2.5 (`PR#277 <https://github.com/python-quantities/python-quantities/pull/277>`_)
 - **Behaviour change:** a NumPy ufunc whose ``out`` argument is a view of a Quantity now raises ``ValueError`` if the result would change the units of the view, as in-place operators already did. Values already written to ``out`` are not rolled back (`PR#276 <https://github.com/python-quantities/python-quantities/pull/276>`_)
@@ -18,11 +18,12 @@ Unreleased
 - ``rescale()`` to the same units now returns a new Quantity built in the same way as for different units, so ``.base`` is no longer ``None`` (`#42 <https://github.com/python-quantities/python-quantities/issues/42>`_)
 - Fix constructing an ``UncertainQuantity`` from another ``UncertainQuantity`` without an explicit uncertainty, which raised ``AttributeError`` (`PR#289 <https://github.com/python-quantities/python-quantities/pull/289>`_)
 - Adding or subtracting a number or Quantity without an uncertainty to or from an ``UncertainQuantity`` now treats it as exact, instead of raising ``AttributeError`` (`#45 <https://github.com/python-quantities/python-quantities/issues/45>`_)
-- ``Quantity.nanmax()``, ``nanmin()``, ``nanargmax()`` and ``nanargmin()`` now honour ``axis`` and ``out``; they used to reduce over the whole array and ignore ``out``
+- ``Quantity.nanmax()``, ``nanmin()``, ``nanargmax()`` and ``nanargmin()`` now honour ``axis`` and ``out``; they used to reduce over the whole array and ignore ``out`` (`PR#294 <https://github.com/python-quantities/python-quantities/pull/294>`_)
 - ``quantities.umath.trapz`` now always uses ``numpy.trapezoid``; SciPy is no longer used, and the ``scipy`` optional dependency has been removed (`PR#285 <https://github.com/python-quantities/python-quantities/pull/285>`_)
 - Functions in ``quantities.umath`` no longer emit a spurious ``QuantitiesDeprecationWarning`` about the ``copy`` argument (`PR#285 <https://github.com/python-quantities/python-quantities/pull/285>`_)
 - Fix the import of ``__version__`` when the package is built with setuptools_scm older than 7.0, which is now the minimum required (`#224 <https://github.com/python-quantities/python-quantities/issues/224>`_)
 - Fix type checking with NumPy 2.5 (`PR#277 <https://github.com/python-quantities/python-quantities/pull/277>`_)
+- Documentation: the tutorial is updated for Python 3, covers ``.magnitude`` and ``.units``, and is now tested; the documentation now says which operations propagate the uncertainty of an ``UncertainQuantity`` (`#214 <https://github.com/python-quantities/python-quantities/issues/214>`_, `#46 <https://github.com/python-quantities/python-quantities/issues/46>`_, `PR#291 <https://github.com/python-quantities/python-quantities/pull/291>`_)
 - Development: extended documentation for developers and maintainers (`PR#274 <https://github.com/python-quantities/python-quantities/pull/274>`_); tests for ``quantities.constants`` (`PR#280 <https://github.com/python-quantities/python-quantities/pull/280>`_); the generated constants file records the CODATA edition instead of a timestamp (`PR#279 <https://github.com/python-quantities/python-quantities/pull/279>`_); f-strings throughout (`PR#230 <https://github.com/python-quantities/python-quantities/pull/230>`_); Ruff linting, now enforced in CI (`PR#290 <https://github.com/python-quantities/python-quantities/pull/290>`_)
 
 ------
