@@ -63,6 +63,5 @@ Functions which ignore/drop units
 There are additional numpy functions not in `pq.umath` that ignore and drop
 units. Below is a list known functions in this category
 
-* `vstack`
 * `interp`
 
