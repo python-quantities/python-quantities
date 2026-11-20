@@ -83,27 +83,28 @@ def ediff1d(ary, to_end=None, to_begin=None):
 
 @with_doc(np.gradient)
 def gradient(f, *varargs):
-    # if no sample distances are specified, use dimensionless 1
-    # this mimics the behavior of np.gradient, but perhaps we should
-    # remove this default behavior
-    # removed for now::
-    #
-    #   if len(varargs) == 0:
-    #       varargs = (Quantity(1),)
-
+    # Sample distances may be Quantities or plain numbers; without any, the
+    # spacing is a dimensionless 1, as in np.gradient.
     varargsQuantities = [Quantity(i) for i in varargs]
     varargsMag = tuple(i.magnitude for i in varargsQuantities)
     ret = np.gradient(f.magnitude, *varargsMag)
 
-    if len(varargs) == 1:
+    if len(varargsQuantities) == 0:
+        units = [f.units] * f.ndim
+    elif len(varargsQuantities) == 1:
         # if there was only one sample distance provided,
         # apply the units in all directions
-        return tuple( Quantity(i, f.units/varargs[0].units)  for i  in ret)
+        units = [f.units / varargsQuantities[0].units] * f.ndim
     else:
-        #give each output array the units of the input array
-        #divided by the units of the spacing quantity given
-        return tuple( Quantity(i, f.units/j.units)
-                      for i,j  in zip( ret, varargsQuantities))
+        # give each output array the units of the input array
+        # divided by the units of the spacing quantity given
+        units = [f.units / j.units for j in varargsQuantities]
+
+    if f.ndim == 1:
+        # np.gradient returns a single array for 1-D input
+        return Quantity(ret, units[0])
+    return tuple(Quantity(i, u) for i, u in zip(ret, units))
+
 
 @with_doc(np.cross)
 def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):

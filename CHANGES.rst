@@ -2,6 +2,12 @@
 Changes
 =======
 
+----------
+Unreleased
+----------
+
+- ``quantities.umath.gradient`` now works without a sample distance or with a plain number as the distance (it returned an empty tuple or raised ``AttributeError``), and returns a single Quantity array for 1-D input, as ``np.gradient`` does, instead of a tuple of scalars
+
 ------
 0.17.0
 ------
