@@ -153,6 +153,25 @@ class TestUmath(TestCase):
     def test_trapezoid(self):
         self.assertQuantityEqual(np.trapezoid(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
 
+    def test_umath_gradient(self):
+        from ..umath import gradient
+        q = [0., 1., 4., 9.] * pq.m
+        # a 1-D input gives one array, as np.gradient does
+        self.assertQuantityEqual(gradient(q, 1 * pq.s), [1., 2., 4., 5.] * pq.m / pq.s)
+        # without spacing, or with a plain number, the units are those of the input
+        self.assertQuantityEqual(gradient(q), [1., 2., 4., 5.] * pq.m)
+        self.assertQuantityEqual(gradient(q, 2.), [0.5, 1., 2., 2.5] * pq.m)
+        # one array per axis for N-D inputs
+        f = [[1, 1], [3, 4]] * pq.J
+        g0, g1 = gradient(f, 1 * pq.m)
+        self.assertQuantityEqual(g0, [[2., 3.], [2., 3.]] * pq.J / pq.m)
+        self.assertQuantityEqual(g1, [[0., 0.], [1., 1.]] * pq.J / pq.m)
+        g0, g1 = gradient(f)
+        self.assertQuantityEqual(g1, [[0., 0.], [1., 1.]] * pq.J)
+        g0, g1 = gradient(f, 1 * pq.m, 2 * pq.s)
+        self.assertQuantityEqual(g0, [[2., 3.], [2., 3.]] * pq.J / pq.m)
+        self.assertQuantityEqual(g1, [[0., 0.], [0.5, 0.5]] * pq.J / pq.s)
+
     def test_umath_trapz(self):
         from ..umath import trapz
         y = [1., 2., 3.] * pq.J
