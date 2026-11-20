@@ -153,6 +153,20 @@ class TestUmath(TestCase):
     def test_trapezoid(self):
         self.assertQuantityEqual(np.trapezoid(self.q, dx = 1*pq.m), 7.5 * pq.J*pq.m)
 
+    def test_umath_cross(self):
+        from ..umath import cross
+        a = [3, -3, 1] * pq.kPa
+        b = [4, 9, 2] * pq.m**2
+        self.assertQuantityEqual(cross(a, b), [-15, -2, 39] * pq.kPa * pq.m**2)
+        # a plain array is treated as dimensionless, so the units are kept
+        self.assertQuantityEqual(cross(a, [4, 9, 2]), [-15, -2, 39] * pq.kPa)
+        self.assertQuantityEqual(cross([4, 9, 2], a), [15, 2, -39] * pq.kPa)
+        # without any Quantity the result is the plain np.cross
+        res = cross([3, -3, 1], [4, 9, 2])
+        from ..quantity import Quantity
+        self.assertNotIsInstance(res, Quantity)
+        np.testing.assert_array_equal(res, [-15, -2, 39])
+
     def test_umath_trapz(self):
         from ..umath import trapz
         y = [1., 2., 3.] * pq.J

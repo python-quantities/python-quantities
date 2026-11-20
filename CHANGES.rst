@@ -2,6 +2,12 @@
 Changes
 =======
 
+----------
+Unreleased
+----------
+
+- ``quantities.umath.cross`` now keeps the units when only one argument is a Quantity, treating the other as dimensionless, instead of returning a plain array
+
 ------
 0.17.0
 ------

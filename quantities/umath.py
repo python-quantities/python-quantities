@@ -107,7 +107,7 @@ def gradient(f, *varargs):
 
 @with_doc(np.cross)
 def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
-    if not (isinstance(a, Quantity) and isinstance(b, Quantity)):
+    if not (isinstance(a, Quantity) or isinstance(b, Quantity)):
         return np.cross(a, b, axisa, axisb, axisc, axis)
 
     if not isinstance(a, Quantity):
@@ -116,7 +116,7 @@ def cross (a, b , axisa=-1, axisb=-1, axisc=-1, axis=None):
         b = Quantity(b, dimensionless)
 
     return Quantity(
-        np.cross(a, b, axisa, axisb, axisc, axis),
+        np.cross(a.magnitude, b.magnitude, axisa, axisb, axisc, axis),
         a._dimensionality*b._dimensionality
     )
 
