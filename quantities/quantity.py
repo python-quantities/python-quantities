@@ -623,10 +623,14 @@ class Quantity(np.ndarray):
 
     @with_doc(np.nanmax)
     def nanmax(self, axis=None, out=None):
-        return Quantity(
-            np.nanmax(self.magnitude),
-            self.dimensionality
-        )
+        ret = np.nanmax(self.magnitude, axis, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.min)
     def min(self, axis=None, out=None):
@@ -641,10 +645,14 @@ class Quantity(np.ndarray):
 
     @with_doc(np.nanmin)
     def nanmin(self, axis=None, out=None):
-        return Quantity(
-            np.nanmin(self.magnitude),
-            self.dimensionality
-        )
+        ret = np.nanmin(self.magnitude, axis, None if out is None else out.magnitude)
+        dim = self.dimensionality
+        if out is None:
+            return Quantity(ret, dim)
+        if not isinstance(out, Quantity):
+            raise TypeError("out parameter must be a Quantity")
+        out._dimensionality = dim
+        return out
 
     @with_doc(np.ndarray.argmin)
     def argmin(self, axis=None, out=None):
@@ -652,11 +660,11 @@ class Quantity(np.ndarray):
 
     @with_doc(np.nanargmin)
     def nanargmin(self,axis=None, out=None):
-        return np.nanargmin(self.magnitude)
+        return np.nanargmin(self.magnitude, axis, out)
 
     @with_doc(np.nanargmax)
     def nanargmax(self,axis=None, out=None):
-        return np.nanargmax(self.magnitude)
+        return np.nanargmax(self.magnitude, axis, out)
 
     @with_doc(np.ptp)
     def ptp(self, axis=None, out=None, keepdims=False):

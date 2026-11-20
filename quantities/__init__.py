@@ -3,9 +3,7 @@ Quantities is designed to handle arithmetic and conversions of
 physical quantities, which have a magnitude, dimensionality specified
 by various units, and possibly an uncertainty. Quantities is designed
 to work with numpy's standard ufuncs, many of which are already
-supported. The package is actively developed, and while the current
-features and API are stable, test coverage is incomplete and so the
-package is not suggested for production use.
+supported.
 
 It is strongly suggested to import quantities to its own namespace, so
 units and constants variables are not accidentally overwritten::
@@ -18,47 +16,69 @@ convenient to think of quantities as a combination of a magnitude and
 units. These two quantities are equivalent::
 
    >>> import numpy as np
-   >>> q = np.array([1,2,3]) * pq.J
-   >>> q = [1,2,3] * pq.J
-   >>> print q
-   [ 1.  2.  3.] J
+   >>> q = np.array([1, 2, 3]) * pq.J
+   >>> q = [1, 2, 3] * pq.J
+   >>> print(q)
+   [1. 2. 3.] J
 
 The Quantity constructor can also be used to create quantities,
 similar to numpy.array. Units can be designated using a string
 containing standard unit abbreviations or unit names. For example::
 
-   >>> q = pq.Quantity([1,2,3], 'J')
-   >>> q = pq.Quantity([1,2,3], 'joules')
+   >>> q = pq.Quantity([1, 2, 3], 'J')
+   >>> q = pq.Quantity([1, 2, 3], 'joules')
 
 Units are also available as variables, and can be passed to
 Quantity::
 
-   >>> q = pq.Quantity([1,2,3], pq.J)
+   >>> q = pq.Quantity([1, 2, 3], pq.J)
+
+The numerical value of a quantity, without its units, is available
+as the ``magnitude`` attribute, which is a plain numpy array. The
+units are available as the ``units`` attribute::
+
+   >>> q = [1.5, 2.5] * pq.ms
+   >>> q.magnitude
+   array([1.5, 2.5])
+   >>> print(q.units)
+   1.0 ms
+
+The magnitude is expressed in the quantity's current units. To obtain
+the numerical value in some other units, rescale the quantity first::
+
+   >>> q.rescale(pq.s).magnitude
+   array([0.0015, 0.0025])
+
+Note that ``magnitude`` is a view onto the quantity's data, not a
+copy, so modifying it also modifies the quantity. Use
+``q.magnitude.copy()`` if you need an independent array.
 
 You can modify a quantity's units in place::
 
    >>> q = 1 * pq.m
    >>> q.units = pq.ft
-   >>> print q
+   >>> print(q)
    3.280839895013123 ft
 
 or equivalently::
 
    >>> q = 1 * pq.meter
    >>> q.units = 'ft' # or 'foot' or 'feet'
-   >>> print q
+   >>> print(q)
    3.280839895013123 ft
 
 Note that, with strings, units can be designated using plural
 variants. Plural variants of the module variables are not available at
 this time, in the interest of keeping the units namespace somewhat
-manageable. `q.units = 'feet'` will work, `q.units = pq.feet` will
+manageable. ``q.units = 'feet'`` will work, ``q.units = pq.feet`` will
 not.
 
 The units themselves are special objects that can not be modified in
 place::
 
    >>> pq.meter.units = 'feet'
+   Traceback (most recent call last):
+     ...
    AttributeError: can not modify protected units
 
 Instead of modifying a quantity in place, you can create a new
@@ -66,60 +86,62 @@ quantity, rescaled to the new units::
 
    >>> q = 300 * pq.ft * 600 * pq.ft
    >>> q2 = q.rescale('US_survey_acre')
-   >>> print q2
-   4.13221487605 US_survey_acre
+   >>> print(q2)
+   4.132214876049587 US_survey_acre
 
 but rescaling will fail if the requested units fails a dimensional
 analysis::
 
    >>> q = 10 * pq.joule
    >>> q2 = q.rescale(pq.watt)
+   Traceback (most recent call last):
+     ...
    ValueError: Unable to convert between units of "J" and "W"
 
 Quantities can not be rescaled in place if the unit conversion fails
 a dimensional analysis::
 
    >>> q = 10 * pq.joule
-   >>> q.units = pq.watts
+   >>> q.units = pq.watt
+   Traceback (most recent call last):
+     ...
    ValueError: Unable to convert between units of "J" and "W"
-   >>> print q
+   >>> print(q)
    10.0 J
 
 Quantities will attempt to simplify units when the users intent is
-unambiguous:
+unambiguous::
 
    >>> q = (10 * pq.meter)**3
    >>> q2 = q/(5*pq.meter)**2
-   >>> print q2
-   40 m
+   >>> print(q2)
+   40.0 m
 
-Quantities will not try to guess in an ambiguous situation:
+Quantities will not try to guess in an ambiguous situation::
 
    >>> q = (10 * pq.meter)**3
    >>> q2 = q/(5*pq.ft)**2
-   >>> print q2
-   40 m**3/ft**2
+   >>> print(q2)
+   40.0 m**3/ft**2
 
 In that case, it is not clear whether the user wanted ft converted to
 meters, or meters to feet, or neither. Instead, you can obtain a new
 copy of the quantity in its irreducible units, which by default are SI
 units::
 
-   >>> q = (10 * pq.meter)**3
-   >>> q2 = q/(5*pq.ft)**2
-   >>> print q2
-   40 m**3/ft**2
    >>> qs = q2.simplified
-   >>> print qs
-   430.556416668 m
+   >>> print(qs)
+   430.55641666838886 m
 
 It is also possible to customize the units in which simplified
 quantities are expressed::
 
    >>> pq.set_default_units('cgs')
-   >>> print pq.J.simplified
+   >>> print(pq.J.simplified)
    10000000.0 g*cm**2/s**2
    >>> pq.set_default_units(length='m', mass='kg')
+   >>> print(pq.J.simplified)
+   1.0 kg*m**2/s**2
 
 There are times when you may want to treat a group of units as a
 single compound unit. For example, surface area per unit volume is a
@@ -128,107 +150,127 @@ usual way, the quantity will be expressed in units that you may not
 recognize::
 
    >>> q = 1 * pq.m**2 / pq.m**3
-   >>> print q
+   >>> print(q)
    1.0 1/m
 
 Here are some tricks for working with these compound units, which
 can be preserved::
 
    >>> q = 1 * pq.CompoundUnit("m**2/m**3")
-   >>> print q
+   >>> print(q)
    1.0 (m**2/m**3)
 
 and can be simplified::
 
    >>> qs = q.simplified
-   >>> qs
+   >>> print(qs)
    1.0 1/m
 
 and then rescaled back into compound units::
 
-   >>> q2 = qs.rescale(CompoundUnit("m**2/m**3"))
-   >>> print q2
+   >>> q2 = qs.rescale(pq.CompoundUnit("m**2/m**3"))
+   >>> print(q2)
    1.0 (m**2/m**3)
 
-Compound units can be combined with regular units as well:
+Compound units can be combined with regular units as well::
 
    >>> q = 1 * pq.CompoundUnit('parsec/cm**3') * pq.cm**2
-   >>> print q
+   >>> print(q)
    1.0 cm**2*(parsec/cm**3)
 
 It is easy to define a unit that is not already provided by
 quantities. For example::
 
    >>> uK = pq.UnitQuantity('microkelvin', pq.degK/1e6, symbol='uK')
-   >>> print uK
+   >>> print(uK)
    1 uK (microkelvin)
    >>> q = 1000*uK
-   >>> print q.simplified
+   >>> print(q.simplified)
    0.001 K
 
 There is also support for quantities with uncertainty::
 
-   >>> q = UncertainQuantity(4,J,.2)
-   >>> q
-   4.0*J
-   +/-0.2*J (1 sigma)
+   >>> q = pq.UncertainQuantity(4, pq.J, .2)
+   >>> print(q)
+   4.0 J
+   +/-0.2 J (1 sigma)
 
 By assuming that the uncertainties are uncorrelated, the uncertainty can be
 propagated during arithmetic operations::
 
-   >>> length = UncertainQuantity(2.0, m, .001)
-   >>> width = UncertainQuantity(3.0, m, .001)
+   >>> length = pq.UncertainQuantity(2.0, pq.m, .001)
+   >>> width = pq.UncertainQuantity(3.0, pq.m, .001)
    >>> area = length*width
-   >>> area
-   6.0*m**2
-   +/-0.00360555127546*m**2 (1 sigma)
+   >>> print(area)
+   6.0 m**2
+   +/-0.0036055512754639895 m**2 (1 sigma)
 
 In that case, the measurements of the length and width were independent, and
-the two uncertainties presumed to be uncorrelated. Here is a warning though:
+the two uncertainties presumed to be uncorrelated. Here is a warning though::
 
-   >>> q*q
-   16.0*J**2
-   +/-1.1313708499*J**2 (1 sigma)
+   >>> print(q*q)
+   16.0 J**2
+   +/-1.1313708498984762 J**2 (1 sigma)
 
 This result is probably incorrect, since it assumes the uncertainties of the two
 multiplicands are uncorrelated. It would be more accurate in this case to use::
 
-   >>> q**2
-   16.0*J**2
-   +/-1.6*J**2 (1 sigma)
+   >>> print(q**2)
+   16.0 J**2
+   +/-1.6 J**2 (1 sigma)
+
+.. warning::
+   Support for uncertainties is incomplete. Uncertainty is propagated
+   by the arithmetic operators (``+``, ``-``, ``*``, ``/``, ``**``), by
+   ``rescale()``, by indexing, and by ``sum()``, ``mean()`` and
+   ``max()``. Most other numpy functions do not propagate uncertainty
+   correctly. In particular, ufuncs such as ``np.sqrt``, ``np.abs`` and
+   ``np.exp`` silently return an uncertainty of zero::
+
+      >>> print(np.sqrt(q))
+      2.0 J**0.5
+      +/-0.0 dimensionless (1 sigma)
+
+   Some other functions, such as ``cumsum()``, return a plain
+   ``Quantity``, dropping the uncertainty, and ``np.concatenate`` drops
+   both the units and the uncertainty. Correlations between operands
+   are never taken into account, even when an operand is combined with
+   itself (as in ``q*q`` above, or ``q - q``). If you need reliable
+   error propagation through arbitrary calculations, check the results
+   carefully.
 
 There is an entire subpackage dedicated to physical constants. The
 values of all the constants are taken from values published by the
 National Institute of Standards and Technology at
-http://physics.nist.gov/constants . Most physical constants have some
-form of uncertainty, which has also been published by NIST. All
-uncertainties are one standard deviation. There are lots of constants
+https://physics.nist.gov/constants. There are lots of constants
 and quantities includes them all (with one exception: F*, the Faraday
 constant for conventional electrical current, which is defined in
-units of C_90, for which I have not found a hard reference value).
-Physical constants are sort of similar to compound units, for example:
+units of C_90, for which no reference value is available).
+NIST also publishes the standard uncertainty of most constants. These
+are recorded in ``quantities.constants._codata``, but are not
+currently attached to the constants, which are plain quantities.
+Physical constants are sort of similar to compound units, for example::
 
-   >>> print pq.constants.proton_mass
+   >>> print(pq.constants.proton_mass)
    1 m_p (proton_mass)
-   >>> print pq.constants.proton_mass.simplified
+   >>> print(pq.constants.proton_mass.simplified)
    1.672621637e-27 kg
-   +/-8.3e-35 kg (1 sigma)
 
-A Latex representation of the dimensionality may be obtained in the following fashion::
+A LaTeX representation of the dimensionality may be obtained in the following fashion::
 
-    >>> g = pq.Quantity(9.80665,'m/s**2')
+    >>> g = pq.Quantity(9.80665, 'm/s**2')
     >>> mass = 50 * pq.kg
     >>> weight = mass*g
-    >>> print weight.dimensionality.latex
+    >>> print(weight.dimensionality.latex)
     $\\mathrm{\\frac{kg{\\cdot}m}{s^{2}}}$
     >>> weight.units = pq.N
-    >>> print weight.dimensionality.latex
+    >>> print(weight.dimensionality.latex)
     $\\mathrm{N}$
 
-The Latex output is compliant with the MathText subset used by Matplotlib.  To add
+The LaTeX output is compliant with the MathText subset used by Matplotlib.  To add
 formatted units to the axis label of a Matplotlib figure, one could use::
 
-    >>> ax.set_ylabel('Weight ' + weight.dimensionality.latex)
+    ax.set_ylabel('Weight ' + weight.dimensionality.latex)
 
 Greater customization is available via the markup.format_units_latex function.  It allows
 the user to modify the font, the multiplication symbol, or to encapsulate the latex
@@ -254,11 +296,11 @@ units, they should still conform to valid python expressions.
    Quantities is not a package for describing coordinate systems that require a
    point of reference, like positions on a map. In particular, Quantities does
    not support absolute temperature scales. Instead, temperatures are assumed to
-   be temperature *differences*. For example:
+   be temperature *differences*. For example::
 
-   >>> T = 20 * pq.degC
-   >>> print T.rescale('K')
-   20.0 K
+      >>> T = 20 * pq.degC
+      >>> print(T.rescale('K'))
+      20.0 K
 
    Proper support of coordinate systems would be a fairly large undertaking and
    is outside the scope of this project.
