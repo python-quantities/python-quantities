@@ -2,6 +2,12 @@
 Changes
 =======
 
+----------
+Unreleased
+----------
+
+- **Behaviour change:** ``np.concatenate`` and the functions built on it (``np.hstack``, ``np.vstack``, ``np.stack``, ``np.append``) now keep the units of Quantity arguments, converting them to the units of the first, instead of returning a dimensionless result. Code that re-attaches the units afterwards, such as ``np.hstack([a, b]) * a.units``, now gets squared units and should use ``.magnitude`` or drop the multiplication. A mix of Quantity and non-Quantity arguments (e.g. ``np.append(q, np.nan)``) is unchanged (`#50 <https://github.com/python-quantities/python-quantities/issues/50>`_, `#88 <https://github.com/python-quantities/python-quantities/issues/88>`_)
+
 ------
 0.17.0
 ------

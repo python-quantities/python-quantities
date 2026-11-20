@@ -416,3 +416,41 @@ class TestQuantityMethods(TestCase):
                                  100 * self.q.magnitude)
         self.assertRaises(ValueError, lambda x: x.dimensionless_magnitude,
                           self.q)
+
+    def test_np_concatenate(self):
+        self.assertQuantityEqual(
+            np.concatenate([self.q, self.q]), [[1, 2], [3, 4], [1, 2], [3, 4]] * pq.m
+        )
+        self.assertQuantityEqual(
+            np.concatenate([self.q, self.q], axis=1), [[1, 2, 1, 2], [3, 4, 3, 4]] * pq.m
+        )
+        self.assertQuantityEqual(
+            np.concatenate([self.q, self.q], axis=None), [1, 2, 3, 4, 1, 2, 3, 4] * pq.m
+        )
+
+    def test_np_concatenate_converts_units(self):
+        res = np.concatenate([[1, 2] * pq.m, [50, 300] * pq.cm])
+        self.assertQuantityEqual(res, [1, 2, 0.5, 3] * pq.m)
+
+    def test_np_concatenate_incompatible_units(self):
+        with self.assertRaises(ValueError):
+            np.concatenate([[1, 2] * pq.m, [1, 2] * pq.s])
+
+    def test_np_concatenate_plain_arrays_unchanged(self):
+        res = np.concatenate([np.ones(2), np.ones(2)])
+        self.assertNotIsInstance(res, type(self.q))
+
+    def test_np_concatenate_out_and_dtype(self):
+        out = np.empty(4)
+        res = np.concatenate([[1, 2] * pq.m, [3, 4] * pq.m], out=out)
+        self.assertIs(res, out)
+        res = np.concatenate([[1, 2] * pq.m, [3, 4] * pq.m], dtype=np.float32)
+        self.assertEqual(res.dtype, np.float32)
+        self.assertEqual(res.units, pq.m)
+
+    def test_np_stacking_keeps_units(self):
+        a = [1, 2] * pq.m
+        self.assertQuantityEqual(np.hstack([a, a]), [1, 2, 1, 2] * pq.m)
+        self.assertQuantityEqual(np.vstack([a, a]), [[1, 2], [1, 2]] * pq.m)
+        self.assertQuantityEqual(np.stack([a, a]), [[1, 2], [1, 2]] * pq.m)
+        self.assertQuantityEqual(np.append(a, 3 * pq.m), [1, 2, 3] * pq.m)

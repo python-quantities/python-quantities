@@ -337,7 +337,36 @@ class Quantity(np.ndarray):
                 # A plain ndarray ``out`` receives the bare magnitude, as
                 # np.ptp did before.
                 return np.ptp(a.magnitude, *rest, **kwargs)
+        if func is np.concatenate:
+            res = self._concatenate(args, kwargs)
+            if res is not NotImplemented:
+                return res
         return super().__array_function__(func, types, args, kwargs)
+
+    @staticmethod
+    def _concatenate(args, kwargs):
+        # np.concatenate (and so hstack, vstack, stack, append, ...) would
+        # otherwise join the bare magnitudes and tag the result dimensionless.
+        kwargs = dict(kwargs)
+        arrays = args[0] if args else kwargs.pop("arrays", None)
+        rest = args[1:]
+        out = rest[1] if len(rest) > 1 else kwargs.get("out")
+        if out is not None or arrays is None:
+            return NotImplemented
+        try:
+            arrays = list(arrays)
+        except TypeError:
+            return NotImplemented
+        # Anything that is not a Quantity (e.g. ``np.append(q, np.nan)``) keeps
+        # the previous behaviour, as does UncertainQuantity.
+        if not arrays or not all(
+            isinstance(a, Quantity) and not hasattr(a, "uncertainty") for a in arrays
+        ):
+            return NotImplemented
+        units = arrays[0].units
+        magnitudes = [a.rescale(units).magnitude for a in arrays]
+        res = np.concatenate(magnitudes, *rest, **kwargs)
+        return Quantity(res, units)
 
     @with_doc(np.ndarray.__add__)
     @scale_other_units
