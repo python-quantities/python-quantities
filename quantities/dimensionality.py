@@ -324,6 +324,15 @@ p_dict[np.fix] = _d_copy
 p_dict[np.ceil] = _d_copy
 p_dict[np.trunc] = _d_copy
 
+def _d_sign(q, out=None):
+    from .uncertainquantity import UncertainQuantity
+
+    if isinstance(q, UncertainQuantity) or isinstance(out, UncertainQuantity):
+        raise ValueError("sign does not propagate uncertainty")
+    return Dimensionality()
+
+p_dict[np.sign] = _d_sign
+
 def _d_clip(a1, a2, a3, q):
     return q.dimensionality
 

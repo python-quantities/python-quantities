@@ -2,6 +2,13 @@
 Changes
 =======
 
+----------
+Unreleased
+----------
+
+- Support ``np.sign`` on quantities, returning a dimensionless result
+  (`#114 <https://github.com/python-quantities/python-quantities/issues/114>`_).
+
 ------
 0.17.0
 ------
