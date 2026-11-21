@@ -18,6 +18,26 @@ class TestUmath(TestCase):
     def test_sum(self):
         self.assertQuantityEqual(np.sum(self.q), 10 * pq.J)
 
+    def test_sign(self):
+        self.assertQuantityEqual(np.sign(-3 * pq.um), -1 * pq.dimensionless)
+        q = [-2., 0., 4.] * pq.mV
+        out = [0., 0., 0.] * pq.s
+        self.assertIs(np.sign(q, out=out), out)
+        self.assertQuantityEqual(out, [-1., 0., 1.] * pq.dimensionless)
+        self.assertQuantityEqual(np.sign(q.rescale(pq.V)), out)
+
+        z = np.array([3+4j, 0j]) * pq.V
+        self.assertQuantityEqual(np.sign(z), np.sign(z.magnitude) * pq.dimensionless)
+
+    def test_sign_with_uncertainty(self):
+        from ..uncertainquantity import UncertainQuantity
+
+        q = UncertainQuantity(0.1, pq.V, uncertainty=0.2)
+        with self.assertRaises(ValueError):
+            np.sign(q)
+        with self.assertRaises(ValueError):
+            np.sign(1 * pq.V, out=q)
+
     def test_nansum(self):
         c = [1,2,3, np.nan] * pq.m
         self.assertQuantityEqual(np.nansum(c), 6 * pq.m)
