@@ -77,8 +77,9 @@ dwt = pennyweight = UnitMass(
 )
 slug = slugs = UnitMass(
     'slug',
-    14.59390*kg,
-    aliases=['slugs']
+    lb*9.80665/0.3048,
+    aliases=['slugs'],
+    doc='exact: one pound-force second squared per foot'
 )
 toz = troy_ounce = apounce = apothecary_ounce = UnitMass(
     'troy_ounce',

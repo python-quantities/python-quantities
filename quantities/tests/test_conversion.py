@@ -72,13 +72,13 @@ class TestConversion(TestCase):
 
         self.assertQuantityEqual(
             temp.simplified,
-            3.08568025e+22 / pq.m**4,
+            3.0856775814913673e+22 / pq.m**4,
             delta=1e17
             )
 
         self.assertQuantityEqual(
             temp.rescale('pc**-4'),
-            2.79740021556e+88 / pq.pc**4,
+            2.7973881195621585e+88 / pq.pc**4,
             delta=1e83
             )
 

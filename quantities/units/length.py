@@ -1,6 +1,8 @@
 """
 """
 
+import math
+
 from ..unitquantity import UnitLength, UnitQuantity
 
 m = meter = metre = UnitLength(
@@ -95,13 +97,6 @@ mil = thou = UnitLength(
     inch/1000,
     aliases=['mils', 'thou', 'thous']
 )
-pc = parsec = UnitLength(
-    'parsec',
-    3.08568025e16*m,
-    symbol='pc',
-    aliases=['parsecs'],
-    doc='approximate'
-)
 ly = light_year = UnitLength(
     'light_year',
     9460730472580.8*km,
@@ -110,7 +105,7 @@ ly = light_year = UnitLength(
 )
 au = astronomical_unit = UnitLength(
     'astronomical_unit',
-    149597870691*m,
+    149597870700*m,
     symbol='au',
     aliases=['astronomical_units'],
     doc='''
@@ -118,10 +113,17 @@ au = astronomical_unit = UnitLength(
     unit of length roughly equal to the mean distance between the Earth and
     the Sun. It is approximately 150 million kilometres (93 million miles).
 
-    uncertainty ± 30 m
+    exact: 149 597 870 700 m (IAU 2012 Resolution B2)
 
     http://en.wikipedia.org/wiki/Astronomical_unit
     '''
+)
+pc = parsec = UnitLength(
+    'parsec',
+    648000/math.pi*au,
+    symbol='pc',
+    aliases=['parsecs'],
+    doc='exact: 648000/pi astronomical units (IAU 2015 Resolution B2)'
 )
 
 nmi = nautical_mile = UnitLength(
