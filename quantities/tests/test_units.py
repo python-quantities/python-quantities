@@ -1,3 +1,5 @@
+import math
+
 import pytest
 
 from .. import units as pq
@@ -81,4 +83,32 @@ class TestForceUnits(TestCase):
     def test_kilogram_force_newtons(self):
         self.assertQuantityEqual(
             pq.kgf.rescale(pq.N), 9.80665 * pq.N, delta=1e-12
+        )
+
+
+class TestExactUnitDefinitions(TestCase):
+
+    def test_slug_is_one_pound_force_second_squared_per_foot(self):
+        # 1 slug = 1 lbf s**2/ft = 0.45359237 * 9.80665 / 0.3048 kg exactly
+        self.assertQuantityEqual(
+            pq.slug.rescale(pq.kg), 14.593902937206364 * pq.kg, delta=1e-12
+        )
+        self.assertQuantityEqual(
+            (pq.slug * pq.ft / pq.s**2).rescale(pq.lbf), 1 * pq.lbf,
+            delta=1e-12
+        )
+
+    def test_astronomical_unit_is_exact(self):
+        # IAU 2012 Resolution B2
+        self.assertQuantityEqual(
+            pq.au.rescale(pq.m), 149597870700 * pq.m, delta=1e-3
+        )
+
+    def test_parsec_is_648000_over_pi_astronomical_units(self):
+        # IAU 2015 Resolution B2: 1 pc = 648000/pi au = 3.0856775814913673e16 m
+        self.assertQuantityEqual(
+            pq.parsec.rescale(pq.m), 3.0856775814913673e16 * pq.m, delta=1e3
+        )
+        self.assertQuantityEqual(
+            pq.pc.rescale(pq.au), 648000 / math.pi * pq.au, delta=1e-6
         )
