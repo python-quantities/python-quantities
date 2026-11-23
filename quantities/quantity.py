@@ -529,10 +529,16 @@ class Quantity(np.ndarray):
 
     @with_doc(np.nansum)
     def nansum(self, axis=None, dtype=None, out=None):
-        return Quantity(
-            np.nansum(self.magnitude, axis, dtype, out),
-            self.dimensionality
-        )
+        dim = self.dimensionality
+        if isinstance(out, Quantity):
+            # Validate compatibility before writing to the output magnitude.
+            out.units.rescale(dim)
+            if isinstance(out.base, Quantity) and out._dimensionality != dim:
+                raise ValueError('can not modify units of a view of a Quantity')
+            np.nansum(self.magnitude, axis, dtype, out.magnitude)
+            out._dimensionality = dim
+            return out
+        return Quantity(np.nansum(self.magnitude, axis, dtype, out), dim)
 
     @with_doc(np.ndarray.fill)
     def fill(self, value):
