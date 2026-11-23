@@ -3,6 +3,7 @@
 
 import warnings
 from functools import wraps
+from math import prod
 
 import numpy as np
 
@@ -755,12 +756,15 @@ class Quantity(np.ndarray):
 
     @with_doc(np.ndarray.prod)
     def prod(self, axis=None, dtype=None, out=None):
+        ret = self.magnitude.prod(axis, dtype, None if out is None else out.magnitude)
         if axis is None:
             power = self.size
+        elif self.ndim == 0:
+            power = 1
         else:
-            power = self.shape[axis]
+            axes = axis if isinstance(axis, tuple) else (axis,)
+            power = prod(self.shape[a] for a in axes)
 
-        ret = self.magnitude.prod(axis, dtype, None if out is None else out.magnitude)
         dim = self._dimensionality**power
         if out is None:
             return Quantity(ret, dim)
