@@ -116,6 +116,101 @@ class TestUncertainty(TestCase):
         self.assertQuantityEqual(a*2, [2, 4]*pq.m)
         self.assertQuantityEqual((a*2).uncertainty, [0.2,0.4]*pq.m)
 
+    def test_uncertainquantity_multiply_signs(self):
+        a = UncertainQuantity([-2, -2, 2, 2], pq.m, [.1] * 4)
+        b = UncertainQuantity([3, -3, 3, -3], pq.s, [.2] * 4)
+        result = a * b
+        self.assertQuantityEqual(result, [-6, 6, 6, -6] * pq.m * pq.s)
+        self.assertQuantityEqual(result.uncertainty, [.5] * 4 * pq.m * pq.s)
+        self.assertQuantityEqual(a.uncertainty, [.1] * 4 * pq.m)
+        self.assertQuantityEqual(b.uncertainty, [.2] * 4 * pq.s)
+
+    def test_uncertainquantity_multiply_zero(self):
+        a = UncertainQuantity([0, 3], pq.m, [.1, .2])
+        b = UncertainQuantity([3, 0], pq.s, [.2, .1])
+        with np.errstate(divide='raise', invalid='raise'):
+            result = a * b
+        self.assertQuantityEqual(result, [0, 0] * pq.m * pq.s)
+        self.assertQuantityEqual(result.uncertainty, [.3, .3] * pq.m * pq.s)
+
+    def test_uncertainquantity_multiply_exact_uncertain_identity(self):
+        a = UncertainQuantity([-2, 0, 2], pq.m, [.1, .2, .3])
+        identity = UncertainQuantity(1, uncertainty=0)
+        with np.errstate(divide='raise', invalid='raise'):
+            for result in (a * identity, identity * a):
+                self.assertQuantityEqual(result, a)
+                self.assertQuantityEqual(result.uncertainty, a.uncertainty)
+
+    def test_uncertainquantity_multiply_broadcast_scaled_units(self):
+        a = UncertainQuantity([[-2], [0], [2]], pq.m, [[.1], [.1], [.1]])
+        b = UncertainQuantity([[300, -300]], pq.cm, [[20, 20]])
+        with np.errstate(divide='raise', invalid='raise'):
+            result = a * b
+        self.assertEqual(result.shape, (3, 2))
+        self.assertQuantityEqual(result.rescale(pq.m**2), [[-6, 6], [0, 0], [6, -6]] * pq.m**2)
+        self.assertQuantityEqual(result.uncertainty.rescale(pq.m**2), [[.5, .5], [.3, .3], [.5, .5]] * pq.m**2)
+
+    def test_uncertainquantity_multiply_exact_factors(self):
+        a = UncertainQuantity([-2, 0, 2], pq.m, [.1, .2, .3])
+        for factor in (-2, Quantity(-2), np.array([-2, -2, -2])):
+            for result in (a * factor, factor * a):
+                self.assertQuantityEqual(result, [4, 0, -4] * pq.m)
+                self.assertQuantityEqual(result.uncertainty, [.2, .4, .6] * pq.m)
+
+    def test_uncertainquantity_multiply_complex(self):
+        a = UncertainQuantity(2 + 1j, pq.m, .1, dtype=complex)
+        b = UncertainQuantity(3 - 1j, pq.s, .2, dtype=complex)
+        result = a * b
+        self.assertQuantityEqual(result, (7 + 1j) * pq.m * pq.s)
+        self.assertQuantityEqual(result.uncertainty, (.2 + .1j)**.5 * pq.m * pq.s)
+
+    def test_uncertainquantity_multiply_complex_branch_convention(self):
+        values = np.array([-2 + 1j, 2 + 1j, -1j, 1j, -1 + 0j, 1 + 0j])
+        # Recorded results of the established relative-uncertainty formula.
+        expected = np.array([
+            [.7211102550927978 - .3605551275463989j, -.6435418168294204 + .15539005762310287j,
+             -.5732365075890913 + .31400651845612737j, .5732365075890913 - .31400651845612737j,
+             .6265297043272523 - .28729683326551664j, -.6265297043272523 + .28729683326551664j],
+            [-.6435418168294204 - .15539005762310287j, .7211102550927978 + .3605551275463989j,
+             -.5732365075890913 - .31400651845612737j, .5732365075890913 + .31400651845612737j,
+             -.6265297043272523 - .28729683326551664j, .6265297043272523 + .28729683326551664j],
+            [-.3104739972694952 + .2576705318434736j, -.3104739972694952 - .2576705318434736j,
+             .36055512754639896j, -.36055512754639896j, .22360679774997894j, -.22360679774997894j],
+            [.3104739972694952 - .2576705318434736j, .3104739972694952 + .2576705318434736j,
+             -.36055512754639896j, .36055512754639896j, -.22360679774997894j, .22360679774997894j],
+            [.48683034809309167 - .16432829283005668j, -.48683034809309167 - .16432829283005668j,
+             -.22360679774997894, .22360679774997894, .36055512754639896, -.36055512754639896],
+            [-.48683034809309167 + .16432829283005668j, .48683034809309167 + .16432829283005668j,
+             .22360679774997894, -.22360679774997894, -.36055512754639896, .36055512754639896],
+        ])
+        for dtype in (complex, object):
+            a = UncertainQuantity(values[:, None], pq.m, [[.2]] * 6, dtype=dtype)
+            b = UncertainQuantity(values[None, :], pq.s, [[.3] * 6], dtype=dtype)
+            result = a * b
+            self.assertIs(type(result.uncertainty), Quantity)
+            self.assertEqual(result.uncertainty.dimensionality, (pq.m * pq.s).dimensionality)
+            np.testing.assert_allclose(np.asarray(result.uncertainty, dtype=complex), expected,
+                                       rtol=1e-13, atol=1e-15)
+
+    def test_uncertainquantity_multiply_real_objects(self):
+        a = UncertainQuantity([3., 4.], pq.m, [.2, .3], dtype=object)
+        b = UncertainQuantity([4., 3.], pq.s, [.4, .5], dtype=object)
+        result = a * b
+        self.assertIs(type(result.uncertainty), Quantity)
+        self.assertEqual(result.uncertainty.dtype, np.dtype(object))
+        self.assertQuantityEqual(result, [12, 12] * pq.m * pq.s)
+        self.assertQuantityEqual(result.uncertainty, [2.08**.5, 4.81**.5] * pq.m * pq.s)
+
+    def test_uncertainquantity_multiply_real_objects_signs_and_zeros(self):
+        a = UncertainQuantity([-3, 3, -3, 0, 3, 0], pq.m, [.2] * 6, dtype=object)
+        b = UncertainQuantity([4, -4, -4, 4, 0, 0], pq.s, [.4] * 6, dtype=object)
+        with np.errstate(divide='raise', invalid='raise'):
+            result = a * b
+        self.assertIs(type(result.uncertainty), Quantity)
+        self.assertQuantityEqual(result, [-12, -12, 12, 0, 0, 0] * pq.m * pq.s)
+        expected = np.array([2.08**.5] * 3 + [.8, 1.2, 0]) * pq.m * pq.s
+        self.assertQuantityEqual(result.uncertainty, expected)
+
     def test_uncertainquantity_negative(self):
         a = UncertainQuantity([1, 2], 'm', [.1, .2])
         self.assertQuantityEqual(-a, [-1., -2.]*pq.m)
