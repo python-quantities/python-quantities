@@ -124,13 +124,31 @@ class UncertainQuantity(Quantity):
     def __mul__(self, other):
         res = super().__mul__(other)
         try:
-            sru = self.relative_uncertainty
-            oru = other.relative_uncertainty
-            ru = (sru**2+oru**2)**0.5
-            u = res.view(Quantity) * ru
+            other_uncertainty = other.uncertainty
         except AttributeError:
             other = np.asanyarray(other)
             u = (self.uncertainty**2*other**2)**0.5
+        else:
+            operands = (self, other, self.uncertainty, other_uncertainty)
+            is_complex = any(np.iscomplexobj(q) for q in operands)
+            if not is_complex:
+                is_complex = any(
+                    np.iscomplexobj(value)
+                    for q in operands if q.dtype.kind == 'O'
+                    for value in q.flat
+                )
+            if is_complex:
+                # Preserve the established complex square-root branch convention.
+                sru = self.relative_uncertainty
+                oru = other.relative_uncertainty
+                u = res.view(Quantity) * (sru**2 + oru**2)**0.5
+            else:
+                su = self.uncertainty * other.view(Quantity)
+                ou = self.view(Quantity) * other_uncertainty
+                if su.dtype.kind == 'O' or ou.dtype.kind == 'O':
+                    u = (su**2 + ou**2)**0.5
+                else:
+                    u = np.hypot(su, ou)
 
         res._uncertainty = u
         return res

@@ -6,6 +6,7 @@ Changes
 0.17.0
 ------
 
+- Fix multiplication of real-valued ``UncertainQuantity`` operands with negative or zero nominal values producing negative or NaN standard uncertainties.
 - Drop support for Python 3.10 and NumPy 1.x, following NEP 29 plus one year, and add CI testing for Python 3.15 and NumPy 2.5 (`PR#277 <https://github.com/python-quantities/python-quantities/pull/277>`_)
 - **Behaviour change:** a NumPy ufunc whose ``out`` argument is a view of a Quantity now raises ``ValueError`` if the result would change the units of the view, as in-place operators already did. Values already written to ``out`` are not rolled back (`PR#276 <https://github.com/python-quantities/python-quantities/pull/276>`_)
 - Fix ``np.nanstd``, and the units of ufunc results written to an existing Quantity with ``out``, with NumPy 2 (`#223 <https://github.com/python-quantities/python-quantities/issues/223>`_, `PR#276 <https://github.com/python-quantities/python-quantities/pull/276>`_)
